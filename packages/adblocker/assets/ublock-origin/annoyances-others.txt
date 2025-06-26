@@ -67,6 +67,9 @@ streambolt.tv##+js(aeld, devtoolschange)
 streambolt.tv##+js(acs, document.onkeydown)
 ! https://www.reddit.com/r/brave_browser/comments/1koxgcs/this_website_detects_brave_adblock/
 ||onepiecepower.com/spoiler.js
+! https://github.com/uBlockOrigin/uAssets/issues/28678
+e-panigiria.gr##+js(rmnt, script, oncontextmenu)
+e-panigiria.gr###body *:not(input):not(textarea):style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -108,6 +111,12 @@ abcya.com##body:style(overflow: auto !important)
 abcya.com##.a-adhesion
 ! https://github.com/AdguardTeam/AdguardFilters/issues/173013
 ||2game.info/ad/failed_ad_view.js
+! https://github.com/uBlockOrigin/uAssets/issues/28629
+studydrive.net##.w-full.flex:has(> div[id^="billboard_btf"])
+! https://github.com/uBlockOrigin/uAssets/issues/28782
+videohelp.com###topmenu:has(> .contentlink[href="https://www.videohelp.com/donate"])
+! https://asiaflix.net/home - anti-adb
+/invoke.js^$script,3p,domain=asiaflix.net,redirect=noopjs
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -352,7 +361,6 @@ winaero.com##+js(acs, jQuery, tweaker)
 ewrc-results.com##+js(aopw, adBlockEnabled)
 ! https://github.com/uBlockOrigin/uAssets/issues/3864
 @@||schnauzer-forum.co.uk^$ghide
-@@||emulasyonturkiye.org^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/3865
 raven-mythic.com##+js(aopw, %24adframe)
 ! https://github.com/uBlockOrigin/uAssets/issues/3868
@@ -1611,9 +1619,6 @@ quotev.com##div.storyView:style(-webkit-touch-callout: default !important; curso
 ! https://github.com/NanoMeow/QuickReports/issues/3216
 underconsideration.com##+js(nostif, test.remove)
 ! https://github.com/uBlockOrigin/uAssets/issues/7058
-!#if env_chromium
-!newyorker.com##+js(acs, navigator.storage.estimate)
-!#endif
 !#if env_firefox
 newyorker.com##+js(set, webkitRequestFileSystem, noopFunc)
 !#endif
@@ -2452,9 +2457,6 @@ bendigoadvertiser.com.au##+js(nosiif, modal)
 ! fatgirlskinny.net overlay annoyance
 fatgirlskinny.net##.pum
 fatgirlskinny.net##html:style(overflow:auto !important)
-! anti select lightnovelworld .com
-! https://www.reddit.com/r/uBlockOrigin/comments/1dkzbax/how_to_disable_special_style_with_ubo/
-lightnovelworld.*###chapter-article .chapter-content:style(user-select: text !important; -ms-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -webkit-user-select: text !important; -webkit-touch-callout: default !important;)
 ! economica .net manipulated clipboard
 economica.net##+js(aeld, copy)
 ! kuroko-analyze.com right-click
@@ -3861,10 +3863,8 @@ outidesigoto.com##*:style(-webkit-touch-callout: default !important; -webkit-use
 rightnonel.com##+js(aopr, document.oncontextmenu)
 rightnonel.com##+js(aopr, document.onmousedown)
 rightnonel.com##+js(aopr, disableSelection)
-! lightnovelpub. com, webnovelpub. com anti select
-lightnovelpub.com,novelpub.com,webnovelpub.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-||moatads.com^$image,redirect=1x1.gif,domain=lightnovelpub.com
-lightnovelpub.com##[data-pw-desk]:upward(1)
+! webnovelpub. com anti select
+novelpub.com,webnovelpub.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 ! viafarmaciaonline. it anti right click
 viafarmaciaonline.it##+js(aopr, document.oncontextmenu)
 ! https://www.reddit.com/r/uBlockOrigin/comments/vc2zuj/kindle_copy_paste_restriction/
@@ -4211,20 +4211,22 @@ media.framu.world##+js(aopw, document.onkeydown)
 ! https://github.com/uBlockOrigin/uAssets/issues/26165
 ! https://github.com/uBlockOrigin/uAssets/issues/28094
 ! https://github.com/uBlockOrigin/uAssets/issues/28361
+! https://github.com/uBlockOrigin/uAssets/issues/28706
 ! https://www.reddit.com/r/uBlockOrigin/comments/1h30v38/filter_not_working_as_expected/
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ia9esg/cant_copy_and_cant_right_click_kritichnobg/
 !#if cap_html_filtering
-tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com,medeberiya.site##^script[id^="wpcp_"]
-tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com##^style:has-text(@media print)
+jnews5.com,tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com,medeberiya.site##^script[id^="wpcp_"]
+jnews5.com,tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com##^style:has-text(@media print)
 medeberiya.site##^script:has-text(stopPrntScr)
 !#else
-tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com,medeberiya.site##+js(aopr, nocontext)
-tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com,medeberiya.site##+js(acs, disableSelection, reEnable)
-tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com##style:has-text(@media print):remove()
+jnews5.com,tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com,medeberiya.site##+js(aopr, nocontext)
+jnews5.com,tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com,medeberiya.site##+js(acs, disableSelection, reEnable)
+jnews5.com,tvshowstars.com,eurooptyk.com.pl,celebzcircle.com,sertracen.com.pa,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,evreporter.com,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com##style:has-text(@media print):remove()
 medeberiya.site##+js(rmnt, script, stopPrntScr)
 !#endif
 celebzcircle.com,pitesti24.ro,samsungtechwin.com,cours-de-droit.net,iptv4best.com,blogvisaodemercado.pt,kapitalis.com,tiempo.hn,winmeen.com,ibps.in,visse.com.br,javsubtitle.co,learninsta.com,licensekeys.org,mediahiburan.my,tipssehatcantik.com,anime-drama.jp,jbjbgame.com,viatasisanatate.com,ziarulargesul.ro,globaldefensecorp.com,gossipnextdoor.com,coffeeapps.ir,media.framu.world,immobiliaremia.com,colegiosconcertados.info,bigdatauni.com,riwyat.com,rukim.id,visefierbinti.ro,cyberkrafttraining.com,theaircurrent.com,ncert-solutions.com,ncertsolutions.guru,nocturnetls.net,clockks.com,ananda-yoga.ro,poolpiscina.com,infodifesa.it,getective.com,flashdumpfiles.com,formatatmak.com,drkrok.com,alphagirlreviews.com,kitchennovel.com,voxvalachorum.ro,cracksone.com,day-hoc.org,onlineonderdelenshop.nl,primicia.com.ve,tech-recipes.com,postcourier.com.pg,afrikmag.com,maduras.vip,aprendeinglessila.com,kicknews.today,koalasplayground.com,hellokpop.com,hayatbilgileri.com,moneyexcel.com,placementstore.com,neuroteam-metz.de,codedosa.com,liveyourmaths.com,newspao.gr,ieltsliz.com,programasvirtualespc.net,tempatwisataseru.com,wikiofcelebs.com,jornaljoca.com.br,arcanescans.com,filmzone.com,hiraethtranslation.com,kaystls.site,home.novel-gate.com,plural.jor.br,sinhasannews.com,viewsofgreece.gr,rozbor-dila.cz,kritichno.bg,csiplearninghub.com##body:style(cursor: revert !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important;)
-eurooptyk.com.pl,evreporter.com,tvshowstars.com##html, .unselectable:style(cursor: revert !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important;)
+jnews5.com,eurooptyk.com.pl,evreporter.com,tvshowstars.com##html, .unselectable:style(cursor: revert !important; -webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important;)
+jnews5.com##+js(aeld, mousedown, , elements, .entry-content)
 ! WPCP Pro - https://wp-buy.com/product/wp-content-copy-protection-pro/
 /wp-content/plugins/wccp-pro/*$domain=ferroviando.com.br|counciloflove.com|gourmetscans.net|infokik.com|kulinarnastronamocy.pl|jafekri.com|reborntrans.com|truyenbanquyen.com|ezmanga.net|secondlifetranslations.com|piklodz.pl
 ! https://github.com/uBlockOrigin/uAssets/issues/4744
@@ -4321,8 +4323,8 @@ likey.me##+js(aeld, %2Fcontextmenu%7Ckeydown%2F, preventDefault)
 ziare.com##+js(aeld, copy)
 ! agrointel. ro copy manipulation
 agrointel.ro##+js(aeld, copy)
-! freefilesync. org anti-blocker
-freefilesync.org#@#.adsbygoogle
+! https://github.com/uBlockOrigin/uAssets/issues/7742
+freefilesync.org##+js(rmnt, script, %2Fadblock%2Fi)
 ! 01. org sticky header
 01.org##.o-header, .project-header-actions:style(position: initial !important;)
 01.org##main[class^="o-content"]:style(top: 0px !important;)
@@ -4958,7 +4960,8 @@ ymovies.vip,aniwatch.to,aniwatchtv.to,megacloud.tv,hianime.*,hianimez.to,putlock
 ||9animetv.to/js/safe.ob.min.js$script
 myflixerz.to,putlocker.pe,theflixertv.to##+js(nosiif, _0x)
 movie4kto.net##+js(nosiif, %2FDevTools%7C_0x%2F)
-grostembed.online,megacloud.*,premiumembeding.cloud,venusembed.site##+js(set, console.clear, throwFunc)
+! https://www.reddit.com/r/uBlockOrigin/comments/1l73lrj/hianimeto_video_infinite_loads/ - megacloud.* breakage
+grostembed.online,premiumembeding.cloud,venusembed.site##+js(set, console.clear, throwFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/20341
 lethalpanda.com##+js(aopr, b2a)
 ! https://www.reddit.com/r/uBlockOrigin/comments/17iihqp/anime_news_network_rolled_out_antiadblocker/
@@ -5345,6 +5348,8 @@ vidsrc.*##+js(set, console.clear, trueFunc)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fopafx/the_filter_ublock_filters_annoyances_makes_a_site/
 vidsrc.*##+js(set, DisableDevtool, noopFunc)
 ate60vs7zcjhsjo5qgv8.com##+js(trusted-suppress-native-method, Function.prototype.constructor, %22debugger%22, abort)
+! https://github.com/uBlockOrigin/uAssets/issues/28579
+moviesapi.club,vidsrc.*##+js(set, devtoolsDetector.launch, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/22769#issuecomment-2515120605
 embed.su##+js(aeld, keydown, 123)
 embed.su##+js(nosiif, devtool)
@@ -5886,3 +5891,17 @@ bangbros.com##+js(set-cookie, iAgree, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/28499
 ingesantoso.wordpress.com##.marketing-bar
 ingesantoso.wordpress.com##body:remove-class(has-marketing-bar)
+! https://github.com/uBlockOrigin/uAssets/issues/28736
+duckduckgo.com##+js(trusted-set-local-storage-item, adblockNotice, %7B%22dismissed%22%3Atrue%2C%22impressionCount%22%3A1%7D)
+! tmnascommunity. eu soft detection
+tmnascommunity.eu##+js(set-cookie, firebox_3330, 1)
+! ofertecatalog. ro anti right click, select, copy
+ofertecatalog.ro##+js(rmnt, script, %2Fcontextmenu%7Concopy%2F)
+ofertecatalog.ro##+js(ra, onselectstart, , stay)
+! https://github.com/AdguardTeam/AdguardFilters/issues/207736
+wiibackupmanager.co.uk##+js(no-fetch-if, adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/28946
+all4pets.com.pl##+js(aeld, contextmenu)
+all4pets.com.pl##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://github.com/AdguardTeam/AdguardFilters/issues/208136
+globalairportconcierge.com##+js(no-fetch-if, method%3AHEAD)

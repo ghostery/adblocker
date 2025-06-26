@@ -149,11 +149,14 @@ energy.de#@##ad_home
 ! Reported through email: http://www.kia.ca/build-and-price-kia
 @@||adobedtm.com/*/satelliteLib-$script,domain=kia.ca
 ! https://forums.lanik.us/viewtopic.php?f=64&t=37974
+! https://github.com/uBlockOrigin/uAssets/issues/28474
 @@||ensighten.com/*/prod/Bootstrap.js$script,domain=espn.com
 @@||espncdn.com/redesign/*/js/espn-analytics.js$script,domain=espn.com
 @@||registerdisney.go.com/*/responder/responder.js$script,domain=espn.com
 ! fix video player
+espn.com##+js(json-prune-xhr-response, stream.insertion, , propsToMatch, %2Fvideo%2Fauth%2Fmedia)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=espn.com,redirect=google-ima.js
+||ads.digital.disneyadvertising.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/878
 ||adservex.media.net/videoAds.js$script,redirect=noopjs,domain=forbes.com
 ! https://github.com/uBlockOrigin/uAssets/issues/168#issuecomment-349736800
@@ -2449,8 +2452,6 @@ job.mt.de,job.nw.de#@#+js(nostif, .call(null), 10)
 @@||cdn.appdynamics.com/adrum/adrum-*.js$domain=santander.cl
 ! https://github.com/uBlockOrigin/uAssets/issues/13655
 ! [badfilter] ||ads.tiktok.com^$badfilter
-! https://www.reddit.com/r/uBlockOrigin/comments/vdl0mx/videos_fail_to_load_on_oe24at/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,important,domain=oe24.at
 ! https://github.com/uBlockOrigin/uAssets/issues/13737
 @@||m.faz.net^$cname
 ! https://github.com/uBlockOrigin/uAssets/issues/13768
@@ -3322,15 +3323,6 @@ futura-sciences.com##+js(set, pa, %7B%7D)
 futura-sciences.com##+js(set, pa.privacy, %7B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/19164
 ||adobe.com/newrelic.js$script,redirect=noopjs,1p
-! https://github.com/uBlockOrigin/uAssets/issues/19168
-wikihow.com##+js(set, Object.prototype.getTargetingMap, noopFunc)
-!#if env_chromium
-@@||wikihow.com^$ghide
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=wikihow.com
-@@||securepubads.g.doubleclick.net/pagead/managed/js/gpt/*/pubads_impl.js$script,domain=wikihow.com
-wikihow.com##ins.adsbygoogle
-wikihow.com##.wh_ad_active:style(margin: 0 !important; visibility: collapse !important;)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/19169
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=startrek.com
 ! https://github.com/uBlockOrigin/uAssets/issues/19147
@@ -3562,7 +3554,8 @@ lumens.com##+js(set, _satellite.track, noopFunc)
 ! [badfilter] ||inmobi.com^$badfilter
 ! Override EasyList Germany exceptions
 ! https://github.com/uBlockOrigin/uAssets/issues/25543
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js,domain=atv.at|autobild.de|chip.de|computerbild.de|gentside.de|kibagames.com|oe24.at|ohmymag.de|phonostar.de|schwaebische.de|spielaffe.de|sport.sky.de|wetteronline.de
+! https://www.reddit.com/r/uBlockOrigin/comments/1lac0fw/videos_on_oe24at_dont_play/
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,important,redirect=google-ima.js,domain=atv.at|autobild.de|chip.de|computerbild.de|gentside.de|kibagames.com|ohmymag.de|phonostar.de|schwaebische.de|spielaffe.de|sport.sky.de|wetteronline.de
 ! https://github.com/uBlockOrigin/uAssets/issues/21286
 ! [badfilter] ||jsrdn.com^$badfilter
 ! cname https://github.com/uBlockOrigin/uAssets/issues/21297#issuecomment-1848938391
@@ -3741,10 +3734,6 @@ sunshine-live.de##+js(set, cpd_configdata, %7B%7D)
 sunshine-live.de##+js(set, cpd_configdata.url, )
 ! https://github.com/easylist/easylist/commit/0fb837521ba8042c4635d9cbe2aff2c1293eafb6
 ||ladsp.com/script-sf/$script,redirect=noop.js,domain=str.toyokeizai.net,important
-! https://github.com/uBlockOrigin/uAssets/issues/23327
-fapeza.com#@#.azz_div
-fapeza.com##.azz_div:style(height: unset !important;)
-fapeza.com##.azz_iframe
 ! https://github.com/uBlockOrigin/uAssets/issues/23360
 ||stats.wp.com^$script,3p,redirect-rule=noopjs,domain=europeanspaceflight.com
 ! https://github.com/uBlockOrigin/uAssets/issues/23351
@@ -4227,8 +4216,6 @@ bluerabbitrx.com##+js(set, _etmc, %7B%7D)
 bluerabbitrx.com##+js(set, _etmc.push, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/28207
 @@||dev.visualwebsiteoptimizer.com/cdn/edrv/$script,domain=searchengineland.com
-! https://github.com/uBlockOrigin/uAssets/issues/28211
-! [badfilter] ||users.atw.hu^$all,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/28310
 @@||assets.adobedtm.com/*-source.min.js$script,domain=developer.arm.com
 ||munchkin.marketo.net^$script,redirect=noopjs,domain=developer.arm.com
@@ -4246,7 +4233,22 @@ developer.arm.com##+js(set, Munchkin.init, noopFunc)
 io.google##+js(aeld, click, Event)
 ! https://github.com/easylist/easylist/issues/21841
 sterkinekor.com##+js(set, ttd_dom_ready, noopFunc)
+||js.adsrvr.org/up_loader.$domain=sterkinekor.com,important
 ! https://github.com/uBlockOrigin/uAssets/issues/28465
 iogames.space##+js(set, ramp, undefined)
 ! temp fix https://github.com/uBlockOrigin/uAssets/issues/28490
 scan-manga.com#@##carouselTOPContainer
+! https://github.com/easylist/easylist/issues/21727
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=stirr.com,important
+! https://github.com/uBlockOrigin/uAssets/issues/28667
+@@||c.amazon-adsystem.com/aax2/apstag.js$script,domain=thedailybeast.com
+thedailybeast.com##+js(set, _aps, %7B%7D)
+! https://www.reddit.com/r/uBlockOrigin/comments/1l33bi7/ubo_preventing_login_on_cond%C3%A9_nast_wiredcom_site/
+id.condenast.com##+js(set, appInfo.snowplow.trackSelfDescribingEvent, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/28744
+||adobedtm.com^$script,redirect=noopjs,domain=euronews.com
+@@||assets.adobedtm.com/extensions/*/AppMeasurement.min.js$script,domain=euronews.com
+@@||assets.adobedtm.com/extensions/*/AppMeasurement_Module_ActivityMap.min.js$script,domain=euronews.com
+! https://kb.arlo.com/1179139/How-do-I-connect-my-Arlo-SmartHub-or-Base-Station-to-the-Internet - page breakage
+kb.arlo.com##+js(set, _vwo_code, %7B%7D)
+kb.arlo.com##+js(set, _vwo_code.init, noopFunc)
