@@ -854,6 +854,38 @@ describe('eval', () => {
         `;
         testQuerySelectorAll('.lure:upward(.target)', html, ['.target']);
       });
+
+      context('combinators', () => {
+        it('combinator of ` `', () => {
+          testQuerySelectorAll('p :upward(1)', `<article><p><a/></p><p></p></article>`, [
+            'p:has(a)',
+          ]);
+        });
+
+        it('combinator of `+`', () => {
+          testQuerySelectorAll(
+            'p+p:not(:has(a)):upward(1)',
+            `<article><p><a/></p><p></p></article>`,
+            ['article'],
+          );
+        });
+
+        it('combinator of `>`', () => {
+          testQuerySelectorAll(
+            'article>p:not(:has(a)):upward(1)',
+            `<article><p><a/></p><p></p></article>`,
+            ['article'],
+          );
+        });
+
+        it('combinator of `~`', () => {
+          testQuerySelectorAll(
+            'p~p:not(:has(a)):upward(1)',
+            `<article><p><a/></p><p></p></article>`,
+            ['article'],
+          );
+        });
+      });
     });
 
     describe(':has-text', () => {
