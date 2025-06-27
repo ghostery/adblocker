@@ -8,6 +8,37 @@
 
 import type { AST, Complex } from './types.js';
 
+function parseCSSValue(cssValue: string): { property: string; value: string; isRegex: boolean } {
+  const firstColonIndex = cssValue.indexOf(':');
+
+  if (firstColonIndex === -1) {
+    throw new Error('Invalid CSS value format: no colon found');
+  }
+
+  const property = cssValue.slice(0, firstColonIndex).trim();
+  const value = cssValue.slice(firstColonIndex + 1).trim();
+  const isRegex = value.startsWith('/') && value.lastIndexOf('/') > 0;
+
+  return { property, value, isRegex };
+}
+
+function matchCSSProperty(element: Element, cssValue: string, pseudoElement?: string): boolean {
+  const { property, value, isRegex } = parseCSSValue(cssValue);
+
+  const win = element.ownerDocument && element.ownerDocument.defaultView;
+  if (!win) throw new Error('No window context for element');
+  const computedStyle = win.getComputedStyle(element, pseudoElement);
+
+  const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
+
+  if (isRegex) {
+    const regex = parseRegex(value);
+    return regex.test(actualValue);
+  }
+
+  return actualValue === value;
+}
+
 function parseRegex(str: string): RegExp {
   if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
     const lastSlashIndex = str.lastIndexOf('/');
@@ -20,7 +51,6 @@ function parseRegex(str: string): RegExp {
 
     return new RegExp(pattern, flags);
   } else {
-    // Treat as raw pattern string, no flags
     return new RegExp(str);
   }
 }
@@ -137,10 +167,10 @@ export function matches(element: Element, selector: AST): boolean {
       namePattern = stripsWrappingQuotes(namePattern);
       valuePattern = valuePattern ? stripsWrappingQuotes(valuePattern) : undefined;
 
-      const valueRegex =
-        valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0
-          ? parseRegex(valuePattern)
-          : undefined;
+      let valueRegex: RegExp | null = null;
+      if (valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0) {
+        valueRegex = parseRegex(valuePattern);
+      }
 
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
@@ -171,6 +201,16 @@ export function matches(element: Element, selector: AST): boolean {
 
         return valueRegex ? valueRegex.test(value) : value === valuePattern;
       }
+    } else if (selector.name === 'matches-css') {
+      return selector.argument !== undefined && matchCSSProperty(element, selector.argument);
+    } else if (selector.name === 'matches-css-after') {
+      return (
+        selector.argument !== undefined && matchCSSProperty(element, selector.argument, '::after')
+      );
+    } else if (selector.name === 'matches-css-before') {
+      return (
+        selector.argument !== undefined && matchCSSProperty(element, selector.argument, '::before')
+      );
     }
   }
 
