@@ -34,7 +34,7 @@ function matchCSSProperty(element: Element, cssValue: string, pseudoElement?: st
 
     if (isRegex) {
       const regex = parseRegex(value);
-      return regex.test(actualValue);
+      return regex?.test(actualValue) ?? false;
     }
 
     return actualValue === value;
@@ -43,19 +43,23 @@ function matchCSSProperty(element: Element, cssValue: string, pseudoElement?: st
   }
 }
 
-function parseRegex(str: string): RegExp {
-  if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
-    const lastSlashIndex = str.lastIndexOf('/');
-    const pattern = str.slice(1, lastSlashIndex);
-    const flags = str.slice(lastSlashIndex + 1);
+function parseRegex(str: string): RegExp | null {
+  try {
+    if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
+      const lastSlashIndex = str.lastIndexOf('/');
+      const pattern = str.slice(1, lastSlashIndex);
+      const flags = str.slice(lastSlashIndex + 1);
 
-    if (!/^[gimsuyd]*$/.test(flags)) {
-      throw new Error(`Invalid regex flags: ${flags}`);
+      if (!/^[gimsuyd]*$/.test(flags)) {
+        return null;
+      }
+
+      return new RegExp(pattern, flags);
+    } else {
+      return new RegExp(str);
     }
-
-    return new RegExp(pattern, flags);
-  } else {
-    return new RegExp(str);
+  } catch (e) {
+    return null;
   }
 }
 
@@ -150,12 +154,8 @@ export function matches(element: Element, selector: AST): boolean {
       const path = window.location.pathname;
       const search = window.location.search;
       const fullUrl = path + search;
-      try {
-        const regex = parseRegex(argument);
-        return regex.test(fullUrl);
-      } catch (e) {
-        return false;
-      }
+      const regex = parseRegex(argument);
+      return regex?.test(fullUrl) ?? false;
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
       if (argument === undefined) {
@@ -175,21 +175,15 @@ export function matches(element: Element, selector: AST): boolean {
       namePattern = stripsWrappingQuotes(namePattern);
       valuePattern = valuePattern ? stripsWrappingQuotes(valuePattern) : undefined;
 
-      let valueRegex: RegExp | undefined;
+      let valueRegex: RegExp | null = null;
       if (valuePattern?.startsWith('/') && valuePattern.lastIndexOf('/') > 0) {
-        try {
-          valueRegex = parseRegex(valuePattern);
-        } catch (e) {
-          return false;
-        }
+        valueRegex = parseRegex(valuePattern);
       }
 
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
-        let regex: RegExp;
-        try {
-          regex = parseRegex(namePattern);
-        } catch (e) {
+        const regex = parseRegex(namePattern);
+        if (regex === null) {
           return false;
         }
         const matchingAttrs = [...element.attributes].filter((attr) => regex.test(attr.name));
