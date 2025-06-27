@@ -389,6 +389,12 @@ describe('eval', () => {
   });
 
   describe('#querySelectorAll', () => {
+    context('deduplicates', () => {
+      it('type of `list`', () => {
+        testQuerySelectorAll('p>a,a', `<p><a/></p>`, ['a']);
+      });
+    });
+
     it('#id', () => {
       testQuerySelectorAll('#some_id', '<!DOCTYPE html><p id="some_id">Hello world</p>', [
         '#some_id',
@@ -466,7 +472,7 @@ describe('eval', () => {
     describe(':has', () => {
       it('*:has', () => {
         testQuerySelectorAll(
-          `*:has(a[href^="https://"]):not(html):not(body):not(p)`,
+          `*:has(a[href^="https://"]):not(body):not(p)`,
           [
             '<!DOCTYPE html>',
             '<p class="cls1">',
@@ -544,7 +550,7 @@ describe('eval', () => {
     describe(':not', () => {
       it('not paragraph', () => {
         testQuerySelectorAll(
-          ':not(p):not(body):not(html):not(head)',
+          ':not(p):not(body):not(head)',
           [
             '<!DOCTYPE html>',
             '<head></head>',
@@ -715,6 +721,38 @@ describe('eval', () => {
           </div>
         `;
         testQuerySelectorAll('.lure:upward(.target)', html, ['.target']);
+      });
+
+      context('combinators', () => {
+        it('combinator of ` `', () => {
+          testQuerySelectorAll('p :upward(1)', `<article><p><a/></p><p></p></article>`, [
+            'p:has(a)',
+          ]);
+        });
+
+        it('combinator of `+`', () => {
+          testQuerySelectorAll(
+            'p+p:not(:has(a)):upward(1)',
+            `<article><p><a/></p><p></p></article>`,
+            ['article'],
+          );
+        });
+
+        it('combinator of `>`', () => {
+          testQuerySelectorAll(
+            'article>p:not(:has(a)):upward(1)',
+            `<article><p><a/></p><p></p></article>`,
+            ['article'],
+          );
+        });
+
+        it('combinator of `~`', () => {
+          testQuerySelectorAll(
+            'p~p:not(:has(a)):upward(1)',
+            `<article><p><a/></p><p></p></article>`,
+            ['article'],
+          );
+        });
       });
     });
 
