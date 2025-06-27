@@ -23,43 +23,35 @@ function parseCSSValue(cssValue: string): { property: string; value: string; isR
 }
 
 function matchCSSProperty(element: Element, cssValue: string, pseudoElement?: string): boolean {
-  try {
-    const { property, value, isRegex } = parseCSSValue(cssValue);
+  const { property, value, isRegex } = parseCSSValue(cssValue);
 
-    const win = element.ownerDocument && element.ownerDocument.defaultView;
-    if (!win) throw new Error('No window context for element');
-    const computedStyle = win.getComputedStyle(element, pseudoElement);
+  const win = element.ownerDocument && element.ownerDocument.defaultView;
+  if (!win) throw new Error('No window context for element');
+  const computedStyle = win.getComputedStyle(element, pseudoElement);
 
-    const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
+  const actualValue = computedStyle[property as keyof CSSStyleDeclaration] as string;
 
-    if (isRegex) {
-      const regex = parseRegex(value);
-      return regex?.test(actualValue) ?? false;
-    }
-
-    return actualValue === value;
-  } catch (e) {
-    return false;
+  if (isRegex) {
+    const regex = parseRegex(value);
+    return regex.test(actualValue);
   }
+
+  return actualValue === value;
 }
 
-function parseRegex(str: string): RegExp | null {
-  try {
-    if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
-      const lastSlashIndex = str.lastIndexOf('/');
-      const pattern = str.slice(1, lastSlashIndex);
-      const flags = str.slice(lastSlashIndex + 1);
+function parseRegex(str: string): RegExp {
+  if (str.startsWith('/') && str.lastIndexOf('/') > 0) {
+    const lastSlashIndex = str.lastIndexOf('/');
+    const pattern = str.slice(1, lastSlashIndex);
+    const flags = str.slice(lastSlashIndex + 1);
 
-      if (!/^[gimsuyd]*$/.test(flags)) {
-        return null;
-      }
-
-      return new RegExp(pattern, flags);
-    } else {
-      return new RegExp(str);
+    if (!/^[gimsuyd]*$/.test(flags)) {
+      throw new Error(`Invalid regex flags: ${flags}`);
     }
-  } catch (e) {
-    return null;
+
+    return new RegExp(pattern, flags);
+  } else {
+    return new RegExp(str);
   }
 }
 
@@ -155,7 +147,7 @@ export function matches(element: Element, selector: AST): boolean {
       const search = window.location.search;
       const fullUrl = path + search;
       const regex = parseRegex(argument);
-      return regex?.test(fullUrl) ?? false;
+      return regex.test(fullUrl);
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
       if (argument === undefined) {
@@ -183,9 +175,6 @@ export function matches(element: Element, selector: AST): boolean {
       if (namePattern.startsWith('/') && namePattern.lastIndexOf('/') > 0) {
         // matching attribute name by regex
         const regex = parseRegex(namePattern);
-        if (regex === null) {
-          return false;
-        }
         const matchingAttrs = [...element.attributes].filter((attr) => regex.test(attr.name));
 
         // If no value pattern, return true if any attribute matches the name pattern

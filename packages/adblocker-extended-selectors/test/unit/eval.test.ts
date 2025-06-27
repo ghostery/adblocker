@@ -448,8 +448,9 @@ describe('eval', () => {
           const ast = parse(':matches-css(invalid)');
           expect(ast).to.not.be.undefined;
           if (ast !== undefined) {
-            const result = matches(element, ast);
-            expect(result).to.be.false;
+            expect(() => matches(element, ast)).to.throw(
+              'Invalid CSS value format: no colon found',
+            );
           }
         }
       });
