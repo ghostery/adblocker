@@ -1,7 +1,7 @@
 [Adblock Plus 1.1]
-! Version: 202506250529
+! Version: 202506290524
 ! Title: EasyPrivacy
-! Last modified: 25 Jun 2025 05:29 UTC
+! Last modified: 29 Jun 2025 05:24 UTC
 ! Expires: 4 days (update frequency)
 ! *** easylist:template_header.txt ***
 !
@@ -847,6 +847,7 @@
 /eta/events?
 /eta/guid?
 /eumcollector/beacons/*
+/ev.gif?_rand=
 /eva-analytics.min.js
 /event-log?
 /event-tracking.js
@@ -1202,6 +1203,7 @@
 /image.ng/*
 /images/tingyun.js$script
 /iMAWebCookie.js
+/img.gif?_rand=
 /img?eid=
 /imgcount.cgi?
 /imgcount.php?
@@ -1670,6 +1672,7 @@
 /pageview?key=
 /pageview?pageId=
 /pageview?pageviewId
+/pageview?session=
 /pageview?t=
 /pageview?user_guid=
 /pageviews.gif?
@@ -2876,6 +2879,16 @@ _trackWebtrekkEvents.
 _view_pixel&$image
 _webanalytics.
 _WebVitalsReporter_
+! https://github.com/AdguardTeam/AdguardFilters/commit/934912b3e760e068a91cd6cb502096a55ab1ca16
+! Tracking on parked domains
+/_static/deliver.js?nonce=$script,~third-party
+/javascripts/browserfp.min.js?templateId=
+/munin/a/ls?t=$xmlhttprequest
+/munin/a/tr/browserjs?domain=
+/sk-park.php?pid=
+/sxp/i/*$script,third-party
+! [dup] from easylist/easyprivacy.txt
+! /tc_imp.gif?
 ! https://www.mcclatchy.com/our-impact/markets
 /ng.gif?
 ! Facebook pixels
@@ -3700,6 +3713,13 @@ omni.soundestlink.com$image
 ||zononi.com^
 ||zqtk.net^
 ||ztsrv.com^
+! https://github.com/AdguardTeam/AdguardFilters/commit/934912b3e760e068a91cd6cb502096a55ab1ca16
+||rsra-ph.cdn-fileserver.com^
+||rsra.cdn-fileserver.com^
+||rsras-ph.cdn-fileserver.com^
+||rsras.cdn-fileserver.com^
+||sra-px.cdn-fileserver.com^
+||youseasky.com^
 ! *** easylist:easyprivacy/easyprivacy_trackingservers_thirdparty.txt ***
 ! easyprivacy_trackingservers_thirdparty.txt
 ! Third-party
@@ -10148,6 +10168,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cdn-channels-pixel.ex.co^
 ||cdn-ds.com/analytics/
 ||cdn.clkmc.com/cmc.js
+||cdn.cuty.io/fps.js
 ||cdn.debugbear.com^$third-party
 ||cdn.one.store/xdomain_cookie.html
 ||cdn.polarbyte.com^
@@ -14724,6 +14745,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||lensdirect.com/page-tracking/
 ||letsdoeit.com/tracking/
 ||lexology.com/pd.js
+||lgforbes.akamaized.net/rtblog.php?
 ||libhunt.com/api/ahoy/event
 ||librato-collector.genius.com^
 ||lightstep.medium.systems^*/reports
@@ -14925,6 +14947,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||ntvid.online/cdn-cgi/trace
 ||nyt.com/ads/tpc-check.html$domain=nytimes.com
 ||nytimes.com/v1/purr-cache
+||nzherald.co.nz/pf/resources/scripts/tracking/data-ref.js
 ||nzpages.co.nz/modules/common/track.js
 ||observe.metarouter.io^
 ||ocular.hotukdeals.com^
@@ -15548,6 +15571,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||ultimate-guitar.com/components/ab/event?
 ||ultimedia.com/deliver/statistiques/
 ||um.contentstudio.io^
+||umami.flixer.su^
+||umami.spencerdevs.xyz^
 ||umami.vidfast.pro^
 ||umami.wakarimasen.moe^
 ||unibling.com/eclytics/
@@ -53251,6 +53276,8 @@ ncbi.nlm.nih.gov##+js(set, ncbi.sg.ping, noopFunc)
 ||hs.fi/stats
 ||huuto.net/js/analytic/
 ||ilcdn.fi^*/Bootstrap.js
+! [dup] from ublock-origin/privacy.txt
+! ||insights.mtv.a2d.tv^
 ||io-tech.fi/io/www/delvr/lokiz.php
 ||is.fi/stats/
 ||logger.omio.com^
@@ -54032,8 +54059,6 @@ ncbi.nlm.nih.gov##+js(set, ncbi.sg.ping, noopFunc)
 @@||addthis.com/js/*/addthis_widget.js$script,domain=stagecoachbus.com
 @@||admin.corrata.com/console/dcconsolews/event-log?$~third-party
 @@||admin.memberspace.com/sites/*/analytics/views$~third-party
-! [dup] from ublock-origin/quick-fixes.txt
-! @@||adobe.com.ssl.d1.sc.omtrdc.net^$xmlhttprequest,domain=www.adobe.com
 @@||adobedc.demdex.net/ee/v1/identity/$xmlhttprequest,domain=cibc.com
 @@||adobedtm.com/launch-$script,xmlhttprequest
 @@||adobedtm.com^*/launch-$script,xmlhttprequest
@@ -54514,6 +54539,8 @@ ncbi.nlm.nih.gov##+js(set, ncbi.sg.ping, noopFunc)
 @@||sourcepointcmp.bloomberg.*/ccpa.js$script,domain=bloomberg.co.jp|bloomberg.com
 @@||sourcepointcmp.bloomberg.*/mms/get_site_data?$domain=bloomberg.co.jp|bloomberg.com
 ! CNAME (Specific allowlists)
+! [dup] from ublock-origin/quick-fixes.txt
+! @@||adobe.com.ssl.d1.sc.omtrdc.net^$xmlhttprequest,domain=www.adobe.com
 @@||app.clarity.so^$~third-party
 @@||cbsi.map.fastly.net^
 @@||content.ingbank.pl^
@@ -54525,6 +54552,7 @@ ncbi.nlm.nih.gov##+js(set, ncbi.sg.ping, noopFunc)
 @@||p11.techlab-cdn.com^$domain=wizzair.com
 @@||sc.omtrdc.net^$domain=cibc.com
 @@||team-rec.jp^$domain=search-voi.0101.co.jp|voi.0101.co.jp
+@@||ubisoft.com.first-party-js.datadome.co^$script,domain=connect.ubisoft.com
 @@||wwwimage-tve.cbsstatic.com^
 ! Chrome bug (Endless loading causing site to crash https://forums.lanik.us/viewtopic.php?f=64&t=25152)
 ! Preliminarily allowlists Omniture s_code tracking pixels (script versions H.25 - H.25.2) due to breakage (https://adblockplus.org/forum/viewtopic.php?f=10&t=11378) if blocking the script causes issues

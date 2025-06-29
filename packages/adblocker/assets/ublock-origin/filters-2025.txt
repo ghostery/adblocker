@@ -1432,8 +1432,6 @@ pokemon-project.com##+js(rmnt, script, closePlayer)
 ||fuseplatform.net^$redirect=noopjs,domain=pokemon-project.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28542
 anime3rb.com##div[x-data*="countdown"]
-! https://katu.com/
-||tradecore.tradehouse.media/js/prebid-
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204150
 3minx.com,555fap.com,ai18.pics,blackwidof.org,cnpics.org,cnxx.me,cosplay18.pics,fc2ppv.stream,hentai4f.com,hentaipig.com,javball.com,javbee.vip,javring.com,javsunday.com,kin8-av.com,porn4f.org,sweetie-fox.com,xcamcovid.com##+js(rmnt, script, %2Fdetect%7CWebAssembly%2F)
 ||2489may2024.com^
@@ -1527,7 +1525,7 @@ watch.yosintvlive.com##+js(acs, addEventListener, detect)
 ! https://moviesmod.com.pl/ - anti-adb
 ||temp.urlshortpro.xyz/moviesmod*.js^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207219
-||probableregret.com^$script,redirect=noopjs,3p,domain=kio.ac
+*$script,3p,redirect-rule=noopjs,domain=kio.ac
 ! https://github.com/uBlockOrigin/uAssets/issues/28793
 magnetdl.*##+js(rpnt, script, %2Fwindow%5C.location%5C.replace%5C(%5B%5E)%5D%2B%5C)%3B%3F%2Fg)
 magnetdl.*##+js(nowoif, !magnetdl., 1)
@@ -1637,7 +1635,6 @@ viralharami.com##+js(nostif, window.open)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1lil85l/radiode_adblock_detected/
 ! https://github.com/uBlockOrigin/uAssets/issues/28967
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=radio.*|radio.at|radio.de|radio.dk|radio.es|radio.fr|radio.it|radio.net|radio.pl|radio.pt|radio.se
-radio.*##+js(nostif, location)
 ! preroll tek.no https://www.tek.no/i/93av4E/
 tek.no##+js(no-xhr-if, damoh)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/208142
@@ -1649,3 +1646,17 @@ bmamag.com##+js(rmnt, script, advanced_ads_check_adblocker)
 smashkarts.io##+js(set, adblockDetected, false)
 smashkarts.io#@##AdBanner
 smashkarts.io#@##Adbanner
+! https://github.com/uBlockOrigin/uAssets/issues/28981
+rlxoff.com##+js(aeld, DOMContentLoaded, Popunder)
+rlxoff.com##div[id^="ad-"]
+! https://www.reddit.com/r/uBlockOrigin/comments/1lk4rc1/ublock_origin_doesnt_block_ads/
+||demonicscans.org/img/wsup.gif
+demonicscans.org##div[id^="pf-"]
+! https://github.com/AdguardTeam/AdguardFilters/issues/208339
+cinemastervip.com##+js(rmnt, script, 'hidden')
+! https://github.com/uBlockOrigin/uAssets/issues/29000
+!#if cap_html_filtering
+mmsbee42.com,mmsmasala.com##^script:has-text(/dismissAdBlock|533092QTEErr/)
+!#else
+mmsbee42.com,mmsmasala.com##+js(rmnt, script, %2FdismissAdBlock%7C533092QTEErr%2F)
+!#endif
