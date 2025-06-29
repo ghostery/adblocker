@@ -529,7 +529,7 @@ timponline.ro##+js(aopw, disableSelection)
 timponline.ro##+js(aopw, nocontext)
 ! https://github.com/uBlockOrigin/uAssets/issues/4158
 ! https://github.com/uBlockOrigin/uAssets/issues/26210
-numberempire.com##+js(nostif, w3ad, 1000)
+numberempire.com##+js(nostif, w3ad)
 ! https://github.com/uBlockOrigin/uAssets/issues/4187 right click, select
 singingdalong.blogspot.com##+js(ra, oncontextmenu%7Condragstart%7Conselectstart)
 singingdalong.blogspot.com##+js(acs, disableselect, reEnable)
@@ -3440,8 +3440,8 @@ picallow.com##*:style(-webkit-touch-callout: default !important; -webkit-user-se
 links.extralinks.casa##+js(acs, document.onselectstart, disableselect)
 ! magesypro. pro anti select
 magesypro.*##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
-magesy.blog,magesypro.pro##+js(noeval-if, disable_copy)
-audiotools.pro,magesy.blog,magesypro.pro,audioztools.com##+js(aeld, contextmenu, preventDefault)
+magesy.blog##+js(noeval-if, disable_copy)
+audiotools.pro,magesy.blog,audioztools.com##+js(aeld, contextmenu, preventDefault)
 ! psihologiadeazi. ro anti right click, select, copy, f-keys
 psihologiadeazi.ro##+js(aopr, nocontext)
 psihologiadeazi.ro##+js(aopr, disable_copy)
@@ -5219,12 +5219,6 @@ oceanplay.org##+js(nostif, devtool)
 bluphim.com,cdnmoviking.tech##+js(nosiif, console.clear)
 ! https://mineskin.org/gallery banners
 mineskin.org##+js(aopw, ABB_config)
-! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-8002410
-blog.cryptowidgets.net,blog.insurancegold.in,blog.wiki-topia.com##+js(acs, document.addEventListener, contextmenu)
-blog.cryptowidgets.net,blog.insurancegold.in,blog.wiki-topia.com##+js(rmnt, script, devtools)
-! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-7999398
-blog.coinsvalue.net,blog.cookinguide.net,blog.freeoseocheck.com##+js(acs, document.addEventListener, contextmenu)
-blog.coinsvalue.net,blog.cookinguide.net,blog.freeoseocheck.com##+js(rmnt, script, devtools)
 ! https://github.com/uBlockOrigin/uAssets/issues/21812
 @@||sheffieldforum.co.uk^$xhr,1p
 ! nsmb .com anti-adb
@@ -5873,8 +5867,9 @@ bilibili.com#@#+js(aost, player.pause, %2F%5B0-9a-f%5D%7B40%7D%5C.js%3A1%5Cd%7B2
 ||s1.hdslb.com/bfs/static/jinkela/video/video.$script,replace=/t\.user\.isLogin\?/1?/,domain=bilibili.com
 !#endif
 ! https://store.steampowered.com/app/993090/Lossless_Scaling/
-store.steampowered.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fsteamcommunity.com%2Flinkfilter%2F%3Fu%3Dhttp%22%5D, %3Fu)
-||steamcommunity.com/linkfilter/?u=http$doc,urlskip=?u
+! https://www.reddit.com/r/uBlockOrigin/comments/1lkd30u/ublock_filters_annoyances_affects_steam_warning/
+! store.steampowered.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fsteamcommunity.com%2Flinkfilter%2F%3Fu%3Dhttp%22%5D, %3Fu)
+! ||steamcommunity.com/linkfilter/?u=http$doc,urlskip=?u
 ! https://github.com/uBlockOrigin/uAssets/issues/28053
 marriedbiography.com##+js(aeld, %2Fcontextmenu%7Ccopy%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28143
