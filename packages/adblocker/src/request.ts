@@ -35,25 +35,29 @@ export type ElectronRequestType =
   | 'webSocket'
   | 'other';
 
-// From: https://github.com/DefinitelyTyped/DefinitelyTyped/blob/7f3549ed0050f2ca8d7fcc00c33eba21f0cbdd88/types/puppeteer/index.d.ts#L945
+// From:
+// - https://github.com/puppeteer/puppeteer/blob/47f4a6c29c55cf1ac1023cbac581ecf6a87db2b4/packages/puppeteer-core/src/api/HTTPRequest.ts#L6
+// - https://github.com/ChromeDevTools/devtools-protocol/blob/097b400f8737003ea73477d31936f3f3040b7a66/types/protocol.d.ts#L10624
 export type PuppeteerRequestType =
-  | 'cspviolationreport'
   | 'document'
-  | 'eventsource'
-  | 'fetch'
-  | 'font'
-  | 'image'
-  | 'manifest'
-  | 'media'
-  | 'other'
-  | 'prefetch'
-  | 'preflight'
-  | 'script'
-  | 'signedexchange'
   | 'stylesheet'
+  | 'image'
+  | 'media'
+  | 'font'
+  | 'script'
   | 'texttrack'
+  | 'xhr'
+  | 'fetch'
+  | 'prefetch'
+  | 'eventsource'
   | 'websocket'
-  | 'xhr';
+  | 'manifest'
+  | 'signedexchange'
+  | 'ping'
+  | 'cspviolationreport'
+  | 'preflight'
+  | 'fedcm'
+  | 'other';
 
 export type PlaywrightRequestType =
   | 'document'
@@ -127,6 +131,7 @@ export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   cspviolationreport: fastHash('type:cspviolationreport'),
   document: fastHash('type:document'),
   eventsource: fastHash('type:other'),
+  fedcm: fastHash('type:script'),
   fetch: fastHash('type:xhr'),
   font: fastHash('type:font'),
   image: fastHash('type:image'),
