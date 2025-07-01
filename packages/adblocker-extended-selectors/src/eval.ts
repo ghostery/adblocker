@@ -239,52 +239,57 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
   const selectors =
     selector.right.type === 'compound' ? selector.right.compound : [selector.right];
   const results: Element[] = [];
-  if (selector.combinator === ' ') {
-    // Look for all children *in any depth* of the all `leftElements` and filter them by `traversal`.
-    for (const leftElement of leftElements) {
-      for (const child of leftElement.querySelectorAll('*')) {
-        for (const result of traverse(child, selectors)) {
+  switch (selector.combinator) {
+    case ' ':
+      // Look for all children *in any depth* of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        for (const child of leftElement.querySelectorAll('*')) {
+          for (const result of traverse(child, selectors)) {
+            if (!results.includes(result)) {
+              results.push(result);
+            }
+          }
+        }
+      }
+      break;
+    case '>':
+      // Look for all children of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        for (const child of leftElement.children) {
+          for (const result of traverse(child, selectors)) {
+            if (!results.includes(result)) {
+              results.push(result);
+            }
+          }
+        }
+      }
+      break;
+    case '~':
+      // Look for all siblings of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        let sibling: Element | null = leftElement;
+        while ((sibling = sibling.nextElementSibling) !== null) {
+          for (const result of traverse(sibling, selectors)) {
+            if (!results.includes(result)) {
+              results.push(result);
+            }
+          }
+        }
+      }
+      break;
+    case '+':
+      // Look for a next sibiling of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        if (leftElement.nextElementSibling === null) {
+          continue;
+        }
+        for (const result of traverse(leftElement.nextElementSibling, selectors)) {
           if (!results.includes(result)) {
             results.push(result);
           }
         }
       }
-    }
-  } else if (selector.combinator === '+') {
-    // Look for a next sibiling of the all `leftElements` and filter them by `traversal`.
-    for (const leftElement of leftElements) {
-      if (leftElement.nextElementSibling === null) {
-        continue;
-      }
-      for (const result of traverse(leftElement.nextElementSibling, selectors)) {
-        if (!results.includes(result)) {
-          results.push(result);
-        }
-      }
-    }
-  } else if (selector.combinator === '>') {
-    // Look for all children of the all `leftElements` and filter them by `traversal`.
-    for (const leftElement of leftElements) {
-      for (const child of leftElement.children) {
-        for (const result of traverse(child, selectors)) {
-          if (!results.includes(result)) {
-            results.push(result);
-          }
-        }
-      }
-    }
-  } else if (selector.combinator === '~') {
-    // Look for all siblings of the all `leftElements` and filter them by `traversal`.
-    for (const leftElement of leftElements) {
-      let sibling: Element | null = leftElement;
-      while ((sibling = sibling.nextElementSibling) !== null) {
-        for (const result of traverse(sibling, selectors)) {
-          if (!results.includes(result)) {
-            results.push(result);
-          }
-        }
-      }
-    }
+      break;
   }
   return results;
 }
