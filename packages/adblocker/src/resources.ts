@@ -297,17 +297,33 @@ export default class Resources {
     }
   }
 
-  public getResource(name: string): { body: string; contentType: string; dataUrl: string } {
-    const { body, contentType } = this.resourcesByName.get(name) || getResourceForMime(name);
+  public getResource(name: string): {
+    filename: string;
+    body: string;
+    contentType: string;
+    dataUrl: string;
+  } {
+    let resource:
+      | {
+          name: string;
+          contentType: string;
+          body: string;
+        }
+      | undefined = this.resourcesByName.get(name);
+    if (resource === undefined) {
+      const extensionIndex = name.lastIndexOf('.');
+      resource = getResourceForMime(extensionIndex === -1 ? name : name.slice(extensionIndex));
+    }
+    const { contentType, body } = resource;
 
-    let dataUrl;
-    if (contentType.indexOf(';') !== -1) {
+    let dataUrl: string;
+    if (resource.contentType.indexOf(';') !== -1) {
       dataUrl = `data:${contentType},${body}`;
     } else {
       dataUrl = `data:${contentType};base64,${btoaPolyfill(body)}`;
     }
 
-    return { body, contentType, dataUrl };
+    return { filename: resource.name, body, contentType, dataUrl };
   }
 
   public getScriptlet(name: string): string | undefined {

@@ -1,3 +1,49 @@
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.16.0 to 8.17.0 [#4490](https://github.com/ghostery/adblocker/pull/4490) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 [#4489](https://github.com/ghostery/adblocker/pull/4489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### Authors: 1
+
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.0 (Thu Oct 17 2024)
 
 #### :boom: Breaking Change

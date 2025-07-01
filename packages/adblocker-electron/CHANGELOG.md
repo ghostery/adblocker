@@ -1,3 +1,87 @@
+# v2.8.0 (Mon Jun 23 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.15.30 to 24.0.1 [#4939](https://github.com/ghostery/adblocker/pull/4939) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 35.2.1 to 36.0.0 [#4836](https://github.com/ghostery/adblocker/pull/4836) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v2.5.1 (Tue Apr 15 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 34.3.0 to 35.0.0 [#4714](https://github.com/ghostery/adblocker/pull/4714) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v2.3.2 (Thu Jan 23 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 33.3.1 to 34.0.0 [#4594](https://github.com/ghostery/adblocker/pull/4594) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.16.0 to 8.17.0 [#4490](https://github.com/ghostery/adblocker/pull/4490) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 [#4489](https://github.com/ghostery/adblocker/pull/4489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### Authors: 1
+
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.1 (Mon Oct 21 2024)
 
 #### :bug: Bug Fix

@@ -23,8 +23,6 @@ import {
   bitCount,
   clearBit,
   fastHash,
-  fastStartsWith,
-  fastStartsWithFrom,
   getBit,
   hasUnicode,
   isAlpha,
@@ -153,6 +151,7 @@ export const enum NETWORK_FILTER_MASK {
   isHostnameAnchor = 1 << 28,
   isRedirectRule = 1 << 29,
   isRedirect = 1 << 30,
+  isRemoveParam = 1 << 31,
   // IMPORTANT: the mask is now full, no more options can be added
   // Consider creating a separate fitler type for isReplace if a new
   // network filter option is needed.
@@ -187,6 +186,10 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   font: NETWORK_FILTER_MASK.fromFont,
   image: NETWORK_FILTER_MASK.fromImage,
   imageset: NETWORK_FILTER_MASK.fromImage,
+  // https://searchfox.org/mozilla-central/rev/fcfb558f8946f3648d962576125af46bf6e2910a/toolkit/components/extensions/schemas/web_request.json
+  // This is for JSON modules from import statements.
+  // Our `NETWORK_FILTER_MASK` is already full and we can treat this as a script request.
+  json: NETWORK_FILTER_MASK.fromScript,
   mainFrame: NETWORK_FILTER_MASK.fromDocument,
   main_frame: NETWORK_FILTER_MASK.fromDocument,
   media: NETWORK_FILTER_MASK.fromMedia,
@@ -725,27 +728,40 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
       // parseOptions
       // --------------------------------------------------------------------- //
+      let domainsList: Set<string> | undefined;
+      let denyallowList: Set<string> | undefined;
+
       for (const rawOption of getFilterOptions(line, optionsIndex + 1, line.length)) {
         const negation = rawOption[0].charCodeAt(0) === 126; /* '~' */
         const option = negation === true ? rawOption[0].slice(1) : rawOption[0];
         const value = rawOption[1];
 
         switch (option) {
+          case 'to': {
+            domainsList ??= new Set();
+            denyallowList ??= new Set();
+            for (const hostname of value.split('|')) {
+              if (hostname.startsWith('~')) {
+                denyallowList.add(hostname.slice(1));
+              } else {
+                domainsList.add(hostname);
+              }
+            }
+            break;
+          }
           case 'denyallow': {
-            denyallow = Domains.parse(value.split('|'), debug);
+            denyallowList ??= new Set();
+            for (const domain of value.split('|')) {
+              denyallowList.add(domain);
+            }
             break;
           }
           case 'domain':
           case 'from': {
-            // domain list starting or ending with '|' is invalid
-            if (
-              value.charCodeAt(0) === 124 /* '|' */ ||
-              value.charCodeAt(value.length - 1) === 124 /* '|' */
-            ) {
-              return null;
+            domainsList ??= new Set();
+            for (const domain of value.split('|')) {
+              domainsList.add(domain);
             }
-
-            domains = Domains.parse(value.split('|'), debug);
             break;
           }
           case 'badfilter':
@@ -888,6 +904,16 @@ export default class NetworkFilter implements IFilter {
             optionValue = value;
 
             break;
+          case 'removeparam':
+            // TODO: Support regex
+            if (negation || value.startsWith('/')) {
+              return null;
+            }
+
+            mask = setBit(mask, NETWORK_FILTER_MASK.isRemoveParam);
+            optionValue = value;
+
+            break;
           default: {
             // Handle content type options separatly
             let optionMask: number = 0;
@@ -963,16 +989,40 @@ export default class NetworkFilter implements IFilter {
           }
         }
       }
+
+      if (domainsList !== undefined && domainsList.size !== 0) {
+        domains = Domains.parse(domainsList, {
+          delimiter: '|',
+          debug,
+        });
+        if (domains === undefined) {
+          return null;
+        }
+      }
+      if (denyallowList !== undefined && denyallowList.size !== 0) {
+        // $denyallow requires $domain
+        if (domainsList === undefined || domainsList.size === 0) {
+          return null;
+        }
+        denyallow = Domains.parse(denyallowList, {
+          delimiter: '|',
+          debug,
+        });
+        if (denyallow === undefined) {
+          return null;
+        }
+      }
+
       // End of option parsing
       // --------------------------------------------------------------------- //
     }
 
     if (cptMaskPositive === 0) {
-      mask |= cptMaskNegative;
+      mask = setBit(mask, cptMaskNegative);
     } else if (cptMaskNegative === FROM_ANY) {
-      mask |= cptMaskPositive;
+      mask = setBit(mask, cptMaskPositive);
     } else {
-      mask |= cptMaskPositive & cptMaskNegative;
+      mask = setBit(mask, cptMaskPositive & cptMaskNegative);
     }
 
     // Identify kind of pattern
@@ -1092,7 +1142,7 @@ export default class NetworkFilter implements IFilter {
       if (getBit(mask, NETWORK_FILTER_MASK.isLeftAnchor)) {
         if (
           filterIndexEnd - filterIndexStart === 5 &&
-          fastStartsWithFrom(line, 'ws://', filterIndexStart)
+          line.startsWith('ws://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromWebsocket);
           mask = clearBit(mask, NETWORK_FILTER_MASK.isLeftAnchor);
@@ -1101,7 +1151,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 7 &&
-          fastStartsWithFrom(line, 'http://', filterIndexStart)
+          line.startsWith('http://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
           mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttps);
@@ -1109,7 +1159,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
-          fastStartsWithFrom(line, 'https://', filterIndexStart)
+          line.startsWith('https://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
           mask = clearBit(mask, NETWORK_FILTER_MASK.fromHttp);
@@ -1117,7 +1167,7 @@ export default class NetworkFilter implements IFilter {
           filterIndexStart = filterIndexEnd;
         } else if (
           filterIndexEnd - filterIndexStart === 8 &&
-          fastStartsWithFrom(line, 'http*://', filterIndexStart)
+          line.startsWith('http*://', filterIndexStart)
         ) {
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttps);
           mask = setBit(mask, NETWORK_FILTER_MASK.fromHttp);
@@ -1238,7 +1288,7 @@ export default class NetworkFilter implements IFilter {
   }) {
     this.filter = filter;
     this.hostname = hostname;
-    this.mask = mask;
+    this.mask = setBit(mask, 0);
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
@@ -1259,6 +1309,14 @@ export default class NetworkFilter implements IFilter {
 
   public get redirect(): string | undefined {
     if (!this.isRedirect()) {
+      return undefined;
+    }
+
+    return this.optionValue;
+  }
+
+  public get removeparam(): string | undefined {
+    if (!this.isRemoveParam()) {
       return undefined;
     }
 
@@ -1535,6 +1593,15 @@ export default class NetworkFilter implements IFilter {
       options.push('badfilter');
     }
 
+    const removeparam = this.removeparam;
+    if (removeparam !== undefined) {
+      if (removeparam.length > 0) {
+        options.push(`removeparam=${removeparam}`);
+      } else {
+        options.push('removeparam');
+      }
+    }
+
     if (options.length > 0) {
       if (typeof modifierReplacer === 'function') {
         filter += `$${options.map(modifierReplacer).join(',')}`;
@@ -1606,6 +1673,10 @@ export default class NetworkFilter implements IFilter {
 
   public isReplace(): boolean {
     return getBit(this.getMask(), NETWORK_FILTER_MASK.isReplace);
+  }
+
+  public isRemoveParam(): boolean {
+    return getBit(this.getMask(), NETWORK_FILTER_MASK.isRemoveParam);
   }
 
   // Expected to be called only with `$replace` modifiers
@@ -2046,8 +2117,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // Since this is not a regex, the filter pattern must follow the hostname
       // with nothing in between. So we extract the part of the URL following
       // after hostname and will perform the matching on it.
-      return fastStartsWithFrom(
-        request.url,
+      return request.url.startsWith(
         pattern,
         request.url.indexOf(filterHostname) + filterHostname.length,
       );
@@ -2070,7 +2140,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     return request.url === pattern;
   } else if (filter.isLeftAnchor()) {
     // |pattern
-    return fastStartsWith(request.url, pattern);
+    return request.url.startsWith(pattern);
   } else if (filter.isRightAnchor()) {
     // pattern|
     return request.url.endsWith(pattern);

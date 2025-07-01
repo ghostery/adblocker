@@ -26,8 +26,7 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://lenta.ru/news/2019/02/12/under_armour/',
-    url:
-      'https://icdn.lenta.ru/images/2019/02/10/20/20190210205913651/tabloid_191cc8db799e1f28e26552d2e23bbace.jpg',
+    url: 'https://icdn.lenta.ru/images/2019/02/10/20/20190210205913651/tabloid_191cc8db799e1f28e26552d2e23bbace.jpg',
   },
   {
     cpt: 'font',
@@ -47,8 +46,7 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://cstatic.weborama.fr/iframe/external_ids_sync.html?d.r=1549979732747',
-    url:
-      'https://cr.frontend.weborama.fr/cr?key=criteov2&url=https%3A%2F%2Fgum.criteo.com%2Fsync%3Fc%3D13%26a%3D1%26r%3D1%26u%3Dhttps%253A%252F%252Fidsync.frontend.weborama.fr%252Fids%253Fkey%253Dcriteov2_id%2526value%253D%2540USERID%2540',
+    url: 'https://cr.frontend.weborama.fr/cr?key=criteov2&url=https%3A%2F%2Fgum.criteo.com%2Fsync%3Fc%3D13%26a%3D1%26r%3D1%26u%3Dhttps%253A%252F%252Fidsync.frontend.weborama.fr%252Fids%253Fkey%253Dcriteov2_id%2526value%253D%2540USERID%2540',
   },
   {
     cpt: 'script',
@@ -68,26 +66,22 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://9gag.com/',
-    url:
-      'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1530265743.6263_qYXUZu_100x100.jpg',
+    url: 'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1530265743.6263_qYXUZu_100x100.jpg',
   },
   {
     cpt: 'image',
     frameUrl: 'https://9gag.com/',
-    url:
-      'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1530265743.6263_qYXUZu_100x100.jpg',
+    url: 'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1530265743.6263_qYXUZu_100x100.jpg',
   },
   {
     cpt: 'image',
     frameUrl: 'https://9gag.com/',
-    url:
-      'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1530265743.6263_qYXUZu_100x100.jpg',
+    url: 'https://miscmedia-9gag-fun.9cache.com/images/thumbnail-facebook/1530265743.6263_qYXUZu_100x100.jpg',
   },
   {
     cpt: 'script',
     frameUrl: 'https://www.amazon.in/gp/css/homepage.html/ref=footer_ya',
-    url:
-      'https://images-eu.ssl-images-amazon.com/images/G/01/AUIClients/ClientSideMetricsAUIJavascript@jserrorsForester.10f2559e93ec589d92509318a7e2acbac74c343a._V2_.js',
+    url: 'https://images-eu.ssl-images-amazon.com/images/G/01/AUIClients/ClientSideMetricsAUIJavascript@jserrorsForester.10f2559e93ec589d92509318a7e2acbac74c343a._V2_.js',
   },
   {
     cpt: 'script',
@@ -119,14 +113,12 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://pagead2.googlesyndication.com/pagead/s/cookie_push.html',
-    url:
-      'https://fcmatch.youtube.com/pixel?google_gm=AMnCDoo9MiOasa_Qi87wA33crERtmoxkaqpXnx4YZeMmUhsiRM_ulpr3HYb0LThBq48NbC67LeLyFfJ8w-fm-mxTF31UjT3Tu7TU_JDLsQ1KiOP3_JERB-E',
+    url: 'https://fcmatch.youtube.com/pixel?google_gm=AMnCDoo9MiOasa_Qi87wA33crERtmoxkaqpXnx4YZeMmUhsiRM_ulpr3HYb0LThBq48NbC67LeLyFfJ8w-fm-mxTF31UjT3Tu7TU_JDLsQ1KiOP3_JERB-E',
   },
   {
     cpt: 'xhr',
     frameUrl: 'https://coinmarketcap.com/currencies/dent/historical-data/',
-    url:
-      'https://aax.amazon-adsystem.com/e/dtb/bid?src=600&pubid=1edde03c-121e-457d-9c35-ad4fca989bac&u=https%3A%2F%2Fcoinmarketcap.com%2Fcurrencies%2Fdent%2Fhistorical-data%2F&pid=1809081749881549979484850&cb=7323923384241549979486233&ws=800x600&v=7.25.00&t=2000&slots=%5B%7B%22sd%22%3A%22div-gpt-ad-1542211140769-3%22%2C%22s%22%3A%5B%22728x90%22%5D%2C%22sn%22%3A%22%2F48901027%2Fdetails_top%22%7D%2C%7B%22sd%22%3A%22div-gpt-ad-1542211140769-5%22%2C%22s%22%3A%5B%22728x90%22%5D%2C%22sn%22%3A%22%2F48901027%2Fdetails_bottom%22%7D%5D&pj=%7B%22apse%22%3A%7B%22chunkRequests%22%3Afalse%2C%22shouldSampleLatency%22%3Afalse%7D%7D&gdprl=%7B%22status%22%3A%22no-cmp%22%7D',
+    url: 'https://aax.amazon-adsystem.com/e/dtb/bid?src=600&pubid=1edde03c-121e-457d-9c35-ad4fca989bac&u=https%3A%2F%2Fcoinmarketcap.com%2Fcurrencies%2Fdent%2Fhistorical-data%2F&pid=1809081749881549979484850&cb=7323923384241549979486233&ws=800x600&v=7.25.00&t=2000&slots=%5B%7B%22sd%22%3A%22div-gpt-ad-1542211140769-3%22%2C%22s%22%3A%5B%22728x90%22%5D%2C%22sn%22%3A%22%2F48901027%2Fdetails_top%22%7D%2C%7B%22sd%22%3A%22div-gpt-ad-1542211140769-5%22%2C%22s%22%3A%5B%22728x90%22%5D%2C%22sn%22%3A%22%2F48901027%2Fdetails_bottom%22%7D%5D&pj=%7B%22apse%22%3A%7B%22chunkRequests%22%3Afalse%2C%22shouldSampleLatency%22%3Afalse%7D%7D&gdprl=%7B%22status%22%3A%22no-cmp%22%7D',
   },
   {
     cpt: 'stylesheet',
@@ -142,8 +134,7 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://www8.hp.com/de/de/privacy/privacy.html',
-    url:
-      'https://d.company-target.com/pixel?type=js&id=1470950488&page=https%3A%2F%2Fwww8.hp.com%2Fde%2Fde%2Fprivacy%2Fprivacy.html',
+    url: 'https://d.company-target.com/pixel?type=js&id=1470950488&page=https%3A%2F%2Fwww8.hp.com%2Fde%2Fde%2Fprivacy%2Fprivacy.html',
   },
   {
     cpt: 'script',
@@ -155,8 +146,7 @@ export default [
     cpt: 'stylesheet',
     frameUrl:
       'https://www.sueddeutsche.de/service/updates-auf-facebook-hier-werden-sie-unser-freund-1.487034',
-    url:
-      'https://www.sueddeutsche.de/article/assets/css/6a2dc7d44dfd5201f95e87a66838c709-sz-article.css',
+    url: 'https://www.sueddeutsche.de/article/assets/css/6a2dc7d44dfd5201f95e87a66838c709-sz-article.css',
   },
   {
     cpt: 'script',
@@ -177,27 +167,23 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://www.lidl.de/de/search?query=*&log=startseite',
-    url:
-      'https://www.lidl.de/media/product/0/2/9/2/3/0/5/livergy-3-herren-boxershorts-regular--10.jpg',
+    url: 'https://www.lidl.de/media/product/0/2/9/2/3/0/5/livergy-3-herren-boxershorts-regular--10.jpg',
   },
   {
     cpt: 'image',
     frameUrl: 'https://www.liveleak.com/c/Liveleak_Random_Thoughts',
-    url:
-      'https://cdn.liveleak.com/80281E/ll_a_u/2019/Feb/11/LiveLeak-dot-com-5c62453cb9fae_thumb.jpg',
+    url: 'https://cdn.liveleak.com/80281E/ll_a_u/2019/Feb/11/LiveLeak-dot-com-5c62453cb9fae_thumb.jpg',
   },
   {
     cpt: 'script',
     frameUrl: 'https://www.uniqlo.com/de/de/babys/babys-alter-3---24-monate/einteiler-bodys',
-    url:
-      'https://www.uniqlo.com/on/demandware.static/Sites-DE-Site/-/de_DE/v1549950838430/js/basic.js',
+    url: 'https://www.uniqlo.com/on/demandware.static/Sites-DE-Site/-/de_DE/v1549950838430/js/basic.js',
   },
   {
     cpt: 'image',
     frameUrl:
       'https://actu.orange.fr/monde/syrie-poursuite-de-violents-combats-dans-l-ultime-reduit-de-l-ei-CNT000001cRqBP.html',
-    url:
-      'https://actu.orange.fr/images/actu/iconcity-small-sb2d1cbe2b6.png?e6efbcf3e8dda4cd3297e3cec98e8a81',
+    url: 'https://actu.orange.fr/images/actu/iconcity-small-sb2d1cbe2b6.png?e6efbcf3e8dda4cd3297e3cec98e8a81',
   },
   {
     cpt: 'image',
@@ -207,8 +193,7 @@ export default [
   {
     cpt: 'image',
     frameUrl: 'https://slate.com/privacy',
-    url:
-      'https://sb.scorecardresearch.com/b?c1=2&c2=18406752&ns__t=1549980366989&ns_c=UTF-8&cv=3.1&c8=Slate%E2%80%99s%20privacy%20policy.&c7=https%3A%2F%2Fslate.com%2Fprivacy&c9=',
+    url: 'https://sb.scorecardresearch.com/b?c1=2&c2=18406752&ns__t=1549980366989&ns_c=UTF-8&cv=3.1&c8=Slate%E2%80%99s%20privacy%20policy.&c7=https%3A%2F%2Fslate.com%2Fprivacy&c9=',
   },
   {
     cpt: 'script',
@@ -254,8 +239,7 @@ export default [
   {
     cpt: 'script',
     frameUrl: 'https://www.amazon.it/',
-    url:
-      'https://images-eu.ssl-images-amazon.com/images/I/31S6jpIf+nL.js?AUIClients/AmazonGatewayHerotatorJS',
+    url: 'https://images-eu.ssl-images-amazon.com/images/I/31S6jpIf+nL.js?AUIClients/AmazonGatewayHerotatorJS',
   },
   {
     cpt: 'font',

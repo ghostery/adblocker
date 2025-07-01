@@ -7,6 +7,7 @@
  */
 
 import type { IMessageFromBackground } from '@ghostery/adblocker-content';
+import { URLSearchParams } from '@ghostery/url-parser';
 
 import Config from '../config.js';
 import { StaticDataView, sizeOfASCII, sizeOfByte, sizeOfBool } from '../data-view.js';
@@ -26,7 +27,7 @@ import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
-import CosmeticFilterBucket from './bucket/cosmetic.js';
+import CosmeticFilterBucket, { createStylesheet } from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import HTMLBucket from './bucket/html.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
@@ -37,7 +38,7 @@ import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 
-export const ENGINE_VERSION = 699;
+export const ENGINE_VERSION = 769;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
@@ -75,9 +76,15 @@ export interface BlockingResponse {
   redirect:
     | undefined
     | {
+        filename: string;
         body: string;
         contentType: string;
         dataUrl: string;
+      };
+  rewrite:
+    | undefined
+    | {
+        url: undefined | string;
       };
   exception: NetworkFilter | undefined;
   filter: NetworkFilter | undefined;
@@ -255,8 +262,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     engines: InstanceType<T>[],
     {
       skipResources = false,
+      overrideConfig = {},
     }: {
       skipResources?: boolean;
+      overrideConfig?: Partial<Config>;
     } = {},
   ): InstanceType<T> {
     if (!engines || engines.length < 2) {
@@ -288,7 +297,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const configKeysMustMatch: ConfigKey[] = (Object.keys(config) as (keyof Config)[]).filter(
       function (key): key is ConfigKey {
         return (
-          typeof config[key] === 'boolean' && !compatibleConfigKeys.includes(key as ConfigKey)
+          typeof config[key] === 'boolean' &&
+          !compatibleConfigKeys.includes(key as ConfigKey) &&
+          !Object.hasOwnProperty.call(overrideConfig, key)
         );
       },
     );
@@ -348,7 +359,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       preprocessors,
 
       lists,
-      config,
+      config: new Config({ ...config, ...overrideConfig }),
     }) as InstanceType<T>;
 
     if (
@@ -447,6 +458,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // Deserialize buckets
     engine.importants = NetworkFilterBucket.deserialize(buffer, config);
     engine.redirects = NetworkFilterBucket.deserialize(buffer, config);
+    engine.removeparams = NetworkFilterBucket.deserialize(buffer, config);
     engine.filters = NetworkFilterBucket.deserialize(buffer, config);
     engine.exceptions = NetworkFilterBucket.deserialize(buffer, config);
 
@@ -476,6 +488,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public exceptions: NetworkFilterBucket;
   public importants: NetworkFilterBucket;
   public redirects: NetworkFilterBucket;
+  public removeparams: NetworkFilterBucket;
   public filters: NetworkFilterBucket;
   public cosmetics: CosmeticFilterBucket;
   public htmlFilters: HTMLBucket;
@@ -521,6 +534,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     this.importants = new NetworkFilterBucket({ config: this.config });
     // $redirect
     this.redirects = new NetworkFilterBucket({ config: this.config });
+    // $removeparam
+    this.removeparams = new NetworkFilterBucket({ config: this.config });
     // All other filters
     this.filters = new NetworkFilterBucket({ config: this.config });
     // Cosmetic filters
@@ -570,6 +585,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       this.exceptions.getSerializedSize() +
       this.importants.getSerializedSize() +
       this.redirects.getSerializedSize() +
+      this.removeparams.getSerializedSize() +
       this.csp.getSerializedSize() +
       this.cosmetics.getSerializedSize() +
       this.hideExceptions.getSerializedSize() +
@@ -621,6 +637,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     // Filters buckets
     this.importants.serialize(buffer);
     this.redirects.serialize(buffer);
+    this.removeparams.serialize(buffer);
     this.filters.serialize(buffer);
     this.exceptions.serialize(buffer);
 
@@ -758,6 +775,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       const exceptions: NetworkFilter[] = [];
       const importants: NetworkFilter[] = [];
       const redirects: NetworkFilter[] = [];
+      const removeparams: NetworkFilter[] = [];
       const hideExceptions: NetworkFilter[] = [];
 
       for (const filter of newNetworkFilters) {
@@ -772,11 +790,17 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         } else if (filter.isGenericHide() || filter.isSpecificHide()) {
           hideExceptions.push(filter);
         } else if (filter.isException()) {
-          exceptions.push(filter);
+          if (filter.isRemoveParam()) {
+            removeparams.push(filter);
+          } else {
+            exceptions.push(filter);
+          }
         } else if (filter.isImportant()) {
           importants.push(filter);
         } else if (filter.isRedirect()) {
           redirects.push(filter);
+        } else if (filter.isRemoveParam()) {
+          removeparams.push(filter);
         } else {
           filters.push(filter);
         }
@@ -788,6 +812,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // Update buckets in-place
       this.importants.update(importants, removedNetworkFiltersSet);
       this.redirects.update(redirects, removedNetworkFiltersSet);
+      this.removeparams.update(removeparams, removedNetworkFiltersSet);
       this.filters.update(filters, removedNetworkFiltersSet);
 
       if (this.config.loadExceptionFilters === true) {
@@ -990,6 +1015,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
+    // inject extended selector filters
+    injectPureHasSafely = false,
+
     hidingStyle,
     callerContext,
   }: {
@@ -1007,6 +1035,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
 
+    injectPureHasSafely?: boolean;
+
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
   }): IMessageFromBackground {
@@ -1019,6 +1049,172 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       };
     }
 
+    const { matches, allowGenericHides } = this.matchCosmeticFilters({
+      url,
+      hostname,
+      domain,
+      classes,
+      hrefs,
+      ids,
+      getRulesFromDOM,
+      getRulesFromHostname,
+      getInjectionRules,
+      getExtendedRules,
+      getPureHasRules: injectPureHasSafely,
+      callerContext,
+    });
+
+    const filters = [];
+
+    for (const { filter, exception } of matches) {
+      if (exception === undefined) {
+        filters.push(filter);
+      }
+    }
+
+    const { extended, scripts, styles } = this.injectCosmeticFilters(filters, {
+      url,
+      injectScriptlets: getInjectionRules,
+      injectExtended: getExtendedRules,
+      injectPureHasSafely,
+      allowGenericHides,
+      getBaseRules,
+      hidingStyle,
+    });
+
+    return {
+      active: true,
+      extended,
+      scripts,
+      styles,
+    };
+  }
+
+  /**
+   * Prepares cosmetic filters to be injected by compiling them to stylesheets, scripts and extented selector ASTs.
+   */
+  public injectCosmeticFilters(
+    filters: CosmeticFilter[],
+    {
+      url,
+
+      injectStyles = true,
+      injectScriptlets,
+      injectExtended,
+      injectPureHasSafely,
+
+      allowGenericHides = true,
+      getBaseRules,
+      hidingStyle,
+    }: {
+      url: string;
+
+      injectStyles?: boolean;
+      injectScriptlets: boolean;
+      injectExtended: boolean;
+      injectPureHasSafely: boolean;
+
+      allowGenericHides?: boolean;
+      hidingStyle?: string | undefined;
+      getBaseRules?: boolean;
+    },
+  ): {
+    scripts: string[];
+    extended: IMessageFromBackground['extended'];
+    styles: string;
+  } {
+    const scripts = [];
+    const styleFilters = [];
+    const extendedFilters = [];
+    const pureHasFilters = [];
+
+    for (const filter of filters) {
+      if (injectScriptlets && filter.isScriptInject()) {
+        const script = filter.getScript(this.resources.getScriptlet.bind(this.resources));
+        if (script !== undefined) {
+          scripts.push(script);
+        }
+      } else if (filter.isExtended()) {
+        if (injectExtended === true && this.config.loadExtendedSelectors) {
+          extendedFilters.push(filter);
+        }
+        if (injectPureHasSafely && filter.isPureHasSelector()) {
+          pureHasFilters.push(filter);
+        }
+      } else if (injectStyles === true) {
+        styleFilters.push(filter);
+      }
+    }
+
+    const stylesheets = this.cosmetics.getStylesheetsFromFilters(
+      {
+        filters: styleFilters,
+        extendedFilters,
+      },
+      { getBaseRules, allowGenericHides, hidingStyle },
+    );
+
+    let styles = stylesheets.stylesheet;
+    for (const filter of pureHasFilters) {
+      styles += `\n\n${createStylesheet([filter.getSelector()], filter.hasCustomStyle() ? filter.getStyle() : hidingStyle)}`;
+    }
+
+    for (const script of scripts) {
+      this.emit('script-injected', script, url);
+    }
+
+    if (styles.length !== 0) {
+      this.emit('style-injected', styles, url);
+    }
+
+    return {
+      extended: stylesheets.extended,
+      scripts,
+      styles,
+    };
+  }
+
+  public matchCosmeticFilters({
+    // Page information
+    url,
+    hostname,
+    domain,
+
+    // DOM information
+    classes,
+    hrefs,
+    ids,
+
+    getRulesFromDOM = true,
+    getRulesFromHostname = true,
+    getInjectionRules,
+    getExtendedRules,
+    getPureHasRules,
+
+    callerContext,
+  }: {
+    url: string;
+    hostname: string;
+    domain: string | null | undefined;
+
+    classes?: string[] | undefined;
+    hrefs?: string[] | undefined;
+    ids?: string[] | undefined;
+
+    getRulesFromDOM?: boolean;
+    getRulesFromHostname?: boolean;
+    getInjectionRules?: boolean;
+    getExtendedRules?: boolean;
+    getPureHasRules?: boolean;
+
+    callerContext?: any | undefined;
+  }): {
+    matches: {
+      filter: CosmeticFilter;
+      exception: CosmeticFilter | undefined;
+    }[];
+    allowGenericHides: boolean;
+  } {
     domain ||= '';
 
     let allowGenericHides = true;
@@ -1061,7 +1257,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       allowSpecificHides = shouldApplyHideException(specificHides) === false;
     }
 
-    // Lookup injections as well as stylesheets
     const { filters, unhides } = this.cosmetics.getCosmeticsFilters({
       domain,
       hostname,
@@ -1076,11 +1271,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       getRulesFromDOM,
       getRulesFromHostname,
 
-      hidingStyle,
       isFilterExcluded: this.isFilterExcluded.bind(this),
     });
 
-    let injectionsDisabled = false;
+    let injectionsDisabledFilter: CosmeticFilter | undefined = undefined;
     const unhideExceptions: Map<string, CosmeticFilter> = new Map();
 
     for (const unhide of unhides) {
@@ -1089,93 +1283,59 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         unhide.isUnhide() === true &&
         unhide.getSelector().length === 0
       ) {
-        injectionsDisabled = true;
+        injectionsDisabledFilter = unhide;
+      } else {
+        unhideExceptions.set(
+          normalizeSelector(unhide, this.resources.getScriptletCanonicalName.bind(this.resources)),
+          unhide,
+        );
       }
-      unhideExceptions.set(
-        normalizeSelector(unhide, this.resources.getScriptletCanonicalName.bind(this.resources)),
-        unhide,
+    }
+
+    const matches: { filter: CosmeticFilter; exception: CosmeticFilter | undefined }[] = [];
+
+    for (const filter of filters) {
+      let exception = unhideExceptions.get(
+        normalizeSelector(filter, this.resources.getScriptletCanonicalName.bind(this.resources)),
+      );
+
+      if (filter.isScriptInject()) {
+        if (injectionsDisabledFilter !== undefined) {
+          exception = injectionsDisabledFilter;
+        }
+        if (getInjectionRules === false) {
+          continue;
+        }
+      }
+
+      if (
+        filter.isExtended() &&
+        (getExtendedRules === false || this.config.loadExtendedSelectors === false) &&
+        // skip extended but not if we try to inject pure has safely
+        !(getPureHasRules && filter.isPureHasSelector())
+      ) {
+        continue;
+      }
+
+      matches.push({ filter, exception });
+
+      this.emit(
+        'filter-matched',
+        {
+          filter,
+          exception,
+        },
+        {
+          url,
+          callerContext,
+          filterType: FilterType.COSMETIC,
+        },
       );
     }
 
-    const injections: CosmeticFilter[] = [];
-    const styleFilters: CosmeticFilter[] = [];
-    const extendedFilters: CosmeticFilter[] = [];
-
-    if (filters.length !== 0) {
-      // Apply unhide rules + dispatch
-      for (const filter of filters) {
-        // Make sure `rule` is not un-hidden by a #@# filter
-        const exception = unhideExceptions.get(
-          normalizeSelector(filter, this.resources.getScriptletCanonicalName.bind(this.resources)),
-        );
-
-        if (exception !== undefined) {
-          continue;
-        }
-
-        let applied = false;
-
-        // Dispatch filters in `injections` or `styles` depending on type
-        if (filter.isScriptInject() === true) {
-          if (getInjectionRules === true && injectionsDisabled === false) {
-            injections.push(filter);
-            applied = true;
-          }
-        } else if (filter.isExtended()) {
-          if (getExtendedRules === true) {
-            extendedFilters.push(filter);
-            applied = true;
-          }
-        } else {
-          styleFilters.push(filter);
-          applied = true;
-        }
-
-        if (applied) {
-          this.emit(
-            'filter-matched',
-            {
-              filter,
-              exception,
-            },
-            {
-              url,
-              callerContext,
-              filterType: FilterType.COSMETIC,
-            },
-          );
-        }
-      }
-    }
-
-    // Perform interpolation for injected scripts
-    const scripts: string[] = [];
-    for (const injection of injections) {
-      const script = injection.getScript(this.resources.getScriptlet.bind(this.resources));
-      if (script !== undefined) {
-        this.emit('script-injected', script, url);
-        scripts.push(script);
-      }
-    }
-
-    const { stylesheet, extended } = this.cosmetics.getStylesheetsFromFilters(
-      {
-        filters: styleFilters,
-        extendedFilters,
-      },
-      { getBaseRules, allowGenericHides, hidingStyle },
-    );
-
-    // Emit events
-    if (stylesheet.length !== 0) {
-      this.emit('style-injected', stylesheet, url);
-    }
-
     return {
-      active: true,
-      extended,
-      scripts,
-      styles: stylesheet,
+      matches,
+      allowGenericHides,
     };
   }
 
@@ -1294,6 +1454,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       filter: undefined,
       match: false,
       redirect: undefined,
+      rewrite: undefined,
       metadata: undefined,
     };
 
@@ -1307,6 +1468,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // 2. redirection ($redirect=resource)
       // 3. normal filters
       // 4. exceptions
+      // 5. url rewrites ($removeparam)
       result.filter = this.importants.match(request, this.isFilterExcluded.bind(this));
 
       let redirectNone: NetworkFilter | undefined;
@@ -1326,6 +1488,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
           // highest priorty wins
           .sort((a, b) => b.getRedirectPriority() - a.getRedirectPriority());
 
+        // There is some extra logic to handle special cases like
+        // redirect-rule and redirect=none.
+        //
+        // * If redirect=none is found, then cancel all redirects.
+        // * Else if redirect-rule is found, only redirect if request would be blocked.
+        // * Else if redirect is found, redirect.
         if (redirects.length !== 0) {
           for (const filter of redirects) {
             if (filter.getRedirectResource() === 'none') {
@@ -1359,13 +1527,114 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (result.filter !== undefined) {
           result.exception = this.exceptions.match(request, this.isFilterExcluded.bind(this));
         }
+
+        // If the request is allowed in any way, we match request removeparam.
+        if (result.filter === undefined) {
+          const searchParamSeparatorIndex = request.url.indexOf('?');
+          if (
+            searchParamSeparatorIndex !== -1 &&
+            searchParamSeparatorIndex !== request.url.length - 1
+          ) {
+            const searchParamLiteral = request.url.slice(searchParamSeparatorIndex);
+            const searchParams = new URLSearchParams(searchParamLiteral);
+            let modified = false;
+
+            // Handle $removeparam filters:
+            // 1st priority: @@||<entity>$removeparam
+            // 2nd priority: ||<entity>$removeparam
+            // 3rd priority: @@||<entity>$removeparam=x
+            // 4th priority: ||<entity>$removeparam=x
+            const removeparamFilters: Map<string, NetworkFilter> = new Map();
+            const removeparamExceptions: Map<string, NetworkFilter> = new Map();
+            for (const filter of this.removeparams.matchAll(
+              request,
+              this.isFilterExcluded.bind(this),
+            )) {
+              if (filter.isException()) {
+                removeparamExceptions.set(filter.removeparam!, filter);
+              } else {
+                removeparamFilters.set(filter.removeparam!, filter);
+              }
+            }
+            const removeparamIgnoreFilter: NetworkFilter | undefined =
+              // `result.exception` is conditionally matched only if `result.filter` is available.
+              (result.filter === undefined
+                ? this.exceptions.match(request, this.isFilterExcluded.bind(this))
+                : result.exception) || removeparamExceptions.get('');
+
+            for (const [key, filter] of removeparamFilters) {
+              // Remove all params in case of option value is empty.
+              // We will not match individual exceptions since it has a higher priority than them.
+              if (key === '') {
+                // In case of non-existence of global exception, we will remove all params.
+                if (removeparamIgnoreFilter === undefined) {
+                  // We need to collect all keys before the execution of `delete()`.
+                  // Running `delete()` will inference with an iterator and its inner index.
+                  for (const key of Array.from(searchParams.keys())) {
+                    searchParams.delete(key);
+                  }
+                  modified = true;
+                }
+                this.emit(
+                  'filter-matched',
+                  { filter, exception: removeparamIgnoreFilter },
+                  { request, filterType: FilterType.NETWORK },
+                );
+                break;
+              }
+
+              if (
+                !key.startsWith('~') &&
+                // Try to find `?${key}` pattern.
+                searchParamLiteral.slice(1, key.length + 1) !== key &&
+                !searchParamLiteral.includes(`&${key}`)
+              ) {
+                continue;
+              }
+
+              const exception = removeparamExceptions.get(key) ?? removeparamIgnoreFilter;
+              if (exception === undefined) {
+                // Handle removeparam inversions.
+                if (key.startsWith('~')) {
+                  const inversionKey = key.slice(1);
+                  for (const param of Array.from(searchParams.keys())) {
+                    if (param !== inversionKey && !removeparamExceptions.has(param)) {
+                      searchParams.delete(param);
+                      modified = true;
+                    }
+                  }
+                } else {
+                  searchParams.delete(key);
+                  modified = true;
+                }
+              }
+              this.emit(
+                'filter-matched',
+                { filter, exception },
+                { request, filterType: FilterType.NETWORK },
+              );
+            }
+
+            if (modified) {
+              let url = request.url.slice(0, searchParamSeparatorIndex);
+              if (searchParams.size > 0) {
+                url += '?' + searchParams.toString();
+              }
+
+              result.rewrite = {
+                url,
+              };
+            }
+          }
+        }
       }
 
       // If there was a redirect match and no exception was found, then we
       // proceed and process the redirect rule. This means two things:
       //
-      // 1. Check if a redirect=none rule was found, which acts as exception.
-      // 2. If no exception was found, prepare `result.redirect` response.
+      // 1. Check if there's a removeparam exception was found, which acts as exception.
+      // 2. Check if a redirect=none rule was found, which acts as exception.
+      // 3. If no exception was found, prepare `result.redirect` response.
       if (
         result.filter !== undefined &&
         result.exception === undefined &&

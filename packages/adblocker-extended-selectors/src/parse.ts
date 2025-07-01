@@ -48,8 +48,6 @@ export const RECURSIVE_PSEUDO_CLASSES = new Set([
   'dir',
   'has',
   'host-context',
-  'if',
-  'if-not',
   'is',
   'matches',
   'not',
@@ -569,7 +567,7 @@ function nestTokens(
 }
 
 // Traverse an AST (or part thereof), in depth-first order
-function walk(
+export function walk(
   node: AST | undefined,
   callback: (node: AST, parentNode?: AST) => void,
   o?: AST,

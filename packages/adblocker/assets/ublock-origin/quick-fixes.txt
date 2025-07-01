@@ -6,8 +6,7 @@
 ! Homepage: https://github.com/uBlockOrigin/uAssets
 ! Forums: https://github.com/uBlockOrigin/uAssets/issues
 ! aternos anti adb
-@@||hb.vntsm.com/v3/live/ad-manager-bundle.min.js$script,domain=aternos.org
-@@||hb.vntsm.com/ab/live/fatum/ad-manager-bundle.min.js$script,domain=aternos.org
+@@||hb.vntsm.com/v4/live/vms/sites/aternos.org/index.js$script,domain=aternos.org
 aternos.org##.header-center:style(margin-top:-5000px !important;)
 aternos.org##.sidebar:style(width: 1.745px !important; padding: 1px !important)
 aternos.org##.ad-dfp:style(min-height: 0.1485mm !important; height: 0.1485mm !important;)
@@ -20,163 +19,453 @@ youtube.com##+js(json-prune, playerResponse.adPlacements%20playerResponse.player
 !#endif
 !#endif
 !#endif
-||googlevideo.com/videoplayback*&ctier=L&*%2Cctier%2C$xhr,3p,domain=m.youtube.com|music.youtube.com|www.youtube.com
-www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26(e.loaded%3Ce.duration%7C%7Ce.duration-e.current%3E1)%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(function%20serverContract(), sedCount, 1)
+! ||googlevideo.com/videoplayback*&ctier=L&*%2Cctier%2C$xhr,3p,domain=m.youtube.com|music.youtube.com|www.youtube.com
+www.youtube.com##+js(trusted-rpnt, script, (function%20serverContract(), %2F*START*%2F%22YOUTUBE_PREMIUM_LOGO%22!%3D%3DytInitialData%3F.topbar%3F.desktopTopbarRenderer%3F.logo%3F.topbarLogoRenderer%3F.iconImage%3F.iconType%26%26(location.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Ftv%23%2F%22)%7C%7Clocation.href.startsWith(%22https%3A%2F%2Fwww.youtube.com%2Fembed%2F%22)%7C%7Cdocument.addEventListener(%22DOMContentLoaded%22%2C(function()%7Bconst%20t%3D()%3D%3E%7Bconst%20t%3Ddocument.getElementById(%22movie_player%22)%3Bif(!t)return%3Bif(!t.getStatsForNerds%3F.()%3F.debug_info%3F.startsWith%3F.(%22SSAP%2C%20AD%22))return%3Bconst%20e%3Dt.getProgressState%3F.()%3Be%26%26e.duration%3E0%26%26(e.loaded%3Ce.duration%7C%7Ce.duration-e.current%3E1)%26%26t.seekTo%3F.(e.duration)%7D%3Bt()%2Cnew%20MutationObserver((()%3D%3E%7Bt()%7D)).observe(document%2C%7BchildList%3A!0%2Csubtree%3A!0%7D)%7D)))%3B(()%3D%3E%7Bconst%20t%3D%7Bapply%3A(t%2Co%2Cn)%3D%3E%7Bconst%20e%3Dn%5B0%5D%3Breturn%22function%22%3D%3Dtypeof%20e%26%26e.toString().includes(%22onAbnormalityDetected%22)%26%26(n%5B0%5D%3Dfunction()%7B%7D)%2CReflect.apply(t%2Co%2Cn)%7D%7D%3Bwindow.Promise.prototype.then%3Dnew%20Proxy(window.Promise.prototype.then%2Ct)%7D)()%3B(()%3D%3E%7Bconst%20e%3D%7Bconstruct%3A(e%2Cc%2Cn)%3D%3E%7Bconst%20t%3Dc%5B0%5D%2Co%3Dc%5B1%5D%3F.body%3Breturn%20t%3F.includes(%22youtubei%22)%26%26o%3F.includes('%22clientScreen%22%3A%22WATCH%22')%26%26(c%5B1%5D.body%3Do.replace('%22clientScreen%22%3A%22WATCH%22'%2C'%22clientScreen%22%3A%22ADUNIT%22'))%2CReflect.construct(e%2Cc%2Cn)%7D%7D%3Bwindow.Request%3Dnew%20Proxy(window.Request%2Ce)%7D)()%3B(function%20serverContract(), sedCount, 1)
 www.youtube.com##+js(nano-stb, %5Bnative%20code%5D, 17000, 0.001)
-!#if cap_html_filtering
-||www.youtube.com/s/player/*/base.js$script,xhr,replace=/if\(e===""\)/if(0)/
-!#endif
+!!#if cap_html_filtering
+!||www.youtube.com/s/_/ytmainappweb/_/js/$script,xhr,replace=/onAbnormalityDetected"\,function\(\)[\S\s]+?playabilityStatus\)\}/onAbnormalityDetected"\,function(){}/
+!!#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ebwr6c/is_ublock_broken_again_or_am_i_doing_something/
-www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2Fplayer%3F)
-! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2271325338
-www.youtube.com#@#+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2Fplayer%3F)
+www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2Fplayer%5C%3F%7Cget_watch%7C%5E%5CW%2B%24%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2144781835
+www.youtube.com##+js(json-prune-fetch-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads, , propsToMatch, %2Fplaylist%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2271325338
 ! https://github.com/uBlockOrigin/uAssets/issues/20586#issuecomment-2308486423
 ! https://github.com/AdguardTeam/AdguardFilters/commit/61d89cebe154ca17932bedf61df5e2c7bd75bd7d
-www.youtube.com#@#+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2Fplayer)
-tv.youtube.com#@#+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7Cplayer%5C%3F%7Cwatch%5C%3F%5Btv%5D%3D%7Cyoutubei%5C%2Fv1%5C%2Fplayer%2F)
-www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots, , propsToMatch, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
+www.youtube.com##+js(json-prune-xhr-response, playerAds%20adPlacements%20adSlots%20no_ads%20playerResponse.playerAds%20playerResponse.adPlacements%20playerResponse.adSlots%20playerResponse.no_ads%20%5B%5D.playerResponse.adPlacements%20%5B%5D.playerResponse.playerAds%20%5B%5D.playerResponse.adSlots%20%5B%5D.playerResponse.no_ads, , propsToMatch, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
 tv.youtube.com##+js(trusted-replace-xhr-response, %22adPlacements%22, %22no_ads%22, %2Fplaylist%5C%3Flist%3D%7C%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%7Cwatch%5C%3F%5Btv%5D%3D%2F)
 !#if !cap_html_filtering
-www.youtube.com#@#+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%5BA-Z%5D%22%5C%7D%7C%22%5C%7D%7B2%2C4%7D)%5C%7D%5C%5D%2C%2F, , %2Fplaylist%5C%3Flist%3D%7Cplayer%5C%3F%7Cwatch%5C%3F%5Btv%5D%3D%7Cyoutubei%5C%2Fv1%5C%2Fplayer%2F)
-www.youtube.com#@#+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%22adSlots%22%7C%22adBreakHeartbeatParams%22)%2Fgms, %241, youtubei%2Fv1%2Fplayer)
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%5BA-Z%5D%22%5C%7D%7C%22%5C%7D%7B2%2C4%7D)%5C%7D%5C%5D%2C%2F, , %2Fplaylist%5C%3Flist%3D%7C%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%7Cwatch%5C%3F%5Btv%5D%3D%2F)
 www.youtube.com##+js(trusted-replace-xhr-response, %2F%22adPlacements.*%3F(%22adSlots%22%7C%22adBreakHeartbeatParams%22)%2Fgms, %241, %2F%5C%2Fplayer(%3F%3A%5C%3F.%2B)%3F%24%2F)
-!#endif
-www.youtube.com##+js(set, yt.config_.EXPERIMENT_FLAGS.web_bind_fetch, false)
-! https://github.com/uBlockOrigin/uBlock-discussions/discussions/831#discussioncomment-10655279
-||www.youtube-nocookie.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements.*?([A-Z]"\}|"\}{2\,4})\}\]\,//
-||www.youtube-nocookie.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots.*?\}\}\]\,"adBreakHeartbeatParams/"adBreakHeartbeatParams/
-! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-2307514494
-web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node.sponsored_data.id_for_advertisement)
-!#if cap_html_filtering
-||facebook.com/api/graphql/$xhr,replace=/null,"category_sensitive"[^\n]+?,"__typename":"SponsoredData"[^\n]+"cursor":"[^"]+"\}/null}/g,domain=web.facebook.com|www.facebook.com
+www.youtube.com##+js(trusted-replace-fetch-response, %22adPlacements%22, %22no_ads%22, player%3F)
+www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22, player%3F)
+www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22, %2F%5E%5CW%2B%24%2F)
+www.youtube.com##+js(rmnt, script, window%2C%22fetch%22)
 !#else
-web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%2C%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D, %2Fapi%2Fgraphql)
-web.facebook.com,www.facebook.com##+js(rpnt, script, %2Fnull%2C%22category_sensitive%22%5B%5E%5Cn%5D%2B%3F%2C%22__typename%22%3A%22SponsoredData%22%5B%5E%5Cn%5D%2B%22cursor%22%3A%22%5B%5E%22%5D%2B%22%5C%7D%2Fg, null%7D)
+||www.youtube.com/playlist?list=$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/playlist?list=$xhr,1p,replace=/"adSlots"/"no_ads"/
+||www.youtube.com/watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/watch?$xhr,1p,replace=/"adSlots"/"no_ads"/
+||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||www.youtube.com/youtubei/v1/player?$xhr,1p,replace=/"adSlots"/"no_ads"/
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adPlacements"/"no_ads"/
+||youtube.com/youtubei/v1/get_watch?$xhr,1p,replace=/"adSlots"/"no_ads"/
+www.youtube.com##^script[id]:has-text(window,"fetch")
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/18476
+www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, fetch)
+www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, Request)
+www.youtube.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, JSON.parse)
+! https://github.com/AdguardTeam/AdguardFilters/issues/172033#issuecomment-1991263854
+youtube.com##+js(json-prune, entries.%5B-%5D.command.reelWatchEndpoint.adClientParams.isAd)
+! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-2945534175
+youtube.com#@##player-ads
+! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-2964564722
+!www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, contentPlaybackContext%22%3A%7B, contentPlaybackContext%22%3A%7B%22isInlinePlaybackNoAd%22%3Atrue%2C, condition, contentPlaybackContext)
+! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-2998301771
+www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, clientScreen%22%3A%22WATCH, clientScreen%22%3A%22ADUNIT, condition, contentPlaybackContext)
+! https://github.com/uBlockOrigin/uAssets/issues/3367
+! web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad)
+! web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad, , propsToMatch, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.sideFeedUnit.nodes.%5B%5D.new_adverts.nodes.%5B-%5D.sponsored_data)
+web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeedUnit.nodes.%5B%5D.new_adverts.nodes.%5B-%5D.sponsored_data)
+web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc][href^="http"][target="_blank"]
+web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
+web.facebook.com,www.facebook.com##+js(json-edit, ..__bbox.result.data.node%5B%3F%40.*.__typename%3D%3D%22SponsoredData%22%5D)
+!#if ext_devbuild
+web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
+web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
+!#endif
+!#if ext_ubol
+! [dup] from ublock-origin/quick-fixes.txt
+! web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
+! [dup] from ublock-origin/quick-fixes.txt
+! web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=evelynthankregion.com|lorimuchbenefit.com|susanhavekeep.com|thomasalthoughhear.com|zacharycollectionmight.com,important
-evelynthankregion.com,lorimuchbenefit.com,susanhavekeep.com,thomasalthoughhear.com,zacharycollectionmight.com##+js(nowoif)
-evelynthankregion.com,lorimuchbenefit.com,susanhavekeep.com,thomasalthoughhear.com,zacharycollectionmight.com##+js(set, console.clear, undefined)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jilliandescribecompany.com,important
+jilliandescribecompany.com##+js(nowoif)
+jilliandescribecompany.com##+js(set, console.clear, undefined)
+jilliandescribecompany.com##+js(acs, globalThis, break%3Bcase)
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
 !next-episode.net##+js(rmnt, script, %2F%5Cd%2B%5C%2B%5Cd%7C64%7C%5C%2B%5C%2B%7C%5C%2B1%7Cadbl%7Cablk%7C%5B%5Cs%5CS%5D%7B0%2C%7D(%5C.%5C.%7Cfunction)%5B%5Cs%5CS%5D%7B1800%2C%7D%7Cdocument%5C%5B%2Fi)
 @@||pagead2.googlesyndication.com^$script,domain=next-episode.net
-! https://github.com/uBlockOrigin/uAssets/issues/20505
-download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%3Breturn%3B%5C%7D%5C%7D.*%3F%3Breturn%3B.*%3F%3Breturn%3B%5C%7D%2Fg, , condition, attribute)
 ! https://github.com/uBlockOrigin/uAssets/issues/23806
-japscan.lol##+js(aost, onload, inlineScript)
 *$image,redirect-rule=1x1.gif,domain=japscan.lol
-japscan.lol##+js(aeld, DOMContentLoaded, (e)%3D%3E)
-japscan.lol#@#+js(rmnt, script, %3B%7Delse%7Bif(typeof)
-japscan.lol#@#+js(rmnt, script, %5C'fined)
-japscan.lol#@#+js(rmnt, script, NeSi!)
-japscan.lol#@#+js(rmnt, script, %2FNeSi.%2F)
-japscan.lol#@#+js(rmnt, script, Ne%5C'%2B%5C'Si)
-japscan.lol#@#+js(rmnt, script, %2FN.%7B0%2C3%7De.%7B0%2C3%7DS.%7B0%2C3%7Di%2F)
-japscan.lol#@#+js(rmnt, script, %3Deval()
-japscan.lol#@#+js(rmnt, script, %2FN.%7B0%2C10%7De.%7B0%2C10%7DS.%7B0%2C10%7Di%7CS.%7B0%2C10%7Di.%7B0%2C10%7DN.%7B0%2C10%7De%2F)
-japscan.lol#@#+js(rmnt, script, %2F%5C%7Breturn%20new%20Function.%2B%5C)%5C(%5C)%3B%5C%7D%3Bvar%20%2F)
-japscan.lol#@#+js(rmnt, script, Function(%5C'return%20%5C'%2B)
-japscan.lol#@#+js(rmnt, script, re%5C'%2B%5C'turn)
-japscan.lol#@#+js(rmnt, script, nApB!)
-japscan.lol#@#+js(rmnt, script, oDD%2BlDC%2BlDA%2BlDD)
-japscan.lol#@#+js(rmnt, script, nApB)
-japscan.lol##+js(rmnt, script, %2F'n.%7B0%2C3%7DA.%7B0%2C3%7Dp.%7B0%2C3%7DB'%2F)
-/^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}(?:\?v=\d+)?$/$script,3p,domain=japscan.lol,important
+japscan.lol##+js(norafif, %2F%5E%2F)
+japscan.lol##+js(trusted-set-attr, .navbar-nav%20%3E%20li%23navpromo2.nav-item%20%3E%20a, onclick, let%20a%3Dfunction()%7B%7D%3Breturn%20false%3B)
+japscan.lol##+js(no-fetch-if, %2F%5C%2F%5C%2Fansuksar%5C.com%5C%2F%5B0-9a-zA-Z%5D%7B3%2C26%7D%5C%2F%5Cd%7B4%2C6%7D%5Cb%2F, length%3A125746)
+! START: Counter Liste FR rules
+japscan.lol#@#div.container > [href]
+! END
+||japscan.lol/zjs/$script,replace=/function GoodDay\(\)\{.+?\}\}\}//
 @@*$image,xhr,script,domain=japscan.lol
-!||googletagmanager.com^$script,domain=japscan.lol,important
-||cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-||google-analytics.com^$xhr,domain=japscan.lol,important
-/^https?:\/\/[a-z]{8,15}\.[a-z]{2,3}\/5\/\d{6,7}(?:\?_=\d+)?$/$script,3p,domain=japscan.lol,important
-/^https?:\/\/[-a-z]{8,15}\.(?:com|net)\/401\/\d{7}$/$script,3p,domain=japscan.lol,important
-! https://github.com/uBlockOrigin/uAssets/issues/2320
-@@||freemcserver.net^$ghide
-@@||cdn.jsdelivr.net/gh/Levii22/$domain=freemcserver.net
-@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=panel.freemcserver.net
-/cdn-cgi/challenge-platform/scripts/jsd/main.js$script,important,1p,domain=freemcserver.net
-panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
-||panel.freemcserver.net/bs4/bs4$script,1p
-||panel.freemcserver.net/*YouUblockAnd$script,1p
-*$script,redirect-rule=noopjs,domain=panel.freemcserver.net
-freemcserver.net##+js(nostif, 0x)
-panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > .col > ul:first-child + [class="row justify-content-center mb-3 billboard_responsive text-center"]
-panel.freemcserver.net##body > #main-wrapper > .page-wrapper > .container-fluid > .row > .col-md-10 > [class] > .row > [class^="col-"] > [style*="min-height"][style*="flex"]:has(> [id^="stpd-"][style^="position:"]:first-child + div + div:last-child)
-! https://github.com/uBlockOrigin/uAssets/issues/20505
-download.megaup.net#@#+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%3Breturn%3B%5C%7D%5C%7D.*%3F%3Breturn%3B.*%3F%3Breturn%3B%5C%7D%2Fg, , condition, attribute)
-download.megaup.net##+js(rpnt, script, %2Ffor%5Cs*%5C(%5Cs*(const%7Clet%7Cvar).*%3F%5C)%5C%3Breturn%5C%3B%5C%7D_%2Fg, _, condition, attribute)
-download.megaup.net##a:has(img[src*="/download"]):style(width: 300px !important; height: 300px !important; display: block !important;)
+*$script,xhr,3p,denyallow=acscdn.com|ansuksar.com|aozoiekopoaka.shop|base64easy.com|base64hub.com|challenges.cloudflare.com|cdn.jsdelivr.net|cdnjs.cloudflare.com|code.jquery.com|coutaricho.shop|curltophp.com|ebooksmangaia.com|faireundon.vip|fkourazirop.shop|fourino.shop|frjelsoieapoas.shop|hakoroubita.shop|mamamiaroubita.shop|morinavotarius.top|platform.pubadx.one|regexgenius.com|reoiamlsa.shop|routinato.shop|smaltourinto.shop|static.cloudflareinsights.com|tourpowouro.shop,domain=japscan.lol,important
+/^https?:\/\/(?:[a-z]{2}\.)?[0-9a-z]{5,16}\.[a-z]{3,7}\/[a-z](?=[a-z]{0,25}[0-9A-Z])[0-9a-zA-Z]{3,26}\/\d{4,6}(?:\?[_a-z]=[-0-9a-z]+)?$/$script,3p,match-case,redirect=noop.js,important,domain=japscan.lol
+/^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
+||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
+||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2BnawNA%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%3A2%2F)
+japscan.lol##+js(nostif, %3Ddocument%5B_0x)
+!japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22%2F%5E%5B-0-9A-Z_a-z%5D%7B4%2C8%7D%24%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+!japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5E%5B-0-9A-Z_a-z%5D%7B4%2C8%7D%24%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
+japscan.lol##+js(trusted-set, aclib, json%3A%7B%22isShowingPop%22%3A%20false%7D)
+japscan.lol##+js(set, aclib.runInPagePush, %7B%7D, as, callback)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
-poophq.com,veev.to##+js(nowoif)
-poophq.com,veev.to##+js(set, fapit.check, noopFunc)
-!poophq.com,veev.to##+js(no-xhr-if, url%3A!%2Fcdn%5C.plyr%5C.io%7Cveev%5C.to%7C%5C%2Fdl%5C%3Fop%3Dplayer_api%2F%20method%3AGET)
-poophq.com,veev.to##+js(no-xhr-if, %2Fvast.php%3F)
-poophq.com,veev.to##+js(no-xhr-if, adsbygoogle, length%3A35000-55000)
-poophq.com,veev.to##+js(rpnt, script, %2F'__abb'%5C%2B'uri'%2F, %2F%5C(function%5C(%5C)%5C%7B%5Cs*'use%20strict'%3B%5Cs*const%20handler%3D%5C%7B%5Cs*apply%3Afunction%5C(target%2CthisArg%2CargumentsList%5C)%5C%7B%5Cs*if%5C(argumentsList%5C%5B0%5C%5D%26%26argumentsList%5C%5B0%5C%5D%5C.html%5C%3F%5C.%5Cdetected%3D%3D%3Dnull%26%26typeof%20argumentsList%5C%5B0%5C%5D%5C.html%5C%3F%5C.%5Cinstance%5C%3F%5C.%5Cstart%3D%3D%3D'function'%26%26typeof%20argumentsList%5C%5B0%5C%5D%5C.env%5C%3F%5C.%5Cinstance%5C%3F%5C.%5Cstart%3D%3D%3D'function'%26%26typeof%20argumentsList%5C%5B0%5C%5D%5C.http%5C%3F%5C.%5Cinstance%5C%3F%5C.%5Cstart%3D%3D%3D'function'%5C)%5C%7B%5Cs*const%20customStartFunction%3Dfunction%5C(%5C)%5C%7B%5Cs*if%5C(typeof%20this%5C._hsz%3D%3D%3D'boolean'%5C)%5C%7B%5Cs*this%5C._hsz%3Dfalse%3B%5Cs*%5C%7D%5C%7D%3B%5Cs*%5C%5B'html'%2C'env'%2C'http'%5C%5D%5C.forEach%5C(%5C(key%5C)%3D%3E%5C%7B%5Cs*argumentsList%5C%5B0%5C%5D%5C%5Bkey%5C%5D%5C.instance%5C.start%3DcustomStartFunction%3B%5Cs*if%5C(typeof%20argumentsList%5C%5B0%5C%5D%5C%5Bkey%5C%5D%5C.instance%5C._hsz%3D%3D%3D'boolean'%5C)%5C%7B%5Cs*argumentsList%5C%5B0%5C%5D%5C%5Bkey%5C%5D%5C.instance%5C._hsz%3Dtrue%3B%5Cs*%5C%7D%5C%7D%3B%5Cs*%5C%7D%5Cs*return%20Reflect%5C.apply%5C(target%2CthisArg%2CargumentsList%5C)%3B%5Cs*%5C%7D%5C%7D%3B%5Cs*window%5C.Object%5C.keys%3Dnew%20Proxy%5C(window%5C.Object%5C.keys%2Chandler%5C)%3B%5Cs*%5C%7D%5C)%5C(%5C)%3B%2F)
-poophq.com,veev.to##+js(rpnt, script, %2F'__a'%5C%2B'bb'%5C%2B'uri'%2F, %2F%5C(function%5C(%5C)%5C%7B%5Cs*'use%20strict'%3B%5Cs*const%20handler%3D%5C%7B%5Cs*apply%3Afunction%5C(target%2CthisArg%2CargumentsList%5C)%5C%7B%5Cs*if%5C(argumentsList%5C%5B0%5C%5D%26%26argumentsList%5C%5B0%5C%5D%5C.html%5C%3F%5C.%5Cdetected%3D%3D%3Dnull%26%26typeof%20argumentsList%5C%5B0%5C%5D%5C.html%5C%3F%5C.%5Cinstance%5C%3F%5C.%5Cstart%3D%3D%3D'function'%26%26typeof%20argumentsList%5C%5B0%5C%5D%5C.env%5C%3F%5C.%5Cinstance%5C%3F%5C.%5Cstart%3D%3D%3D'function'%26%26typeof%20argumentsList%5C%5B0%5C%5D%5C.http%5C%3F%5C.%5Cinstance%5C%3F%5C.%5Cstart%3D%3D%3D'function'%5C)%5C%7B%5Cs*const%20customStartFunction%3Dfunction%5C(%5C)%5C%7B%5Cs*if%5C(typeof%20this%5C._hsz%3D%3D%3D'boolean'%5C)%5C%7B%5Cs*this%5C._hsz%3Dfalse%3B%5Cs*%5C%7D%5C%7D%3B%5Cs*%5C%5B'html'%2C'env'%2C'http'%5C%5D%5C.forEach%5C(%5C(key%5C)%3D%3E%5C%7B%5Cs*argumentsList%5C%5B0%5C%5D%5C%5Bkey%5C%5D%5C.instance%5C.start%3DcustomStartFunction%3B%5Cs*if%5C(typeof%20argumentsList%5C%5B0%5C%5D%5C%5Bkey%5C%5D%5C.instance%5C._hsz%3D%3D%3D'boolean'%5C)%5C%7B%5Cs*argumentsList%5C%5B0%5C%5D%5C%5Bkey%5C%5D%5C.instance%5C._hsz%3Dtrue%3B%5Cs*%5C%7D%5C%7D%3B%5Cs*%5C%7D%5Cs*return%20Reflect%5C.apply%5C(target%2CthisArg%2CargumentsList%5C)%3B%5Cs*%5C%7D%5C%7D%3B%5Cs*window%5C.Object%5C.keys%3Dnew%20Proxy%5C(window%5C.Object%5C.keys%2Chandler%5C)%3B%5Cs*%5C%7D%5C)%5C(%5C)%3B%2F)
-poophq.com,veev.to##+js(no-xhr-if, %2F%5C%2Fpreroll%5C.engine%24%2F)
-*$script,3p,domain=poophq.com|veev.to,redirect-rule=noopjs
-*$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to
-@@*$ghide,domain=poophq.com|veev.to
+poophq.com,veev.to,doods.to##+js(nowoif)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fvast.php%3F)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, %2Fclick%5C.com%7Cpreroll%7Cnative_render%5C.js%7Cacscdn%2F, length%3A10001)
+poophq.com,veev.to##+js(nostif, %5D()%3B%7D, 500)
+poophq.com,veev.to##+js(rmnt, script, offsetParent)
+!#if cap_html_filtering
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'adblockEnabled\':[a-zA-Z]{2}/'adblockEnabled':false/g,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/return new Promise\(function\(.{100,550}?\]\[\'on\'\].*?[a-zA-Z]\;\}\)\[/[/,domain=poophq.com|veev.to|doods.to
+||static.veevcdn.co/assets/videoplayer/$script,3p,replace=/\'vavl\':\!0x0/'vavl':false/g,domain=poophq.com|veev.to|doods.to
+||adsco.re^$xhr,important,domain=poophq.com|veev.to|doods.to
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$xhr,important,domain=poophq.com|veev.to|doods.to
+/dl?op=aa&cmd=ga&_a=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
+!#else
+!#if ext_ubol
+@@||c.adsco.re/|$script,domain=poophq.com|veev.to|doods.to
+poophq.com,veev.to,doods.to##+js(no-xhr-if, 162.252.214.4, true)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, c.adsco.re)
+poophq.com,veev.to,doods.to##+js(no-xhr-if, adsco.re%3A2087)
+!#else
+/dl?op=player_api&cmd=*adb=$xhr,1p,important,domain=poophq.com|veev.to|doods.to
+||adsco.re^$script,redirect=none:5,domain=poophq.com|veev.to|doods.to
+poophq.com,veev.to,doods.to##+js(nostif, %2F%5E%5Cs*function%5Cs*%5C(%5Cs*%5C)%5Cs*%7B%5Cs*%5Ba-zA-Z%5D%7B1%2C2%7D%5Cs*%5C(.%7B1%2C10%7D%24%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2Fbjwywsj%7Cbhhsywi%7Ccaoampzpue%7C2147%7C00z0oq%7Cqrqwrruqwwtz%7CkA_z3az21%7Ctrwqqkzka1c2%7Coon%5C%3D%5C%22cy%7Czaz%2Cee%2F)
+poophq.com,veev.to,doods.to##+js(nostif, %2Ffunction%5C(%5C)%5Cs*%5C%7B%5Cs*var%20.%7B70%2C300%7D%5Cs*%5C)%5Cs*%5C%7D%5Cs*%24%2F, 4000-6000)
+poophq.com,veev.to,doods.to##+js(nostif, console%5B)
+!#endif
+!#endif
+*$script,3p,domain=poophq.com|veev.to|doods.to,redirect-rule=noopjs
+*$frame,redirect-rule=noopframe,3p,domain=poophq.com|veev.to
+poophq.com,veev.to##style:has-text(veevad-):remove()
+*$other,3p,denyallow=veevcdn.co,domain=poophq.com|veev.to|doods.to
+@@*$ghide,xhr,domain=poophq.com|veev.to|doods.to
 veev.to#@#.avb-active
-! https://github.com/uBlockOrigin/uAssets/issues/24575
-@@||widgets.outbrain.com/outbrain.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
-animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, outbrain.com, outbrain)
-coempregos.com.br##+js(nostif, hasAdblock)
-! https://github.com/uBlockOrigin/uAssets/issues/22648
-! https://github.com/uBlockOrigin/uAssets/issues/20401
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%20%5C(%3Ffunction%5C(.*catch.*%20%5C%24%5C.ajax%5C(%5C%7B%2Fs, %24.ajax(%7B, condition, throw)
-@@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js|$xhr,domain=infinityscans.xyz|infinityscans.net
-*$script,redirect-rule=noopjs,domain=infinityscans.xyz|infinityscans.net
-infinityscans.xyz,infinityscans.net##+js(no-fetch-if, api%2Fcollect)
-infinityscans.xyz,infinityscans.net#@#+js(nowoif)
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %2F%22%5C%5Cx68%5C%5Cx74%5C%5Cx74%5C%5Cx70.*%3F%22%2F, false)
-infinityscans.xyz,infinityscans.net##+js(rpnt, script, %3D%3D0xc8, %3D%3D0, condition, throw)
-||enigmaswhereas.com^$all
-! https://github.com/uBlockOrigin/uAssets/issues/19935
-sportnews.to,soccershoes.blog##+js(aeld, DOMContentLoaded, adsSrc)
-*$script,redirect-rule=noopjs,domain=sportnews.to|sportshub.to
-! https://github.com/uBlockOrigin/uAssets/issues/8719
-1001tracklists.com##+js(rmnt, script, .className.indexOf)
-1001tracklists.com##+js(spoof-css, %5Btarget%3D%22_blank%22%5D%5Brel%3D%22noopener%20noreferrer%22%5D, display, block)
+! https://github.com/uBlockOrigin/uAssets/issues/2320
+panel.freemcserver.net#@#+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20window.setTimeout(function()%7BblockPing()%7D%2C200)%3B)
+panel.freemcserver.net##+js(rpnt, script, 'G-1B4LC0KT6C')%3B, 'G-1B4LC0KT6C')%3B%20localStorage.setItem(%22tuna%22%2C%20%22dW5kZWZpbmVk%22)%3B%20localStorage.setItem(%22sausage%22%2C%20%22ZmFsc2U%3D%22)%3B%20window.setTimeout(function()%7BfuckYouUblockAndJobcenterTycoon(false)%7D%2C200)%3B)
+! filemoon
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fuaaw5/asblock_detected_in_ask4porncc
-file-1bl9ruic-moon.com,file-sp32aoh8-moon.com,moon-kg83docx.com,moon-fm43w1qv.com##+js(nowoif)
-file-1bl9ruic-moon.com,file-sp32aoh8-moon.com,moon-kg83docx.com,moon-fm43w1qv.com##+js(acs, Math, localStorage%5B'%5Cx)
-.xyz/js/cold.js|$script,3p
-! https://github.com/uBlockOrigin/uAssets/issues/25538
-jmzkzesy.xyz##+js(nowoif)
-jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
-!#if env_firefox
-*$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,from=filemoon.*
+! https://github.com/uBlockOrigin/uAssets/issues/27173
+! https://github.com/AdguardTeam/AdguardFilters/issues/202301
+0deh.com,26efp.com,2glho.org,58n1.com,5mgz1.com,6jlvu.com,c1z39.com,djx10.org,fu-4u3omzw0.nl,guum5.com,hmt6u.com,imdpu9eq.com,kzjou.com,l8e8.com,l99j.com,mee-cccdoz45.com,my4w.com,qa2h.com,qvzidojm.com,tpz6t.com,tz7z9z0h.com,v1kkm.com,xcoic.com,xo7c.com,z4h4.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(art|cfd|fun|icu|info|live|pro|sbs|world)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(nowoif, %2F%5E%20%5B-%5Cd%5D%2F)
+0deh.com,26efp.com,2glho.org,58n1.com,5mgz1.com,6jlvu.com,c1z39.com,djx10.org,fu-4u3omzw0.nl,guum5.com,hmt6u.com,imdpu9eq.com,kzjou.com,l8e8.com,l99j.com,mee-cccdoz45.com,my4w.com,qa2h.com,qvzidojm.com,tpz6t.com,tz7z9z0h.com,v1kkm.com,xcoic.com,xo7c.com,z4h4.com,/^moon(?:-[a-z0-9]+)?-embed\.com$/,/^moonfile-[a-z0-9-]+\.com$/,/^[0-9a-z]{5,8}\.(art|cfd|fun|icu|info|live|pro|sbs|world)$/,/^moo-[a-z0-9]+(-[a-z0-9]+)*-mkay\.com$/,/^file-[a-z0-9]+(-[a-z0-9]+)*-(moon|embed)\.com$/,/^fle-[a-z0-9]+(-[a-z0-9]+)*-moo\.com$/,/^filemoon-[a-z0-9]+(?:-[a-z0-9]+)*\.(?:com|xyz)$/##+js(acs, Math.random, parseInt(localStorage%5B'%5Cx)
+f51rm.com>>##+js(nowoif, %2F%5E%20%5B-%5Cd%5D%2F)
+u26bekrb.fun##+js(set, adBlockDetected, undefined)
+!#if cap_html_filtering
+$frame,3p,domain=8rm3l0i9.fun|iqksisgw.xyz|u6lyxl0w.skin|l1afav.net,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(e,t,r)=>{}});const e=new WeakMap,t=(e,t)=>{try{e.dispatchEvent(new Event(t))}catch{}};XMLHttpRequest.prototype;self.XMLHttpRequest=class extends self.XMLHttpRequest{open(t,r,...n){if(e.delete(this),new URL(r).hostname.endsWith(".cdn255.com"))return super.open(t,r,...n);const s={method:t,url:r},a=Object.assign(s,{xhr:this,headers:{date:"","content-type":"","content-length":""},url:s.url,props:{response:{value:""},responseText:{value:""},responseXML:{value:null}}});return e.set(this,a),super.open(t,r,...n)}send(...r){const n=e.get(this);return void 0===n?super.send(...r):!1===n.defer?(n.headers["content-length"]=`${n.props.response.value}`.length,Object.defineProperties(n.xhr,{readyState:{value:4},responseURL:{value:n.url},status:{value:200},statusText:{value:"OK"}}),void Object.defineProperties(n.xhr,n.props)):void Promise.resolve("").then((()=>n)).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:1,configurable:!0},responseURL:{value:n.url}}),t(e.xhr,"readystatechange"),e))).then((e=>(n.headers["content-length"]=`${e.props.response.value}`.length,Object.defineProperties(e.xhr,{readyState:{value:2,configurable:!0},status:{value:200},statusText:{value:"OK"}}),t(e.xhr,"readystatechange"),e))).then((e=>(Object.defineProperties(e.xhr,{readyState:{value:3,configurable:!0}}),Object.defineProperties(e.xhr,e.props),t(e.xhr,"readystatechange"),e))).then((e=>{Object.defineProperties(e.xhr,{readyState:{value:4}}),t(e.xhr,"readystatechange"),t(e.xhr,"load"),t(e.xhr,"loadend")}))}};let r=document.querySelector("script");r.innerHTML.includes("window.open")&&r.parentElement.removeChild(r)})();<\/script>/'
+/^https:\/\/[a-z0-9]{2,}-[a-z0-9]{8}\.(?:com|nl)\/[a-z0-9-]+/[a-z0-9]{12}\b/$frame,3p,match-case,to=com|nl,ipaddress=/^(1(72\.67\.\d{3}|04\.21\.\d+)\.\d+|188\.114\.9[67]\.[08]|64:ff9b::[a-f0-9]{4}:[a-f0-9]{1,4})$/,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(n,o,w)=>{}});let e=document.querySelector("script");e.innerHTML.includes("window.open")&&e.parentElement.removeChild(e)})();<\/script>/i'
+/^https:\/\/[a-z0-9]{8}\.com\/[a-z0-9-]+\/[a-zA-Z0-9]{12,50}\b/$frame,1p,strict1p,match-case,to=com,ipaddress=/^(1(72\.67\.\d{3}|04\.21\.\d+)\.\d+|188\.114\.9[67]\.[08]|64:ff9b::[a-f0-9]{4}:[a-f0-9]{1,4})$/,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(n,o,w)=>{}});let e=document.querySelector("script");e.innerHTML.includes("window.open")&&e.parentElement.removeChild(e)})();<\/script>/i'
+/^https:\/\/[a-z0-9]{4,8}\.[a-z]{2,5}\/[a-z0-9-]+\/[a-zA-Z0-9]{12,50}\b/$frame,3p,match-case,to=~net|~org|~gov|~edu|~br|~jp|~ir|~it|~ru,ipaddress=/^(1(72\.67\.\d{3}|04\.21\.\d+)\.\d+|188\.114\.9[67]\.[08]|64:ff9b::[a-f0-9]{4}:[a-f0-9]{1,4})$/,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(n,o,w)=>{}});let e=document.querySelector("script");e.innerHTML.includes("window.open")&&e.parentElement.removeChild(e)})();<\/script>/i'
+*$frame,3p,replace=/adBlockDetected//,from=filemoon.*
 !#endif
-! https://github.com/AdguardTeam/AdguardFilters/commit/337aaa82e68d2aeae140b46d5d234a86e2f0cde3
-wiki.yjsnpi.nu##+js(set, HTMLElement.prototype.remove, noopFunc)
-wiki.yjsnpi.nu##+js(set, DOMTokenList.prototype.remove, noopFunc)
-wiki.yjsnpi.nu#@#+js(aopr, HTMLElement.prototype.style)
-$frame,redirect-rule=noopframe,domain=wiki.yjsnpi.nu
-wiki.yjsnpi.nu##iframe[src*="?affid="]
-wiki.yjsnpi.nu###mw-content-text > div.im[style^="min-height:"]
-wiki.yjsnpi.nu###mw-content-text > div[style*="min-height:"]:has(> div.im > div[id^="im-"] > script)
-wiki.yjsnpi.nu###mw-content-text > div[style*="min-height:"]:has(> div[id^="im-"] > script)
-wiki.yjsnpi.nu###mw-content-text > div[style*="min-height:"]:has(> div[style] > div[id^="im-"] > script)
-wiki.yjsnpi.nu###mw-content-text > div[style*="min-height:"]:has(> a[rel*="sponsored"][target="_blank"] > img)
-wiki.yjsnpi.nu#@#+js(ra, id, %23bodyContent)
-wiki.yjsnpi.nu##body img, body .Inmbox, body .lazy-image-placeholder:style(width: auto !important; height: auto !important; opacity: 1 !important; visibility: visible !important; display: block !important; color: unset !important; background: none !important;)
-wiki.yjsnpi.nu###comments-loading
-! https://github.com/uBlockOrigin/uAssets/issues/25614
-pinterest.*#@#div[data-test-id="pin"]:has(div[title^="Promoted"])
-pinterest.*#@#[data-grid-item]:has([data-test-pin-id] [data-test-id^="one-tap-desktop"] > a[href^="http"][rel="nofollow"])
-! https://github.com/AdguardTeam/AdguardFilters/issues/190368
-! [badfilter] /^https:\/\/[0-9a-z]{8}\.[A-z0-9-]+\.[A-z]{2,3}\/[a-z]+\/[a-z0-9]{10}\.html$/$match-case,doc,badfilter
-! https://www.reddit.com/r/uBlockOrigin/comments/1g2g56h/important_banking_website_issue/
-@@||ebanking.meezanbank.com/AmbitRetailFrontEnd/js/fingerprint2.min.js$1p
-! https://github.com/uBlockOrigin/uAssets/commit/360f0115688625e65e7f8b3e3cd3093c4994bfac
-! https://github.com/uBlockOrigin/uAssets/issues/25667
-! https://www.reddit.com/r/uBlockOrigin/comments/1g50usk/amazon_similar_items_link_resolving_to_bad_url/
-! https://github.com/uBlockOrigin/uAssets/issues/25678
+! https://github.com/uBlockOrigin/uAssets/issues/25538
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(nowoif)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##+js(acs, Math, localStorage%5B'%5Cx)
+0cbcq8mu.com,2cf0xzdu.com,4k2h4w04.xyz,a6iqb4m8.xyz,afl3ua5u.xyz,jmzkzesy.xyz##^script:has-text(/popunder|\(\)\{try\{localStorage\[/)
+||droci.buzz^$popup,doc
+||qsiyfgazubcu.top^$popup,doc
+||sez88e.fun^$popup,doc
+||vrkonefd.buzz^$popup,doc
+||xpobbwxzhe-l.site^$popup,doc
+! Ad-Shield
+dogdrip.net##html[lang="ko"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
+infinityfree.com##html[lang][dir="ltr"] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
+smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[frameborder="0"][style]):style(clip-path: circle(0) !important;)
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##html[class^="img_"][amp4ads=""][i-amphtml-layout=""][i-amphtml-no-boilerplate=""][amp-version="2502032353000"]
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://content-loader.com/content"]
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://html-load.com/content"]
+~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://07c225f3.online/content"]
+07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##html:not(:has(> head > style:only-child:has-text(width:399px;height:411px))):style(filter: opacity(0) !important; pointer-events: none !important;)
+/^https:\/\/www\.[0-9a-z-]{8,}\.(?:com|xyz)\/script\/[-.0-9A-Za-z]+\.[-A-Za-z]{2,30}\.js$/$script,3p,match-case,header=x-length
+://html-load.com/loader.min.js$domain=~dogdrip.net|~infinityfree.com|~smsonline.cloud
+/^https:\/\/(?:as(?:loader)?|loader)\.[-0-9A-Za-z]+.[-A-Za-z]{2,30}\/loader.min.js$/$script,1p,strict3p
+! https://github.com/uBlockOrigin/uAssets/issues/26487
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(no-fetch-if, -load.com%2Fscript%2F, length%3A101)
+dogdrip.net,infinityfree.com,smsonline.cloud##+js(nostif, )%5D(this%2C..., 3000-6000)
+-load.com/script/$xhr,domain=smsonline.cloud
+smsonline.cloud##+js(nostif, (new%20Error(, 3000-6000)
+smsonline.cloud##aside[class^="css-"]:has(> p:has-text(Advertisement) + ins.adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/25344
+! https://github.com/uBlockOrigin/uAssets/pull/26342
+! https://github.com/uBlockOrigin/uAssets/issues/26393
+! https://github.com/uBlockOrigin/uAssets/issues/26623
+bing.com##+js(rpnt, script, _w.keyMap%3D, (()%3D%3E%7Bconst%20e%3D%7Bapply%3A(e%2Ct%2Cn)%3D%3E%7Blet%20o%3DReflect.apply(e%2Ct%2Cn)%3Breturn%20o%20instanceof%20HTMLIFrameElement%26%26!o.src%26%26o.contentWindow%26%26(o.contentWindow.document.body.getElementsByTagName%3Dwindow.document.body.getElementsByTagName%2Co.contentWindow.MutationObserver%3Dvoid%200)%2Co%7D%7D%3BHTMLBodyElement.prototype.appendChild%3Dnew%20Proxy(HTMLBodyElement.prototype.appendChild%2Ce)%3Bconst%20t%3D%7Bapply%3A(e%2Ct%2Cn)%3D%3E(t%20instanceof%20HTMLLIElement%26%26%22b_algo%22%3D%3D%3Dt%3F.classList%3F.value%26%26%22a%22%3D%3D%3Dn%3F.%5B0%5D%26%26setTimeout((()%3D%3E%7Bt.style.display%3D%22none%22%7D)%2C100)%2CReflect.apply(e%2Ct%2Cn))%7D%3BHTMLBodyElement.prototype.getElementsByTagName%3Dnew%20Proxy(HTMLBodyElement.prototype.getElementsByTagName%2Ct)%7D)()%3B_w.keyMap%3D)
+bing.com##+js(no-xhr-if, %2Ffd%2Fls%2Flsp.aspx)
+bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
+bing.com##ol#b_results > li.b_algo:has(.b_lineclamp3:matches-css-before(content:/^url\(\Sdata:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD.AAAA/))
+! https://www.reddit.com/r/uBlockOrigin/comments/1j76tpa/adblock_detected_site_gledaitvlive/
+! https://www.reddit.com/r/uBlockOrigin/comments/197760n/adblock_detected_httpswwwbggledailive/
+bg-gledai.*,gledaitv.*##+js(no-fetch-if, method%3AHEAD)
+! https://github.com/uBlockOrigin/uAssets/issues/28024
+! https://www.reddit.com/r/uBlockOrigin/comments/1jef4qb/having_adblock_issues_with_faqwikius/
+faqwiki.us##+js(nostif, .offsetHeight%3E0)
+faqwiki.*##+js(rmnt, script, %2Fadblock%2Fi)
+! https://github.com/AdguardTeam/AdguardFilters/issues/199124
+pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjacentHTML, %22afterbegin%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
+pvpoke-re.com##.nitro-any
+pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep, %5B%22n%22%2C15500%5D)
+pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep_date, 2030-03-18T02%3A00%3A00)
+pvpoke-re.com##+js(set-local-storage-item, google_tg_rep_attr6, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/27884
+! https://github.com/uBlockOrigin/uAssets/issues/27886
+! royalroad.com##+js(trusted-set, nitroAds, json%3A%7B%22version%22%3A%2220250402%20de32690%22%2C%22createAd%22%3A%22placement%20generation%22%7D)
+! royalroad.com##+js(nostif, _0x)
+royalroad.com##.dKKumhSnWiFq75vPUVtmTanQ:has(a[href^="https://www.royalroad.com/a/r?campaign="]:not([href*="&url=https%3A%2F%2Fwww.royalroad.com"]))
+! ||royalroad.com/bd/cr?$xhr,method=get,1p,strict1p
+! https://github.com/uBlockOrigin/uAssets/issues/17012
+mail.yahoo.com##+js(nostif, adblock)
+! https://github.com/uBlockOrigin/uAssets/issues/25421
+gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22gecmisi%22, condition, googleads)
+gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22googleads%22, condition, gecmisi)
+! https://github.com/uBlockOrigin/uAssets/issues/22825
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads, , propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks)
+hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), MPD%20Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
+! https://github.com/uBlockOrigin/uAssets/issues/1545
+elektroda.pl,elektroda.de,elektroda.com##div[style="position: relative;"]:has(> a[href*=".php?"][onclick*="sendGAEvent"][target="_blank"][title] > img[width] + div > span)
+elektroda.pl##div[class="topic-box clearfix "] + div[class]:last-child:has(> a[style="font-weight: bold;"][target="_blank"]:only-child)
+elektroda.pl##*:has(> div[style*="height"] + div:last-child > div:first-child + div:last-child > a[href*=".php?"][rel][onclick].fancybox:only-child)
+elektroda.pl##div:not([id], [class]):has(> div:first-child + a[href*=".php?"]:last-child > picture > source + source + img)
+! https://github.com/AdguardTeam/AdguardFilters/issues/205907
+vook.vc#@#[class*="-spnsr"]
+vook.vc##.note-main-spnsr a:not([href*="vook.vc"])
+vook.vc##.note-right-spnsr
+!#if env_mobile
+vook.vc##.note-sp-spnsr
+!#endif
+! FP by Phishing URL Blocklist
+! [badfilter] ||sbisec.co.jp/etgate/^$all,badfilter
+! [badfilter] ||banei-keiba.or.jp^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/26537
+www.google.*#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year)
+!www.google.*##+js(trusted-rpnt, script, %2F%24%2F, (()%3D%3E%7Bconst%20cookies%3Ddocument.cookie.split('%3B').map(c%3D%3Ec.trim())%3Bconst%20socsCookie%3Dcookies.find(c%3D%3Ec.split('%3D')%5B0%5D%3D%3D%3D'SOCS')%3Bif(socsCookie%26%26location.hostname.startsWith('www.google.'))%7Bdocument.cookie%3D%22SOCS%3D%3B%20path%3D%2F%3B%20expires%3DThu%2C%2001%20Jan%201970%2000%3A00%3A00%20GMT%3B%22%3B%7D%7D)()%3B, sedCount, 1)
+! Disable previous trusted-set-cookie filters
+www.google.*#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, %2F%5Cbgoogle%5C..%2B%24%2F, dontOverwrite, 1)
+www.google.ac#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ac, dontOverwrite, 1)
+www.google.ad#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ad, dontOverwrite, 1)
+www.google.ae#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ae, dontOverwrite, 1)
+www.google.al#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.al, dontOverwrite, 1)
+www.google.am#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.am, dontOverwrite, 1)
+www.google.as#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.as, dontOverwrite, 1)
+www.google.at#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.at, dontOverwrite, 1)
+www.google.az#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.az, dontOverwrite, 1)
+www.google.ba#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ba, dontOverwrite, 1)
+www.google.be#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.be, dontOverwrite, 1)
+www.google.bf#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.bf, dontOverwrite, 1)
+www.google.bg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.bg, dontOverwrite, 1)
+www.google.bi#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.bi, dontOverwrite, 1)
+www.google.bj#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.bj, dontOverwrite, 1)
+www.google.bs#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.bs, dontOverwrite, 1)
+www.google.bt#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.bt, dontOverwrite, 1)
+www.google.by#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.by, dontOverwrite, 1)
+www.google.ca#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ca, dontOverwrite, 1)
+www.google.cat#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cat, dontOverwrite, 1)
+www.google.cd#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cd, dontOverwrite, 1)
+www.google.cf#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cf, dontOverwrite, 1)
+www.google.cg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cg, dontOverwrite, 1)
+www.google.ch#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ch, dontOverwrite, 1)
+www.google.ci#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ci, dontOverwrite, 1)
+www.google.cl#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cl, dontOverwrite, 1)
+www.google.cm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cm, dontOverwrite, 1)
+www.google.tk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.tk, dontOverwrite, 1)
+www.google.co.ao#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ao, dontOverwrite, 1)
+www.google.co.bw#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.bw, dontOverwrite, 1)
+www.google.co.ck#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ck, dontOverwrite, 1)
+www.google.co.cr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.cr, dontOverwrite, 1)
+www.google.co.id#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.id, dontOverwrite, 1)
+www.google.co.il#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.il, dontOverwrite, 1)
+www.google.co.in#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.in, dontOverwrite, 1)
+www.google.co.jp#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.jp, dontOverwrite, 1)
+www.google.co.ke#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ke, dontOverwrite, 1)
+www.google.co.kr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.kr, dontOverwrite, 1)
+www.google.co.ls#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ls, dontOverwrite, 1)
+www.google.co.ma#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ma, dontOverwrite, 1)
+www.google.co.mz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.mz, dontOverwrite, 1)
+www.google.co.nz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.nz, dontOverwrite, 1)
+www.google.co.th#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.th, dontOverwrite, 1)
+www.google.co.tz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.tz, dontOverwrite, 1)
+www.google.co.ug#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ug, dontOverwrite, 1)
+www.google.co.uk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.uk, dontOverwrite, 1)
+www.google.co.uz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.uz, dontOverwrite, 1)
+www.google.co.ve#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.ve, dontOverwrite, 1)
+www.google.co.vi#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.vi, dontOverwrite, 1)
+www.google.co.za#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.za, dontOverwrite, 1)
+www.google.co.zm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.zm, dontOverwrite, 1)
+www.google.co.zw#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.co.zw, dontOverwrite, 1)
+www.google.com#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com, dontOverwrite, 1)
+www.google.com.af#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.af, dontOverwrite, 1)
+www.google.com.ag#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ag, dontOverwrite, 1)
+www.google.com.ai#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ai, dontOverwrite, 1)
+www.google.com.ar#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ar, dontOverwrite, 1)
+www.google.com.au#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.au, dontOverwrite, 1)
+www.google.com.bd#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.bd, dontOverwrite, 1)
+www.google.com.bh#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.bh, dontOverwrite, 1)
+www.google.com.bn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.bn, dontOverwrite, 1)
+www.google.com.bo#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.bo, dontOverwrite, 1)
+www.google.com.br#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.br, dontOverwrite, 1)
+www.google.com.by#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.by, dontOverwrite, 1)
+www.google.com.bz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.bz, dontOverwrite, 1)
+www.google.com.co#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.co, dontOverwrite, 1)
+www.google.com.cu#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.cu, dontOverwrite, 1)
+www.google.com.cy#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.cy, dontOverwrite, 1)
+www.google.com.do#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.do, dontOverwrite, 1)
+www.google.com.ec#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ec, dontOverwrite, 1)
+www.google.com.eg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.eg, dontOverwrite, 1)
+www.google.com.et#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.et, dontOverwrite, 1)
+www.google.com.fj#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.fj, dontOverwrite, 1)
+www.google.com.gh#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.gh, dontOverwrite, 1)
+www.google.com.gi#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.gi, dontOverwrite, 1)
+www.google.com.gt#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.gt, dontOverwrite, 1)
+www.google.com.hk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.hk, dontOverwrite, 1)
+www.google.com.jm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.jm, dontOverwrite, 1)
+www.google.com.jo#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.jo, dontOverwrite, 1)
+www.google.com.kh#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.kh, dontOverwrite, 1)
+www.google.com.kw#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.kw, dontOverwrite, 1)
+www.google.com.lb#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.lb, dontOverwrite, 1)
+www.google.com.ly#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ly, dontOverwrite, 1)
+www.google.com.mm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.mm, dontOverwrite, 1)
+www.google.com.mt#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.mt, dontOverwrite, 1)
+www.google.com.mx#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.mx, dontOverwrite, 1)
+www.google.com.my#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.my, dontOverwrite, 1)
+www.google.com.na#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.na, dontOverwrite, 1)
+www.google.com.ng#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ng, dontOverwrite, 1)
+www.google.com.ni#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ni, dontOverwrite, 1)
+www.google.com.np#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.np, dontOverwrite, 1)
+www.google.com.om#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.om, dontOverwrite, 1)
+www.google.com.pa#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.pa, dontOverwrite, 1)
+www.google.com.pe#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.pe, dontOverwrite, 1)
+www.google.com.pg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.pg, dontOverwrite, 1)
+www.google.com.ph#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ph, dontOverwrite, 1)
+www.google.com.pk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.pk, dontOverwrite, 1)
+www.google.com.pr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.pr, dontOverwrite, 1)
+www.google.com.py#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.py, dontOverwrite, 1)
+www.google.com.qa#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.qa, dontOverwrite, 1)
+www.google.com.ru#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ru, dontOverwrite, 1)
+www.google.com.sa#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.sa, dontOverwrite, 1)
+www.google.com.sb#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.sb, dontOverwrite, 1)
+www.google.com.sg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.sg, dontOverwrite, 1)
+www.google.com.sl#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.sl, dontOverwrite, 1)
+www.google.com.sv#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.sv, dontOverwrite, 1)
+www.google.com.tj#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.tj, dontOverwrite, 1)
+www.google.com.tn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.tn, dontOverwrite, 1)
+www.google.com.tr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.tr, dontOverwrite, 1)
+www.google.com.tw#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.tw, dontOverwrite, 1)
+www.google.com.ua#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ua, dontOverwrite, 1)
+www.google.com.uy#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.uy, dontOverwrite, 1)
+www.google.com.vc#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.vc, dontOverwrite, 1)
+www.google.com.ve#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.ve, dontOverwrite, 1)
+www.google.com.vn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.com.vn, dontOverwrite, 1)
+www.google.cv#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cv, dontOverwrite, 1)
+www.google.cz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.cz, dontOverwrite, 1)
+www.google.de#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.de, dontOverwrite, 1)
+www.google.dj#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.dj, dontOverwrite, 1)
+www.google.dk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.dk, dontOverwrite, 1)
+www.google.dm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.dm, dontOverwrite, 1)
+www.google.dz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.dz, dontOverwrite, 1)
+www.google.ee#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ee, dontOverwrite, 1)
+www.google.es#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.es, dontOverwrite, 1)
+www.google.fi#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.fi, dontOverwrite, 1)
+www.google.fm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.fm, dontOverwrite, 1)
+www.google.fr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.fr, dontOverwrite, 1)
+www.google.ga#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ga, dontOverwrite, 1)
+www.google.ge#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ge, dontOverwrite, 1)
+www.google.gg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.gg, dontOverwrite, 1)
+www.google.gl#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.gl, dontOverwrite, 1)
+www.google.gm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.gm, dontOverwrite, 1)
+www.google.gp#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.gp, dontOverwrite, 1)
+www.google.gr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.gr, dontOverwrite, 1)
+www.google.gy#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.gy, dontOverwrite, 1)
+www.google.hk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.hk, dontOverwrite, 1)
+www.google.hn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.hn, dontOverwrite, 1)
+www.google.hr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.hr, dontOverwrite, 1)
+www.google.ht#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ht, dontOverwrite, 1)
+www.google.hu#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.hu, dontOverwrite, 1)
+www.google.ie#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ie, dontOverwrite, 1)
+www.google.im#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.im, dontOverwrite, 1)
+www.google.iq#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.iq, dontOverwrite, 1)
+www.google.is#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.is, dontOverwrite, 1)
+www.google.it#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.it, dontOverwrite, 1)
+www.google.it.ao#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.it.ao, dontOverwrite, 1)
+www.google.je#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.je, dontOverwrite, 1)
+www.google.jo#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.jo, dontOverwrite, 1)
+www.google.jp#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.jp, dontOverwrite, 1)
+www.google.kg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.kg, dontOverwrite, 1)
+www.google.ki#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ki, dontOverwrite, 1)
+www.google.kz#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.kz, dontOverwrite, 1)
+www.google.la#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.la, dontOverwrite, 1)
+www.google.li#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.li, dontOverwrite, 1)
+www.google.lk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.lk, dontOverwrite, 1)
+www.google.lt#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.lt, dontOverwrite, 1)
+www.google.lu#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.lu, dontOverwrite, 1)
+www.google.lv#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.lv, dontOverwrite, 1)
+www.google.md#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.md, dontOverwrite, 1)
+www.google.me#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.me, dontOverwrite, 1)
+www.google.mg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.mg, dontOverwrite, 1)
+www.google.mk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.mk, dontOverwrite, 1)
+www.google.ml#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ml, dontOverwrite, 1)
+www.google.mn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.mn, dontOverwrite, 1)
+www.google.ms#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ms, dontOverwrite, 1)
+www.google.mu#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.mu, dontOverwrite, 1)
+www.google.mv#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.mv, dontOverwrite, 1)
+www.google.mw#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.mw, dontOverwrite, 1)
+www.google.ne#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ne, dontOverwrite, 1)
+www.google.ne.jp#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ne.jp, dontOverwrite, 1)
+www.google.ng#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ng, dontOverwrite, 1)
+www.google.nl#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.nl, dontOverwrite, 1)
+www.google.no#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.no, dontOverwrite, 1)
+www.google.nr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.nr, dontOverwrite, 1)
+www.google.nu#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.nu, dontOverwrite, 1)
+www.google.pl#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.pl, dontOverwrite, 1)
+www.google.pn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.pn, dontOverwrite, 1)
+www.google.ps#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ps, dontOverwrite, 1)
+www.google.pt#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.pt, dontOverwrite, 1)
+www.google.ro#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ro, dontOverwrite, 1)
+www.google.rs#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.rs, dontOverwrite, 1)
+www.google.ru#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ru, dontOverwrite, 1)
+www.google.rw#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.rw, dontOverwrite, 1)
+www.google.sc#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.sc, dontOverwrite, 1)
+www.google.se#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.se, dontOverwrite, 1)
+www.google.sh#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.sh, dontOverwrite, 1)
+www.google.si#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.si, dontOverwrite, 1)
+www.google.sk#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.sk, dontOverwrite, 1)
+www.google.sm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.sm, dontOverwrite, 1)
+www.google.sn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.sn, dontOverwrite, 1)
+www.google.so#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.so, dontOverwrite, 1)
+www.google.sr#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.sr, dontOverwrite, 1)
+www.google.st#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.st, dontOverwrite, 1)
+www.google.td#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.td, dontOverwrite, 1)
+www.google.tg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.tg, dontOverwrite, 1)
+www.google.tl#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.tl, dontOverwrite, 1)
+www.google.tm#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.tm, dontOverwrite, 1)
+www.google.tn#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.tn, dontOverwrite, 1)
+www.google.to#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.to, dontOverwrite, 1)
+www.google.tt#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.tt, dontOverwrite, 1)
+www.google.us#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.us, dontOverwrite, 1)
+www.google.vg#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.vg, dontOverwrite, 1)
+www.google.vu#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.vu, dontOverwrite, 1)
+www.google.ws#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQzEaAnJvIAEaBgiAgo7CBg, 1year, , domain, google.ws, dontOverwrite, 1)
+! https://github.com/AdguardTeam/AdguardFilters/issues/207941
+! [badfilter] ||sstats.adobe.com^$badfilter
+@@||adobe.com.ssl.d1.sc.omtrdc.net^$xmlhttprequest,domain=www.adobe.com
+! https://github.com/uBlockOrigin/uAssets/issues/28776
+@@||nontonx.com/cdn-cgi/rum$xhr,1p
+nontonx.com##+js(rmnt, script, location.reload)
+nontonx.com##+js(rmnt, script, uAssets)
+nontonx.com##+js(trusted-replace-node-text, script, %2F%2Ftele()%3B, telek5()%3B)
+! https://github.com/uBlockOrigin/uAssets/issues/28966
+! [badfilter] ||s.yimg.com/ss/analytics3.js$badfilter

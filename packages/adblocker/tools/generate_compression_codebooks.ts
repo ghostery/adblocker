@@ -1,8 +1,8 @@
 import { promises as fs } from 'node:fs';
 import { resolve, join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { generate } from '@remusao/smaz-generate';
 import { Smaz } from '@remusao/smaz';
+import { generate } from '@remusao/smaz-generate';
 
 import {
   parseFilters,
@@ -126,11 +126,11 @@ async function generateCodebook(kind: string): Promise<string[]> {
   const finetuneNgrams = [1];
   const options = { finetuneNgrams, maxNgram: maxSize, maxRoundsWithNoImprovements: 10 };
   if (kind === 'raw-cosmetic') {
-    options.maxNgram = 19;
+    options.maxNgram = 12;
   } else if (kind === 'raw-network') {
-    options.maxNgram = 20;
+    options.maxNgram = 11;
   } else if (kind === 'cosmetic-selector') {
-    options.maxNgram = 128;
+    options.maxNgram = 26;
   }
   const codebook = generate(strings, options);
   validateCodebook(codebook, strings);

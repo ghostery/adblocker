@@ -1,3 +1,387 @@
+# v2.8.0 (Mon Jun 23 2025)
+
+#### :rocket: New Feature
+
+- New extended selectors: matches-attr, matches-path, upward [#4931](https://github.com/ghostery/adblocker/pull/4931) ([@chrmod](https://github.com/chrmod) [@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 22.15.30 to 24.0.1 [#4939](https://github.com/ghostery/adblocker/pull/4939) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.7.0 (Mon Jun 09 2025)
+
+#### :rocket: New Feature
+
+- feat: `$removeparam` [#4528](https://github.com/ghostery/adblocker/pull/4528) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#4911](https://github.com/ghostery/adblocker/pull/4911) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4908](https://github.com/ghostery/adblocker/pull/4908) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4907](https://github.com/ghostery/adblocker/pull/4907) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4905](https://github.com/ghostery/adblocker/pull/4905) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4904](https://github.com/ghostery/adblocker/pull/4904) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): codebook generation of cosmetic selectors [#4903](https://github.com/ghostery/adblocker/pull/4903) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.6.1 (Wed May 21 2025)
+
+#### :bug: Bug Fix
+
+- Reimplement network modifier `$to` [#4857](https://github.com/ghostery/adblocker/pull/4857) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.6.0 (Tue May 20 2025)
+
+#### :rocket: New Feature
+
+- feat: return filename in `BlockingResponse['redirect']` [#4840](https://github.com/ghostery/adblocker/pull/4840) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4898](https://github.com/ghostery/adblocker/pull/4898) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4887](https://github.com/ghostery/adblocker/pull/4887) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4886](https://github.com/ghostery/adblocker/pull/4886) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): update `maxNgram` for `cosmetic-selector` [#4884](https://github.com/ghostery/adblocker/pull/4884) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4876](https://github.com/ghostery/adblocker/pull/4876) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4870](https://github.com/ghostery/adblocker/pull/4870) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4866](https://github.com/ghostery/adblocker/pull/4866) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4864](https://github.com/ghostery/adblocker/pull/4864) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(internal): unreachable code [#4861](https://github.com/ghostery/adblocker/pull/4861) ([@seia-soto](https://github.com/seia-soto))
+- fix(internal): asset update with maxNgram of 80 [#4862](https://github.com/ghostery/adblocker/pull/4862) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4829](https://github.com/ghostery/adblocker/pull/4829) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.5.2 (Tue Apr 29 2025)
+
+#### :bug: Bug Fix
+
+- fix: remove `$to` support due to regression [#4828](https://github.com/ghostery/adblocker/pull/4828) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4813](https://github.com/ghostery/adblocker/pull/4813) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4806](https://github.com/ghostery/adblocker/pull/4806) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump fast-check from 3.23.2 to 4.1.1 [#4814](https://github.com/ghostery/adblocker/pull/4814) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.85 to 7.0.0 [#4807](https://github.com/ghostery/adblocker/pull/4807) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.5.1 (Tue Apr 15 2025)
+
+#### :bug: Bug Fix
+
+- feat: use `TextEncoder` and `TextDecoder` for utf8 strings [#4513](https://github.com/ghostery/adblocker/pull/4513) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4804](https://github.com/ghostery/adblocker/pull/4804) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4799](https://github.com/ghostery/adblocker/pull/4799) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4796](https://github.com/ghostery/adblocker/pull/4796) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4795](https://github.com/ghostery/adblocker/pull/4795) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4789](https://github.com/ghostery/adblocker/pull/4789) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4779](https://github.com/ghostery/adblocker/pull/4779) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4775](https://github.com/ghostery/adblocker/pull/4775) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4773](https://github.com/ghostery/adblocker/pull/4773) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4768](https://github.com/ghostery/adblocker/pull/4768) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4764](https://github.com/ghostery/adblocker/pull/4764) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4755](https://github.com/ghostery/adblocker/pull/4755) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): asset update [#4754](https://github.com/ghostery/adblocker/pull/4754) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4740](https://github.com/ghostery/adblocker/pull/4740) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4738](https://github.com/ghostery/adblocker/pull/4738) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4737](https://github.com/ghostery/adblocker/pull/4737) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- chore: subscribe to ublock-origin 2025 filters [#4733](https://github.com/ghostery/adblocker/pull/4733) ([@seia-soto](https://github.com/seia-soto))
+- fix(ci): asset update - cosmetic codebook generation [#4736](https://github.com/ghostery/adblocker/pull/4736) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4712](https://github.com/ghostery/adblocker/pull/4712) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4706](https://github.com/ghostery/adblocker/pull/4706) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): cosmetic codebook generation [#4705](https://github.com/ghostery/adblocker/pull/4705) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4695](https://github.com/ghostery/adblocker/pull/4695) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix: cosmetic codebook generation [#4694](https://github.com/ghostery/adblocker/pull/4694) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4686](https://github.com/ghostery/adblocker/pull/4686) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): cosmetic codebook generation [#4663](https://github.com/ghostery/adblocker/pull/4663) ([@seia-soto](https://github.com/seia-soto))
+- fix: keep integrity in network filter mask [#4634](https://github.com/ghostery/adblocker/pull/4634) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4643](https://github.com/ghostery/adblocker/pull/4643) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(internal): cosmetic codebook generation [#4642](https://github.com/ghostery/adblocker/pull/4642) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4636](https://github.com/ghostery/adblocker/pull/4636) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(internal): cosmetic selector asset generation [#4635](https://github.com/ghostery/adblocker/pull/4635) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4627](https://github.com/ghostery/adblocker/pull/4627) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): codebook generation [#4626](https://github.com/ghostery/adblocker/pull/4626) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump @remusao/guess-url-type from 1.3.0 to 2.0.0 [#4793](https://github.com/ghostery/adblocker/pull/4793) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @remusao/smaz-generate from 1.10.0 to 2.0.0 [#4790](https://github.com/ghostery/adblocker/pull/4790) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @remusao/small from 1.3.0 to 2.0.0 [#4791](https://github.com/ghostery/adblocker/pull/4791) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @remusao/smaz from 1.10.0 to 2.0.0 [#4794](https://github.com/ghostery/adblocker/pull/4794) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/webextension-polyfill from 0.12.1 to 0.12.2 [#4679](https://github.com/ghostery/adblocker/pull/4679) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.5.0 (Fri Jan 24 2025)
+
+#### :rocket: New Feature
+
+- feat: `to` network modifier [#4524](https://github.com/ghostery/adblocker/pull/4524) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.4.0 (Thu Jan 23 2025)
+
+#### :running_woman: Performance
+
+- refactor: replace `fastStartsWith` & `fastStartsWithFrom` [#4518](https://github.com/ghostery/adblocker/pull/4518) ([@SukkaW](https://github.com/SukkaW))
+
+#### Authors: 1
+
+- Sukka ([@SukkaW](https://github.com/SukkaW))
+
+---
+
+# v2.3.2 (Thu Jan 23 2025)
+
+#### :bug: Bug Fix
+
+- fix: check domains validity when parsing network filters [#4525](https://github.com/ghostery/adblocker/pull/4525) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+- fix: cosmetic codebook generation ([@seia-soto](https://github.com/seia-soto))
+- fix: cosmetic selector codebook generation ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#4614](https://github.com/ghostery/adblocker/pull/4614) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4613](https://github.com/ghostery/adblocker/pull/4613) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(internal): codebook generation [#4612](https://github.com/ghostery/adblocker/pull/4612) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4608](https://github.com/ghostery/adblocker/pull/4608) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4604](https://github.com/ghostery/adblocker/pull/4604) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4603](https://github.com/ghostery/adblocker/pull/4603) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4602](https://github.com/ghostery/adblocker/pull/4602) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): cosmetic-selector codebook generation [#4601](https://github.com/ghostery/adblocker/pull/4601) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4590](https://github.com/ghostery/adblocker/pull/4590) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4585](https://github.com/ghostery/adblocker/pull/4585) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4580](https://github.com/ghostery/adblocker/pull/4580) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4574](https://github.com/ghostery/adblocker/pull/4574) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(adblocker-webextension): incorrect use of webextension-polyfill [#4564](https://github.com/ghostery/adblocker/pull/4564) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4571](https://github.com/ghostery/adblocker/pull/4571) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4570](https://github.com/ghostery/adblocker/pull/4570) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4568](https://github.com/ghostery/adblocker/pull/4568) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix: cosmetic codebook generation [#4567](https://github.com/ghostery/adblocker/pull/4567) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4563](https://github.com/ghostery/adblocker/pull/4563) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4561](https://github.com/ghostery/adblocker/pull/4561) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4558](https://github.com/ghostery/adblocker/pull/4558) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix: cosmetic selector codebook generation [#4555](https://github.com/ghostery/adblocker/pull/4555) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4553](https://github.com/ghostery/adblocker/pull/4553) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4552](https://github.com/ghostery/adblocker/pull/4552) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4550](https://github.com/ghostery/adblocker/pull/4550) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4549](https://github.com/ghostery/adblocker/pull/4549) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4547](https://github.com/ghostery/adblocker/pull/4547) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4544](https://github.com/ghostery/adblocker/pull/4544) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4540](https://github.com/ghostery/adblocker/pull/4540) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4530](https://github.com/ghostery/adblocker/pull/4530) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4529](https://github.com/ghostery/adblocker/pull/4529) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4526](https://github.com/ghostery/adblocker/pull/4526) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4521](https://github.com/ghostery/adblocker/pull/4521) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(test): drop `.only` [#4520](https://github.com/ghostery/adblocker/pull/4520) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rollup from 4.30.0 to 4.30.1 [#4581](https://github.com/ghostery/adblocker/pull/4581) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 22.10.4 to 22.10.5 [#4573](https://github.com/ghostery/adblocker/pull/4573) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.29.1 to 4.29.2 [#4572](https://github.com/ghostery/adblocker/pull/4572) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.18.1 to 8.18.2 [#4548](https://github.com/ghostery/adblocker/pull/4548) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump cross-fetch from 4.0.0 to 4.1.0 [#4546](https://github.com/ghostery/adblocker/pull/4546) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.28.1 to 4.29.1 [#4545](https://github.com/ghostery/adblocker/pull/4545) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump chalk from 5.3.0 to 5.4.0 [#4538](https://github.com/ghostery/adblocker/pull/4538) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 6.1.68 to 6.1.69 [#4541](https://github.com/ghostery/adblocker/pull/4541) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump puppeteer from 23.10.4 to 23.11.1 [#4542](https://github.com/ghostery/adblocker/pull/4542) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.16.0 to 9.17.0 [#4536](https://github.com/ghostery/adblocker/pull/4536) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.3.1 (Wed Dec 11 2024)
+
+#### :bug: Bug Fix
+
+- Merge: allow config differences [#4519](https://github.com/ghostery/adblocker/pull/4519) ([@chrmod](https://github.com/chrmod))
+- Merge: allow config differences ([@chrmod](https://github.com/chrmod))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+
+#### :house: Internal
+
+- Update local assets [#4514](https://github.com/ghostery/adblocker/pull/4514) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4507](https://github.com/ghostery/adblocker/pull/4507) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.3.0 (Mon Dec 09 2024)
+
+#### :rocket: New Feature
+
+- Split cosmetic matching from injection [#4499](https://github.com/ghostery/adblocker/pull/4499) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.2.0 (Mon Dec 09 2024)
+
+#### :rocket: New Feature
+
+- feat: override config when merging [#4495](https://github.com/ghostery/adblocker/pull/4495) ([@seia-soto](https://github.com/seia-soto))
+
+#### :bug: Bug Fix
+
+- fix: `CosmeticFilter.toString()` ignoring custom style [#4505](https://github.com/ghostery/adblocker/pull/4505) ([@seia-soto](https://github.com/seia-soto))
+- fix: custom styles being ignored for pure has filters [#4506](https://github.com/ghostery/adblocker/pull/4506) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+
+#### :house: Internal
+
+- chore: fix `@typescript-eslint/no-unsafe-member-access` [#4487](https://github.com/ghostery/adblocker/pull/4487) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#4501](https://github.com/ghostery/adblocker/pull/4501) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.1.2 (Thu Dec 05 2024)
+
+#### :bug: Bug Fix
+
+- Fix: hidingStyles should not be cached [#4500](https://github.com/ghostery/adblocker/pull/4500) ([@chrmod](https://github.com/chrmod))
+- Update local assets and compression codebooks (ghostery-adblocker-bot@users.noreply.github.com)
+- Fix assets update CI ([@chrmod](https://github.com/chrmod))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### :house: Internal
+
+- Update local assets [#4493](https://github.com/ghostery/adblocker/pull/4493) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Fix assets update CI [#4492](https://github.com/ghostery/adblocker/pull/4492) ([@chrmod](https://github.com/chrmod))
+- chore: export referenceable components [#4476](https://github.com/ghostery/adblocker/pull/4476) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.16.0 to 8.17.0 [#4490](https://github.com/ghostery/adblocker/pull/4490) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump mocha from 10.8.2 to 11.0.1 [#4489](https://github.com/ghostery/adblocker/pull/4489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.286 to 0.0.287 [#4480](https://github.com/ghostery/adblocker/pull/4480) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 33.2.0 to 33.2.1 [#4481](https://github.com/ghostery/adblocker/pull/4481) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.1.1 (Wed Nov 20 2024)
+
+#### :bug: Bug Fix
+
+- Fix unhides with styles [#4460](https://github.com/ghostery/adblocker/pull/4460) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.1.0 (Wed Nov 20 2024)
+
+#### :rocket: New Feature
+
+- feat: Optional support for native :has pseudo classes [#4455](https://github.com/ghostery/adblocker/pull/4455) ([@chrmod](https://github.com/chrmod))
+
+#### :bug: Bug Fix
+
+- Remove "branch=master" ([@regseb](https://github.com/regseb))
+- docs: Fix build badges ([@regseb](https://github.com/regseb))
+
+#### :house: Internal
+
+- Adjust cosmetic filter Ngram size [#4437](https://github.com/ghostery/adblocker/pull/4437) ([@chrmod](https://github.com/chrmod))
+
+#### :memo: Documentation
+
+- docs: Fix build badges [#4413](https://github.com/ghostery/adblocker/pull/4413) ([@regseb](https://github.com/regseb))
+
+#### Authors: 2
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.0.4 (Tue Nov 05 2024)
 
 #### :bug: Bug Fix

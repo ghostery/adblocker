@@ -148,7 +148,7 @@ function filtersDiff(
   return differences;
 }
 
-async function getMeta(url: string): Promise<any> {
+async function getMeta(url: string): Promise<{ name: string; revisions: string[] }> {
   const meta = (await axios.get(url)).data;
   if (typeof meta === 'string') {
     const buffer = Buffer.from(
@@ -273,7 +273,6 @@ async function collectTestCases(list: string): Promise<TestCase[]> {
   const revisions: Set<string> = new Set();
 
   // Append current revision (the most recent one)
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const previousRevisions = [...meta.revisions];
   console.log('revisions', previousRevisions);
 

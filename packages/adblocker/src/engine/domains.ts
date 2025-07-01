@@ -12,17 +12,33 @@ import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
 export class Domains {
-  public static parse(parts: string[], debug: boolean = false): Domains | undefined {
-    if (parts.length === 0) {
+  public static parse(
+    value: string | Set<string>,
+    { delimiter = ',', debug = false }: { delimiter?: string; debug?: boolean } = {},
+  ): Domains | undefined {
+    if (typeof value === 'string') {
+      if (value.length === 0) {
+        return undefined;
+      }
+    } else if (value.size === 0) {
       return undefined;
+    }
+    const parts = typeof value === 'string' ? value.split(delimiter) : value;
+    for (const part of parts) {
+      if (part.length === 0) {
+        return undefined;
+      }
     }
 
     const entities: number[] = [];
     const notEntities: number[] = [];
     const hostnames: number[] = [];
     const notHostnames: number[] = [];
+    const rawParts: string[] = [];
 
-    for (let hostname of parts) {
+    for (const rawHostname of parts) {
+      let hostname = rawHostname;
+
       if (hasUnicode(hostname)) {
         hostname = toASCII(hostname);
       }
@@ -45,11 +61,17 @@ export class Domains {
         } else {
           notHostnames.push(hash);
         }
+        if (debug) {
+          rawParts.push(negation ? rawHostname : `~${rawHostname}`);
+        }
       } else {
         if (entity) {
           entities.push(hash);
         } else {
           hostnames.push(hash);
+        }
+        if (debug) {
+          rawParts.push(negation ? rawHostname.slice(1) : rawHostname);
         }
       }
     }
@@ -59,7 +81,7 @@ export class Domains {
       hostnames: hostnames.length !== 0 ? new Uint32Array(hostnames).sort() : undefined,
       notEntities: notEntities.length !== 0 ? new Uint32Array(notEntities).sort() : undefined,
       notHostnames: notHostnames.length !== 0 ? new Uint32Array(notHostnames).sort() : undefined,
-      parts: debug === true ? parts.join(',') : undefined,
+      parts: debug === true ? rawParts.join(delimiter) : undefined,
     });
   }
 

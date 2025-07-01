@@ -27,11 +27,11 @@ export function getBit(n: number, mask: number): boolean {
 }
 
 export function setBit(n: number, mask: number): number {
-  return n | mask;
+  return (n | mask) >>> 0;
 }
 
 export function clearBit(n: number, mask: number): number {
-  return n & ~mask;
+  return (n & ~mask) >>> 0;
 }
 
 export function fastHashBetween(str: string, begin: number, end: number): number {
@@ -63,37 +63,6 @@ export function hashStrings(strings: string[]): Uint32Array {
     result[index++] = fastHash(str);
   }
   return result;
-}
-
-// https://jsperf.com/string-startswith/21
-export function fastStartsWith(haystack: string, needle: string): boolean {
-  if (haystack.length < needle.length) {
-    return false;
-  }
-
-  const ceil = needle.length;
-  for (let i = 0; i < ceil; i += 1) {
-    if (haystack[i] !== needle[i]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function fastStartsWithFrom(haystack: string, needle: string, start: number): boolean {
-  if (haystack.length - start < needle.length) {
-    return false;
-  }
-
-  const ceil = start + needle.length;
-  for (let i = start; i < ceil; i += 1) {
-    if (haystack[i] !== needle[i - start]) {
-      return false;
-    }
-  }
-
-  return true;
 }
 
 export function isDigit(ch: number): boolean {

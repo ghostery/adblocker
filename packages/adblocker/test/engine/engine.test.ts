@@ -435,6 +435,7 @@ $csp=baz,domain=bar.com
       expect(filter).not.to.be.undefined;
       expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.eql({
+        filename: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -447,6 +448,7 @@ $csp=baz,domain=bar.com
         'foo.js',
       ).match(request);
       expect(redirect).to.eql({
+        filename: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -463,6 +465,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        filename: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -475,6 +478,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        filename: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -504,6 +508,7 @@ $csp=baz,domain=bar.com
         '||foo.com$image,redirect-rule=foo.js',
       );
       expect(redirect).to.eql({
+        filename: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -516,6 +521,7 @@ $csp=baz,domain=bar.com
         'foo.js',
       ).match(request);
       expect(redirect).to.eql({
+        filename: 'foo.js',
         body: 'foo.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,Zm9vLmpz',
@@ -533,6 +539,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        filename: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -549,6 +556,7 @@ $csp=baz,domain=bar.com
         'a.js',
       ).match(request);
       expect(redirect).to.eql({
+        filename: 'a.js',
         body: 'a.js',
         contentType: 'application/javascript',
         dataUrl: 'data:application/javascript;base64,YS5qcw==',
@@ -599,6 +607,186 @@ $csp=baz,domain=bar.com
       expect(filter).not.to.be.undefined;
       expect((filter as NetworkFilter).toString()).to.equal('||foo.com$image,redirect=foo.js');
       expect(redirect).to.be.undefined;
+    });
+
+    context('removeparam', () => {
+      function urlToDocumentRequest(url: string) {
+        return Request.fromRawDetails({
+          sourceUrl: 'https://foo.com/',
+          url,
+          type: 'document',
+        });
+      }
+
+      const urls = [
+        'https://foo.com/?utm',
+        'https://foo.com/?utm=',
+        'https://foo.com/?utm=a',
+        'https://foo.com/?utm=a&utm_source=organic',
+        'https://foo.com/?utm_source=organic&utm=a',
+      ];
+
+      describe('removes all parameters', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam', {
+            debug: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes all params from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url).to.be.eql('https://foo.com/');
+          });
+        }
+      });
+
+      describe('removes specific parameter', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes "utm" from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url ?? request.url).not.to.include('utm=');
+          });
+        }
+      });
+
+      describe('inversion', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=~utm', {
+            debug: true,
+          });
+        });
+        for (const url of urls) {
+          it(`removes all parameters except for "utm" from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url ?? url).not.to.include('utm_');
+          });
+        }
+      });
+
+      describe('removes specific parameter regardless of ordering', () => {
+        let engine: FilterEngine;
+        before(() => {
+          engine = Engine.parse('||foo.com$removeparam=utm', {
+            debug: true,
+          });
+        });
+        for (const url of [
+          // First
+          'https://foo.com/?utm=a&utm_source=organic&utm_event=b',
+          // Middle
+          'https://foo.com/?utm_source=organic&utm=a&utm_event=b',
+          // Last
+          'https://foo.com/?utm_source=organic&utm_event=b&utm=a',
+        ]) {
+          it(`removeparam "utm" from "${url}"`, () => {
+            const { rewrite } = engine.match(urlToDocumentRequest(url));
+            expect(rewrite?.url).to.be.eql('https://foo.com/?utm_source=organic&utm_event=b');
+          });
+        }
+      });
+
+      describe('exceptions', () => {
+        let request: Request;
+        before(() => {
+          request = urlToDocumentRequest('https://foo.com/?x=y');
+        });
+
+        it('respects exception', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=x`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+        it('respects option value with exception', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com$removeparam=y`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql('https://foo.com/');
+        });
+
+        it('priorities global removeparam over singular exception', () => {
+          const engine = Engine.parse(
+            `@@||foo.com$removeparam=x
+||foo.com$removeparam`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql('https://foo.com/');
+        });
+        it('priorities global exception over global removeparam', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam
+@@||foo.com$removeparam`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+
+        it('priorities exception over inversion', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=~z
+@@||foo.com$removeparam=x`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+
+        it('priorities network exception over others', () => {
+          const engine = Engine.parse(
+            `||foo.com$removeparam=x
+@@||foo.com`,
+            {
+              debug: true,
+            },
+          );
+          expect(engine.match(request).rewrite?.url).to.be.eql(undefined);
+        });
+      });
+
+      describe('optimizations', () => {
+        const engine = Engine.parse(`||foo.com$removeparam=x`, {
+          debug: true,
+        });
+        expect(
+          engine.match(
+            Request.fromRawDetails({
+              sourceUrl: 'https://bar.com',
+              type: 'xhr',
+              url: 'https://foo.com?',
+            }),
+          ).rewrite?.url,
+        ).to.be.eql(undefined);
+        expect(
+          engine.match(
+            Request.fromRawDetails({
+              sourceUrl: 'https://bar.com',
+              type: 'xhr',
+              url: 'https://foo.com/?',
+            }),
+          ).rewrite?.url,
+        ).to.be.eql(undefined);
+      });
     });
   });
 
@@ -665,7 +853,7 @@ $csp=baz,domain=bar.com
               redirects.push(filter);
             }
 
-            if (!parsed.isRedirect() && !parsed.isException() && !parsed.isImportant()) {
+            if (!parsed.isException() && !parsed.isImportant()) {
               normalFilters.push(filter);
             }
           }
@@ -931,27 +1119,200 @@ foo.com###selector
       });
     });
 
-    it('handles custom default hiding styles', () => {
-      expect(
-        Engine.parse('foo.com###id').getCosmeticsFilters({
-          domain: 'foo.com',
-          hostname: 'foo.com',
-          url: 'https://foo.com',
-          hidingStyle: 'visibility: none;',
-        }).styles,
-      ).to.be.eql(`#id { visibility: none; }`);
+    context('with hidingStyle', () => {
+      it('handles custom default hiding styles', () => {
+        expect(
+          Engine.parse('foo.com###id').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            hidingStyle: 'visibility: none;',
+          }).styles,
+        ).to.be.eql(`#id { visibility: none; }`);
+      });
+
+      it('affects generic filters', () => {
+        const engine = Engine.parse('##test');
+        expect(
+          engine.getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getBaseRules: true,
+            hidingStyle: 'visibility: none;',
+          }).styles,
+        ).to.be.eql(`test { visibility: none; }`);
+        // generic filters are cached but should still respect hidingStyle
+        expect(
+          engine.getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getBaseRules: true,
+            hidingStyle: 'visibility: collapse;',
+          }).styles,
+        ).to.be.eql(`test { visibility: collapse; }`);
+      });
     });
 
-    it('handles custom :styles', () => {
-      expect(
-        Engine.parse(
-          `
-##selector :style(foo)
-##selector :style(bar)
-##selector1 :style(foo)`,
-        ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
-          .styles,
-      ).to.equal('selector ,\nselector1  { foo }\n\nselector  { bar }');
+    context('with has selectors', function () {
+      it('ignores if not allowed', function () {
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+          }).styles,
+        ).to.be.eql('');
+
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: true,
+            injectPureHasSafely: false,
+          }).styles,
+        ).to.be.eql('');
+      });
+
+      it('does not emit extended', function () {
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)', {
+            loadExtendedSelectors: false,
+          }).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: true,
+            injectPureHasSafely: true,
+          }).extended,
+        ).to.be.empty;
+
+        expect(
+          Engine.parse('foo.com##aside:has(a.ad-remove)', {
+            loadExtendedSelectors: false,
+          }).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).extended,
+        ).to.be.empty;
+      });
+
+      it('adds separate blocks if allowed', function () {
+        expect(
+          Engine.parse(
+            `
+            foo.com###test
+            foo.com##aside:has(a.ad-remove)
+          `,
+          ).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).styles,
+        ).to.be.eql(
+          `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
+        );
+
+        expect(
+          Engine.parse(
+            `
+            foo.com###test
+            foo.com##aside:has(a.ad-remove)
+          `,
+            { loadExtendedSelectors: false },
+          ).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).styles,
+        ).to.be.eql(
+          `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
+        );
+      });
+
+      it('respects custom styles', function () {
+        expect(
+          Engine.parse(`foo.com##body:has(a):style(visibility: hidden !important;)`, {
+            loadExtendedSelectors: false,
+          }).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).styles,
+        ).to.be.eql(`\n\nbody:has(a) { visibility: hidden !important; }`);
+
+        expect(
+          Engine.parse(
+            `
+            foo.com##body:has(a):style(visibility: hidden !important;)
+            foo.com#@#body:has(a):style(visibility: hidden !important;)
+          `,
+          ).getCosmeticsFilters({
+            domain: 'foo.com',
+            hostname: 'foo.com',
+            url: 'https://foo.com',
+            getExtendedRules: false,
+            injectPureHasSafely: true,
+          }).styles,
+        ).to.be.eql('');
+      });
+    });
+
+    context('with :styles psuedo-class', function () {
+      it('injects separate css block', function () {
+        expect(
+          Engine.parse(
+            `
+            ##selector :style(foo)
+            ##selector :style(bar)
+            ##selector1 :style(foo)`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('selector ,\nselector1  { foo }\n\nselector  { bar }');
+      });
+
+      it('ignores unhides not matching unhides', function () {
+        expect(
+          Engine.parse(
+            `
+            ##selector :style(foo)
+            #@#selector`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('selector  { foo }');
+
+        expect(
+          Engine.parse(
+            `
+            ##selector
+            #@#selector :style(foo)`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('selector { display: none !important; }');
+      });
+
+      it('respects unhides with styles', function () {
+        expect(
+          Engine.parse(
+            `
+            ##selector :style(foo)
+            #@#selector :style(foo)`,
+          ).getCosmeticsFilters({ domain: 'foo.com', hostname: 'foo.com', url: 'https://foo.com' })
+            .styles,
+        ).to.equal('');
+      });
     });
 
     [
@@ -1847,6 +2208,28 @@ foo.com###selector
         expect(engine.metadata!.getCategories()).to.have.length(1);
         expect(engine.metadata!.getOrganizations()).to.have.length(1);
         expect(engine.metadata!.getPatterns()).to.have.length(1);
+      });
+    });
+
+    context('valides configs', () => {
+      it('throws with different configs', () => {
+        const engine1 = FilterEngine.empty({ loadCosmeticFilters: true });
+        const engine2 = FilterEngine.empty({ loadCosmeticFilters: false });
+        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+          `config "loadCosmeticFilters" of all merged engines must be the same`,
+        );
+      });
+
+      it('does not check overridden configs', () => {
+        const engine1 = FilterEngine.empty({ enableCompression: true });
+        const engine2 = FilterEngine.empty({ enableCompression: false });
+        let engine: FilterEngine;
+        expect(() => {
+          engine = FilterEngine.merge([engine1, engine2], {
+            overrideConfig: { enableCompression: false },
+          });
+        }).not.to.throw();
+        expect(engine!.config).to.have.property('enableCompression').that.equal(false);
       });
     });
 
