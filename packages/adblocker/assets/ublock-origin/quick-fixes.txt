@@ -114,6 +114,7 @@ japscan.lol##+js(nostif, %3Ddocument%5B_0x)
 !japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5E%5B-0-9A-Z_a-z%5D%7B4%2C8%7D%24%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
 japscan.lol##+js(trusted-set, aclib, json%3A%7B%22isShowingPop%22%3A%20false%7D)
 japscan.lol##+js(set, aclib.runInPagePush, %7B%7D, as, callback)
+japscan.lol##+js(nostif, aclib)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -187,7 +188,7 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 ~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://html-load.com/content"]
 ~dogdrip.net,~infinityfree.com,~smsonline.cloud##*:not(body) > a[href^="https://07c225f3.online/content"]
 07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##html:not(:has(> head > style:only-child:has-text(width:399px;height:411px))):style(filter: opacity(0) !important; pointer-events: none !important;)
-/^https:\/\/www\.[0-9a-z-]{8,}\.(?:com|xyz)\/script\/[-.0-9A-Za-z]+\.[-A-Za-z]{2,30}\.js$/$script,3p,match-case,header=x-length
+/^https:\/\/www\.[0-9a-z-]{8,}\.(?:com|xyz)\/script\/(?:[-.0-9A-Za-z]+\.)?[-0-9A-Za-z]{2,30}\.js$/$script,3p,match-case,header=x-length
 ://html-load.com/loader.min.js$domain=~dogdrip.net|~infinityfree.com|~smsonline.cloud
 /^https:\/\/(?:as(?:loader)?|loader)\.[-0-9A-Za-z]+.[-A-Za-z]{2,30}\/loader.min.js$/$script,1p,strict3p
 ! https://github.com/uBlockOrigin/uAssets/issues/26487
@@ -216,7 +217,7 @@ pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjac
 pvpoke-re.com##.nitro-any
 pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep, %5B%22n%22%2C15500%5D)
 pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep_date, 2030-03-18T02%3A00%3A00)
-pvpoke-re.com##+js(set-local-storage-item, google_tg_rep_attr6, 1)
+pvpoke-re.com##+js(set-local-storage-item, google_tg_rep_attr7, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/27884
 ! https://github.com/uBlockOrigin/uAssets/issues/27886
 ! royalroad.com##+js(trusted-set, nitroAds, json%3A%7B%22version%22%3A%2220250402%20de32690%22%2C%22createAd%22%3A%22placement%20generation%22%7D)
@@ -466,6 +467,6 @@ www.google.ws#@#+js(trusted-set-cookie, SOCS, CAESHAgBEhJnd3NfMjAyNTA2MDQtMF9SQz
 @@||nontonx.com/cdn-cgi/rum$xhr,1p
 nontonx.com##+js(rmnt, script, location.reload)
 nontonx.com##+js(rmnt, script, uAssets)
-nontonx.com##+js(trusted-replace-node-text, script, %2F%2Ftele()%3B, telek5()%3B)
+titan.nontonx.com##+js(trusted-replace-node-text, script, %2F%2Ftele()%3B, telek6()%3B)
 ! https://github.com/uBlockOrigin/uAssets/issues/28966
 ! [badfilter] ||s.yimg.com/ss/analytics3.js$badfilter

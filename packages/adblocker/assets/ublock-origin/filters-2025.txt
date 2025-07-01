@@ -60,11 +60,13 @@ sbs.com.au##+js(trusted-prevent-xhr, securepubads.g.doubleclick.net%2Fpagead%2Fi
 @@||sbs.demdex.net/dest5.html?d_nsid=0&ord=$xhr,domain=sbs.com.au
 ! https://github.com/uBlockOrigin/uAssets/issues/19534
 ! https://github.com/uBlockOrigin/uAssets/issues/26856
+! https://github.com/uBlockOrigin/uAssets/issues/29031
 @@||appnee.com^$ghide
 appnee.com##ins.adsbygoogle
 appnee.com###babasbmsgx
 appnee.com##[href^="https://appnee.com/advertising/"] > [src^="https://img.appnee.com/other/"][alt="Ads Place"]
 appnee.com##+js(trusted-suppress-native-method, eval, %22%2Fchp_%3Fad%2F%22)
+appnee.com##+js(nostif, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/506
 ! https://github.com/uBlockOrigin/uAssets/issues/6568
 ||msn.com/advertisement.ad.js$script,1p,important
@@ -1056,8 +1058,6 @@ eatcells.com##+js(rpnt, script, %2Ffunction%20_.*JSON.*%7D%7D%2Fgms, function%20
 ! moviemaniak. com antiadb
 moviemaniak.com##+js(aost, Array.prototype.includes, adblockTrigger)
 moviemaniak.com##+js(aopr, LieDetector)
-! https://www.pelotalibretv.me/en-vivo/extremo-uno.php => popups
-||capo5play.com^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
 ! https://github.com/uBlockOrigin/uAssets/issues/27757
 netfree.cc##+js(nowoif, _blank, 20)
 ||stookroocoudray.com^$all
@@ -1251,13 +1251,6 @@ abyssplay.pages.dev##+js(nowoif, _blank)
 !#if !env_mobile
 glamour.com###main-content:style(margin-top: 125px !important;)
 !#endif
-! https://streambolt.tv/8jf21b4022ww.html - anti-adb
-streambolt.tv,strmbolt.com##div[style*="z-index: 2147483647;"][style*="position: fixed;"]
-streambolt.tv##+js(aopw, showADBOverlay)
-streambolt.tv##+js(rmnt, script, ADBlock)
-streambolt.tv,strmbolt.com##+js(nostif, (), 5000)
-streambolt.tv,strmbolt.com##+js(aost, Promise, HTMLDocument)
-/noadblocker.js$domain=streambolt.tv|strmbolt.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28090
 cbssports.com##+js(rmnt, script, %2Fadmiral%2Fi)
 ! https://github.com/MajkiIT/polish-ads-filter/issues/22746
@@ -1525,7 +1518,10 @@ watch.yosintvlive.com##+js(acs, addEventListener, detect)
 ! https://moviesmod.com.pl/ - anti-adb
 ||temp.urlshortpro.xyz/moviesmod*.js^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207219
+kio.ac##[data-placement-id^="revbid-"]
+kio.ac##+js(no-fetch-if, mode%3Ano-cors)
 *$script,3p,redirect-rule=noopjs,domain=kio.ac
+||probableregret.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/28793
 magnetdl.*##+js(rpnt, script, %2Fwindow%5C.location%5C.replace%5C(%5B%5E)%5D%2B%5C)%3B%3F%2Fg)
 magnetdl.*##+js(nowoif, !magnetdl., 1)
@@ -1641,7 +1637,7 @@ tek.no##+js(no-xhr-if, damoh)
 @@||discover-sharm.com^$ghide
 discover-sharm.com##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/208134
-bmamag.com##+js(rmnt, script, advanced_ads_check_adblocker)
+bmamag.com,bmacanberra.wpcomstaging.com##+js(rmnt, script, advanced_ads_check_adblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/28975
 smashkarts.io##+js(set, adblockDetected, false)
 smashkarts.io#@##AdBanner
@@ -1660,3 +1656,15 @@ mmsbee42.com,mmsmasala.com##^script:has-text(/dismissAdBlock|533092QTEErr/)
 !#else
 mmsbee42.com,mmsmasala.com##+js(rmnt, script, %2FdismissAdBlock%7C533092QTEErr%2F)
 !#endif
+! https://www.reddit.com/r/uBlockOrigin/comments/1lnu3o2/website_detects_ublock_origin_and_opens_popuptabs/
+beamng.wesupply.cx##+js(set, importFAB, undefined)
+! https://github.com/uBlockOrigin/uAssets/issues/29015
+tdtnews.com##+js(nostif, TNCMS.DMP)
+! https://www.reddit.com/r/uBlockOrigin/comments/1ln1oes/unable_top_bypass_the_anti_adblocker_on_this_web/
+buickforums.com##+js(no-xhr-if, googlesyndication)
+! https://github.com/uBlockOrigin/uAssets/issues/25417#issuecomment-3017980757
+! https://github.com/uBlockOrigin/uAssets/issues/29025
+/assets/jquery/adult0.js?$script,1p
+cloudwish.xyz,kamehaus.net,javhd.*>>,javhdz.*>>,roshy.tv>>##+js(set, uas, %5B%5D)
+! https://github.com/uBlockOrigin/uAssets/issues/29030
+rockmods.net##.download-btn-group > a[href*="/4/"].simple-btn
