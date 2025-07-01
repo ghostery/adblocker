@@ -184,6 +184,7 @@ const REQUEST_TYPE_TO_MASK: { [s in RequestType]: number | undefined } = {
   cspviolationreport: NETWORK_FILTER_MASK.fromOther,
   // https://developer.mozilla.org/en-US/docs/Web/API/FedCM_API/IDP_integration#provide_a_config_file_and_endpoints
   // FedCM configuration file is resolved as a JSON module, which is interpreted as a "script".
+  // Some of FedCM related requests are resolved as "xhr/fetch" but we use "script" to add weight to the meaning of "standardised" module behavior in browser-side.
   fedcm: NETWORK_FILTER_MASK.fromScript,
   fetch: NETWORK_FILTER_MASK.fromXmlHttpRequest,
   font: NETWORK_FILTER_MASK.fromFont,
