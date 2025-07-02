@@ -429,8 +429,10 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     // Since `document` is at the higher position rather `document.documentElement`,
     // it can't select `html` for an instance.
     for (const subjective of element.querySelectorAll('*')) {
-      if (matches(subjective, selector) && !results.includes(subjective)) {
-        results.push(subjective);
+      for (const result of traverse(subjective, [selector])) {
+        if (!results.includes(result)) {
+          results.push(result);
+        }
       }
     }
     return results;
