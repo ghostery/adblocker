@@ -861,35 +861,93 @@ describe('eval', () => {
         testQuerySelectorAll('.lure:upward(.target)', html, ['.target']);
       });
 
-      context('combinators', () => {
-        it('combinator of ` `', () => {
-          testQuerySelectorAll('p :upward(1)', `<article><p><a/></p><p></p></article>`, [
-            'p:has(a)',
-          ]);
+      describe('combinators', () => {
+        context('combinator of ` `', () => {
+          it('should respect ` ` combinator before pseudo-selector', () => {
+            // `p`: Seek for all `p`
+            // ` `: Select every element has children
+            // `:upward(1)`: Look parent at depth of 1
+            testQuerySelectorAll(
+              'p :upward(1)',
+              `<article><p id="res"><a/></p><p></p></article>`,
+              ['#res'],
+            );
+
+            // `p`: Seek for all `p`
+            // ` `: Select every element has children
+            // `a`: Select every element has children of `a`
+            // `:upward(1)`: Look parent at depth of 1
+            testQuerySelectorAll(
+              'p a:upward(1)',
+              `<article><p id="res"><a/></p><p></p></article>`,
+              ['#res'],
+            );
+
+            // `p`: Seek for all `p`
+            // `:has(span)`: Select every element has `span`
+            // ` `: Select every element has children
+            // `:upward(1)`: Look parent at depth of 1
+            testQuerySelectorAll('p:has(span) :upward(1)', '<p id="res"><span/></p><p/>', [
+              '#res',
+            ]);
+
+            // `p`: Select every element is `p`
+            // `:upward(div)`: Look parent with tag name of `div`
+            // ` `: Select every children at any depth
+            // `:has(:upward(a))`: Select every element has children which can look parent with tag name of `a`
+            // - From (whitespace) combinator, we select "p", "a", and "span". However, "span" cannot be selected
+            //   because it doesn't have a child element, making `:has` ineffective
+            testQuerySelectorAll(
+              'p:upward(div) :has(:upward(a))',
+              [
+                '<article><div><p target><a target><span/></a></p></div><div><p/></div></article>',
+                '<article><div><p><a/></p></div><div><p/></div></article>',
+              ].join('\n'),
+              ['[target]'],
+            );
+          });
         });
 
-        it('combinator of `+`', () => {
-          testQuerySelectorAll(
-            'p+p:not(:has(a)):upward(1)',
-            `<article><p><a/></p><p></p></article>`,
-            ['article'],
-          );
+        context('combinator of `+`', () => {
+          it('should respect `+` combinator before pseudo-selector', () => {
+            // `p`: Seek for all `p`
+            // `+`: Select every next siblings
+            // `p:not(:has(a))`: Select every element is `p` but don't have children of `a`
+            // `:upward(1)`: Look parent at depth of 1
+            testQuerySelectorAll(
+              'p+p:not(:has(a)):upward(1)',
+              `<article id="res"><p><a/></p><p></p></article>`,
+              ['#res'],
+            );
+          });
         });
 
-        it('combinator of `>`', () => {
-          testQuerySelectorAll(
-            'article>p:not(:has(a)):upward(1)',
-            `<article><p><a/></p><p></p></article>`,
-            ['article'],
-          );
+        context('combinator of `>`', () => {
+          it('should respect `>` combinator before pseudo-selector', () => {
+            // `article`: Seek for all `article`
+            // `>`: Select every children at depth of 1
+            // `p:not(:has(a))`: Select every element is `p` but don't have children of `a`
+            // `:upward(1)`: Look parent at depth of 1
+            testQuerySelectorAll(
+              'article>p:not(:has(a)):upward(1)',
+              `<article id="res"><p><a/></p><p></p></article>`,
+              ['#res'],
+            );
+          });
         });
 
-        it('combinator of `~`', () => {
-          testQuerySelectorAll(
-            'p~p:not(:has(a)):upward(1)',
-            `<article><p><a/></p><p></p></article>`,
-            ['article'],
-          );
+        context('combinator of `~`', () => {
+          it('should respect `~` combinator before pseudo-selector', () => {
+            // `p`: Seek for all `p`
+            // `~`: Select every siblings
+            // `p:not(:has(a))`: Select every element is `p` but don't have children of `a`
+            // `:upward(1)`: Look parent at depth of 1
+            testQuerySelectorAll(
+              'p~p:not(:has(a)):upward(1)',
+              `<article id="res"><p><a/></p><p></p></article>`,
+              ['#res'],
+            );
+          });
         });
       });
     });
