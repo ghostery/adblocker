@@ -308,9 +308,9 @@ function transpose(element: Element, selector: AST): Element[] | null {
         return [];
       }
 
-      const argumnent = stripsWrappingQuotes(selector.argument);
+      const argument = stripsWrappingQuotes(selector.argument);
       let parentElement: Element | null = element;
-      let number = Number(argumnent);
+      let number = Number(argument);
 
       if (Number.isInteger(number)) {
         if (number <= 0 || number >= 256) {
@@ -323,7 +323,7 @@ function transpose(element: Element, selector: AST): Element[] | null {
         }
       } else {
         while ((parentElement = parentElement.parentElement) !== null) {
-          if (parentElement.matches(argumnent)) {
+          if (parentElement.matches(argument)) {
             return [parentElement];
           }
         }
