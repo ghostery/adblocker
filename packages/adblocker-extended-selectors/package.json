@@ -47,12 +47,15 @@
     "clean": "rimraf dist coverage .tshy .tshy-build .nyc_output .rollup.cache",
     "lint": "eslint src test",
     "build": "tshy && rollup --config ./rollup.config.js",
-    "test": "nyc mocha --config ../../.mocharc.json"
+    "test": "yarn test:unit && yarn test:browser",
+    "test:unit": "nyc mocha --config ../../.mocharc.json test/unit",
+    "test:browser": "yarn build && playwright test test/e2e/browser.test.ts"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
   },
   "devDependencies": {
+    "@playwright/test": "^1.53.1",
     "@rollup/plugin-terser": "^0.4.4",
     "@types/chai": "^5.0.0",
     "@types/jsdom": "^21.1.3",
