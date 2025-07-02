@@ -1,3 +1,25 @@
+# v2.9.0 (Wed Jul 02 2025)
+
+#### :rocket: New Feature
+
+- Extended selectors: matches-css [#4932](https://github.com/ghostery/adblocker/pull/4932) (ghostery-adblocker-bot@users.noreply.github.com [@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#4985](https://github.com/ghostery/adblocker/pull/4985) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#4980](https://github.com/ghostery/adblocker/pull/4980) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(ci): update compression codebook ngram sizes [#4979](https://github.com/ghostery/adblocker/pull/4979) ([@seia-soto](https://github.com/seia-soto))
+- Extended selectors: remove support for :if [#4968](https://github.com/ghostery/adblocker/pull/4968) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.8.0 (Mon Jun 23 2025)
 
 #### :rocket: New Feature
