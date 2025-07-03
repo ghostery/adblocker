@@ -849,7 +849,7 @@ aa.com,americanairlines.*##+js(trusted-click-element, button.optoutmulti_button,
 chron.com,greenwichtime.com,houstonchronicle.com,mysanantonio.com,seattlepi.com,sfchronicle.com,sfgate.com,thetelegraph.com,timesunion.com##+js(trusted-set-cookie, _consent_cookie, %7B%22services%22%3A%5B%22jwp%22%2C%22twitter%22%5D%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/21749
 ! button[title="Accepter"]
-consent.capital.fr,consent.voici.fr,programme-tv.net##+js(trusted-click-element, button%5Btitle%3D%22Accepter%22%5D)
+consent.capital.fr,consent.programme.tv,consent.voici.fr,programme-tv.net##+js(trusted-click-element, button%5Btitle%3D%22Accepter%22%5D)
 ! hide banner, allow embeeded social
 24ur.com##.cookies
 24ur.com##+js(trusted-set-cookie, cookies_accept, local%2Cthird)
@@ -3418,3 +3418,5 @@ bistro.sk##pie-cookie-banner
 ! https://logistics.vr.fi/fi/vr-logistiikka/linked/artikkeli/jattimuuntaja-matkasi-halki-suomen-301120201145/#
 ! All cookies, needed for videos
 logistics.vr.fi##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Atrue%252Cmarketing%3Atrue%7D, 1year)
+! https://github.com/uBlockOrigin/uAssets/issues/29037 - preferences
+kabasakalonline.com##+js(trusted-set-local-storage-item, cookie-consent, %7B%22name%22%3A%22cookie-consent%22%2C%22default%22%3Afalse%2C%22date%22%3A%22%24currentDate%24%22%2C%22permissions%22%3A%7B%22ad_personalization%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22analytics_storage%22%3A%22denied%22%2C%22personalization_storage%22%3A%22denied%22%2C%22functionality_storage%22%3A%22granted%22%2C%22security_storage%22%3A%22granted%22%7D%7D)
