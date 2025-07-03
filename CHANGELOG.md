@@ -1,3 +1,20 @@
+# v2.9.2 (Thu Jul 03 2025)
+
+#### :bug: Bug Fix
+
+- Fix yarn dependencies [#5005](https://github.com/ghostery/adblocker/pull/5005) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @playwright/test from 1.53.1 to 1.53.2 [#5001](https://github.com/ghostery/adblocker/pull/5001) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.1 (Thu Jul 03 2025)
 
 #### :bug: Bug Fix
