@@ -1,3 +1,38 @@
+# v2.9.1 (Thu Jul 03 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker-electron`
+  - fix(adblocker-electron): use `session.registerPreloadScript` [#4982](https://github.com/ghostery/adblocker/pull/4982) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#4993](https://github.com/ghostery/adblocker/pull/4993) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 7.0.9 to 7.0.10 [#5002](https://github.com/ghostery/adblocker/pull/5002) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 37.1.0 to 37.2.0 [#5004](https://github.com/ghostery/adblocker/pull/5004) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 24.0.7 to 24.0.10 [#4998](https://github.com/ghostery/adblocker/pull/4998) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.29.0 to 9.30.1 [#4997](https://github.com/ghostery/adblocker/pull/4997) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.35.0 to 8.35.1 [#4994](https://github.com/ghostery/adblocker/pull/4994) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump playwright from 1.53.1 to 1.53.2 [#4995](https://github.com/ghostery/adblocker/pull/4995) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.30.0 to 9.30.1 [#4999](https://github.com/ghostery/adblocker/pull/4999) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.11.1 to 24.11.2 [#5003](https://github.com/ghostery/adblocker/pull/5003) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker`
+  - Build(deps): Bump puppeteer from 24.10.2 to 24.11.1 [#4989](https://github.com/ghostery/adblocker/pull/4989) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.9.0 (Wed Jul 02 2025)
 
 #### :rocket: New Feature

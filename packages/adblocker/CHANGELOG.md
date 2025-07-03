@@ -1,3 +1,22 @@
+# v2.9.1 (Thu Jul 03 2025)
+
+#### :house: Internal
+
+- Update local assets [#4993](https://github.com/ghostery/adblocker/pull/4993) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 24.10.2 to 24.11.1 [#4989](https://github.com/ghostery/adblocker/pull/4989) ([@dependabot[bot]](https://github.com/dependabot[bot]) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.9.0 (Wed Jul 02 2025)
 
 #### :rocket: New Feature
