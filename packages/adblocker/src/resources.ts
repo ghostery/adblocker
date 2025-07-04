@@ -119,7 +119,7 @@ const assembleScript = (script: string, dependencies: string[] = []): string =>
   [
     `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; }`,
     ...dependencies,
-    `(${script})(...['{{1}}','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
+    `(${script})(...[\`{{1}}\`,\`{{2}}\`,\`{{3}}\`,\`{{4}}\`,\`{{5}}\`,\`{{6}}\`,\`{{7}}\`,\`{{8}}\`,\`{{9}}\`,\`{{10}}\`].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
   ].join(';');
 
 /**

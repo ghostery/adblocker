@@ -935,7 +935,7 @@ $csp=baz,domain=bar.com
             url: 'https://foo.com',
           }).scripts[0],
         ).to.equal(
-          `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; };(function script() {})(...['arg1','{{2}}','{{3}}','{{4}}','{{5}}','{{6}}','{{7}}','{{8}}','{{9}}','{{10}}'].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
+          `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; };(function script() {})(...[\`arg1\`,\`{{2}}\`,\`{{3}}\`,\`{{4}}\`,\`{{5}}\`,\`{{6}}\`,\`{{7}}\`,\`{{8}}\`,\`{{9}}\`,\`{{10}}\`].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
         );
       });
 
