@@ -1,3 +1,23 @@
+# v2.9.3 (Fri Jul 04 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - (scriptlets): argument encoding handles single quotes [#5008](https://github.com/ghostery/adblocker/pull/5008) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5006](https://github.com/ghostery/adblocker/pull/5006) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.2 (Thu Jul 03 2025)
 
 #### :bug: Bug Fix
