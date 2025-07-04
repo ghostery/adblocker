@@ -373,6 +373,12 @@ hanime.tv##.htvnad
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/28791
 hanime.tv##+js(trusted-set-cookie, in_d4, 1, , , domain, hanime.tv)
+! https://github.com/uBlockOrigin/uAssets/issues/10405
+nhentai.net##+js(nowoif)
+nhentai.net##+js(set, _n_app.popunder, null)
+nhentai.net##+js(set, _n_app.options.ads.show_popunders, false)
+nhentai.net##+js(rpnt, script, popunder, p)
+nhentai.net##+js(set, N_BetterJsPop.object, %7B%7D)
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -1361,9 +1367,13 @@ freestreams-live.*>>,~chatango.com,~twitter.com,~youtube.com##+js(nowoif)
 freestreams-live.*>>,~chatango.com,~twitter.com,~youtube.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 freestreams-live.*>>,~chatango.com,~twitter.com,~youtube.com##+js(rmnt, script, adserverDomain)
 ! https://www.natomanga.com/manga/the-night-clenched-in-your-hands
+! https://github.com/uBlockOrigin/uAssets/issues/29043
+! https://github.com/uBlockOrigin/uAssets/issues/29045
 natomanga.com##.ads-contain
+||natomanga.com/js/ads/
 ||natomanga.com/js/cat_
 ||natomanga.com/js/pu_
+/\/js\/(?:[a-z]+\/)?[a-z]+_[a-f0-9]{32}\.js\b/$script,1p,match-case,domain=mangakakalot.gg|natomanga.com|nelomanga.net
 ! https://github.com/uBlockOrigin/uAssets/issues/28391
 cryptofaucet.club###claimform:style(display:block !important)
 cryptofaucet.club##.op2
@@ -1664,7 +1674,18 @@ tdtnews.com##+js(nostif, TNCMS.DMP)
 buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/25417#issuecomment-3017980757
 ! https://github.com/uBlockOrigin/uAssets/issues/29025
-/assets/jquery/adult0.js?$script,1p
-cloudwish.xyz,kamehaus.net,javhd.*>>,javhdz.*>>,roshy.tv>>##+js(set, uas, %5B%5D)
+! https://github.com/uBlockOrigin/uAssets/issues/29048
+! https://github.com/uBlockOrigin/uAssets/issues/28834#issuecomment-3026400384
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|javindo.site|javindosub.site|kamehaus.net|movearnpre.com
+/assets/jquery/*.js?type=adult^$script,1p
+cloudwish.xyz,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>##+js(set, uas, %5B%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/29030
 rockmods.net##.download-btn-group > a[href*="/4/"].simple-btn
+! https://vegamoviese.blog/ - popups
+vegamoviese.blog##+js(nowoif)
+! https://github.com/AdguardTeam/AdguardFilters/issues/208624
+@@||madarascans.com^$ghide
+! https://github.com/AdguardTeam/AdguardFilters/issues/208731
+kijk.nl##+js(no-xhr-if, url%3Aad%2Fbanner.gif)
+! https://github.com/uBlockOrigin/uAssets/issues/29064
+||securepubads.g.doubleclick.net/tag/js/gpt.js$script,redirect=noop.js:6,from=tvaplus.ca
