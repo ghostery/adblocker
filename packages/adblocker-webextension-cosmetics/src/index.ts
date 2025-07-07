@@ -23,7 +23,7 @@ let DOM_MONITOR: DOMMonitor | null = null;
 
 let UPDATE_EXTENDED_TIMEOUT: ReturnType<typeof setTimeout> | null = null;
 const PENDING: Set<Element> = new Set();
-const EXTENDED: ExtendedSelector[] = [];
+const EXTENDED: Map<ExtendedSelector['id'], ExtendedSelector> = new Map();
 const HIDDEN: Map<
   Element,
   {
@@ -107,7 +107,7 @@ function cachedQuerySelector(
 }
 
 function updateExtended() {
-  if (PENDING.size === 0 || EXTENDED.length === 0) {
+  if (PENDING.size === 0 || EXTENDED.size === 0) {
     return;
   }
 
@@ -128,7 +128,7 @@ function updateExtended() {
   PENDING.clear();
 
   for (const root of roots) {
-    for (const selector of EXTENDED) {
+    for (const selector of EXTENDED.values()) {
       for (const element of cachedQuerySelector(root, selector, cache)) {
         if (selector.remove === true) {
           element.textContent = '';
@@ -173,7 +173,7 @@ function updateExtended() {
 function delayedUpdateExtended(elements: Element[]) {
   // If we do not have any extended filters applied to this frame, then we do
   // not need to do anything. We just ignore.
-  if (EXTENDED.length === 0) {
+  if (EXTENDED.size === 0) {
     return;
   }
 
@@ -230,7 +230,9 @@ function handleResponseFromBackground(
 
   // Extended CSS
   if (extended && extended.length > 0) {
-    EXTENDED.push(...extended);
+    for (const selector of extended) {
+      EXTENDED.set(selector.id, selector);
+    }
     delayedUpdateExtended([window.document.documentElement]);
   }
 }
