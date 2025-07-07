@@ -97,7 +97,9 @@ export function matches(element: Element, selector: AST): boolean {
   } else if (selector.type === 'list') {
     return selector.list.some((s) => matches(element, s));
   } else if (selector.type === 'compound') {
-    // Type of `complex` cannot be one of `compound` as it splits selectors by left-side and right-side.
+    // Compound selectors contain only simple selectors (id, class, type, attribute, pseudo-class)
+    // that must all match the same element. Complex selectors (with combinators like >, +, ~)
+    // are processed at a higher level by the parser, so they can never be children of compound selectors.
     return selector.compound.every((s) => matches(element, s));
   } else if (selector.type === 'pseudo-class') {
     if (selector.name === 'has') {
@@ -238,16 +240,14 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
   // Therefore, we unmarshal the `compound` selector and directly use `traversal` which will involve `compound` handling in `match`.
   const selectors =
     selector.right.type === 'compound' ? selector.right.compound : [selector.right];
-  const results: Element[] = [];
+  const results: Set<Element> = new Set();
   switch (selector.combinator) {
     case ' ':
       // Look for all children *in any depth* of the all `leftElements` and filter them by `traversal`.
       for (const leftElement of leftElements) {
         for (const child of leftElement.querySelectorAll('*')) {
           for (const result of traverse(child, selectors)) {
-            if (!results.includes(result)) {
-              results.push(result);
-            }
+            results.add(result);
           }
         }
       }
@@ -257,9 +257,7 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
       for (const leftElement of leftElements) {
         for (const child of leftElement.children) {
           for (const result of traverse(child, selectors)) {
-            if (!results.includes(result)) {
-              results.push(result);
-            }
+            results.add(result);
           }
         }
       }
@@ -270,9 +268,7 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
         let sibling: Element | null = leftElement;
         while ((sibling = sibling.nextElementSibling) !== null) {
           for (const result of traverse(sibling, selectors)) {
-            if (!results.includes(result)) {
-              results.push(result);
-            }
+            results.add(result);
           }
         }
       }
@@ -284,14 +280,12 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
           continue;
         }
         for (const result of traverse(leftElement.nextElementSibling, selectors)) {
-          if (!results.includes(result)) {
-            results.push(result);
-          }
+          results.add(result);
         }
       }
       break;
   }
-  return results;
+  return Array.from(results);
 }
 
 /**
@@ -406,9 +400,9 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   // They're in chained form like `p:has(span)` and works as logical AND.
   if (selector.type === 'compound') {
     const results: Element[] = [];
-    const selectors = selector.compound.slice(1);
-    for (const subjective of querySelectorAll(element, selector.compound[0])) {
-      for (const result of traverse(subjective, selectors)) {
+    const [first, ...rest] = selector.compound;
+    for (const subjective of querySelectorAll(element, first)) {
+      for (const result of traverse(subjective, rest)) {
         if (!results.includes(result)) {
           results.push(result);
         }
