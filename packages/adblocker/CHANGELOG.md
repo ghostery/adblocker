@@ -1,3 +1,15 @@
+# v2.9.4 (Mon Jul 07 2025)
+
+#### :bug: Bug Fix
+
+- Prevent extended selectors duplicates [#5012](https://github.com/ghostery/adblocker/pull/5012) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.3 (Fri Jul 04 2025)
 
 #### :bug: Bug Fix

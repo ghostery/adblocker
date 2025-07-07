@@ -1,3 +1,22 @@
+# v2.9.4 (Mon Jul 07 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker`
+  - Prevent extended selectors duplicates [#5012](https://github.com/ghostery/adblocker/pull/5012) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rollup from 4.44.1 to 4.44.2 [#5010](https://github.com/ghostery/adblocker/pull/5010) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump fast-check from 4.1.1 to 4.2.0 [#5011](https://github.com/ghostery/adblocker/pull/5011) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.3 (Fri Jul 04 2025)
 
 #### :bug: Bug Fix
