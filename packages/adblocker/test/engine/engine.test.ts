@@ -2211,25 +2211,23 @@ foo.com###selector
       });
     });
 
-    context('valides configs', () => {
-      it('throws with different configs', () => {
+    context('configs', () => {
+      it('does not throw with different configs', () => {
         const engine1 = FilterEngine.empty({ loadCosmeticFilters: true });
         const engine2 = FilterEngine.empty({ loadCosmeticFilters: false });
-        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
-          `config "loadCosmeticFilters" of all merged engines must be the same`,
-        );
+        expect(() => FilterEngine.merge([engine1, engine2])).to.not.throw();
       });
 
-      it('does not check overridden configs', () => {
-        const engine1 = FilterEngine.empty({ enableCompression: true });
+      it('allows to override the configs', () => {
+        const engine1 = FilterEngine.empty({ enableCompression: false });
         const engine2 = FilterEngine.empty({ enableCompression: false });
         let engine: FilterEngine;
         expect(() => {
           engine = FilterEngine.merge([engine1, engine2], {
-            overrideConfig: { enableCompression: false },
+            overrideConfig: { enableCompression: true },
           });
         }).not.to.throw();
-        expect(engine!.config).to.have.property('enableCompression').that.equal(false);
+        expect(engine!.config).to.have.property('enableCompression').that.equal(true);
       });
     });
 
