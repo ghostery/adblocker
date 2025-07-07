@@ -739,7 +739,7 @@ fap18.net,xxxmom.net,fuck55.net,gofucker.com,sexu.tv,vid123.net,babe8.net,beeg.p
 /vp/download/goto/?u=http$doc,urlskip=?u
 ! [NSFW] https://losporn.org/black-beautys-10-watch-online-free and similar
 ! https://github.com/uBlockOrigin/uAssets/issues/20330
-losporn.org,streamporn.li,pandamovies.org,bananamovies.org,xopenload.net,adultdvdparadise.com,speedporn.net,mangoporn.net,pandamovie.info,mangoporn.co,mangoparody.com,xxxscenes.net,pornkino.cc,watchxxxfree.pw,pandamovie.in,speedporn.pw,watchfreexxx.net,youwatchporn.com,watchpornfree.info,pandamovies.me,xtapes.me,netflixporno.net,pornwish.org,freeomovie.info,fullxxxmovies.me,watchpornx.com,xxxparodyhd.net,xxxstream.me,pornwatch.ws,xopenload.pw,onstreams.net,playpornfree.xyz,pandamovies.pw,streamporn.pw,xopenload.me##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fdrivevideo.xyz%2Flink%3Flink%3Dhttp%22%5D, %3Flink)
+losporn.org,streamporn.li,pandamovies.org,bananamovies.org,xopenload.net,adultdvdparadise.com,speedporn.net,mangoporn.net,pandamovie.info,mangoporn.co,mangoparody.com,xxxscenes.net,pornkino.cc,watchxxxfree.pw,pandamovie.in,speedporn.pw,watchfreexxx.net,youwatchporn.com,watchpornfree.info,pandamovies.me,xtapes.me,netflixporno.net,pornwish.org,freeomovie.info,fullxxxmovies.me,watchpornx.com,xxxparodyhd.net,xxxstream.me,pornwatch.ws,xopenload.pw,pandamovies.pw,streamporn.pw,xopenload.me##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fdrivevideo.xyz%2Flink%3Flink%3Dhttp%22%5D, %3Flink)
 ! https://nowinstock.net/computers/videocards/nvidia/rtx4090/
 nowinstock.net##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fclick.linksynergy.com%2Fdeeplink%3Fid%3D%22%5D%5Bhref*%3D%22%26murl%3D%22%5D, %3Fmurl)
 nowinstock.net##+js(href-sanitizer, a%5Bhref*%3D%22%3F%22%5D%5Bhref*%3D%22%26url%3Dhttp%22%5D, %3Furl)
@@ -874,6 +874,16 @@ community.fortinet.com##+js(remove-cookie, %2FLithiumVisitor%7CValueSurveyVisito
 camhub.cc,heavyfetish.com,kissjav.*,severeporn.com,shemale6.com,watchporn.to##+js(cookie-remover, kt_ips)
 ! cxense.com
 bizjournals.com,businessinsider.de,computerbild.de##+js(remove-cookie, %2F%5E(_pc%7CcX_)%2F, when, scroll%20keydown)
+elconfidencial.com,journaldemontreal.com##+js(remove-cookie, %2F_pcid%7C_pctx%7Camp_%7CcX%7Cincap%2F, when, scroll%20keydown)
+elconfidencial.com,journaldemontreal.com##+js(set-local-storage-item, %2Famplitude%7ClastUtms%7CgaAccount%7CcX%7C_ls_ttl%2F, %24remove%24)
+elconfidencial.com,journaldemontreal.com##+js(set-session-storage-item, _cX_S, %24remove%24)
+elconfidencial.com,journaldemontreal.com##+js(norafif, cX_atfr)
+||api.cxense.com/public/widget/data?$removeparam=experienceId
+||api.cxense.com/public/widget/data?$removeparam=experienceActionId
+||api.cxense.com/public/widget/data?$removeparam=sid
+||api.cxense.com/public/widget/data?$removeparam=trackingId
+||api.cxense.com/public/widget/data?$removeparam=tzo
+||api.cxense.com/public/widget/data?$removeparam=widgetId
 ! adobedtm.com
 bizjournals.com##+js(remove-cookie, %2F%5EAMCVS%3F_%2F)
 ! disqus.com
@@ -1311,8 +1321,6 @@ nytimes.com##+js(no-fetch-if, api.theathletic.com%2Fgraphql%20body%3A%2FPostEven
 ! https://github.com/uBlockOrigin/uAssets/issues/25432
 /^https:\/\/[a-z]\d{3}\.[a-z]+\.com\/script\.js$/$script,1p,strict3p,domain=com,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/25467
-||inficourses.com/_next/static/chunks/pages/course/%5Bslug%5D-$1p,script
-! https://github.com/uBlockOrigin/uAssets/issues/25467
 ||shrinkearn.com/full?*&type=1$urlskip=?url -base64 +https
 ! cloudflare.com tracking
 blog.cloudflare.com,www.cloudflare.com##+js(no-fetch-if, method%3APOST%20body%3Azaraz)
@@ -1621,5 +1629,11 @@ edikted.com##+js(remove-cookie, %2F_shopify_y%7Cyotpo_pixel%2F, when, scroll%20k
 mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 ! https://github.com/uBlockOrigin/uAssets/issues/29042
 ||swatalk.com/wp-admin/admin-ajax.php?action=bill_minozzi_js_error_catched
+! https://massagechairs.com/
+||ob.*.com/i/*.js|$script,3p,domain=apothekenaratgeber.com|massagechairs.com
+/^https:\/\/ob\.[a-z]{8,}\.com\/i\/[a-f0-9]{32}\.js$/$script,3p,match-case,to=com
+!#if env_safari
+/^https:\/\/ob\.[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]*\.com\/i\/[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]\.js$/$script,3p,match-case
+!#endif
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
