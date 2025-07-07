@@ -870,9 +870,9 @@ describe('eval', () => {
             testQuerySelectorAll(
               'p :upward(1)',
               `<article>
-  <p id="res"><a /></p>
-  <p></p>
-</article>`,
+                <p id="res"><a></a></p>
+                <p></p>
+              </article>`,
               ['#res'],
             );
 
@@ -883,9 +883,9 @@ describe('eval', () => {
             testQuerySelectorAll(
               'p a:upward(1)',
               `<article>
-  <p id="res"><a /></p>
-  <p></p>
-</article>`,
+                <p id="res"><a></a></p>
+                <p></p>
+              </article>`,
               ['#res'],
             );
 
@@ -909,19 +909,19 @@ describe('eval', () => {
             testQuerySelectorAll(
               'p:upward(div) :has(:upward(a))',
               `<article>
-  <div>
-    <p id="res1">
-      <a id="res2"><span /></a>
-    </p>
-  </div>
-  <div><p /></div>
-</article>
-<article>
-  <div>
-    <p><a /></p>
-  </div>
-  <div><p /></div>
-</article>`,
+                <div>
+                  <p id="res1">
+                    <a id="res2"><span /></a>
+                  </p>
+                </div>
+                <div><p /></div>
+              </article>
+              <article>
+                <div>
+                  <p><a /></p>
+                </div>
+                <div><p /></div>
+              </article>`,
               ['#res1', '#res2'],
             );
           });
@@ -936,9 +936,9 @@ describe('eval', () => {
             testQuerySelectorAll(
               'p+p:not(:has(a)):upward(1)',
               `<article id="res">
-  <p><a /></p>
-  <p></p>
-</article>`,
+                <p><a></a></p>
+                <p></p>
+              </article>`,
               ['#res'],
             );
           });
@@ -953,9 +953,9 @@ describe('eval', () => {
             testQuerySelectorAll(
               'article>p:not(:has(a)):upward(1)',
               `<article id="res">
-  <p><a /></p>
-  <p></p>
-</article>`,
+                <p><a></a></p>
+                <p></p>
+              </article>`,
               ['#res'],
             );
           });
@@ -970,9 +970,9 @@ describe('eval', () => {
             testQuerySelectorAll(
               'p~p:not(:has(a)):upward(1)',
               `<article id="res">
-  <p><a /></p>
-  <p></p>
-</article>`,
+                <p><a></a></p>
+                <p></p>
+              </article>`,
               ['#res'],
             );
           });
