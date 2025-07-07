@@ -225,7 +225,6 @@ describe('#parseFilters', () => {
           '##^script:has-text(',
           '##+js()',
           'youtube.com##+js()',
-          '##:has()',
           // TODO: add example for invalid CSS selector - currently those are not testable in nodejs
         ]) {
           expect(parseFilters(filter, config))

@@ -28,6 +28,10 @@ describe('extended', () => {
       expect(classifySelector('.cl_S')).to.equal(SelectorType.Normal);
     });
 
+    it(':has', () => {
+      expect(classifySelector('div:has(span)')).to.equal(SelectorType.Normal);
+    });
+
     for (const pseudo of Array.from(PSEUDO_CLASSES)) {
       it(`pseudo-class: ${pseudo}`, () => {
         expect(classifySelector(`div:${pseudo}(2)`)).to.equal(SelectorType.Normal);
