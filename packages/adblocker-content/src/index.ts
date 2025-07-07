@@ -26,6 +26,7 @@ export interface IMessageFromBackground {
   styles: string;
   extended: {
     ast: AST;
+    id: number;
     remove: boolean;
     attribute?: string | undefined;
   }[];

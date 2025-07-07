@@ -521,6 +521,7 @@ export default class CosmeticFilterBucket {
           }
 
           extended.push({
+            id: filter.getId(),
             ast,
             remove: filter.isRemove(),
             attribute,
