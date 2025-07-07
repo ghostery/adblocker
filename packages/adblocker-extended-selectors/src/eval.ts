@@ -82,10 +82,9 @@ export function matchPattern(pattern: string, text: string): boolean {
 }
 
 /**
- * Checks if an element complies with the given selector.
- * This function shouldn't handle any transposing as it's intended to check subtree not the parents.
- * @param element The subjective element
- * @param selector A selector
+ * Checks if the given element complies with the given selector.
+ * @param element The subjective element.
+ * @param selector The selector.
  */
 export function matches(element: Element, selector: AST): boolean {
   if (
@@ -98,15 +97,22 @@ export function matches(element: Element, selector: AST): boolean {
   } else if (selector.type === 'list') {
     return selector.list.some((s) => matches(element, s));
   } else if (selector.type === 'compound') {
+    // Compound selectors contain only simple selectors (id, class, type, attribute, pseudo-class)
+    // that must all match the same element. Complex selectors (with combinators like >, +, ~)
+    // are processed at a higher level by the parser, so they can never be children of compound selectors.
     return selector.compound.every((s) => matches(element, s));
   } else if (selector.type === 'pseudo-class') {
     if (selector.name === 'has') {
-      // TODO - is this a querySelectorAll or matches here?
+      // The subjective element of `:has` check may be the given element or its children:
+      // - e.g. `html:has(body)`, `body` is the expected subjective to be filtered by `traverse`.
+      // - e.g. `html:has(>body)`, `html` is the subjective element to be filtered by `branch` then `traverse`.
+      // `querySelectorAll` already describes the all.
       return (
         selector.subtree !== undefined && querySelectorAll(element, selector.subtree).length !== 0
       );
     } else if (selector.name === 'not') {
-      return selector.subtree !== undefined && matches(element, selector.subtree) === false;
+      // Unlike `:has`, `:not` assumes the subtree to be the condition for the given element.
+      return selector.subtree !== undefined && traverse(element, [selector.subtree]).length === 0;
     } else if (selector.name === 'has-text') {
       const { argument } = selector;
       if (argument === undefined) {
@@ -217,62 +223,88 @@ export function matches(element: Element, selector: AST): boolean {
   return false;
 }
 
+/**
+ * Describes CSS combinator behaviors from the given element.
+ * @param element The current subjective element.
+ * @param selector A complex selector.
+ */
 function handleComplexSelector(element: Element, selector: Complex): Element[] {
-  const elements: Element[] = [];
-  const leftElements =
+  // The *left* part of the given selector is not queried by the previous step.
+  // If there's no *left* part, we fallback to the current element.
+  const leftElements: Element[] =
     selector.left === undefined ? [element] : querySelectorAll(element, selector.left);
-
+  // The *right* part of the given selector is always *singular*.
+  // The understanding of `compound` selector behavior differs by `match` and `querySelectorAll`.
+  // The `compound` handler in `querySelectorAll` assume the subjective to be queried.
+  // However, our *actual* subjective elements are coming from *left* part of the selector.
+  // Therefore, we unmarshal the `compound` selector and directly use `traversal` which will involve `compound` handling in `match`.
+  const selectors =
+    selector.right.type === 'compound' ? selector.right.compound : [selector.right];
+  const results: Set<Element> = new Set();
   switch (selector.combinator) {
     case ' ':
-      for (const e of leftElements) {
-        elements.push(...querySelectorAll(e, selector.right));
+      // Look for all children *in any depth* of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        for (const child of leftElement.querySelectorAll('*')) {
+          for (const result of traverse(child, selectors)) {
+            results.add(result);
+          }
+        }
       }
       break;
     case '>':
-      for (const e of leftElements) {
-        elements.push(...Array.from(e.children).filter((child) => matches(child, selector.right)));
+      // Look for all children of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        for (const child of leftElement.children) {
+          for (const result of traverse(child, selectors)) {
+            results.add(result);
+          }
+        }
       }
       break;
     case '~':
-      for (const e of leftElements) {
-        let sibling: Element | null = e;
+      // Look for all siblings of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        let sibling: Element | null = leftElement;
         while ((sibling = sibling.nextElementSibling) !== null) {
-          if (matches(sibling, selector.right)) {
-            elements.push(sibling);
+          for (const result of traverse(sibling, selectors)) {
+            results.add(result);
           }
         }
       }
       break;
     case '+':
-      for (const e of leftElements) {
-        const next = e.nextElementSibling;
-        if (next !== null && matches(next, selector.right)) {
-          elements.push(next);
+      // Look for a next sibiling of the all `leftElements` and filter them by `traversal`.
+      for (const leftElement of leftElements) {
+        if (leftElement.nextElementSibling === null) {
+          continue;
+        }
+        for (const result of traverse(leftElement.nextElementSibling, selectors)) {
+          results.add(result);
         }
       }
       break;
   }
-
-  return elements;
+  return Array.from(results);
 }
 
 /**
- * Try transposing with a selector from the subjective element.
+ * Transposes the given element with a selector.
  * @param element The subjective element
  * @param selector A selector
  * @returns An array with and without singular element; we may support transposing to multiple targets in the future
  * but currently it's for the convenience to match return type.
  */
-function transpose(element: Element, selector: AST): [] | [Element] | null {
+function transpose(element: Element, selector: AST): Element[] | null {
   if (selector.type === 'pseudo-class') {
     if (selector.name === 'upward') {
       if (selector.argument === undefined) {
         return [];
       }
-      let parentElement: Element | null = element;
 
-      const argumnent = stripsWrappingQuotes(selector.argument);
-      let number = Number(argumnent);
+      const argument = stripsWrappingQuotes(selector.argument);
+      let parentElement: Element | null = element;
+      let number = Number(argument);
 
       if (Number.isInteger(number)) {
         if (number <= 0 || number >= 256) {
@@ -285,11 +317,13 @@ function transpose(element: Element, selector: AST): [] | [Element] | null {
         }
       } else {
         while ((parentElement = parentElement.parentElement) !== null) {
-          if (parentElement.matches(argumnent)) {
+          if (parentElement.matches(argument)) {
             return [parentElement];
           }
         }
       }
+
+      return [];
     }
   }
 
@@ -297,34 +331,30 @@ function transpose(element: Element, selector: AST): [] | [Element] | null {
 }
 
 /**
- * Handles compound selectors or a list of selectors for subjective element.
- * To handle multi-paths matching, this function create branches internally and validates each cases.
- * @param element The subjective element
- * @param selectors A list of selectors to sequentially validated
- * @returns A list of elements matches the list of selectors
+ * Checks elements by traversing from the given element.
+ * You need to decide the subjective element candidates manually.
+ * It doesn't look for the children of the given element.
+ * @param root The subjective element.
+ * @param selectors The selector list to validate with.
+ * @returns If the given element and all followed candidate fails, it returns an empty array.
  */
-function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
+function traverse(root: Element, selectors: AST[]): Element[] {
   if (selectors.length === 0) {
     return [];
   }
 
-  // Start with validating the subjective element with given selectors
-  const branches = querySelectorAll(element, selectors[0]).map((element) => ({
-    element,
-    index: 1,
-  }));
-
+  const traversals = [{ element: root, index: 0 }];
   const results: Element[] = [];
 
-  while (branches.length) {
-    const branch = branches.pop()!;
-    const { element } = branch;
-    let { index } = branch;
+  while (traversals.length) {
+    const traversal = traversals.pop()!;
+    const { element } = traversal;
+    let { index } = traversal;
     for (; index < selectors.length; index++) {
       const candidates = transpose(element, selectors[index]);
       const isTransposeOperator = candidates !== null;
       if (isTransposeOperator) {
-        branches.push(...candidates.map((element) => ({ element, index: index + 1 })));
+        traversals.push(...candidates.map((element) => ({ element, index: index + 1 })));
         break;
       } else if (matches(element, selectors[index]) === false) {
         // no maches found - stop processing the branch
@@ -341,6 +371,8 @@ function handleCompoundSelector(element: Element, selectors: AST[]): Element[] {
 }
 
 export function querySelectorAll(element: Element, selector: AST): Element[] {
+  // Type of `attribute`, `class`, `id`, and `type` are to express simple selectors.
+  // e.g. `[attr]` is `attribute` type, `.cls` is `class` type, `#lure` is `id` type, and `div` is `type` type.
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
@@ -350,20 +382,55 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     return Array.from(element.querySelectorAll(selector.content));
   }
 
+  // Type of `list` is sets of selector trees.
+  // We just join all the results.
+  // e.g. `p, span`
   if (selector.type === 'list') {
-    return selector.list.flatMap((s) => querySelectorAll(element, s));
+    const results: Element[] = [];
+    for (const item of selector.list) {
+      for (const result of querySelectorAll(element, item)) {
+        if (!results.includes(result)) {
+          results.push(result);
+        }
+      }
+    }
+    return results;
   }
 
+  // Type of `compound` is a set of consecutive selectors.
+  // They're in chained form like `p:has(span)` and works as logical AND.
   if (selector.type === 'compound') {
-    return handleCompoundSelector(element, selector.compound);
+    const results: Element[] = [];
+    const [first, ...rest] = selector.compound;
+    for (const subjective of querySelectorAll(element, first)) {
+      for (const result of traverse(subjective, rest)) {
+        if (!results.includes(result)) {
+          results.push(result);
+        }
+      }
+    }
+    return results;
   }
 
+  // Type of `complex` is used to express CSS combinators: ` `, `>`, `+`, `~`.
+  // The `branch` function describes the behavior per combinator.
   if (selector.type === 'complex') {
     return handleComplexSelector(element, selector);
   }
 
   if (selector.type === 'pseudo-class') {
-    return Array.from(element.querySelectorAll('*')).filter((e) => matches(e, selector));
+    const results: Element[] = [];
+    // This code is intended to be matched with `document.documentElement.querySelectorAll`.
+    // Since `document` is at the higher position rather `document.documentElement`,
+    // it can't select `html` for an instance.
+    for (const subjective of element.querySelectorAll('*')) {
+      for (const result of traverse(subjective, [selector])) {
+        if (!results.includes(result)) {
+          results.push(result);
+        }
+      }
+    }
+    return results;
   }
 
   return [];
