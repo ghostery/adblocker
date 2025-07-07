@@ -1,3 +1,16 @@
+# v2.9.0 (Wed Jul 02 2025)
+
+#### :rocket: New Feature
+
+- Extended selectors: matches-css [#4932](https://github.com/ghostery/adblocker/pull/4932) (ghostery-adblocker-bot@users.noreply.github.com [@chrmod](https://github.com/chrmod))
+
+#### Authors: 2
+
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.5.2 (Tue Apr 29 2025)
 
 #### :nut_and_bolt: Dependencies

@@ -3690,8 +3690,9 @@ biologianet.com##+js(set-constant, __configuredDFPTags, %7B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/22804
 @@||jssdkcdns.mparticle.com/js/*/mparticle.js$script,domain=shudder.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22767
-10play.com.au##+js(set, moatPrebidApi, %7B%7D)
-10play.com.au##+js(set, moatPrebidApi.getMoatTargetingForPage, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/29026
+10.com.au,10play.com.au##+js(set, moatPrebidApi, %7B%7D)
+10.com.au,10play.com.au##+js(set, moatPrebidApi.getMoatTargetingForPage, noopFunc)
 ! https://www.ramahdarom.org/join-our-team/ content below the fold disappears/clicking section titles doesn't work
 @@||wurfl.io/wurfl.js$domain=ramahdarom.org
 ! https://github.com/uBlockOrigin/uAssets/issues/22837
@@ -3792,6 +3793,8 @@ bristan.com##+js(set, stLight, %7B%7D)
 bristan.com##+js(set, stLight.options, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/23820
 zillow.com##+js(set, DD_RUM.addError, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/29023
+zillow.com##+js(set, DD_RUM.addAction, noopFunc)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1d119io/ad_detected/
 saveinsta.cam#@#.aplvideo
 ! https://github.com/uBlockOrigin/uAssets/issues/23893
@@ -4254,3 +4257,12 @@ kb.arlo.com##+js(set, _vwo_code, %7B%7D)
 kb.arlo.com##+js(set, _vwo_code.init, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/28982
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=noticiascaracol.com
+! Whitelist Cookiebot GDPR script to prevent breakages (dialog handled by trusted filters)
+@@||cookiebot.com^$domain=cosmohairshop.de|ellisphere.com|storyhouseegmont.com
+@@||cookiebot.eu^$domain=logistics.vr.fi
+! Prevents cookiebot GDPR script from loading
+@@||googletagmanager.com^$script,domain=logistics.vr.fi|storyhouseegmont.com
+! https://github.com/uBlockOrigin/uAssets/issues/29039
+/appmeasurement.js$redirect=noopjs,domain=geoportal.kreis-reutlingen.de
+! https://github.com/uBlockOrigin/uAssets/issues/29029
+@@||datadome.co/|$domain=paypal.com

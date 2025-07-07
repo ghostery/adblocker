@@ -1,3 +1,28 @@
+# v2.9.4 (Mon Jul 07 2025)
+
+#### :bug: Bug Fix
+
+- Prevent extended selectors duplicates [#5012](https://github.com/ghostery/adblocker/pull/5012) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
+# v2.9.0 (Wed Jul 02 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chrome from 0.0.328 to 0.0.329 [#5000](https://github.com/ghostery/adblocker/pull/5000) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.0.326 to 0.0.328 [#4990](https://github.com/ghostery/adblocker/pull/4990) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.8.0 (Mon Jun 23 2025)
 
 #### :nut_and_bolt: Dependencies

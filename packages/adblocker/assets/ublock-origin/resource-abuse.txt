@@ -58,10 +58,6 @@ djs.sk##+js(aopr, miner)
 steamplay.*##+js(aopw, CoinNebula)
 ! revdl . com avoids miners
 ||revdl.com^$csp=worker-src 'none';
-! https://github.com/uBlockOrigin/uAssets/commit/d7a8d46e7dd4d978a395517bba5f98abcec998b8#commitcomment-33156535
-||firstonetv.*^$csp=worker-src 'none';
-||firstone.*^$csp=worker-src 'none';
-||firstonetv.*^$csp=connect-src 'none';
 ! https://github.com/uBlockOrigin/uAssets/issues/6433
 ||backend.dna-delivery.com^$domain=france.tv|rt.com
 ||cdn.streamroot.io/dna-client/$script,domain=prod-player.tf1.fr
@@ -76,7 +72,7 @@ steamplay.*##+js(aopw, CoinNebula)
 ! ||p2p.huya.com^$xhr
 ||msstatic.com/huya/*/p2plib.js$script
 ! Block some Chinese web pages from using P2P
-bilibili.com,dandanzan.top,nunuyy.*,v.qq.com##+js(nowebrtc)
+bilibili.com,dandanzan.top,v.qq.com##+js(nowebrtc)
 ! https://github.com/uBlockOrigin/uAssets/issues/28262
 bilibili.com##+js(no-fetch-if, data.bilibili.com)
 bilibili.com##+js(trusted-suppress-native-method, navigator.sendBeacon, %22data.bilibili.com%2Flog%2F%22, prevent)

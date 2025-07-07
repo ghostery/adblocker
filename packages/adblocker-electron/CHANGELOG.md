@@ -1,3 +1,27 @@
+# v2.9.1 (Thu Jul 03 2025)
+
+#### :bug: Bug Fix
+
+- fix(adblocker-electron): use `session.registerPreloadScript` [#4982](https://github.com/ghostery/adblocker/pull/4982) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.9.0 (Wed Jul 02 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 36.5.0 to 37.0.0 [#4973](https://github.com/ghostery/adblocker/pull/4973) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.8.0 (Mon Jun 23 2025)
 
 #### :nut_and_bolt: Dependencies

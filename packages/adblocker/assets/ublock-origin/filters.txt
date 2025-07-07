@@ -477,6 +477,7 @@ skidrowcodexgames.com##[class^="aligncenter wp-image-"]
 ! https://forums.lanik.us/viewtopic.php?f=62&t=34570
 ! https://github.com/uBlockOrigin/uAssets/issues/266
 autobytel.com,cesoirtv.com,huffingtonpost.co.uk,huffingtonpost.com,moviefone.com,playboy.de##+js(aopw, _sp_)
+faz.net##+js(acs, %24, _sp_._networkListenerData)
 eltern.de,essen-und-trinken.de,focus.de##+js(aopr, _sp_.mms.startMsg)
 ! https://github.com/jspenguin2017/uBlockProtector/issues/367
 ! https://github.com/uBlockOrigin/uAssets/issues/701
@@ -4258,11 +4259,6 @@ pornoman.pl##+js(aopr, _0x311a)
 pornoman.pl##[src*="bannery"]
 pornoman.pl###porno_accept
 @@||pornoman.pl^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/10405
-nhentai.net##+js(nowoif)
-nhentai.net##+js(set, _n_app.popunder, null)
-nhentai.net##+js(rpnt, script, popunder, p)
-nhentai.net##+js(set, N_BetterJsPop.object, %7B%7D)
 ! https://adblockplus.org/forum/viewtopic.php?f=10&t=60372&start=0
 *.mp4$media,redirect=noopmp4-1s,domain=abc.go.com
 ! https://github.com/uBlockOrigin/uAssets/issues/3737
@@ -9080,11 +9076,11 @@ makemoneywithurl.com###scroll.hidden, .footerLink.hidden:style(display: block!im
 makemoneywithurl.com###next.getmylink
 makemoneywithurl.com##.box-main > div:not([class])
 ! https://github.com/uBlockOrigin/uAssets/issues/9613
-dvdgayonline.com##+js(ra, href, %23clickfakeplayer)
-dvdgayonline.com##+js(nano-stb, countdown, 1000, 0.02)
-dflix.top##+js(nowoif)
-dflix.top##body > div[class]:last-child
-||acacdn.com^$script,redirect-rule=noop.js,domain=dflix.top
+dvdgayonline.com###clickfakeplayer:remove-attr(href)
+5flix.top##+js(nostif, afterOpen)
+5flix.top##+js(json-prune, AffiliateAdBlock)
+*$xhr,3p,redirect-rule=nooptext,domain=5flix.top
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=3flix.top|8flix.top,redirect=google-ima.js
 ! wutime_adblock
 trade2win.com##+js(nostif, .show)
 ! https://github.com/uBlockOrigin/uAssets/issues/6984

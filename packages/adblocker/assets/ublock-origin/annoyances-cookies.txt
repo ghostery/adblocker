@@ -849,7 +849,7 @@ aa.com,americanairlines.*##+js(trusted-click-element, button.optoutmulti_button,
 chron.com,greenwichtime.com,houstonchronicle.com,mysanantonio.com,seattlepi.com,sfchronicle.com,sfgate.com,thetelegraph.com,timesunion.com##+js(trusted-set-cookie, _consent_cookie, %7B%22services%22%3A%5B%22jwp%22%2C%22twitter%22%5D%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/21749
 ! button[title="Accepter"]
-consent.capital.fr,consent.voici.fr,programme-tv.net##+js(trusted-click-element, button%5Btitle%3D%22Accepter%22%5D)
+consent.capital.fr,consent.programme.tv,consent.voici.fr,programme-tv.net##+js(trusted-click-element, button%5Btitle%3D%22Accepter%22%5D)
 ! hide banner, allow embeeded social
 24ur.com##.cookies
 24ur.com##+js(trusted-set-cookie, cookies_accept, local%2Cthird)
@@ -1079,7 +1079,7 @@ elmundo.es,expansion.com##+js(trusted-click-element, button%5Bid%3D%22ue-accept-
 eurobaustoff.com##+js(trusted-set-local-storage-item, ccm_consent, %7B%22%2F%22%3A%7B%22gen%22%3A2%2C%22ucid%22%3A%221%22%2C%22consent%22%3Atrue%2C%22embeddings%22%3A%5B%221e76acf%22%2C%228ed8d9a%22%2C%22b429e86%22%2C%22f22e6ed%22%2C%220b25af3%22%2C%226079a42%22%5D%2C%22created%22%3A%22%24currentDate%24%22%2C%22updated%22%3A%22%24currentDate%24%22%2C%22clickedButton%22%3A%22acceptAll%22%2C%22iframeConsentDomains%22%3A%5B%5D%2C%22tcf%22%3A%7B%22p%22%3A%5B%5D%2C%22lip%22%3A%5B%5D%2C%22sf%22%3A%5B%5D%2C%22v%22%3A%5B%5D%2C%22liv%22%3A%5B%5D%2C%22gad%22%3A%5B%5D%7D%2C%22lang%22%3A%22de_DE%22%7D%7D)
 ! usercentrics consents
 ! deny consent
-s-pankki.fi,srf.ch,alternate.de,bayer04.de,douglas.de,dr-beckmann.com,falke.com,fitnessfirst.de,flaschenpost.de,gloeckle.de,hornbach.nl,hypofriend.de,lactostop.de,neumann.com,post.ch,postbank.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D, , 1000)
+s-pankki.fi,srf.ch,alternate.de,bayer04.de,douglas.de,dr-beckmann.com,falke.com,fitnessfirst.de,flaschenpost.de,gloeckle.de,hornbach.nl,hypofriend.de,lactostop.de,neumann.com,post.ch,postbank.de,rts.ch##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D, , 1000)
 ! accept (no other option)
 immowelt.de,joyn.*,morenutrition.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-accept-all-button%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/23499 - Necessary and marketing
@@ -2457,8 +2457,8 @@ millenniumprize.org##+js(trusted-click-element, button.cookie-consent__button--d
 hepster.com##+js(trusted-click-element, button%23saveChoice, , 1000)
 ! necessary
 pointomega.de##+js(trusted-set-local-storage-item, cookieMonster, war%20schon%20da)
-! refuse
-ellisphere.fr##+js(trusted-click-element, button%23refuseCookiesBtn, , 1000)
+! necessary + pref
+ellisphere.com##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Afalse%7D, 1year)
 ! necessary
 peterstaler.de,blackforest-still.de##+js(trusted-click-element, button.p-button.p-privacy-settings__accept-selected-button, , 2500)
 ! reject
@@ -3412,11 +3412,11 @@ entrio.hr##+js(trusted-set-cookie, entrio_cookie, %5B%7B%22title%22%3A%22Necessa
 cosmohairshop.de##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Afalse%252Cmarketing%3Atrue%7D, 1year)
 ! Necessary + Pref
 storyhouseegmont.com##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Afalse%252Cmarketing%3Afalse%7D, 1year)
-@@||googletagmanager.com^$script,domain=storyhouseegmont.com
 ! Necessary + Pref
 bistro.sk##+js(trusted-click-element, pie-cookie-banner%20%3E%3E%3E%20%5Bdata-test-id%3D%22actions-manage-prefs%22%5D%2C%20pie-cookie-banner%20%3E%3E%3E%20%23functional%20%3E%3E%3E%20.c-switch-input%2C%20pie-cookie-banner%20%3E%3E%3E%20pie-modal%20%3E%3E%3E%20pie-button%20%3E%3E%3E%20button%5Btype%3D%22submit%22%5D, , 1000)
 bistro.sk##pie-cookie-banner
 ! https://logistics.vr.fi/fi/vr-logistiikka/linked/artikkeli/jattimuuntaja-matkasi-halki-suomen-301120201145/#
 ! All cookies, needed for videos
 logistics.vr.fi##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Atrue%252Cmarketing%3Atrue%7D, 1year)
-@@||googletagmanager.com^$script,domain=logistics.vr.fi
+! https://github.com/uBlockOrigin/uAssets/issues/29037 - preferences
+kabasakalonline.com##+js(trusted-set-local-storage-item, cookie-consent, %7B%22name%22%3A%22cookie-consent%22%2C%22default%22%3Afalse%2C%22date%22%3A%22%24currentDate%24%22%2C%22permissions%22%3A%7B%22ad_personalization%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22analytics_storage%22%3A%22denied%22%2C%22personalization_storage%22%3A%22denied%22%2C%22functionality_storage%22%3A%22granted%22%2C%22security_storage%22%3A%22granted%22%7D%7D)
