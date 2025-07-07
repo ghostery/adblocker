@@ -1,3 +1,16 @@
+# v2.9.5 (Mon Jul 07 2025)
+
+#### :bug: Bug Fix
+
+- fix(adblocker-extended-selector): `compound` with `complex` [#4974](https://github.com/ghostery/adblocker/pull/4974) ([@seia-soto](https://github.com/seia-soto) [@chrmod](https://github.com/chrmod))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.0 (Wed Jul 02 2025)
 
 #### :rocket: New Feature
