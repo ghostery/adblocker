@@ -289,7 +289,7 @@ function handleComplexSelector(element: Element, selector: Complex): Element[] {
 }
 
 /**
- * Tranposes the given element with a selector.
+ * Transposes the given element with a selector.
  * @param element The subjective element
  * @param selector A selector
  * @returns An array with and without singular element; we may support transposing to multiple targets in the future
