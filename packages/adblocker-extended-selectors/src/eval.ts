@@ -343,26 +343,27 @@ function traverse(root: Element, selectors: AST[]): Element[] {
     return [];
   }
 
-  const traversals: Array<{ element: Element; index: number }> = [{ element: root, index: 0 }];
+  const traversals = [{ element: root, index: 0 }];
   const results: Element[] = [];
-  const selectorsCount = selectors.length;
 
   while (traversals.length) {
     const traversal = traversals.pop()!;
-    for (; traversal.index < selectorsCount; traversal.index++) {
-      const candidates = transpose(traversal.element, selectors[traversal.index]);
+    const { element } = traversal;
+    let { index } = traversal;
+    for (; index < selectors.length; index++) {
+      const candidates = transpose(element, selectors[index]);
       const isTransposeOperator = candidates !== null;
       if (isTransposeOperator) {
-        traversals.push(...candidates.map((element) => ({ element, index: traversal.index + 1 })));
+        traversals.push(...candidates.map((element) => ({ element, index: index + 1 })));
         break;
-      } else if (matches(traversal.element, selectors[traversal.index]) === false) {
+      } else if (matches(element, selectors[index]) === false) {
         // no maches found - stop processing the branch
         break;
       }
     }
     // Check if the loop was completed
-    if (traversal.index === selectors.length && !results.includes(traversal.element)) {
-      results.push(traversal.element);
+    if (index === selectors.length && !results.includes(element)) {
+      results.push(element);
     }
   }
 
