@@ -24,7 +24,7 @@ import { HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter, { normalizeSelector } from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
-import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
+import { f, FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
 import CosmeticFilterBucket, { createStylesheet } from './bucket/cosmetic.js';
@@ -270,6 +270,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   ): InstanceType<T> {
     if (!engines || engines.length < 2) {
       throw new Error('merging engines requires at least two engines');
+    }
+
+    for (const engine of engines) {
+      if (engine.config.enableCompression !== engines[0].config.enableCompression) {
+        throw new Error(
+          `compression of all merged engines must match with the first one: "${engines[0].config.enableCompression}" but got: "${engine.config.enableCompression}"`,
+        );
+      }
     }
 
     const lists = new Map();

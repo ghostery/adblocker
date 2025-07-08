@@ -2218,6 +2218,14 @@ foo.com###selector
         expect(() => FilterEngine.merge([engine1, engine2])).to.not.throw();
       });
 
+      it('does throw if compression is different', () => {
+        const engine1 = FilterEngine.empty({ enableCompression: true });
+        const engine2 = FilterEngine.empty({ enableCompression: false });
+        expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+          'compression of all merged engines must match with the first one: "true" but got: "false"',
+        );
+      });
+
       it('allows to override the configs', () => {
         const engine1 = FilterEngine.empty({ enableCompression: false });
         const engine2 = FilterEngine.empty({ enableCompression: false });
