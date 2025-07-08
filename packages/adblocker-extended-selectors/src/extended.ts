@@ -117,6 +117,15 @@ export function classifySelector(selector: string): SelectorType {
         return SelectorType.Invalid;
       }
 
+      // Check for nested :has selectors (which are not supported by standard CSS)
+      if (
+        name === 'has' &&
+        token.argument !== undefined &&
+        token.argument.indexOf(':has(') !== -1
+      ) {
+        foundSupportedExtendedSelector = true;
+      }
+
       // Recursively
       if (
         foundSupportedExtendedSelector === false &&
