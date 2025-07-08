@@ -45,6 +45,9 @@ partner.co.il##.cookie-message
 ||globetel.fi/wp-content/plugins/gdpr-cookie-compliance/
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
+! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
+! https://old.reddit.com/r/uBlockOrigin/comments/1l8i7qu/unusual_traffic_warning_from_google_search_in/
+www.google.*##+js(trusted-click-element, button%23W0wltc, , 500)
 ! When moving from Google search to other Google services or opening them directly. E.G. https://translate.google.com/
 consent.google.*##+js(trusted-click-element, form%5Baction%5D%20button%5Bjsname%3D%22tWT92d%22%5D)
 ! https://github.com/DandelionSprout/adfilt/discussions/932#discussioncomment-8260397
@@ -100,8 +103,8 @@ thetrainline.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%2
 all3dp.com##+js(trusted-set-cookie, PUR_SUBSCRIPTION, PREMIUM)
 ! If necessary aren't accepted, choosing a favorite store won't work
 lidl.*##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Afalse%7D, 1year)
-! https://github.com/DandelionSprout/adfilt/discussions/779#discussioncomment-6679609
-threads.com##+js(trusted-set-cookie, cb, 1_1970_01_01_2-3, 1year, , reload, 1)
+! Deny. Also Set future year 2029
+threads.com##+js(trusted-set-cookie, cb, %7B%22version%22%3A%221%22%2C%22date%22%3A%222029_07_03%22%2C%22third_party_consent%22%3A%22withdrawn%22%2C%22categories%22%3A%7B%7D%2C%22integration_controls%22%3A%7B%7D%7D, , , reload, 1)
 ! https://github.com/DandelionSprout/adfilt/discussions/779#discussioncomment-6679609
 messenger.com##+js(trusted-set-cookie, datr, mWTaZBxAoW8lFl0v3EpECGYi, 1year, , reload, 1)
 ! https://www.myscript.com/
@@ -473,15 +476,6 @@ cencenelec.eu##+js(trusted-set-cookie, cookieconsent, saved%3D1%26functional%3D0
 ! https://github.com/uBlockOrigin/uAssets/issues/28920
 kick.com##+js(trusted-set-cookie, cookie_preferences_set_v1, %257B%2522state%2522%253A%257B%2522preferences%2522%253A%257B%2522necessary%2522%253Atrue%252C%2522functional%2522%253Afalse%252C%2522performance%2522%253Afalse%252C%2522targeting%2522%253Afalse%252C%2522userHasMadeChoice%2522%253Atrue%257D%252C%2522functionalEnabled%2522%253Afalse%252C%2522performanceEnabled%2522%253Afalse%252C%2522targetingEnabled%2522%253Afalse%257D%252C%2522version%2522%253A0%257D, , , domain, .kick.com)
 !! Needs additional cookies
-! https://github.com/uBlockOrigin/uAssets/issues/23701
-! Doesn't enable search customization anymore, reject all now
-! Expire time can't be for a session only: https://www.reddit.com/r/uBlockOrigin/comments/1dh4mi4/google_reverts_to_light_theme_between_sessions_in/
-! https://www.reddit.com/r/uBlockOrigin/comments/1ekkkp1/google_constantly_reverting_to_light_mode_and/
-! https://github.com/uBlockOrigin/uAssets/issues/26537#issuecomment-2952259241
-! Better to use domain option to make sure the scriptlet sets the cookie to the same place as the site would naturally set it
-! https://old.reddit.com/r/uBlockOrigin/comments/1l8i7qu/unusual_traffic_warning_from_google_search_in/
-! Trusted-set-cookie causes Google captcha issues, clicker is safer
-www.google.*##+js(trusted-click-element, button%23W0wltc, , 500)
 ! Closing Optanon Alert Box
 1001games.com,1001hry.cz,1001jeux.fr,1001jocuri.ro,1001jogos.com.br,1001jogos.pt,1001pelit.com,1001spiele.de,elkspel.nl,gamespot.com,giochixl.it,glamour.com,grajteraz.pl,isladejuegos.com,jatekokxl.hu,mtvuutiset.fi,paixnidiaxl.gr,pushsquare.com,spelo.se,spillespill.no,spilxl.dk,thejournal.ie,thetrainline.com,vkmag.com,zdnet.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
 ! Mandatory + functional
@@ -843,8 +837,8 @@ med.uni-rostock.de##+js(trusted-set-cookie, umr-data-consent, %7B%2522essential%
 ! functional
 advalvas.vu.nl##+js(trusted-set-cookie, wpsaurus_cookie_banner_plugin, functional)
 ! Don't allow 3rd-party sharing checkbox, hide popup
-aa.com,americanairlines.*##.aa_optoutmulti-cookie-policy:style(visibility: hidden !important;)
-aa.com,americanairlines.*##+js(trusted-click-element, button.optoutmulti_button, , 2000)
+americanairlines.*##.aa_optoutmulti-cookie-policy:style(visibility: hidden !important;)
+americanairlines.*##+js(trusted-click-element, button.optoutmulti_button, , 2000)
 ! JW Player/Twitter
 chron.com,greenwichtime.com,houstonchronicle.com,mysanantonio.com,seattlepi.com,sfchronicle.com,sfgate.com,thetelegraph.com,timesunion.com##+js(trusted-set-cookie, _consent_cookie, %7B%22services%22%3A%5B%22jwp%22%2C%22twitter%22%5D%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/21749
@@ -2471,7 +2465,7 @@ ajtix.co.uk##+js(trusted-click-element, button.reject, , 1000)
 raja.fr,rajarani.de,rajapack.*##+js(trusted-click-element, button.ot-btn-deny, , 1000)
 rajapack.*##+js(trusted-click-element, button.js-ot-deny, , 1000)
 ! deny
-avery-zweckform.com,1xinternet.de,futterhaus.de,dasfutterhaus.at,frischeparadies.de,fmk-steuer.de,selgros.de,transgourmet.de##+js(trusted-click-element, button.cn-decline, , 1000)
+avery-zweckform.com,1xinternet.com,futterhaus.de,dasfutterhaus.at,frischeparadies.de,fmk-steuer.de,selgros.de,transgourmet.de##+js(trusted-click-element, button.cn-decline, , 1000)
 ! refuse
 mediapart.fr##+js(trusted-click-element, button%23js-gateaux-secs-deny, , 1500)
 ! necessary
