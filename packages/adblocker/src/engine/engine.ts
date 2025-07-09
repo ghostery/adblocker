@@ -272,7 +272,14 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       throw new Error('merging engines requires at least two engines');
     }
 
-    const config = engines[0].config;
+    for (const engine of engines) {
+      if (engine.config.enableCompression !== engines[0].config.enableCompression) {
+        throw new Error(
+          `compression of all merged engines must match with the first one: "${engines[0].config.enableCompression}" but got: "${engine.config.enableCompression}"`,
+        );
+      }
+    }
+
     const lists = new Map();
 
     const networkFilters: Map<number, NetworkFilter> = new Map();
@@ -289,29 +296,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       patterns: {},
     };
 
-    type ConfigKey = keyof {
-      [Key in keyof Config as Config[Key] extends boolean ? Key : never]: Config[Key];
-    };
-
-    const compatibleConfigKeys: ConfigKey[] = [];
-    const configKeysMustMatch: ConfigKey[] = (Object.keys(config) as (keyof Config)[]).filter(
-      function (key): key is ConfigKey {
-        return (
-          typeof config[key] === 'boolean' &&
-          !compatibleConfigKeys.includes(key as ConfigKey) &&
-          !Object.hasOwnProperty.call(overrideConfig, key)
-        );
-      },
-    );
-
     for (const engine of engines) {
-      // Validate the config
-      for (const configKey of configKeysMustMatch) {
-        if (config[configKey] !== engine.config[configKey]) {
-          throw new Error(`config "${configKey}" of all merged engines must be the same`);
-        }
-      }
-
       const filters = engine.getFilters();
 
       for (const networkFilter of filters.networkFilters) {
@@ -359,7 +344,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       preprocessors,
 
       lists,
-      config: new Config({ ...config, ...overrideConfig }),
+      config: new Config({ ...engines[0].config, ...overrideConfig }),
     }) as InstanceType<T>;
 
     if (
