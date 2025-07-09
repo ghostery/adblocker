@@ -2392,13 +2392,18 @@ cxchief.com##:matches-path(/utm_medium=adv/i) html:remove()
 smostafa.ir##:matches-path(/utm_source=footer/i) html:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/15073
 upiapi.in##+js(set, detectAdBlock, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/8532
+||video-ads-module.ad-tech.nbcuni.com/$xhr,redirect=nooptext,domain=peacocktv.com
 ! https://github.com/uBlockOrigin/uAssets/issues/18244
 ! https://github.com/uBlockOrigin/uAssets/issues/19433
 ! https://github.com/uBlockOrigin/uAssets/issues/22074
 *&caid=$xhr,removeparam=caid,domain=max.com
 play.max.com##+js(json-prune, ssaiInfo%20fallback.ssaiInfo)
-play.max.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , .mpd)
 play.max.com##+js(json-prune, adtech-brightline%20adtech-google-pal%20adtech-iab-om)
+! https://github.com/uBlockOrigin/uAssets/issues/21255
+||freewheel.tv^$image,redirect=1x1.gif,domain=peacocktv.com
+||peacocktv.com/*/tracking/
+peacocktv.com,play.max.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , .mpd)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/130913
 forexfactory.com##.adbit
 ! https://github.com/easylist/easylist/commit/d3d87f8b48ae5380687742c0727a076b11394758#commitcomment-85272282

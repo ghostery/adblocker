@@ -475,6 +475,12 @@ flibco.com##+js(trusted-set-cookie, cookiesjsr, %257B%2522functional%2522%253Afa
 cencenelec.eu##+js(trusted-set-cookie, cookieconsent, saved%3D1%26functional%3D0%26analytics%3D0%26marketing%3D0, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/28920
 kick.com##+js(trusted-set-cookie, cookie_preferences_set_v1, %257B%2522state%2522%253A%257B%2522preferences%2522%253A%257B%2522necessary%2522%253Atrue%252C%2522functional%2522%253Afalse%252C%2522performance%2522%253Afalse%252C%2522targeting%2522%253Afalse%252C%2522userHasMadeChoice%2522%253Atrue%257D%252C%2522functionalEnabled%2522%253Afalse%252C%2522performanceEnabled%2522%253Afalse%252C%2522targetingEnabled%2522%253Afalse%257D%252C%2522version%2522%253A0%257D, , , domain, .kick.com)
+! https://github.com/uBlockOrigin/uAssets/issues/15700#issuecomment-3046610041
+! Rules can be merged when regex for domain vararg will be available for stable version | https://github.com/gorhill/uBlock/commit/3a2bb62519
+filehippo.com##+js(trusted-set-cookie, euconsent-v2, CQULowAQULowAAHABBENBxFgAAAAAAAAAAiQAAAAAACkoAMAAQWrKQAYAAgtWOgAwABBashABgACC1YSADAAEFqw.YAAAAAAAAAAA, 1year, , domain, filehippo.com)
+filehippo.de##+js(trusted-set-cookie, euconsent-v2, CQULowAQULowAAHABBENBxFgAAAAAAAAAAiQAAAAAACkoAMAAQWrKQAYAAgtWOgAwABBashABgACC1YSADAAEFqw.YAAAAAAAAAAA, 1year, , domain, filehippo.de)
+filehippo.jp##+js(trusted-set-cookie, euconsent-v2, CQULowAQULowAAHABBENBxFgAAAAAAAAAAiQAAAAAACkoAMAAQWrKQAYAAgtWOgAwABBashABgACC1YSADAAEFqw.YAAAAAAAAAAA, 1year, , domain, filehippo.jp)
+filehippo.pl##+js(trusted-set-cookie, euconsent-v2, CQULowAQULowAAHABBENBxFgAAAAAAAAAAiQAAAAAACkoAMAAQWrKQAYAAgtWOgAwABBashABgACC1YSADAAEFqw.YAAAAAAAAAAA, 1year, , domain, filehippo.pl)
 !! Needs additional cookies
 ! Closing Optanon Alert Box
 1001games.com,1001hry.cz,1001jeux.fr,1001jocuri.ro,1001jogos.com.br,1001jogos.pt,1001pelit.com,1001spiele.de,elkspel.nl,gamespot.com,giochixl.it,glamour.com,grajteraz.pl,isladejuegos.com,jatekokxl.hu,mtvuutiset.fi,paixnidiaxl.gr,pushsquare.com,spelo.se,spillespill.no,spilxl.dk,thejournal.ie,thetrainline.com,vkmag.com,zdnet.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
@@ -2457,8 +2463,10 @@ ellisphere.com##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cp
 peterstaler.de,blackforest-still.de##+js(trusted-click-element, button.p-button.p-privacy-settings__accept-selected-button, , 2500)
 ! reject
 tiendaplayaundi.com##+js(trusted-click-element, button.cookies-ko, , 1000)
-! basic
+! necessary + videos
 chamaeleon.de##+js(trusted-set-cookie, hide_cn, core)
+chamaeleon.de##+js(set-local-storage-item, PrivacyPolicy%5B%5D%5Bcore%5D, forever)
+chamaeleon.de##+js(set-local-storage-item, PrivacyPolicy%5B%5D%5Bvideos%5D, forever)
 ! reject
 ajtix.co.uk##+js(trusted-click-element, button.reject, , 1000)
 ! deny
@@ -3414,3 +3422,5 @@ bistro.sk##pie-cookie-banner
 logistics.vr.fi##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Atrue%252Cstatistics%3Atrue%252Cmarketing%3Atrue%7D, 1year)
 ! https://github.com/uBlockOrigin/uAssets/issues/29037 - preferences
 kabasakalonline.com##+js(trusted-set-local-storage-item, cookie-consent, %7B%22name%22%3A%22cookie-consent%22%2C%22default%22%3Afalse%2C%22date%22%3A%22%24currentDate%24%22%2C%22permissions%22%3A%7B%22ad_personalization%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22analytics_storage%22%3A%22denied%22%2C%22personalization_storage%22%3A%22denied%22%2C%22functionality_storage%22%3A%22granted%22%2C%22security_storage%22%3A%22granted%22%7D%7D)
+! Necessary + settings
+pizzahut.fi##+js(trusted-set-local-storage-item, privacySettings, %7B%22consent%22%3Atrue%2C%22additionalSettings%22%3A%7B%22preferences%22%3Atrue%2C%22statistics%22%3Afalse%2C%22marketing%22%3Afalse%7D%2C%22version%22%3A2%7D)

@@ -1443,7 +1443,8 @@ gadgetbond.com##+js(no-fetch-if, adsbygoogle)
 updateroj24.com##+js(no-fetch-if, adsbygoogle)
 updateroj24.com##.ad-container
 ! https://www.reddit.com/r/uBlockOrigin/comments/1kxmdab/video_ads_in_embedded_videos_of_mega/
-mega.nz##+js(json-prune-fetch-response, *, 0.aurl, propsToMatch, %2Fcs%3Fid%3D)
+! https://www.reddit.com/r/uBlockOrigin/comments/1lssmxc/mega_filehoster_showing_ads_in_uploaded_videos/
+mega.nz##+js(json-prune-fetch-response, *, *.aurl, propsToMatch, %2Fcs%3Fid%3D)
 ! https://github.com/uBlockOrigin/uAssets/issues/28595
 umatechnology.org##+js(aeld, DOMContentLoaded, -banner)
 ||outebytech.com^$all
@@ -1695,3 +1696,13 @@ jsfiddle.net##+js(set, _carbonads, %7B%7D)
 jsfiddle.net##+js(set, _bsa, %7B%7D)
 ! https://speechma.com/
 ||speechma.com/anti-adblocker.js
+! https://fastpic.org/view/125/2025/0702/_1e5443f0df53345ab069adb631c48c93.png.html
+fastpic.org##+js(trusted-set-cookie, k3a9q, %24now%24%257C1)
+! nobledicion.yoveo.xyz detection
+nobledicion.yoveo.xyz##+js(noeval-if, googlesyndication)
+! https://stevenuniverse.best/cartoons/gravity-falls/ - anti-adb
+stevenuniverse.best##+js(acs, document.addEventListener, bait)
+! https://github.com/uBlockOrigin/uAssets/issues/29110
+klouderr.com##+js(trusted-create-html, body, %3Cdiv%20id%3D%22rpjMdOwCJNxQ%22%20style%3D%22display%3A%20none%3B%22%3E%3C%2Fdiv%3E)
+! https://github.com/uBlockOrigin/uAssets/issues/29116
+mrscript.net##+js(no-xhr-if, googlesyndication)
