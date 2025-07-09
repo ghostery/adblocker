@@ -1,3 +1,15 @@
+# v2.10.1 (Wed Jul 09 2025)
+
+#### :bug: Bug Fix
+
+- Adblocker: relax merge config consistancy check [#5013](https://github.com/ghostery/adblocker/pull/5013) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.10.0 (Wed Jul 09 2025)
 
 #### :rocket: New Feature
