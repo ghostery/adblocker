@@ -1,3 +1,15 @@
+# v2.11.0 (Wed Jul 09 2025)
+
+#### :rocket: New Feature
+
+- Extended selectors: xpath [#4933](https://github.com/ghostery/adblocker/pull/4933) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.10.1 (Wed Jul 09 2025)
 
 #### :bug: Bug Fix
