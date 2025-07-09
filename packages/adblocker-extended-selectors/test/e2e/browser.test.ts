@@ -309,7 +309,7 @@ test.describe(':xpath', () => {
       return matches.map((el) => el.id);
     });
 
-    expect(result).toEqual(['container1', 'container2', 'container3']);
+    expect(result).toEqual(['container3', 'container2', 'container1']);
   });
 
   test('xpath transpose chains with compound selectors', async ({ page }) => {

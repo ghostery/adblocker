@@ -463,10 +463,6 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   }
 
   if (selector.type === 'pseudo-class') {
-    if (selector.name === 'xpath') {
-      return handleXPathSelector(element, selector.argument);
-    }
-
     const results: Element[] = [];
     // This code is intended to be matched with `document.documentElement.querySelectorAll`.
     // Since `document` is at the higher position rather `document.documentElement`,
