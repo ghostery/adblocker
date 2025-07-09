@@ -1,3 +1,35 @@
+# v2.10.0 (Wed Jul 09 2025)
+
+#### :rocket: New Feature
+
+- `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker`
+  - Support :has natively [#5014](https://github.com/ghostery/adblocker/pull/5014) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5017](https://github.com/ghostery/adblocker/pull/5017) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5009](https://github.com/ghostery/adblocker/pull/5009) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/node from 24.0.10 to 24.0.12 [#5018](https://github.com/ghostery/adblocker/pull/5018) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump chai from 5.2.0 to 5.2.1 [#5020](https://github.com/ghostery/adblocker/pull/5020) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.35.1 to 8.36.0 [#5015](https://github.com/ghostery/adblocker/pull/5015) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`
+  - Build(deps-dev): Bump @types/chrome from 0.0.329 to 0.0.331 [#5019](https://github.com/ghostery/adblocker/pull/5019) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.11.2 to 24.12.0 [#5016](https://github.com/ghostery/adblocker/pull/5016) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.5 (Mon Jul 07 2025)
 
 #### :bug: Bug Fix

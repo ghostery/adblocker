@@ -1,3 +1,22 @@
+# v2.10.0 (Wed Jul 09 2025)
+
+#### :rocket: New Feature
+
+- Support :has natively [#5014](https://github.com/ghostery/adblocker/pull/5014) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#5017](https://github.com/ghostery/adblocker/pull/5017) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5009](https://github.com/ghostery/adblocker/pull/5009) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.9.4 (Mon Jul 07 2025)
 
 #### :bug: Bug Fix
