@@ -16,7 +16,7 @@ import type { AST, Complex } from './types.js';
  */
 function handleXPathSelector(element: Element, xpathExpression: string): Element[] {
   try {
-    if (!Node || !XPathResult) {
+    if (typeof Node === 'undefined' || typeof XPathResult === 'undefined') {
       return []; // unsupported (not running in the browser)
     }
 
