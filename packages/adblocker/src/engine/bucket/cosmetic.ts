@@ -292,11 +292,7 @@ export default class CosmeticFilterBucket {
         } else {
           genericHideRules.push(rule);
         }
-      } else if (
-        rule.isExtended() === false ||
-        config.loadExtendedSelectors === true ||
-        rule.isPureHasSelector()
-      ) {
+      } else if (rule.isExtended() === false || config.loadExtendedSelectors === true) {
         hostnameSpecificRules.push(rule);
       }
     }

@@ -12,7 +12,6 @@ export const EXTENDED_PSEUDO_CLASSES = new Set([
   // '-abp-contains',
   // '-abp-has',
   // '-abp-properties',
-  'has',
   'has-text',
   'matches-path',
   'matches-attr',
@@ -48,6 +47,7 @@ export const PSEUDO_CLASSES = new Set([
   'focus-visible',
   'focus-within',
   'fullscreen',
+  'has',
   'host',
   'host-context',
   'hover',
@@ -115,6 +115,15 @@ export function classifySelector(selector: string): SelectorType {
         foundSupportedExtendedSelector = true;
       } else if (PSEUDO_CLASSES.has(name) === false && PSEUDO_ELEMENTS.has(name) === false) {
         return SelectorType.Invalid;
+      }
+
+      // Check for nested :has selectors (which are not supported by standard CSS)
+      if (
+        name === 'has' &&
+        token.argument !== undefined &&
+        token.argument.indexOf(':has(') !== -1
+      ) {
+        foundSupportedExtendedSelector = true;
       }
 
       // Recursively

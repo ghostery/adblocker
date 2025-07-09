@@ -10,7 +10,6 @@ import {
   AST,
   classifySelector,
   SelectorType,
-  isPureHasSelector,
   parse as parseCssSelector,
 } from '@ghostery/adblocker-extended-selectors';
 
@@ -146,7 +145,6 @@ const enum COSMETICS_MASK {
   isHrefSelector = 1 << 5,
   remove = 1 << 6,
   extended = 1 << 7,
-  isPureHasSelector = 1 << 8,
 }
 
 function computeFilterId(
@@ -332,10 +330,6 @@ export default class CosmeticFilter implements IFilter {
       const selectorType = classifySelector(selector);
       if (selectorType === SelectorType.Extended) {
         mask = setBit(mask, COSMETICS_MASK.extended);
-
-        if (isPureHasSelector(selector)) {
-          mask = setBit(mask, COSMETICS_MASK.isPureHasSelector);
-        }
       } else if (selectorType === SelectorType.Invalid || !isValidCss(selector)) {
         // console.error('Invalid', line);
         // TODO - maybe perform `isValidCss` from the other module.
@@ -883,10 +877,6 @@ export default class CosmeticFilter implements IFilter {
 
   public isRemove(): boolean {
     return getBit(this.mask, COSMETICS_MASK.remove);
-  }
-
-  public isPureHasSelector(): boolean {
-    return getBit(this.mask, COSMETICS_MASK.isPureHasSelector);
   }
 
   public isUnhide(): boolean {

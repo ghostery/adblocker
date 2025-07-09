@@ -27,7 +27,7 @@ import { block } from '../filters/dsl.js';
 import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
-import CosmeticFilterBucket, { createStylesheet } from './bucket/cosmetic.js';
+import CosmeticFilterBucket from './bucket/cosmetic.js';
 import NetworkFilterBucket from './bucket/network.js';
 import HTMLBucket from './bucket/html.js';
 import { Metadata, IPatternLookupResult } from './metadata.js';
@@ -1015,9 +1015,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
 
-    // inject extended selector filters
-    injectPureHasSafely = false,
-
     hidingStyle,
     callerContext,
   }: {
@@ -1034,8 +1031,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getExtendedRules?: boolean;
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
-
-    injectPureHasSafely?: boolean;
 
     hidingStyle?: string | undefined;
     callerContext?: any | undefined;
@@ -1060,7 +1055,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       getRulesFromHostname,
       getInjectionRules,
       getExtendedRules,
-      getPureHasRules: injectPureHasSafely,
       callerContext,
     });
 
@@ -1076,7 +1070,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       url,
       injectScriptlets: getInjectionRules,
       injectExtended: getExtendedRules,
-      injectPureHasSafely,
       allowGenericHides,
       getBaseRules,
       hidingStyle,
@@ -1101,7 +1094,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       injectStyles = true,
       injectScriptlets,
       injectExtended,
-      injectPureHasSafely,
 
       allowGenericHides = true,
       getBaseRules,
@@ -1112,7 +1104,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       injectStyles?: boolean;
       injectScriptlets: boolean;
       injectExtended: boolean;
-      injectPureHasSafely: boolean;
 
       allowGenericHides?: boolean;
       hidingStyle?: string | undefined;
@@ -1126,7 +1117,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const scripts = [];
     const styleFilters = [];
     const extendedFilters = [];
-    const pureHasFilters = [];
 
     for (const filter of filters) {
       if (injectScriptlets && filter.isScriptInject()) {
@@ -1137,9 +1127,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       } else if (filter.isExtended()) {
         if (injectExtended === true && this.config.loadExtendedSelectors) {
           extendedFilters.push(filter);
-        }
-        if (injectPureHasSafely && filter.isPureHasSelector()) {
-          pureHasFilters.push(filter);
         }
       } else if (injectStyles === true) {
         styleFilters.push(filter);
@@ -1154,23 +1141,18 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       { getBaseRules, allowGenericHides, hidingStyle },
     );
 
-    let styles = stylesheets.stylesheet;
-    for (const filter of pureHasFilters) {
-      styles += `\n\n${createStylesheet([filter.getSelector()], filter.hasCustomStyle() ? filter.getStyle() : hidingStyle)}`;
-    }
-
     for (const script of scripts) {
       this.emit('script-injected', script, url);
     }
 
-    if (styles.length !== 0) {
-      this.emit('style-injected', styles, url);
+    if (stylesheets.stylesheet.length !== 0) {
+      this.emit('style-injected', stylesheets.stylesheet, url);
     }
 
     return {
       extended: stylesheets.extended,
       scripts,
-      styles,
+      styles: stylesheets.stylesheet,
     };
   }
 
@@ -1189,7 +1171,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromHostname = true,
     getInjectionRules,
     getExtendedRules,
-    getPureHasRules,
 
     callerContext,
   }: {
@@ -1205,7 +1186,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromHostname?: boolean;
     getInjectionRules?: boolean;
     getExtendedRules?: boolean;
-    getPureHasRules?: boolean;
 
     callerContext?: any | undefined;
   }): {
@@ -1295,6 +1275,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const matches: { filter: CosmeticFilter; exception: CosmeticFilter | undefined }[] = [];
 
     for (const filter of filters) {
+      if (filter.isExtended() && getExtendedRules === false) {
+        continue;
+      }
+
       let exception = unhideExceptions.get(
         normalizeSelector(filter, this.resources.getScriptletCanonicalName.bind(this.resources)),
       );
@@ -1306,15 +1290,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         if (getInjectionRules === false) {
           continue;
         }
-      }
-
-      if (
-        filter.isExtended() &&
-        (getExtendedRules === false || this.config.loadExtendedSelectors === false) &&
-        // skip extended but not if we try to inject pure has safely
-        !(getPureHasRules && filter.isPureHasSelector())
-      ) {
-        continue;
       }
 
       matches.push({ filter, exception });

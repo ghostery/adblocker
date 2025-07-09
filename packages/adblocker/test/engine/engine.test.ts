@@ -1156,117 +1156,27 @@ foo.com###selector
     });
 
     context('with has selectors', function () {
-      it('ignores if not allowed', function () {
+      it('emits styles when getExtendedRules is false', function () {
         expect(
-          Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
+          Engine.parse(`foo.com##body:has(a)`).getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
             getExtendedRules: false,
           }).styles,
-        ).to.be.eql('');
-
-        expect(
-          Engine.parse('foo.com##aside:has(a.ad-remove)').getCosmeticsFilters({
-            domain: 'foo.com',
-            hostname: 'foo.com',
-            url: 'https://foo.com',
-            getExtendedRules: true,
-            injectPureHasSafely: false,
-          }).styles,
-        ).to.be.eql('');
-      });
-
-      it('does not emit extended', function () {
-        expect(
-          Engine.parse('foo.com##aside:has(a.ad-remove)', {
-            loadExtendedSelectors: false,
-          }).getCosmeticsFilters({
-            domain: 'foo.com',
-            hostname: 'foo.com',
-            url: 'https://foo.com',
-            getExtendedRules: true,
-            injectPureHasSafely: true,
-          }).extended,
-        ).to.be.empty;
-
-        expect(
-          Engine.parse('foo.com##aside:has(a.ad-remove)', {
-            loadExtendedSelectors: false,
-          }).getCosmeticsFilters({
-            domain: 'foo.com',
-            hostname: 'foo.com',
-            url: 'https://foo.com',
-            getExtendedRules: false,
-            injectPureHasSafely: true,
-          }).extended,
-        ).to.be.empty;
-      });
-
-      it('adds separate blocks if allowed', function () {
-        expect(
-          Engine.parse(
-            `
-            foo.com###test
-            foo.com##aside:has(a.ad-remove)
-          `,
-          ).getCosmeticsFilters({
-            domain: 'foo.com',
-            hostname: 'foo.com',
-            url: 'https://foo.com',
-            getExtendedRules: false,
-            injectPureHasSafely: true,
-          }).styles,
-        ).to.be.eql(
-          `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
-        );
-
-        expect(
-          Engine.parse(
-            `
-            foo.com###test
-            foo.com##aside:has(a.ad-remove)
-          `,
-            { loadExtendedSelectors: false },
-          ).getCosmeticsFilters({
-            domain: 'foo.com',
-            hostname: 'foo.com',
-            url: 'https://foo.com',
-            getExtendedRules: false,
-            injectPureHasSafely: true,
-          }).styles,
-        ).to.be.eql(
-          `#test { display: none !important; }\n\naside:has(a.ad-remove) { display: none !important; }`,
-        );
+        ).to.be.eql(`body:has(a) { display: none !important; }`);
       });
 
       it('respects custom styles', function () {
         expect(
-          Engine.parse(`foo.com##body:has(a):style(visibility: hidden !important;)`, {
-            loadExtendedSelectors: false,
-          }).getCosmeticsFilters({
-            domain: 'foo.com',
-            hostname: 'foo.com',
-            url: 'https://foo.com',
-            getExtendedRules: false,
-            injectPureHasSafely: true,
-          }).styles,
-        ).to.be.eql(`\n\nbody:has(a) { visibility: hidden !important; }`);
-
-        expect(
           Engine.parse(
-            `
-            foo.com##body:has(a):style(visibility: hidden !important;)
-            foo.com#@#body:has(a):style(visibility: hidden !important;)
-          `,
+            `foo.com##body:has(a):style(visibility: hidden !important;)`,
           ).getCosmeticsFilters({
             domain: 'foo.com',
             hostname: 'foo.com',
             url: 'https://foo.com',
-            getExtendedRules: false,
-            injectPureHasSafely: true,
           }).styles,
-        ).to.be.eql('');
+        ).to.be.eql(`body:has(a) { visibility: hidden !important; }`);
       });
     });
 

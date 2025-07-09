@@ -2060,7 +2060,7 @@ describe('Cosmetic filters', () => {
       });
     }
 
-    for (const pseudo of ['has', 'has-text']) {
+    for (const pseudo of ['has-text']) {
       it(`parse supported: ${pseudo}`, () => {
         cosmetic(`example.com##.cls:${pseudo}()`, {
           ...DEFAULT_COSMETIC_FILTER,
