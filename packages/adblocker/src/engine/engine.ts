@@ -24,7 +24,7 @@ import { HTMLSelector } from '../html-filtering.js';
 import CosmeticFilter, { normalizeSelector } from '../filters/cosmetic.js';
 import NetworkFilter from '../filters/network.js';
 import { block } from '../filters/dsl.js';
-import { f, FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
+import { FilterType, IListDiff, IPartialRawDiff, parseFilters } from '../lists.js';
 import Request from '../request.js';
 import Resources from '../resources.js';
 import CosmeticFilterBucket, { createStylesheet } from './bucket/cosmetic.js';

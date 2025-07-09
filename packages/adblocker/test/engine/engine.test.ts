@@ -2212,13 +2212,14 @@ foo.com###selector
     });
 
     context('configs', () => {
-      it('does not throw with different configs', () => {
+      it('does not throw with different configs - takes values from first', () => {
         const engine1 = FilterEngine.empty({ loadCosmeticFilters: true });
         const engine2 = FilterEngine.empty({ loadCosmeticFilters: false });
-        expect(() => FilterEngine.merge([engine1, engine2])).to.not.throw();
+        const engine = FilterEngine.merge([engine1, engine2]);
+        expect(engine.config).to.have.property('loadCosmeticFilters').that.equal(true);
       });
 
-      it('does throw if compression is different', () => {
+      it('throws on inconsistent compression', () => {
         const engine1 = FilterEngine.empty({ enableCompression: true });
         const engine2 = FilterEngine.empty({ enableCompression: false });
         expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
@@ -2226,16 +2227,13 @@ foo.com###selector
         );
       });
 
-      it('allows to override the configs', () => {
+      it('allows config override', () => {
         const engine1 = FilterEngine.empty({ enableCompression: false });
         const engine2 = FilterEngine.empty({ enableCompression: false });
-        let engine: FilterEngine;
-        expect(() => {
-          engine = FilterEngine.merge([engine1, engine2], {
-            overrideConfig: { enableCompression: true },
-          });
-        }).not.to.throw();
-        expect(engine!.config).to.have.property('enableCompression').that.equal(true);
+        const engine = FilterEngine.merge([engine1, engine2], {
+          overrideConfig: { enableCompression: true },
+        });
+        expect(engine.config).to.have.property('enableCompression').that.equal(true);
       });
     });
 
