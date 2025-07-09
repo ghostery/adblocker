@@ -14,18 +14,13 @@ import type { AST, Complex } from './types.js';
  * @param xpathExpression - The XPath expression to evaluate
  * @returns Array of Element nodes that match the XPath expression
  */
-function handleXPathSelector(element: Element, xpathExpression: string | undefined): Element[] {
-  if (xpathExpression === undefined) {
-    return [];
-  }
-
+function handleXPathSelector(element: Element, xpathExpression: string): Element[] {
   try {
-    const document = element.ownerDocument;
-    if (!Node || !XPathResult || !document || typeof document.evaluate !== 'function') {
-      return [];
+    if (!Node || !XPathResult) {
+      return []; // unsupported (not running in the browser)
     }
 
-    const result = document.evaluate(
+    const result = element.ownerDocument.evaluate(
       xpathExpression,
       element,
       null,
@@ -367,6 +362,9 @@ function transpose(element: Element, selector: AST): Element[] | null {
       }
       return [];
     } else if (selector.name === 'xpath') {
+      if (selector.argument === undefined) {
+        return [];
+      }
       return handleXPathSelector(element, selector.argument);
     }
   }
