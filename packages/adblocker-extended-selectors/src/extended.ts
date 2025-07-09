@@ -19,13 +19,13 @@ export const EXTENDED_PSEUDO_CLASSES = new Set([
   'matches-css-after',
   'matches-css-before',
   'upward',
+  'xpath',
   // 'if',
   // 'if-not',
   // 'min-text-length',
   // 'nth-ancestor',
   // 'watch-attr',
   // 'watch-attrs',
-  // 'xpath',
 ]);
 
 export const PSEUDO_CLASSES = new Set([
