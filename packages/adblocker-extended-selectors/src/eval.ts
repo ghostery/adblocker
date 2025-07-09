@@ -261,9 +261,6 @@ export function matches(element: Element, selector: AST): boolean {
       return (
         selector.argument !== undefined && matchCSSProperty(element, selector.argument, '::before')
       );
-    } else if (selector.name === 'xpath') {
-      const matches = handleXPathSelector(element, selector.argument);
-      return matches.includes(element);
     }
   }
 
