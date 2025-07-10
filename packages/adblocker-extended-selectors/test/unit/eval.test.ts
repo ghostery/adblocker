@@ -30,10 +30,9 @@ function testMatches(selector: string, html: string, target: string, expected: b
   const element = target === 'document' ? document : document.querySelector(target);
   expect(element).to.not.be.null;
   if (element !== null) {
-    // NOTE: here we need to ignore the type warnings so that we can pass a
-    // `Document` argument to test some edge cases (e.g. textContent returns
-    // null on document).
-    // @ts-ignore
+    // @ts-expect-error here we need to ignore the type warnings so that
+    // we can pass a `Document` argument to test some edge cases.
+    // (e.g. textContent returns null on document)
     const result = matches(element, ast);
     expect(result).to.equal(expected);
   }
@@ -288,7 +287,7 @@ describe('eval', () => {
       it('matches current path', () => {
         const html = '<div>Test</div>';
         const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
-        // @ts-ignore - JSDOM window type compatibility
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/h(.*){2}e$/)')!;
@@ -299,7 +298,7 @@ describe('eval', () => {
       it('matches current path with regex flags', () => {
         const html = '<div>Test</div>';
         const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
-        // @ts-ignore - JSDOM window type compatibility
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/home/i)')!;
@@ -312,7 +311,7 @@ describe('eval', () => {
           <div class="content">Test 2</div>
         `;
         const jsdom = new JSDOM(html, { url: 'https://example.com/content' });
-        // @ts-ignore - JSDOM window type compatibility
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const ast = parse(':matches-path(/content$/) .content')!;
         const actual = querySelectorAll(jsdom.window.document.documentElement, ast);
@@ -324,7 +323,7 @@ describe('eval', () => {
       it('matches current path with query params', () => {
         const html = '<div>Test</div>';
         const jsdom = new JSDOM(html, { url: 'https://example.com/search/results?q=foo' });
-        // @ts-ignore - JSDOM window type compatibility
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/q=foo/)')!;
@@ -335,7 +334,7 @@ describe('eval', () => {
       it('does not match different path', () => {
         const html = '<div>Test</div>';
         const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
-        // @ts-ignore - JSDOM window type compatibility
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div')!;
         const ast = parse(':matches-path(/search/)')!;
@@ -402,6 +401,7 @@ describe('eval', () => {
           <div>Test</div>
         `;
         const jsdom = new JSDOM(html);
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div');
         expect(element).to.not.be.null;
@@ -425,6 +425,7 @@ describe('eval', () => {
           <div>Test</div>
         `;
         const jsdom = new JSDOM(html);
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div');
         expect(element).to.not.be.null;
@@ -441,6 +442,7 @@ describe('eval', () => {
       it('handles invalid CSS value format', () => {
         const html = '<div>Test</div>';
         const jsdom = new JSDOM(html);
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div');
         expect(element).to.not.be.null;
@@ -465,6 +467,7 @@ describe('eval', () => {
           <div>Test</div>
         `;
         const jsdom = new JSDOM(html);
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div');
         expect(element).to.not.be.null;
@@ -488,6 +491,7 @@ describe('eval', () => {
           <div>Test</div>
         `;
         const jsdom = new JSDOM(html);
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div');
         expect(element).to.not.be.null;
@@ -511,6 +515,7 @@ describe('eval', () => {
           <div>Test</div>
         `;
         const jsdom = new JSDOM(html);
+        // @ts-expect-error JSDOM window type incompatibility
         globalThis.window = jsdom.window;
         const element = jsdom.window.document.querySelector('div');
         expect(element).to.not.be.null;
