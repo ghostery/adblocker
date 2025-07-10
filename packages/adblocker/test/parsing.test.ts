@@ -1297,6 +1297,24 @@ describe('Network filters', () => {
       });
     });
 
+    describe('options sharing same field must be rejected', () => {
+      [
+        'redirect=empty',
+        'redirect-rule=empty',
+        'csp=a',
+        'inline-script',
+        'inline-font',
+        'content=/a/b/',
+        'replace=/a/b/',
+        'removeparam=a',
+      ].forEach((option, index, arr) => {
+        const option2 = arr[index === arr.length - 1 ? 0 : index + 1];
+        it(`${option} and ${option2}`, () => {
+          network(`||foo.com$${option},${option2}`, null);
+        });
+      });
+    });
+
     const allOptions = (value: boolean) => ({
       fromFont: value,
       fromImage: value,
