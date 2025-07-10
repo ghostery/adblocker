@@ -836,7 +836,9 @@ export default class NetworkFilter implements IFilter {
             if (option === 'redirect-rule') {
               mask = setBit(mask, NETWORK_FILTER_MASK.isRedirectRule);
             }
-
+            if (optionValue !== undefined) {
+              return null;
+            }
             optionValue = value;
             break;
           }
@@ -847,6 +849,9 @@ export default class NetworkFilter implements IFilter {
 
             mask = setBit(mask, NETWORK_FILTER_MASK.isCSP);
             if (value.length > 0) {
+              if (optionValue !== undefined) {
+                return null;
+              }
               optionValue = value;
             }
             break;
@@ -876,7 +881,7 @@ export default class NetworkFilter implements IFilter {
             mask = setBit(mask, NETWORK_FILTER_MASK.isGenericHide);
             break;
           case 'inline-script':
-            if (negation) {
+            if (negation || optionValue !== undefined) {
               return null;
             }
 
@@ -885,7 +890,7 @@ export default class NetworkFilter implements IFilter {
               "script-src 'self' 'unsafe-eval' http: https: data: blob: mediastream: filesystem:";
             break;
           case 'inline-font':
-            if (negation) {
+            if (negation || optionValue !== undefined) {
               return null;
             }
 
@@ -899,7 +904,8 @@ export default class NetworkFilter implements IFilter {
               negation ||
               (value.length === 0
                 ? getBit(mask, NETWORK_FILTER_MASK.isException) === false
-                : replaceOptionValueToRegexp(value) === null)
+                : replaceOptionValueToRegexp(value) === null) ||
+              optionValue !== undefined
             ) {
               return null;
             }
@@ -910,7 +916,7 @@ export default class NetworkFilter implements IFilter {
             break;
           case 'removeparam':
             // TODO: Support regex
-            if (negation || value.startsWith('/')) {
+            if (negation || value.startsWith('/') || optionValue !== undefined) {
               return null;
             }
 
