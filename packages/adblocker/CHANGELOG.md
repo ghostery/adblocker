@@ -1,3 +1,16 @@
+# v2.11.1 (Thu Jul 10 2025)
+
+#### :house: Internal
+
+- Update local assets [#5021](https://github.com/ghostery/adblocker/pull/5021) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 2
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+
+---
+
 # v2.11.0 (Wed Jul 09 2025)
 
 #### :rocket: New Feature

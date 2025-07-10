@@ -1,3 +1,30 @@
+# v2.11.1 (Thu Jul 10 2025)
+
+#### ⚠️ Pushed to `master`
+
+- Create FUNDING.yml ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5021](https://github.com/ghostery/adblocker/pull/5021) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`
+  - Build(deps-dev): Bump @types/chrome from 0.0.331 to 0.0.332 [#5023](https://github.com/ghostery/adblocker/pull/5023) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.12.0 to 24.12.1 [#5022](https://github.com/ghostery/adblocker/pull/5022) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.11.0 (Wed Jul 09 2025)
 
 #### :rocket: New Feature
