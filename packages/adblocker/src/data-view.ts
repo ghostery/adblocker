@@ -429,7 +429,7 @@ export class StaticDataView {
     const byteLength = this.getLength();
     this.pos += byteLength;
 
-    // @ts-ignore
+    // @ts-expect-error `Uint8Array<ArrayBufferLike>` is indexable with `number`
     return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 
