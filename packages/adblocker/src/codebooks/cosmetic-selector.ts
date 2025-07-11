@@ -7,6 +7,7 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
+  ", document.addEventListene",
   ", document.createElement, ",
   ", document.getElementById,",
   "%5Bhref%5E%3D%22https%3A%2",
@@ -46,6 +47,7 @@ export default [
   "no-xhr-if",
   "placehold",
   "[href*=\"",
+  "%5Bdata-",
   "AAAAAAAA",
   "backdrop",
   "disclaim",
@@ -150,7 +152,6 @@ export default [
   "an",
   "ar",
   "at",
-  "d-",
   "de",
   "e-",
   "ed",
@@ -176,7 +177,6 @@ export default [
   "on",
   "op",
   "or",
-  "ot",
   "ra",
   "re",
   "ro",
