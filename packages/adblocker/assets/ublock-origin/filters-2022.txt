@@ -869,7 +869,9 @@ whats-on-netflix.com##+js(acs, eval, replace)
 dongknows.com##+js(no-fetch-if, %2Fads%7Cdoubleclick%2F)
 dongknows.com##+js(nostif, %2FAds%7Cadbl%7CoffsetHeight%2F)
 dongknows.com##+js(acs, eval, replace)
+dongknows.com##+js(aeld, load, .innerHTML)
 dongknows.com###amz-deals
+dongknows.com##.dkt-amz-top
 dongknows.com##.dkt-abanner-top
 @@||dongknows.com^$ghide
 ! https://tlin.me/h88 focus detection
@@ -1116,7 +1118,6 @@ phimmoiaz.cc##+js(aopr, popunder)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/116394
 mangahentai.xyz##+js(aopr, loadXMLDoc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/116465
-javenspanish.com##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
 player.subespanolvip.com##+js(aopr, BetterJsPop)
 ! https://github.com/uBlockOrigin/uAssets/issues/12956
 racedepartment.com##+js(acs, %24, adsBlocked)
@@ -2393,17 +2394,18 @@ smostafa.ir##:matches-path(/utm_source=footer/i) html:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/15073
 upiapi.in##+js(set, detectAdBlock, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/8532
+! https://github.com/uBlockOrigin/uAssets/issues/21255
 ||video-ads-module.ad-tech.nbcuni.com/$xhr,redirect=nooptext,domain=peacocktv.com
+||freewheel.tv^$image,redirect=1x1.gif,domain=peacocktv.com
+||peacocktv.com/*/tracking/
 ! https://github.com/uBlockOrigin/uAssets/issues/18244
 ! https://github.com/uBlockOrigin/uAssets/issues/19433
 ! https://github.com/uBlockOrigin/uAssets/issues/22074
+! https://github.com/uBlockOrigin/uAssets/issues/29130
 *&caid=$xhr,removeparam=caid,domain=max.com
-play.max.com##+js(json-prune, ssaiInfo%20fallback.ssaiInfo)
-play.max.com##+js(json-prune, adtech-brightline%20adtech-google-pal%20adtech-iab-om)
-! https://github.com/uBlockOrigin/uAssets/issues/21255
-||freewheel.tv^$image,redirect=1x1.gif,domain=peacocktv.com
-||peacocktv.com/*/tracking/
-peacocktv.com,play.max.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , .mpd)
+play.hbomax.com,play.max.com##+js(json-prune, ssaiInfo%20fallback.ssaiInfo)
+play.hbomax.com,play.max.com##+js(json-prune, adtech-brightline%20adtech-google-pal%20adtech-iab-om)
+peacocktv.com,play.hbomax.com,play.max.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , .mpd)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/130913
 forexfactory.com##.adbit
 ! https://github.com/easylist/easylist/commit/d3d87f8b48ae5380687742c0727a076b11394758#commitcomment-85272282
