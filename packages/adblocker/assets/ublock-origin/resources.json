@@ -545,7 +545,7 @@
     {
       "name": "prevent-innerHTML.js",
       "aliases": [],
-      "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=(t,r)=>{if(e!==\"\"){if(typeof t.matches!==\"function\")return false;if(t.matches(e)===false)return false}return n.testPattern(i,r)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(this,e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
+      "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=(t,r)=>{if(e!==\"\"){if(typeof t.matches!==\"function\")return false;if(t.matches(e)===false)return false}return n.testPattern(i,`${r}`)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(this,e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
       "dependencies": [
         "safe-self.fn"
       ]

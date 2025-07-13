@@ -67,6 +67,7 @@ appnee.com###babasbmsgx
 appnee.com##[href^="https://appnee.com/advertising/"] > [src^="https://img.appnee.com/other/"][alt="Ads Place"]
 appnee.com##+js(noeval-if, %2Fchp_%3Fad%2F)
 appnee.com##+js(nostif, adsbygoogle)
+appnee.com##+js(set, HTMLScriptElement.prototype.onerror, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/506
 ! https://github.com/uBlockOrigin/uAssets/issues/6568
 ||msn.com/advertisement.ad.js$script,1p,important
@@ -130,6 +131,7 @@ lewdzone.com###ad_vid
 ! https://github.com/uBlockOrigin/uAssets/issues/27207
 ! https://github.com/uBlockOrigin/uAssets/issues/27430
 ! https://github.com/uBlockOrigin/uAssets/issues/29070
+! https://github.com/uBlockOrigin/uAssets/issues/29120
 @@*$ghide,domain=f1stream.*|fbstream.*|mlbstream.*|motogpstream.*|nbastream.*|nflstream.*|nhlstream.*|plylive.*|plyvdo.*|rugbystreams.*|socceronline.*|tennisstreams.*|tvply.*|ufcstream.*|vipleague.*
 plylive.*,plyvdo.*##+js(nowoif)
 tennisstreams.*,vipleague.*##+js(acs, setTimeout, admc)
@@ -142,10 +144,10 @@ vipleague.*##.bg-dark.ratio > .position-absolute
 */script/formula.js|$script
 vipleague.*##.m-1.btn-danger.btn
 !#if cap_html_filtering
-fbstreams.*,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
+buffsports.*,fbstreams.*,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
 !#else
-fbstreams.*,vipleague.*,wavewalt.me##+js(rmnt, script, %2FadserverDomain%7Cdelete%20window%7CFingerprintJS%2F)
-fbstreams.*,vipleague.*,wavewalt.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+buffsports.*,fbstreams.*,vipleague.*,wavewalt.me##+js(rmnt, script, %2FadserverDomain%7Cdelete%20window%7CFingerprintJS%2F)
+buffsports.*,fbstreams.*,vipleague.*,wavewalt.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 !#endif
 ! https://forums.lanik.us/viewtopic.php?f=64&t=29322
 ! https://github.com/uBlockOrigin/uAssets/issues/11710
@@ -280,20 +282,13 @@ hulu.com##.ad-choices
 ! https://www.reddit.com/r/uBlockOrigin/comments/14b5lbw/
 ! https://www.reddit.com/r/uBlockOrigin/comments/158nvca/not_blocking_hulu_ads/jti29qk/
 ! https://www.reddit.com/r/uBlockOrigin/comments/16hr6pk/hulu_subtitles_getting_delayed_again/
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads, , propsToMatch, %2Fplaylist)
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads)
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads)
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks)
-! [dup] from ublock-origin/quick-fixes.txt
-! hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), MPD%20Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads, , propsToMatch, %2Fplaylist)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads)
+hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks)
+hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), MPD%20Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
 ! https://github.com/uBlockOrigin/uAssets/issues/7348
 ! https://github.com/uBlockOrigin/uAssets/issues/28125
 hentai2read.com##+js(nowoif)
@@ -1664,8 +1659,9 @@ buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/29025
 ! https://github.com/uBlockOrigin/uAssets/issues/29048
 ! https://github.com/uBlockOrigin/uAssets/issues/28834#issuecomment-3026400384
+! https://github.com/uBlockOrigin/uAssets/issues/28525#issuecomment-3064625698
 ! https://arabshentai.com/episodes/%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d9%83%d8%a7%d9%86%d8%aa-%d9%81%d8%a7%d8%b3%d9%82%d8%a9-2/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|movearnpre.com
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|movearnpre.com|nekovid.xyz
 cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>##+js(set, uas, %5B%5D)
 /assets/jquery/*.js?type=adult^$script,1p
 /wp-content/plugins/anti-adblocker/*
@@ -1706,3 +1702,19 @@ stevenuniverse.best##+js(acs, document.addEventListener, bait)
 klouderr.com##+js(trusted-create-html, body, %3Cdiv%20id%3D%22rpjMdOwCJNxQ%22%20style%3D%22display%3A%20none%3B%22%3E%3C%2Fdiv%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/29116
 mrscript.net##+js(no-xhr-if, googlesyndication)
+! https://sneakernews.com/
+sneakernews.com##.site-header:style(top: 0 !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/29147
+emojipedia.org##.items-center:has([class^="AdContainer_ad"])
+emojipedia.org##.min-h-\[184px\]:style(min-height:0 !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/29155
+mediacast.click,playcast.click##+js(nowoif)
+mediacast.click,playcast.click###openLinks
+! https://watchanimeworld.in/episode/fairy-tail-2x49/ anti adblock
+||watchanimeworld.in/wp-content/plugins/adblock
+! https://www.zoominar.online/ popup
+zoominar.online##+js(aopr, redirectOnClick)
+! https://bigbuttshub.com/ anti-adb,popup
+bigbuttshub2.top,bigbuttshubvideos.com##+js(no-fetch-if, widgets.outbrain.com)
+bigbuttshub2.top,bigbuttshubvideos.com##+js(no-fetch-if, mode%3Ano-cors)
+bigbuttshub2.top,bigbuttshubvideos.com##body > div ~ div[class]:empty

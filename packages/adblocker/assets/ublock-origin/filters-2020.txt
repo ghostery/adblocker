@@ -978,6 +978,8 @@ graphicdesignresources.net##+js(nosiif, visibility, 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/22198
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gdc7mh/spotify/
 ! ||spotify.com/storage-resolve/files/audio/interactive/*$xhr,domain=open.spotify.com
+! https://github.com/AdguardTeam/AdguardFilters/commit/828dd91e2a34c07276df372ebf8028ef28b85ee4
+open.spotify.com##+js(trusted-json-edit-fetch-response, .cdnurl%3D%5B%22data%3Aaudio%2Fmpeg%3Bbase64%2CSUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU2LjQwLjEwMQAAAAAAAAAAAAAA%2F%2FtUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAAGAAADAABgYGBgYGBgYGBgYGBgYGBggICAgICAgICAgICAgICAgICgoKCgoKCgoKCgoKCgoKCgwMDAwMDAwMDAwMDAwMDAwMDg4ODg4ODg4ODg4ODg4ODg4P%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F%2F8AAAAATGF2YzU2LjYwAAAAAAAAAAAAAAAAJAAAAAAAAAAAAwDNZKlY%2F%2FsUZAAP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAETEFNRTMuOTkuNVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV%2F%2FsUZB4P8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV%2F%2FsUZDwP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV%2F%2FsUZFoP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV%2F%2FsUZHgP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV%2F%2FsUZJYP8AAAaQAAAAgAAA0gAAABAAABpAAAACAAADSAAAAEVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV%22%5D, propsToMatch, %2Fstorage-resolve%2Ffiles%2Faudio%2Finteractive)
 ||adxcel.com^
 ||akamaized.net/audio/$media,redirect=noop-1s.mp4:10,from=open.spotify.com
 ||scdn.co/audio/$media,redirect=noop-1s.mp4:10,domain=open.spotify.com
@@ -2999,10 +3001,3 @@ xfile.*##.downloads-btns-div
 ~xcloud.eu,~xcloud.host,xcloud.*##.ads-btns
 /^https:\/\/[0-9a-z]{8,}\.[a-z0-9]{7,}\.[a-z]{4,}\/[0-9a-f]{32}\/a4\/[0-9a-f]{13}\.js$/$script,3p,match-case
 /^https:\/\/[0-9a-z]{8,}\.[a-z0-9]{7,}\.[a-z]{4,}\/[0-9a-f]{32}\/b4\/[0-9a-f]{13}\.js$/$script,3p,match-case
-! https://github.com/uBlockOrigin/uAssets/issues/5761
-nsw2u.*##[href^="https://bit.ly/"]
-! https://www.reddit.com/r/uBlockOrigin/comments/126iwtj/
-nsw2u.*##+js(no-xhr-if, googlesyndication)
-! https://github.com/uBlockOrigin/uAssets/issues/25434
-||com/|$xhr,3p,method=head,domain=nsw2u.com
-||xyz/|$xhr,3p,method=head,domain=nsw2u.com

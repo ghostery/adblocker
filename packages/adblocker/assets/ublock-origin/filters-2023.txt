@@ -233,6 +233,8 @@ hochi.news###ohtani-pickup
 businessinsider.jp##div[class^="article_specialFeature_"]
 businessinsider.jp##div[class^="displayhandler"]:has(> div[class^="premiumRecommend"])
 sankei.com##div[id^="piano_special_Top_"]
+diamond.jp###contents > div.sub-column > div.title:has(+ #cx-recommed)
+diamond.jp###cx-recommed
 ! ziyu.net
 jin115.com,livedoor.biz#?#.plugin-memo:has(> div.side > script[src*="ziyu.net/"])
 okutta.net##.article__footer > div[style="height:500px; overflow-y:scroll;"]
@@ -1135,8 +1137,6 @@ assettoworld.com##+js(no-fetch-if, doubleclick)
 assettoworld.com##.nitro-ads
 ! webcreator-journal.com anti-adb
 webcreator-journal.com##+js(nostif, getComputedStyle)
-! https://github.com/uBlockOrigin/uAssets/issues/17393
-game-2u.com##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/17396
 ||movie44.com/*.gif$image
 movie44.com##.imgbanner
@@ -1440,8 +1440,6 @@ bakai.org##+js(aeld, load, nextFunction)
 ||bakai.org/uploads/fhentai.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/17726
 japscan.lol##+js(nostif, detectImgLoad)
-! https://www.reddit.com/r/uBlockOrigin/comments/12v8kak/
-mgnetu.com##h4:has-text(VPN)
 ! https://github.com/uBlockOrigin/uAssets/issues/20849
 @@||bondagevalley.cc^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/17744
@@ -2989,6 +2987,7 @@ snapwordz.com,toolxox.com##+js(no-fetch-if, googlesyndication)
 afly.pro##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/19667
 iwanttfc.com##+js(set, settings.adBlockDetectionEnabled, false)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=web.iwanttfc.com
 ! https://github.com/uBlockOrigin/uAssets/issues/19670
 @@*$ghide,domain=usandoapp.com|fazercurriculo.online
 obaianinho.com##+js(nano-sib, , *, 0.001)
@@ -3667,7 +3666,6 @@ fwcdn.pl##[id*="banner"]
 ! https://github.com/uBlockOrigin/uAssets/issues/27532
 filmweb.pl##+js(rc, rodo, body.rodo)
 filmweb.pl##+js(set, rodo.checkIsDidomiConsent, noopFunc)
-filmweb.pl##+js(set, rodo.waitForConsent, noopPromiseResolve)
 ! https://github.com/uBlockOrigin/uAssets/issues/28023
 @@||filmweb.pl^$ghide
 filmweb.pl#@##ad
