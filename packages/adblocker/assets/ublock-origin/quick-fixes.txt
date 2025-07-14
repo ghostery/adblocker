@@ -68,7 +68,8 @@ www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, clientScreen
 ! web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad, , propsToMatch, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.sideFeedUnit.nodes.%5B%5D.new_adverts.nodes.%5B-%5D.sponsored_data)
 web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeedUnit.nodes.%5B%5D.new_adverts.nodes.%5B-%5D.sponsored_data)
-web.facebook.com,www.facebook.com##a[aria-labelledby][attributionsrc][href^="http"][target="_blank"]
+! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-3060431385
+web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc^="/privacy_sandbox/comet/register/source/?eid="][href^="http"][target="_blank"]
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
 web.facebook.com,www.facebook.com##+js(json-edit, ..__bbox.result.data.node%5B%3F%40.*.__typename%3D%3D%22SponsoredData%22%5D)
 !#if ext_devbuild
@@ -107,14 +108,11 @@ japscan.lol#@#div.container > [href]
 /^https:\/\/acscdn\.com\/script\/(?:aclib|atg|compatibility|ippg|suv4|ut)\.js(\?cb=\d{13})?$/$script,3p,match-case,important,domain=japscan.lol
 ||platform.pubadx.one/pubadx-ad.js$script,domain=japscan.lol,important
 ||static.cloudflareinsights.com/beacon.min.js/$script,domain=japscan.lol,important
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2BnawNA%2F)
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%23%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%3A2%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%2F%22, prevent, %2FnawNA%20inlineScript%2F)
 japscan.lol##+js(nostif, %3Ddocument%5B_0x)
-!japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22%2F%5E%5B-0-9A-Z_a-z%5D%7B4%2C8%7D%24%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
-!japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5E%5B-0-9A-Z_a-z%5D%7B4%2C8%7D%24%2F%22, prevent, %2FstackDepth%3A4.%2B%20inlineScript%2F)
 japscan.lol##+js(trusted-set, aclib, json%3A%7B%22isShowingPop%22%3A%20false%7D)
 japscan.lol##+js(set, aclib.runInPagePush, %7B%7D, as, callback)
-japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22%2F%5BA-Z%5D%7B6%2C9%7D%2F%22, prevent, %2FstackDepth%3A4.%2B%5B0-9A-Za-z%5D%2B%20inlineScript%3A%5B12%5D%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5E%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2F%5B0-9A-Za-z%5D%7B4%7D%20inlineScript%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -231,14 +229,6 @@ mail.yahoo.com##+js(nostif, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/25421
 gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22gecmisi%22, condition, googleads)
 gecmisi.com.tr##+js(trusted-replace-argument, String.prototype.includes, 0, json%3A%22googleads%22, condition, gecmisi)
-! https://github.com/uBlockOrigin/uAssets/issues/22825
-hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads, propsToMatch, %2Fplaylist)
-hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks, propsToMatch, %2Fplaylist)
-hulu.com##+js(json-prune-fetch-response, breaks%20custom_breaks_data%20pause_ads, , propsToMatch, %2Fplaylist)
-hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads)
-hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, pause_ads)
-hulu.com##+js(json-prune, breaks%20custom_breaks_data%20pause_ads%20video_metadata.end_credits_time, breaks)
-hulu.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22%2Fads-%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bstarts-with(%40id%2C%22Ad%22)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), MPD%20Period%5Bid%5E%3D%22Ad%22i%5D, .mpd)
 ! https://github.com/uBlockOrigin/uAssets/issues/1545
 elektroda.pl,elektroda.de,elektroda.com##div[style="position: relative;"]:has(> a[href*=".php?"][onclick*="sendGAEvent"][target="_blank"][title] > img[width] + div > span)
 elektroda.pl##div[class="topic-box clearfix "] + div[class]:last-child:has(> a[style="font-weight: bold;"][target="_blank"]:only-child)
@@ -258,17 +248,8 @@ vook.vc##.note-sp-spnsr
 ! [badfilter] ||sstats.adobe.com^$badfilter
 @@||adobe.com.ssl.d1.sc.omtrdc.net^$xmlhttprequest,domain=www.adobe.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28776
-nontonx.com##+js(rpnt, script, %2Fif%20%5C(!.%2B%5C(%5C)%5C)%20return%3B%2Fg)
-nontonx.com##+js(rpnt, script, %2Fif%20%5C(.%5C..%20%3D%3D%3D%20null%5C)%20return%3B%2Fg)
-nontonx.com##+js(rpnt, script, %2Fif%20%5C(%5Ba-zA-Z%5Cd%5D%2B%5C(%5C)%5C)%20%5C%7B%2Fg, if(!0)%7B)
-nontonx.com##+js(rpnt, script, %2F!results%5C.bait%20%5C%7C%5C%7C%20!results%5C.rum%20%5C%7C%5C%7C%20!results%5C.recaptcha%2F!1%2Fg, !1)
+nontonx.com##+js(rpnt, script, %2F%2Ftele()%3B, telek3()%3B)
+nontonx.com##+js(rpnt, script, %2F!%5C(Object%5C.values.*%3Freturn%20false%3B%2Fg)
 nontonx.com##+js(rmnt, script, location.reload)
 nontonx.com###rules-nontonx
 ||raw.githubusercontent.com^$domain=nontonx.com
-! https://github.com/uBlockOrigin/uAssets/issues/28966
-! [badfilter] ||s.yimg.com/ss/analytics3.js$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/29029
-! [dup] from ublock-origin/unbreak.txt
-! @@||datadome.co/|$domain=paypal.com
-! [dup] from ublock-origin/unbreak.txt
-! @@||c.paypal.com/da/r/fb*$script,1p
