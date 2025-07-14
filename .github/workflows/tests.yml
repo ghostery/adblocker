@@ -2,6 +2,10 @@ name: Tests
 
 on: [pull_request]
 
+env:
+  PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1 # Skip downloading during yarn install
+  PLAYWRIGHT_BROWSERS_PATH: 0 # Places binaries to node_modules/@playwright/test
+
 jobs:
   test:
     name: Test on node ${{ matrix.node }} and ${{ matrix.os }}
@@ -30,15 +34,14 @@ jobs:
       - name: Install dependencies
         run: yarn install --immutable
 
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+
       - name: Build
         run: yarn build
 
       - name: Lint
         run: yarn lint
-
-      - name: Install Playwright browsers
-        run: yarn playwright install --with-deps
-        working-directory: ${{ env.working-directory }}/packages/adblocker-puppeteer
 
       - name: Test
         run: yarn test
