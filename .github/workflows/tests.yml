@@ -37,7 +37,8 @@ jobs:
         run: yarn lint
 
       - name: Install Playwright browsers
-        run: yarn dlx playwright install --with-deps
+        run: yarn playwright install --with-deps
+        working-directory: ${{ env.working-directory }}/packages/adblocker-puppeteer
 
       - name: Test
         run: yarn test
