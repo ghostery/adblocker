@@ -373,6 +373,39 @@ nhentai.net##+js(set, _n_app.popunder, null)
 nhentai.net##+js(set, _n_app.options.ads.show_popunders, false)
 nhentai.net##+js(rpnt, script, popunder, p)
 nhentai.net##+js(set, N_BetterJsPop.object, %7B%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/1826
+||go.pub2srv.com/apu.php$script,redirect=noopjs
+! https://github.com/uBlockOrigin/uAssets/issues/1826#issuecomment-478300989
+! https://github.com/uBlockOrigin/uAssets/pull/29202
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(aopr, jwplayer.vast)
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(aopw, adcashMacros)
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(aopw, Fingerprent2)
+pouvideo.*,povvideo.*,povvldeo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(aopw, Fingerprint2)
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(nano-stb, grecaptcha.ready, *)
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(nostif, test.remove, 100)
+pouvideo.*,povvideo.*,povvldeo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*,powstreen.*##+js(nowoif)
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##+js(set, isAdb, false)
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##[src^="/ben/mgnat.html?"]
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*###embed
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*###keepFloatin
+pouvideo.*,povvideo.*,povw1deo.*,povwideo.*,powv1deo.*,powvibeo.*,powvideo.*,powvldeo.*##iframe:not([src*="recaptcha"])
+/jquery.notify.js$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|powvibeo.*|powvideo.*|powvldeo.*
+ext=$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|powvibeo.*|powvideo.*|powvldeo.*
+*$frame,3p,denyallow=google.com,domain=pouvideo.*|povvideo.*|povw1deo.*|powvibeo.*|povwideo.*|powv1deo.*|powvideo.*|powvldeo.*|povvldeo.*|powcloud.*
+*$script,3p,denyallow=googleapis.com|google.com|gstatic.com,domain=povvldeo.*|povvldeo.lol|powcloud.*
+@@player*.html$frame,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|powvibeo.*|povwideo.*|powv1deo.*|powvideo.*|powvldeo.*
+||wontent.powvideo.net^
+||zontent.powvideo.net^
+||ctent.povvverz.one^
+||powcloud.*/pu*.min.js
+/js/fpu3/pu4.min.js
+/js/gpu3/pu5.min.js
+||ghastlyejection.com^
+||zonedummy.com^
+!#if ext_ubol
+*$frame,3p,denyallow=google.com,domain=powcloud.one
+*$script,3p,denyallow=googleapis.com|google.com|gstatic.com,domain=powcloud.one
+!#endif
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -534,7 +567,6 @@ omeuemprego.online##+js(rmnt, script, adsbygoogle)
 ! flixsix. com antiadb
 flixsix.com##+js(aeld, load, nextFunction)
 ! https://github.com/uBlockOrigin/uAssets/issues/26844
-incgrepacks.com##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
 incgrepacks.com##[href^="https://candy.ai"]
 incgrepacks.com##.incgr-before-content_2
 ! jattfilms. cfd ad redirect
@@ -1513,6 +1545,7 @@ watch.yosintvlive.com##+js(acs, addEventListener, detect)
 ||temp.urlshortpro.xyz/moviesmod*.js^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207219
 kio.ac##[data-placement-id^="revbid-"]
+kio.ac##canvas[width="300"][height="150"]
 kio.ac##+js(no-fetch-if, mode%3Ano-cors)
 *$script,3p,redirect-rule=noopjs,domain=kio.ac
 ||probableregret.com^
@@ -1722,8 +1755,14 @@ bigbuttshub2.top,bigbuttshubvideos.com##body > div ~ div[class]:empty
 ! detection nepalieducate.com
 nepalieducate.com##+js(nostif, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/29175
-@@||s.nitropay.com/*.gif$image,domain=aram.zone
+aram.zone##+js(prevent-canvas, 2d)
 ! https://github.com/uBlockOrigin/uAssets/issues/29181
 @@||uwupad.me^$ghide
 uwupad.me##.remove-ads-btn
 uwupad.me##.ad-slot-container
+! https://github.com/uBlockOrigin/uBOL-home/issues/387#issuecomment-3069486535
+file.org##+js(rmnt, script, googlesyndication)
+! https://us.dragonnest.com/game/download
+dragonnest.com##+js(rpnt, script, gtag%20!%3D%20null, false)
+! https://github.com/AdguardTeam/AdguardFilters/issues/209342
+newstopics.in##+js(no-fetch-if, adsbygoogle)

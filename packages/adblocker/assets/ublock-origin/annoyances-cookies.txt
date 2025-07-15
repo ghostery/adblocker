@@ -1089,7 +1089,7 @@ elmundo.es,expansion.com##+js(trusted-click-element, button%5Bid%3D%22ue-accept-
 eurobaustoff.com##+js(trusted-set-local-storage-item, ccm_consent, %7B%22%2F%22%3A%7B%22gen%22%3A2%2C%22ucid%22%3A%221%22%2C%22consent%22%3Atrue%2C%22embeddings%22%3A%5B%221e76acf%22%2C%228ed8d9a%22%2C%22b429e86%22%2C%22f22e6ed%22%2C%220b25af3%22%2C%226079a42%22%5D%2C%22created%22%3A%22%24currentDate%24%22%2C%22updated%22%3A%22%24currentDate%24%22%2C%22clickedButton%22%3A%22acceptAll%22%2C%22iframeConsentDomains%22%3A%5B%5D%2C%22tcf%22%3A%7B%22p%22%3A%5B%5D%2C%22lip%22%3A%5B%5D%2C%22sf%22%3A%5B%5D%2C%22v%22%3A%5B%5D%2C%22liv%22%3A%5B%5D%2C%22gad%22%3A%5B%5D%7D%2C%22lang%22%3A%22de_DE%22%7D%7D)
 ! usercentrics consents
 ! deny consent
-s-pankki.fi,srf.ch,alternate.de,bayer04.de,douglas.de,dr-beckmann.com,falke.com,fitnessfirst.de,flaschenpost.de,gloeckle.de,hornbach.nl,hypofriend.de,lactostop.de,neumann.com,post.ch,postbank.de,rts.ch##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D, , 1000)
+s-pankki.fi,srf.ch,alternate.de,bayer04.de,douglas.de,dr-beckmann.com,falke.com,fitnessfirst.de,flaschenpost.de,gloeckle.de,hornbach.nl,hypofriend.de,lactostop.de,neumann.com,post.ch,postbank.de,rts.ch,zalando.*##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D, , 1000)
 ! accept (no other option)
 immowelt.de,joyn.*,morenutrition.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-accept-all-button%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/23499 - Necessary and marketing
@@ -2045,6 +2045,8 @@ multioferta.es##+js(trusted-click-element, span.cookies_rechazo, , 1000)
 testwise.com##+js(trusted-click-element, button.ui-button-secondary.ui-button-secondary-wide, , 500)
 ! save
 testwise.com##+js(trusted-click-element, button.ui-button-primary-wide.ui-button-text-only, , 750)
+! reject
+console.anthropic.com##+js(trusted-set-cookie, anthropic-consent-preferences, %7B%22analytics%22%3Afalse%2C%22marketing%22%3Afalse%7D, , , reload, 1)
 ! decline
 tonyschocolonely.com,fitplus.is,fransdegrebber.nl,lilliputpress.ie,lexibo.com,marin-milou.com,dare2tri.com,t3micro.*##+js(trusted-click-element, button%23shopify-pc__banner__btn-decline, , 1000)
 ! refuse
@@ -3442,3 +3444,6 @@ spk-schaumburg.de##+js(trusted-click-element, %5Bdata-form%3D%22.eprivacy_optin_
 computerbase.de##+js(trusted-click-element, %23cookie-consent-button, , 1500)
 ! https://github.com/uBlockOrigin/uAssets/issues/29154
 wowbiz.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler)
+! https://github.com/uBlockOrigin/uAssets/issues/29206
+@@||cookie-cdn.cookiepro.com/scripttemplates/*/otBannerSdk.js$script,domain=observatornews.ro
+observatornews.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler)

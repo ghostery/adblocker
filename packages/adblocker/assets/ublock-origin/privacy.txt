@@ -508,8 +508,8 @@ bikesales.com.au##^html > head > :is([name="canonical"], [rel="canonical"]):not(
 /^https?:\/\/(?:[^.]+\.){2}(?:com|io|net)\/c(?:\/\d+){3}\/?\?.*?&?u=http/$doc,to=com|io|net,urlskip=?u
 /^https?:\/\/(?:[^.]+\.){2}(?:com|io|net)\/c(?:\/\d+){3}\/?\?.*?&?url=http/$doc,to=com|io|net,match-case,urlskip=?url
 /^https?:\/\/(?:[^.]+\.){2}(?:com|io|net)\/c(?:\/\d+){3}\/?\?.*?&?URL=http/$doc,to=com|io|net,match-case,urlskip=?URL
-/^https?:\/\/www\.[a-z]+\.(?:com|net)\/click-\d{6,7}-\d{8}\b.*?[?&]url=http/$doc,to=com|net,match-case,urlskip=?url
-/^https?:\/\/www\.[a-z]+\.(?:com|net)\/click-\d{6,7}-\d{8}\b.*?[?&]URL=http/$doc,to=com|net,match-case,urlskip=?URL
+/^https?:\/\/www\.[a-z]+\.(?:com|net)\/click-\d{6,9}-\d{8}\b.*?[?&]url=http/$doc,to=com|net,match-case,urlskip=?url
+/^https?:\/\/www\.[a-z]+\.(?:com|net)\/click-\d{6,9}-\d{8}\b.*?[?&]URL=http/$doc,to=com|net,match-case,urlskip=?URL
 /Proxy.ashx?*&GR_URL=http$doc,urlskip=?GR_URL
 ||clicks.trx-hub.com/*^q=http$doc,urlskip=?q
 ||shop-links.co/link*^url=http$doc,urlskip=?url
@@ -518,6 +518,8 @@ bikesales.com.au##^html > head > :is([name="canonical"], [rel="canonical"]):not(
 ! https://github.com/uBlockOrigin/uAssets/issues/23729
 ||go.redirectingat.com/*^url=http$doc,urlskip=?url
 ||go.skimresources.com/*^url=http$doc,urlskip=?url
+! https://backpackmoments.com/fergana-valley-uzbekistan-full-guide/
+||jdoqocy.com/click-*&url=$urlskip=?url -uricomponent
 ! https://github.com/uBlockOrigin/uAssets/issues/26126
 ||click.linksynergy.com/*^murl=http$doc,urlskip=?murl
 ||bestbuy.7tiv.net/c/*^u=https%3A%2F%2Fwww.bestbuy.com$doc,urlskip=?u -blocked
@@ -1472,6 +1474,12 @@ r.mail.wowvegas.com%2Ftr%2Fop%2F$image
 ! klinkfinance
 ://dedxk.r.ag.d.sendibm3.com/$image
 %3A%2F%2Fdedxk.r.ag.d.sendibm3.com%2F$image
+! coinbase
+://comm.coinbase.com/$image
+%3A%2F%2Fcomm.coinbase.com%2F$image
+! bitcasinao
+://cmail.bitcasino.io/$image
+%3A%2F%2Fcmail.bitcasino.io%2F$image
 ! others
 static.adsugar.ch/img?ord=$image
 static.adsugar.ch%2Fimg%3Ford%3D$image
@@ -1626,7 +1634,6 @@ edikted.com##+js(remove-cookie, %2F_shopify_y%7Cyotpo_pixel%2F, when, scroll%20k
 ||mtm.bondagevalley.cc^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207219
 ||kio.ac/analytics/
-||api.kio.ac/v0/collection/get
 ! https://github.com/uBlockOrigin/uAssets/issues/28917
 ||api.bilibili.com/x/web-frontend/data/collector^
 ! https://edition.cnn.com/2025/06/19/politics/tulsi-gabbard-trump-off-message-out-of-favor
