@@ -1427,7 +1427,8 @@ tubtic.com##+js(no-fetch-if, mode%3Ano-cors)
 ! https://github.com/uBlockOrigin/uAssets/issues/28443
 @@||wiadomosci.onet.pl^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/28450
-||vntsm.com^$script,redirect=noopjs,3p,domain=trueachievements.com|truesteamachievements.com|truetrophies.com
+trueachievements.com,truesteamachievements.com,truetrophies.com##+js(set, HTMLScriptElement.prototype.onerror, undefined)
+trueachievements.com,truesteamachievements.com,truetrophies.com##.nn_player_w > .pro-upgrade
 ! https://forums.lanik.us/viewtopic.php?t=48760-www-seir-sanduk-com
 @@||ads.poshtata.online/adsbygoogle.js$script,domain=seir-sanduk.com
 ! https://nmac.to/now/ - ads
@@ -1694,9 +1695,14 @@ buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/29048
 ! https://github.com/uBlockOrigin/uAssets/issues/28834#issuecomment-3026400384
 ! https://github.com/uBlockOrigin/uAssets/issues/28525#issuecomment-3064625698
+! https://github.com/uBlockOrigin/uAssets/issues/29228
 ! https://arabshentai.com/episodes/%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d9%83%d8%a7%d9%86%d8%aa-%d9%81%d8%a7%d8%b3%d9%82%d8%a9-2/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mmvh01.xyz|movearnpre.com|nekovid.xyz
-cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>##+js(set, uas, %5B%5D)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mmvh01.xyz|movearnpre.com|nekovid.xyz|trailerhg.xyz|turboplayers.xyz
+cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,trailerhg.xyz,turboplayers.xyz,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.net>>##+js(set, uas, %5B%5D)
+trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(nostif, ast)
+trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(trusted-set, premium, json%3A1)
+trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(nowoif)
+trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(trusted-override-element-method, HTMLAnchorElement.prototype.click, a%5Bhref%5D%5Btarget%3D%22_blank%22%5D)
 /assets/jquery/*.js?type=adult^$script,1p
 /wp-content/plugins/anti-adblocker/*
 ||non.arabshentai.com^
@@ -1762,7 +1768,12 @@ uwupad.me##.remove-ads-btn
 uwupad.me##.ad-slot-container
 ! https://github.com/uBlockOrigin/uBOL-home/issues/387#issuecomment-3069486535
 file.org##+js(rmnt, script, googlesyndication)
-! https://us.dragonnest.com/game/download
-dragonnest.com##+js(rpnt, script, gtag%20!%3D%20null, false)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/209342
 newstopics.in##+js(no-fetch-if, adsbygoogle)
+! https://www.solobari.it/forum/viewtopic.php?t=309399&forum=2 - anti-adb
+solobari.it##+js(aeld, load, blockAdBlock)
+! https://github.com/AdguardTeam/AdguardFilters/commit/efda2a4d4d1dc73b5eca05f93054460badc2800d
+@@||fundingchoicesmessages.google.com/i/pub-$domain=kojodan.jp
+! https://github.com/uBlockOrigin/uAssets/issues/29224
+||kleinezeitung.at/layout/klz/files/service/blakr/advertising.js
+kleinezeitung.at##+js(cookie-remover, __adblocker)
