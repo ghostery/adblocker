@@ -7,7 +7,7 @@
  */
 
 export { default as FiltersEngine, ENGINE_VERSION } from './engine/engine.js';
-export type { BlockingResponse } from './engine/engine.js';
+export type { BlockingResponse, Caching } from './engine/engine.js';
 export { default as ReverseIndex } from './engine/reverse-index.js';
 export {
   default as Request,
