@@ -1,3 +1,24 @@
+# v2.11.2 (Thu Jul 17 2025)
+
+#### :bug: Bug Fix
+
+- fix: reject on `optionValue` duplicate found [#5024](https://github.com/ghostery/adblocker/pull/5024) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5045](https://github.com/ghostery/adblocker/pull/5045) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5040](https://github.com/ghostery/adblocker/pull/5040) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5037](https://github.com/ghostery/adblocker/pull/5037) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5026](https://github.com/ghostery/adblocker/pull/5026) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.1 (Thu Jul 10 2025)
 
 #### :house: Internal

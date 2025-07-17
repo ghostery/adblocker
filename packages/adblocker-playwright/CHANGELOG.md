@@ -1,3 +1,15 @@
+# v2.11.2 (Thu Jul 17 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- chore(internal): update `playwright` ecosystem [#5038](https://github.com/ghostery/adblocker/pull/5038) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.9.0 (Wed Jul 02 2025)
 
 #### :rocket: New Feature

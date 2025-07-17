@@ -1,3 +1,48 @@
+# v2.11.2 (Thu Jul 17 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: reject on `optionValue` duplicate found [#5024](https://github.com/ghostery/adblocker/pull/5024) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5045](https://github.com/ghostery/adblocker/pull/5045) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5040](https://github.com/ghostery/adblocker/pull/5040) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5037](https://github.com/ghostery/adblocker/pull/5037) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5026](https://github.com/ghostery/adblocker/pull/5026) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 37.2.2 to 37.2.3 [#5048](https://github.com/ghostery/adblocker/pull/5048) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.1.0 to 0.1.1 [#5046](https://github.com/ghostery/adblocker/pull/5046) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 24.0.13 to 24.0.14 [#5041](https://github.com/ghostery/adblocker/pull/5041) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.45.0 to 4.45.1 [#5043](https://github.com/ghostery/adblocker/pull/5043) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 37.2.1 to 37.2.2 [#5044](https://github.com/ghostery/adblocker/pull/5044) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump typescript-eslint from 8.36.0 to 8.37.0 [#5039](https://github.com/ghostery/adblocker/pull/5039) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump eslint from 9.30.1 to 9.31.0 [#5034](https://github.com/ghostery/adblocker/pull/5034) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @eslint/js from 9.30.1 to 9.31.0 [#5032](https://github.com/ghostery/adblocker/pull/5032) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.44.2 to 4.45.0 [#5031](https://github.com/ghostery/adblocker/pull/5031) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 24.0.12 to 24.0.13 [#5030](https://github.com/ghostery/adblocker/pull/5030) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 37.2.0 to 37.2.1 [#5027](https://github.com/ghostery/adblocker/pull/5027) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.13.0 to 24.14.0 [#5047](https://github.com/ghostery/adblocker/pull/5047) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Build(deps): Bump puppeteer from 24.12.1 to 24.13.0 [#5042](https://github.com/ghostery/adblocker/pull/5042) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`
+  - chore(internal): update `playwright` ecosystem [#5038](https://github.com/ghostery/adblocker/pull/5038) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`
+  - Build(deps-dev): Bump @types/chrome from 0.0.332 to 0.1.0 [#5035](https://github.com/ghostery/adblocker/pull/5035) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.1 (Thu Jul 10 2025)
 
 #### ⚠️ Pushed to `master`
