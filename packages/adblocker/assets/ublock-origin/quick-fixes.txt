@@ -72,16 +72,8 @@ web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.side
 web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc^="/privacy_sandbox/comet/register/source/?eid="][href^="http"][target="_blank"]
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
 web.facebook.com,www.facebook.com##+js(json-edit, ..__bbox.result.data.node%5B%3F%40.*.__typename%3D%3D%22SponsoredData%22%5D)
-!#if ext_devbuild
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
-!#endif
-!#if ext_ubol
-! [dup] from ublock-origin/quick-fixes.txt
-! web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
-! [dup] from ublock-origin/quick-fixes.txt
-! web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jilliandescribecompany.com,important
@@ -114,6 +106,7 @@ japscan.lol##+js(trusted-set, aclib, json%3A%7B%22isShowingPop%22%3A%20false%7D)
 japscan.lol##+js(set, aclib.runInPagePush, %7B%7D, as, callback)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%23%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2FinlineScript%2F)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2F%5B0-9A-Za-z%5D%7B4%7D%20inlineScript%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5E%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2F%5B0-9A-Za-z%5D%7B4%7D%20inlineScript%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -251,6 +244,7 @@ vook.vc##.note-sp-spnsr
 ! https://github.com/uBlockOrigin/uAssets/issues/28776
 nontonx.com##+js(rpnt, script, %2F%2Ftele()%3B, telek3()%3B)
 nontonx.com##+js(rpnt, script, %2F!%5C(Object%5C.values.*%3Freturn%20false%3B%2Fg)
+nontonx.com##+js(rpnt, script, %2F%5Ba-z%5D%2B%5C(%5C)%20%26%26%2F, !0%26%26)
 nontonx.com##+js(rmnt, script, location.reload)
 nontonx.com###rules-nontonx
 ||raw.githubusercontent.com^$domain=nontonx.com
