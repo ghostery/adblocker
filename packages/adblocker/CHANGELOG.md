@@ -1,3 +1,21 @@
+# v2.11.3 (Fri Jul 18 2025)
+
+#### :bug: Bug Fix
+
+- feat: export `Caching` type [#5049](https://github.com/ghostery/adblocker/pull/5049) ([@regseb](https://github.com/regseb))
+
+#### :house: Internal
+
+- Update local assets [#5050](https://github.com/ghostery/adblocker/pull/5050) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Sébastien Règne ([@regseb](https://github.com/regseb))
+
+---
+
 # v2.11.2 (Thu Jul 17 2025)
 
 #### :bug: Bug Fix
