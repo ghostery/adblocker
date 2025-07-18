@@ -429,8 +429,10 @@ export class StaticDataView {
     const byteLength = this.getLength();
     this.pos += byteLength;
 
-    // @ts-ignore
-    return String.fromCharCode.apply(null, this.buffer.subarray(this.pos - byteLength, this.pos));
+    return String.fromCharCode.apply(
+      null,
+      this.buffer.subarray(this.pos - byteLength, this.pos) as unknown as number[],
+    );
   }
 
   public pushNetworkRedirect(str: string): void {
