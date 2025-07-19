@@ -1158,8 +1158,6 @@ babaktv.com##.code-block
 babaktv.com##.vidoverlay
 ! https://github.com/uBlockOrigin/uAssets/issues/27843
 opensubtitles.com##+js(set, extInstalled, true)
-! https://nukibooks.com/ ad
-*$script,3p,domain=nukibooks.com
 ! https://github.com/uBlockOrigin/uAssets/issues/24527
 mirrored.to##.container.dl-width form[target="_blank"][method="POST"][action^="//"]:has(> input[type="image"])
 ! https://github.com/uBlockOrigin/uAssets/issues/843
@@ -1777,3 +1775,14 @@ solobari.it##+js(aeld, load, blockAdBlock)
 ! https://github.com/uBlockOrigin/uAssets/issues/29224
 ||kleinezeitung.at/layout/klz/files/service/blakr/advertising.js
 kleinezeitung.at##+js(cookie-remover, __adblocker)
+! https://github.com/uBlockOrigin/uAssets/pull/29232
+tarnkappe.info##+js(acs, document.createElement, %2Fadblock%2Fi)
+! https://github.com/AdguardTeam/AdguardFilters/issues/209519
+rajssoid.online##+js(no-fetch-if, adsbygoogle, war%3Agooglesyndication_adsbygoogle.js)
+! https://hentaianimezone.com popup
+hentaianimezone.com##+js(acs, onload, puHref)
+! https://myperfectweather.com/ - anti-adb
+myperfectweather.com##+js(aeld, load, adblock)
+! https://github.com/uBlockOrigin/uAssets/issues/18048
+! https://github.com/uBlockOrigin/uAssets/issues/29238
+neilpatel.com##+js(no-xhr-if, %2Fgoogletagmanager%7Cip-api%2F)
