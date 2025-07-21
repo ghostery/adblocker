@@ -107,6 +107,7 @@ japscan.lol##+js(set, aclib.runInPagePush, %7B%7D, as, callback)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%23%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2FinlineScript%2F)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.querySelectorAll, %22%2F%5E%23%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2F%5B0-9A-Za-z%5D%7B4%7D%20inlineScript%2F)
 japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementById, %22%2F%5E%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2F%5B0-9A-Za-z%5D%7B4%7D%20inlineScript%2F)
+japscan.lol##+js(trusted-suppress-native-method, Document.prototype.getElementsByClassName, %22%2F%5E%5B0-9A-Z_a-z%5D%7B5%2C10%7D%24%2F%22, prevent, %2F%5B0-9A-Za-z%5D%7B4%7D%20inlineScript%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -253,3 +254,8 @@ nontonx.com###rules-nontonx
 ! https://github.com/AdguardTeam/AdguardFilters/issues/209327
 best-hit.tv,h178.com,j-baseball.club,j-basketball.club,j-rugby.club,j-volleyball.club,jukenbbs.com,localch.net,shukatsubbs.com#@#div[id^="div-gpt-"]:not([style^="width: 1px; height: 1px; position: absolute; left: -10000px; top: -"]):not([style="pointer-events: none; height: 1px; width: 0px; opacity: 0; visibility: hidden; position: fixed; bottom: 0px;"])
 best-hit.tv,h178.com,j-baseball.club,j-basketball.club,j-rugby.club,j-volleyball.club,jukenbbs.com,localch.net,shukatsubbs.com#@#[id^="div-gpt-ad"]:not([style^="width: 1px; height: 1px; position: absolute; left: -10000px; top: -"]):not([style="pointer-events: none; height: 1px; width: 0px; opacity: 0; visibility: hidden; position: fixed; bottom: 0px;"])
+! broken
+! [badfilter] *$script,3p,denyallow=fastly.net|google.com|googleapis.com|gstatic.com|h-cdn.com,domain=javbangers.com,badfilter
+*$script,3p,denyallow=fastly.net|google.com|googleapis.com|gstatic.com|h-cdn.com|javcdn.li,domain=javbangers.com
+! https://www.reddit.com/r/uBlockOrigin/comments/1m2tnpu/ubo_lite_getting_detected/
+! [badfilter] ||now.gg^$3p,badfilter
