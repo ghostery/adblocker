@@ -1262,6 +1262,7 @@ www.wp.pl##div[data-bdc="section-celebrities"] > .wp-inner-content > div:has(> d
 www.wp.pl##div[class*=" "]:has(> div > div:first-child > div:first-child > a[href^="https://www.wp.pl/"]:first-child):matches-css(max-width: 420px):remove()
 www.wp.pl##.app-container > div:has(> div > div > div + img[src^="https://v.wpimg.pl/"] + div:empty)
 www.wp.pl##div:has(> div:first-child:empty + div:empty)
+wp.pl##div[class]:not([class^="wp-content"]):has(> img + div:empty + div > [id^="div-gpt-ad-"])
 money.pl##div:has(> style:first-child:has-text(flex: 0 0 100%) + div)
 wiadomosci.wp.pl##div:has(> div[data-native-adv] > a[href*="utm_"])
 !#endif
@@ -2561,11 +2562,13 @@ southpark.*,southpark.cc.com,southparkstudios.*##+js(no-fetch-if, dai_iframe)
 southpark.*,southparkstudios.*##+js(json-prune-fetch-response, imasdk, , propsToMatch, topaz.)
 ! MV3 wildcard issue
 !#if ext_ubol
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=southpark.cc.com|southpark.de|southparkstudios.com|southparkstudios.de,important
-||imasdk.googleapis.com/pal/sdkloader/pal.js$redirect=noop.js,domain=southpark.cc.com|southpark.de|southparkstudios.com|southparkstudios.de
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=southpark.cc.com|southpark.de|southparkstudios.com|southparkstudios.de
-@@||fwmrm.net^*/admanager.js$script,3p,domain=southpark.cc.com|southpark.de|southparkstudios.com|southparkstudios.de
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=southpark.cc.com|southpark.de|southpark.lat|southparkstudios.com|southparkstudios.com.br|southparkstudios.de,important
+||imasdk.googleapis.com/pal/sdkloader/pal.js$redirect=noop.js,domain=southpark.cc.com|southpark.de|southpark.lat|southparkstudios.com|southparkstudios.com.br|southparkstudios.de
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=southpark.cc.com|southpark.de|southpark.lat|southparkstudios.com|southparkstudios.com.br|southparkstudios.de
+@@||fwmrm.net^*/admanager.js$script,3p,domain=southpark.cc.com|southpark.de|southpark.lat|southparkstudios.com|southparkstudios.com.br|southparkstudios.de
 !#endif
+! https://www.reddit.com/r/uBlockOrigin/comments/1m4dbk1/ublock_being_detected_on_south_park_studios/
+southpark.*,southpark.cc.com,southparkstudios.*#@#+js(google-ima)
 ! https://github.com/uBlockOrigin/uAssets/issues/19210
 rain-alarm.com###main_canvas > div[id^="google"]
 rain-alarm.com###main_canvas > div:not(div[id^="google"]):style(width: 100% !important;)
