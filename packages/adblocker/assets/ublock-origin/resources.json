@@ -814,9 +814,9 @@
       "dependencies": []
     },
     {
-      "name": "abort-current-script-core.fn",
+      "name": "abort-current-script.fn",
       "aliases": [],
-      "body": "function abortCurrentScriptCore(e=\"\",t=\"\",r=\"\"){if(typeof e!==\"string\")return;if(e===\"\")return;const n=safeSelf();const c=n.makeLogPrefix(\"abort-current-script\",e,t,r);const o=n.patternToRegex(t);const s=n.patternToRegex(r);const i=n.getExtraArgs(Array.from(arguments),3);const a=document.currentScript;const f=n.String_split.call(e,\".\");let l=window;let u;for(;;){u=f.shift();if(f.length===0)break;if(u in l===false)break;l=l[u];if(l instanceof Object===false)return}let g;let b=Object.getOwnPropertyDescriptor(l,u);if(b instanceof Object===false||b.get instanceof Function===false){g=l[u];b=void 0}const d=shouldDebug(i);const p=getExceptionTokenFn();const h=new WeakMap;const m=e=>{let t=e.textContent;if(t.trim()!==\"\")return t;if(h.has(e))return h.get(e);const[,r,n]=/^data:([^,]*),(.+)$/.exec(e.src.trim())||[\"\",\"\",\"\"];try{switch(true){case r.endsWith(\";base64\"):t=self.atob(n);break;default:t=self.decodeURIComponent(n);break}}catch{}h.set(e,t);return t};const x=()=>{const e=document.currentScript;if(e instanceof HTMLScriptElement===false)return;if(e===a)return;if(r!==\"\"&&s.test(e.src)===false){if(d===\"nomatch\"||d===\"all\")debugger;return}if(n.logLevel>1&&r!==\"\")n.uboLog(c,`Matched src\\n${e.src}`);const t=m(e);if(o.test(t)===false){if(d===\"nomatch\"||d===\"all\")debugger;return}if(n.logLevel>1)n.uboLog(c,`Matched text\\n${t}`);if(d===\"match\"||d===\"all\")debugger;n.uboLog(c,\"Aborted\");throw new ReferenceError(p)};if(d===\"install\")debugger;try{Object.defineProperty(l,u,{get:function(){x();return b instanceof Object?b.get.call(l):g},set:function(e){x();if(b instanceof Object)b.set.call(l,e);else g=e}})}catch(e){n.uboErr(c,`Error: ${e}`)}}",
+      "body": "function abortCurrentScriptFn(e=\"\",t=\"\",r=\"\"){if(typeof e!==\"string\")return;if(e===\"\")return;const n=safeSelf();const o=n.makeLogPrefix(\"abort-current-script\",e,t,r);const c=n.patternToRegex(t);const s=n.patternToRegex(r);const i=n.getExtraArgs(Array.from(arguments),3);const a=document.currentScript;const f=n.String_split.call(e,\".\");let l=window;let u;for(;;){u=f.shift();if(f.length===0)break;if(u in l===false)break;l=l[u];if(l instanceof Object===false)return}let g;let b=Object.getOwnPropertyDescriptor(l,u);if(b instanceof Object===false||b.get instanceof Function===false){g=l[u];b=void 0}const d=shouldDebug(i);const p=getExceptionTokenFn();const h=new WeakMap;const m=Object.getOwnPropertyDescriptor(Node.prototype,\"textContent\").get;const O=e=>{let t=m.call(e);if(t.trim()!==\"\")return t;if(h.has(e))return h.get(e);const[,r,n]=/^data:([^,]*),(.+)$/.exec(e.src.trim())||[\"\",\"\",\"\"];try{switch(true){case r.endsWith(\";base64\"):t=self.atob(n);break;default:t=self.decodeURIComponent(n);break}}catch{}h.set(e,t);return t};const w=()=>{const e=document.currentScript;if(e instanceof HTMLScriptElement===false)return;if(e===a)return;if(r!==\"\"&&s.test(e.src)===false){if(d===\"nomatch\"||d===\"all\")debugger;return}if(n.logLevel>1&&r!==\"\")n.uboLog(o,`Matched src\\n${e.src}`);const t=O(e);if(c.test(t)===false){if(d===\"nomatch\"||d===\"all\")debugger;return}if(n.logLevel>1)n.uboLog(o,`Matched text\\n${t}`);if(d===\"match\"||d===\"all\")debugger;n.uboLog(o,\"Aborted\");throw new ReferenceError(p)};if(d===\"install\")debugger;try{Object.defineProperty(l,u,{get:function(){w();return b instanceof Object?b.get.call(l):g},set:function(e){w();if(b instanceof Object)b.set.call(l,e);else g=e}})}catch(e){n.uboErr(o,`Error: ${e}`)}}",
       "dependencies": [
         "get-exception-token.fn",
         "safe-self.fn",
@@ -861,9 +861,9 @@
         "abort-current-inline-script.js",
         "acis.js"
       ],
-      "body": "function abortCurrentScript(...r){runAtHtmlElementFn((()=>{abortCurrentScriptCore(...r)}))}",
+      "body": "function abortCurrentScript(...t){runAtHtmlElementFn((()=>{abortCurrentScriptFn(...t)}))}",
       "dependencies": [
-        "abort-current-script-core.fn",
+        "abort-current-script.fn",
         "run-at-html-element.fn"
       ]
     },

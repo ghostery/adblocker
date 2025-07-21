@@ -8,7 +8,6 @@
 /* eslint-disable prettier/prettier */
 export default [
   "securepubads.g.doubleclick",
-  ".carte-gr.total.fr",
   ".actonservice.com",
   "googlesyndication",
   "imasdk.googleapis",
@@ -99,7 +98,6 @@ export default [
   "do",
   "dr",
   "ds",
-  "du",
   "dy",
   "e-",
   "eb",
@@ -129,6 +127,7 @@ export default [
   "ge",
   "go",
   "gr",
+  "gu",
   "he",
   "ho",
   "ht",
@@ -221,6 +220,7 @@ export default [
   "us",
   "ut",
   "ve",
+  "vo",
   "we",
   "yo",
   "-",
