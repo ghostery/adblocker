@@ -170,11 +170,7 @@ export function matches(element: Element, selector: AST): boolean {
         return false;
       }
 
-      const text = element.textContent;
-      if (text === null) {
-        return false;
-      }
-
+      const text = element.textContent ?? '';
       return text.length >= minLength;
     } else if (selector.name === 'matches-path') {
       const { argument } = selector;
