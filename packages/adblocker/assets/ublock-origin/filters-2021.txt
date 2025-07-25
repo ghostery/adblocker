@@ -654,7 +654,6 @@ embedsports.me,embedstream.me,jumbtv.com,reliabletv.me##+js(aeld, message)
 !#endif
 ||veepteecejoushe.net^
 ! https://github.com/uBlockOrigin/uAssets/issues/27207
-reliabletv.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 reliabletv.me##html > iframe[style="display: none;"]:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/27593
 @@/?scode=*&stream=$xhr,domain=reliabletv.me
@@ -3086,8 +3085,8 @@ insider.com##.in-post-sticky:has(> .ad-wrapper)
 myshrinker.com##+js(set, blurred, false)
 myshrinker.com##.banner-inner
 ! https://github.com/uBlockOrigin/uAssets/issues/10533
-cricstream.*##.w-100.position-absolute.h-100
-watch.cricstream.*##button:has-text(/Watch|🎟|👉/)
+cricstream.*,cricstreams.re##.w-100.position-absolute.h-100
+watch.cricstream.*,cricstreams.re##button:has-text(/Watch|🎟|👉/)
 ! wishanimes.com popup
 wishanimes.com##+js(acs, JSON.parse)
 ! https://www.reddit.com/r/uBlockOrigin/comments/qzmgb6/
@@ -3460,10 +3459,7 @@ mmiyue.com#@#.google-ad:not(.testAd)
 ##.ad-slot:not(.adsbox):not(.adsbygoogle)
 #@#.ad-300x250
 ##.ad-300x250:not(.ads)
-||ad.doubleclick.net^$xhr,redirect=noop.txt
-||fls.doubleclick.net^$xhr,redirect=noop.txt
-||g.doubleclick.net^$xhr,redirect=noop.txt
-||static.doubleclick.net^$xhr,redirect=noop.txt
+||doubleclick.net^$xhr,redirect=noop.txt
 ||media.fastclick.net/|$xhr,3p,redirect=noop.txt
 ||ads.facebook.com/|$xhr,3p,redirect=noop.txt
 ||advice-ads.s3.amazonaws.com/|$xhr,3p,redirect=noop.txt
