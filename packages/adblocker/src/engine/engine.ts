@@ -38,7 +38,7 @@ import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 
-export const ENGINE_VERSION = 782;
+export const ENGINE_VERSION = 783;
 
 function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   if (filters.length === 0) {
