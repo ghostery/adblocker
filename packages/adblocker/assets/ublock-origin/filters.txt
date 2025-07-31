@@ -80,6 +80,7 @@ westword.com##.AirBillboardInlineContentresponsive
 ! https://github.com/gorhill/uBlock/issues/949
 ! https://github.com/uBlockOrigin/uAssets/issues/6541#issuecomment-1012435405
 tvspielfilm.de##.promo-box
+tvspielfilm.de##table.info-table tr:has(td[colspan] .promo-box-any-banner):remove()
 tvtoday.de##+js(nosiif, fireEvent, 500)
 @@||tvtoday.de^$ghide
 ! https://forums.lanik.us/viewtopic.php?p=129561#p129561
@@ -619,6 +620,13 @@ wcoanimedub.tv,wcoforever.net##+js(nostif, google_jobrunner)
 wcoforever.net##.anti-ad
 wcoforever.net###sidebar_r1
 @@||embed.watchanimesub.net^$script,1p
+! https://github.com/uBlockOrigin/uAssets/issues/29349
+@@||embed.wcostream.com^$ghide
+!#if cap_html_filtering
+embed.wcostream.com##^script:has-text(/google_jobrunner|AdBlock|pubadx/i)
+!#else
+embed.wcostream.com##+js(rmnt, script, %2Fgoogle_jobrunner%7CAdBlock%7Cpubadx%2Fi)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/331
 ! https://github.com/uBlockOrigin/uAssets/issues/10133
 handelsblatt.com##+js(no-xhr-if, request%3Dadb)
@@ -2547,7 +2555,7 @@ tubsexer.*##.advertising
 yourlust.com##+js(aopr, ExoLoader.serve)
 yourlust.com##+js(aeld, getexoloader)
 ! https://github.com/uBlockOrigin/uAssets/issues/719
-twitch.tv##+js(nowoif, amazon-adsystem)
+www.twitch.tv##+js(nowoif, %2Famazon-adsystem%7Cexample%5C.com%2F)
 ||amazon-adsystem.com/aax2/apstag.js$script,domain=twitch.tv,important
 ||ddacn6pr5v0tl.cloudfront.net^
 ! https://github.com/uBlockOrigin/uAssets/issues/5184#issuecomment-1960744541
@@ -3075,6 +3083,7 @@ pcgamestorrents.org##[href*="/gameadult/"][href$=".php"]
 ||pcgamestorrents.com/*.gif$image
 pcgamestorrents.com,pcgamestorrents.org##a[href^="https://pcgamestorrents."][href*="/cuskilo"]
 pcgamestorrents.com,pcgamestorrents.org##a[href][aria-label="awed"]
+igg-games.com,pcgamestorrents.org,pcgamestorrents.com##div.uk-margin-medium-top > div
 ! https://github.com/uBlockOrigin/uAssets/issues/2458
 pornrabbit.com##+js(nowoif)
 ||pornrabbit.com/sw.js$script,1p
@@ -7895,7 +7904,9 @@ spiegel.de##^script:has-text(homad)
 ||cinema.de/sites/default/files/js/js_$script,1p,replace=/var conf=\{'globalConfig'.*?'vpaid':'true'\};var exportz=/var conf={}; var exportz=/
 ||svonm.com^$xhr,replace=/"enabled":\s*true/"enabled":false/,domain=desired.de|giga.de
 !#else
-giga.de,welt.de##+js(aost, XMLHttpRequest.prototype.open, svonm.com)
+! https://github.com/uBlockOrigin/uAssets/issues/15918#issuecomment-3121578415
+welt.de##+js(set, weltConfig.switches.videoAdBlockBlocker, false)
+giga.de##+js(aost, XMLHttpRequest.prototype.open, svonm.com)
 spiegel.de##+js(rmnt, script, homad)
 desired.de##+js(trusted-replace-xhr-response, %2F%22enabled%22%3A%5Cs*true%2F, %22enabled%22%3Afalse, svonm.com)
 !#endif

@@ -1167,6 +1167,9 @@ currencyconverterx.com##.block-after-head
 currencyconverterx.com##.block-inside-blocks
 ! https://frivcomfriv.com/friv-car-games/hill-climb-racing-friv/ ads
 ||imasdk.googleapis.com/js/core/bridge*.html$frame,domain=html5.gamemonetize.co,important
+! https://gamesfrog.com/games/racing/xtreme-speed-stunts-bmx-gm - ads
+html5.gamemonetize.co##+js(nostif, MobileInGameGames)
+gamesfrog.com##.banner > span
 ! https://github.com/AdguardTeam/AdguardFilters/issues/117128
 /\/img\/(?!new).+\.gif/$image,1p,domain=jennylist.xyz
 ! https://github.com/AdguardTeam/AdguardFilters/issues/116991
@@ -2035,7 +2038,7 @@ adslink.pw##+js(nostif, showModal)
 *$image,redirect-rule=2x2.png,domain=adslink.pw|jpopsingles.eu
 ||adslink.pw/*.php
 ||jpopsingles.eu/*.php
-*$script,xhr,3p,denyallow=cloudflare.com|gravatar.com,domain=adslink.pw|jpopsingles.eu
+*$script,xhr,3p,denyallow=b-cdn.net|cloudflare.com|gravatar.com,domain=adslink.pw|jpopsingles.eu
 adslink.pw##^script:has-text(chp_ads_blocker_detector)
 ! https://www.reddit.com/r/uBlockOrigin/comments/y91yer/
 jpopsingles.eu##style[id$="-css"]:remove()
@@ -2282,8 +2285,8 @@ deutschekanale.com##.banner
 @@||thenetnaija.net^$ghide
 @@||sabishare.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/14870
-divxfilmeonline.net,vidscdns.com##+js(nowoif)
-vidscdns.com##+js(aopr, doSecondPop)
+! https://github.com/tcptomato/ROad-Block/issues/561
+divxfilmeonline.net>>##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/14887
 ||googlesyndication.com/favicon.ico$image,redirect-rule=1x1.gif
 ! iptvapps. net anti-adb, elements
@@ -2357,37 +2360,6 @@ ottverse.com##+js(nostif, show)
 hokej.net##+js(nostif, blur)
 ! https://github.com/uBlockOrigin/uAssets/issues/15062
 @@||shoop.de^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/14296
-soft98.ir,~forum.soft98.ir##+js(aeld, click, open)
-soft98.ir,~forum.soft98.ir##+js(aeld, contextmenu, preventDefault)
-||img.soft98.ir^$image,1p,redirect-rule=1x1.gif
-@@||soft98.ir^$ghide
-soft98.ir,~forum.soft98.ir##+js(window-close-if, %2Flink-)
-linkdoni.soft98.ir##html:remove()
-!#if cap_html_filtering
-linkdoni.soft98.ir##^body,title
-!#endif
-sysban.ir##+js(window-close-if, %2Ftelephone-service)
-smostafa.ir##+js(window-close-if, %2F%5E%2F)
-coffeete.ir##+js(window-close-if, %2Fsoft98)
-||cdn.hostdl.com/goto/soft98^$doc,csp=script-src
-cdn.hostdl.com##^responseheader(location)
-cdn.hostdl.com##:matches-path(soft98) html:remove()
-||iranicard.ir^$doc,removeparam=utm_source
-||iranicard.ir^$doc,removeparam=utm_campaign
-||iranicard.ir/payments/shopping/amazon/?utm_medium=Banner^$doc,csp=script-src
-iranicard.ir##:matches-path(/utm_medium=Banner/i) html:remove()
-||faradars.org^$doc,removeparam=utm_source
-||faradars.org^$doc,removeparam=utm_campaign
-||faradars.org/explore?orderby=views&*&utm_medium=banner-kaprila^$doc,csp=script-src
-faradars.org##:matches-path(/utm_medium=banner-kaprila/i) html:remove()
-||cxchief.com^$doc,removeparam=utm_source
-||cxchief.com^$doc,removeparam=utm_campaign
-||cxchief.com^$doc,removeparam=utm_content
-||cxchief.com/fa/?utm_medium=adv^$doc,csp=script-src
-cxchief.com##:matches-path(/utm_medium=adv/i) html:remove()
-||smostafa.ir/?utm_source=footer^$doc,csp=script-src
-smostafa.ir##:matches-path(/utm_source=footer/i) html:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/15073
 upiapi.in##+js(set, detectAdBlock, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/8532
@@ -3076,6 +3048,7 @@ derivative-calculator.net,integral-calculator.com##[class]:matches-css-before(co
 ilsole24ore.com##+js(nostif, refresh)
 ! https://github.com/uBlockOrigin/uAssets/issues/23918
 @@||ilsole24ore.com^$ghide
+ilsole24ore.com##.background-adv
 ! https://github.com/uBlockOrigin/uAssets/issues/25130
 ilsole24ore.com#@#.adv
 ! https://github.com/uBlockOrigin/uAssets/issues/15913
@@ -3186,30 +3159,6 @@ audiotruyenfull.com##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/138053
 ###video-id_fluid_html_on_pause
 /uthnafrwy.js
-! fix emturbovid.com player (e.g. supjav.com)
-! https://github.com/uBlockOrigin/uAssets/issues/22846
-! https://github.com/uBlockOrigin/uAssets/issues/24456
-! https://github.com/uBlockOrigin/uAssets/issues/4396
-emturbovid.com###pop
-emturbovid.com,turbocloud.xyz,turbovid.xyz##.div_pop
-emturbovid.com,findjav.com,javggvideo.xyz,mmtv01.xyz,stbturbo.xyz##+js(aeld, click, pop)
-emturbovid.com,findjav.com,javggvideo.xyz,mmtv01.xyz,stbturbo.xyz##+js(trusted-set, premium, '1')
-emturbovid.com,findjav.com,javggvideo.xyz,mmtv01.xyz,stbturbo.xyz##+js(nowoif)
-emturbovid.com,findjav.com,javggvideo.xyz,mmtv01.xyz,stbturbo.xyz##+js(nostif, window.open)
-emturbovid.com,findjav.com,javggvideo.xyz,mmtv01.xyz,stbturbo.xyz##+js(trusted-rpnt, script, %2FopenNewTab%5C(%22.*%3F%22%5C)%2Fg, null)
-!#if env_firefox
-||emturbovid.com^$replace=/openNewTab\(".*?"\)/null/g
-||mmtv01.xyz^$replace=/openNewTab\(".*?"\)/null/g
-||stbturbo.xyz^$replace=/openNewTab\(".*?"\)/null/g
-||javggvideo.xyz^$replace=/openNewTab\(".*?"\)/null/g
-||emturbovid.com^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
-||turbovid.xyz^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
-!#endif
-! https://community.brave.com/t/many-websites-subtitles-in-videos-go-tiny-then-large-switching-full-screen/596327
-! ##.jw-wrapper > div[style="opacity: 0; visibility: hidden; overflow: hidden; display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"]
-!#if env_mobile
-emturbovid.com,hihihehe01.xyz#@#.jw-wrapper > div[style="opacity: 0; visibility: hidden; overflow: hidden; display: block; position: absolute; top: 0px; left: 0px; width: 100%; height: 100%;"]
-!#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/138059
 ! https://github.com/AdguardTeam/AdguardFilters/issues/138060
 18pussy.porn,milf-porn.xxx##.footer-margin

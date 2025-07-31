@@ -209,8 +209,6 @@ youku.com##+js(nano-stb, , , 0)
 ! https://github.com/uBlockOrigin/uAssets/issues/11515
 hitomi.la##+js(noeval)
 hitomi.la##+js(aopr, open)
-hitomi.la##.container > div[class$="content"] > div[class]:has(> script)
-||ltn.hitomi.la^*?yuo1=$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/6029
 ! https://github.com/uBlockOrigin/uAssets/issues/16049
 !*$popunder,3p,domain=spankbang.com
@@ -320,8 +318,8 @@ daddylive.*##+js(nowebrtc)
 daddylive.*##+js(aopw, afStorage)
 daddylive.*##^script:has-text(decodeURIComponent)
 daddylive.*##+js(nowoif)
-daddylive.*>>,thedaddy.*>>,~chatango.com##+js(nowoif)
-daddylive.*>>,thedaddy.*>>,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+daddylive.*>>,dlhd.*>>,thedaddy.*>>,~chatango.com##+js(nowoif)
+daddylive.*>>,dlhd.*>>,thedaddy.*>>,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 dlhd.sx##+js(aopw, u_cfg)
 /adblock.php$script,domain=dlhd.sx
 dlhd.sx##+js(nostif, (), 150)
@@ -1072,6 +1070,9 @@ formatlibrary.com##+js(no-fetch-if, doubleclick)
 /^https?:\/\/[^\/]+\/[a-zA-Z]{9}\.js$/$script,1p,strict1p,ipaddress=199.59.243.228
 /^https?:\/\/[^\/]+\/_fd$/$xhr,1p,strict1p,ipaddress=199.59.243.228
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/29281
+/_static/delivery.js?nonce=$script,1p,header=server:/^openresty\//
+/_static/delivery.js?nonce=$script,1p,strict1p,ipaddress=23.239.3.104
 ! https://github.com/uBlockOrigin/uAssets/issues/27716
 ##.gliaplayer-container
 ||player.gliacloud.com^$3p
@@ -1345,8 +1346,6 @@ zeenews.india.com##+js(no-fetch-if, adsbygoogle)
 @@*$script,1p,domain=cool-web.de|gps-cache.de|web-spiele.de|fun-seiten.de|photo-alben.de|wetter-vorhersage.de|coolsoftware.de|kryptografie.de|cool-domains.de|net-tours.de|such-maschine.de|qul.de|mailtool.de|c-ix.de|softwareengineer.de|net-tools.de|hilfen.de|45er.de|cooldns.de|hardware-entwicklung.de
 cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, wbDeadHinweis)
 cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translate.goog,fun--seiten-de.translate.goog,photo--alben-de.translate.goog,wetter--vorhersage-de.translate.goog,coolsoftware-de.translate.goog,kryptografie-de.translate.goog,cool--domains-de.translate.goog,net--tours-de.translate.goog,such--maschine-de.translate.goog,qul-de.translate.goog,mailtool-de.translate.goog,c--ix-de.translate.goog,softwareengineer-de.translate.goog,net--tools-de.translate.goog,hilfen-de.translate.goog,45er-de.translate.goog,cooldns-de.translate.goog,hardware--entwicklung-de.translate.goog##+js(nostif, , 10000)
-! https://github.com/easylist/easylist/commit/e8ce8894620c4b7d4eee158ebd13fe30d71f159c counter PL
-! [badfilter] ||doubleclick.net^$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204889
 @@||tpc.googlesyndication.com/pagead/js/*/elements/html/countdown_handler_fy2021.js$domain=safeframe.googlesyndication.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/206635
@@ -1600,16 +1599,6 @@ condorsoft.co##+js(no-xhr-if, googlesyndication)
 ||poweredby.jads.co/js/jads.js$script,domain=216.219.94.112,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/21941
 /\.gsmarena\.com\/[0-9]+\.php3/$xhr,1p,domain=gsmarena.com
-! https://github.com/uBlockOrigin/uAssets/issues/28913
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=p2pplay.pro
-!#if env_firefox
-tokuzl.net##[onclick="goToURL();"]:remove-attr(onclick)
-!#else
-tokuzl.net##+js(ra, onclick, %5Bonclick%3D%22goToURL()%3B%22%5D, complete)
-!#endif
-tokuzl.net##+js(aeld, click, overlay)
-tokuzl.net##+js(nowoif, _blank)
-tokuzl.net##.overlay
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207808
 cosplay-xxx.com##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207864
@@ -1652,7 +1641,7 @@ tusachmanga.com##+js(nowoif, _blank)
 friv.com##+js(aeld, DOMContentLoaded, determineVisibility)
 friv.com##+js(nostif, determineVisibility)
 ! https://www.reddit.com/r/Piracy/comments/1lieoqd/how_to_bypass_these_adblocker_blockers/
-fileszero.com,viralharami.com##+js(rmnt, script, destroyContent)
+fileszero.com,viralharami.com,wstream.cloud##+js(rmnt, script, destroyContent)
 viralharami.com##+js(nostif, window.open)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1lil85l/radiode_adblock_detected/
 ! https://github.com/uBlockOrigin/uAssets/issues/28967
@@ -1695,12 +1684,12 @@ buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/28525#issuecomment-3064625698
 ! https://github.com/uBlockOrigin/uAssets/issues/29228
 ! https://arabshentai.com/episodes/%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d9%83%d8%a7%d9%86%d8%aa-%d9%81%d8%a7%d8%b3%d9%82%d8%a9-2/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mmvh01.xyz|movearnpre.com|nekovid.xyz|trailerhg.xyz|turboplayers.xyz
-cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,trailerhg.xyz,turboplayers.xyz,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.net>>##+js(set, uas, %5B%5D)
-trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(nostif, ast)
-trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(trusted-set, premium, json%3A1)
-trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(nowoif)
-trailerhg.xyz,turboplayers.xyz,sextb.net>>##+js(trusted-override-element-method, HTMLAnchorElement.prototype.click, a%5Bhref%5D%5Btarget%3D%22_blank%22%5D)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mmvh01.xyz|movearnpre.com|nekovid.xyz
+cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.*>>##+js(set, uas, %5B%5D)
+sextb.*>>##+js(nostif, ast)
+sextb.*>>##+js(trusted-set, premium, json%3A1)
+sextb.*>>##+js(nowoif)
+sextb.*>>##+js(trusted-override-element-method, HTMLAnchorElement.prototype.click, a%5Bhref%5D%5Btarget%3D%22_blank%22%5D)
 /assets/jquery/*.js?type=adult^$script,1p
 /wp-content/plugins/anti-adblocker/*
 ||non.arabshentai.com^
@@ -1787,11 +1776,83 @@ myperfectweather.com##+js(aeld, load, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/29238
 neilpatel.com##+js(no-xhr-if, %2Fgoogletagmanager%7Cip-api%2F)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/209668
-hydrogen.lat##+js(no-fetch-if, method%3AHEAD%20mode%3Ano-cors)
 hydrogen.lat##+js(aeld, load, %26%26)
 ! https://github.com/uBlockOrigin/uAssets/issues/29245
 @@||cinehax.com^$ghide
 ! https://tchgdns.de/ antiadb
 ||tchgdns.de/wp-content/themes/the-tchgdns/javascript/detector.min.js^
-! https://github.com/AdguardTeam/AdguardFilters/issues/209773
-easyocrconverter.com##+js(no-fetch-if, method%3AHEAD)
+! https://www.bike-magazin.de/fahrraeder/mountainbike/downhill-bikes-freeride-bikes/canyon-sender-2025-die-eilsendung/ - anti-adb
+||bf-ad.net^$redirect=noopjs,domain=bike-magazin.de
+! https://forums.lanik.us/viewtopic.php?t=48805-infomatricula-pt
+infomatricula.pt##+js(nostif, setInterval)
+infomatricula.pt##.container:has(.adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/29274
+idlixku.com##+js(acs, document.createElement, bait)
+! https://tv4.idlixku.com/movie/lilo-stitch-2025/ - ads countdown
+idlixku.com##+js(trusted-set, dtGonza.playeradstime, json%3A%220%22)
+! https://github.com/uBlockOrigin/uAssets/issues/29287
+agar.io##html:style(--bottom-banner-height: 0 !important;)
+! https://daftsex.biz DL timer
+daftsex.biz##+js(nano-sib, timeleftlink, 1000, 0.001)
+! https://github.com/AdguardTeam/AdguardFilters/issues/209507
+criollasx.com##.video-list-content:remove-class(with-happy)
+criollasx.com##+js(aeld, click, handlePopup)
+! https://github.com/uBlockOrigin/uAssets/issues/29249
+gol245.online##+js(nowoif)
+andrenalynrushplay.cfd,fnjplay.xyz##+js(rmnt, script, debugger)
+! https://github.com/uBlockOrigin/uAssets/issues/29296
+||tucson.com/shared-content/art/tncms/api/access.*.js
+! https://github.com/AdguardTeam/AdguardFilters/issues/209354
+best-hit.tv#@##gStickyAd
+! https://github.com/uBlockOrigin/uAssets/issues/29314
+dynamix.top##+js(rpnt, script, !document.getElementById, document.getElementById)
+! https://pendujatt.com.se/song/chi-pae-thu-vaaheesan-rasaiya-mp3-song - interstitial
+pendujatt.com.se##+js(rpnt, script, window.dataLayer%20%3D, (()%3D%3E%7Bdocument.querySelectorAll(%60form%3Ahas(%3E%20input%5Bvalue%24%3D%22.mp3%22%5D)%60).forEach(el%3D%3E%7Blet%20url%3Del.querySelector(%22input%22).getAttribute(%22value%22)%3Bel.setAttribute(%22action%22%2Curl)%7D)%7D)()%3Bwindow.dataLayer%20%3D, sedCount, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/29320
+windowsonarm.org##+js(no-fetch-if, doubleclick)
+! https://github.com/uBlockOrigin/uAssets/issues/29325
+moutogami.com##+js(no-fetch-if, adsbygoogle, war%3Agooglesyndication_adsbygoogle.js)
+! https://www.ditjesendatjes.nl/ - ads
+ditjesendatjes.nl##+js(rpnt, script, %2CavailableAds%3A%5B, %2CavailableAds%3A%5B%5D%2CnoAds%3A%5B, sedCount, 1)
+! https://hdfilmsitesi.me/film/enkanto-sihirli-dunya-hd9/ - ads
+hdfilmsitesi.*##+js(rpnt, script, window.lazyLoadOptions%20%3D, ilk_part_getir()%3Bwindow.lazyLoadOptions%20%3D)
+! https://www.reddit.com/r/uBlockOrigin/comments/1m9gay5/ubo_detected_on_a_crimsonscrolls_a_small_ln/
+crimsonscrolls.net##+js(acs, document.addEventListener, adblock)
+! https://github.com/uBlockOrigin/uAssets/issues/29339
+criticker.com##+js(json-prune, bannerad%20sidebar%20ti_sidebar)
+||criticker.com/ajax/loadAd.php
+! https://briefly.co.za/entertainment/celebrities/214876-isaka-dominates-streaming-charts-cizas-meteoric-rise-fame/
+||cdn.briefly.co.za/briefly/js/monetization.
+briefly.co.za##.c-adv
+briefly.co.za##.c-adv-branding__top
+! https://github.com/uBlockOrigin/uAssets/issues/14480 - soft98.ir
+soft98.ir,~forum.soft98.ir##html::before:style(content: ' ⚠️ این وبسایت توسط جامعهٔ PersianBlocker یک وبسایت ضدکاربر تشخیص داده شده است؛ یعنی با جلوگیری از استفاده از افزونه‌های ضدتبلیغات، آزادی شماره صفرم شما (هر کاربر باید آزادی اینکه چه چیز را ببیند یا نبیند داشته باشد) را محدود کرده است. پیشنهاد می‌شود از وبسایت‌های جایگزین استفاده کنید. PersianBlocker 🄯 ⚠️ ' !important; color: red !important; font-weight: bold !important; font-size: x-large !important; overflow: visible !important; z-index: 856985698569 !important; position: absolute !important; background-color: black !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/29362
+sourceb.in##.carbon
+! popup on age verification
+bdsmkingdom.xyz,cosplaynsfw.xyz,crazytoys.xyz,hardcorelesbian.xyz,pornfeet.xyz,pornahegao.xyz,sexontheboat.xyz##+js(set, dclm_ajax_var.disclaimer_redirect_url, )
+! https://github.com/AdguardTeam/AdguardFilters/issues/210206
+india.marathinewz.in##+js(no-fetch-if, adsbygoogle, war%3Agooglesyndication_adsbygoogle.js)
+! https://github.com/uBlockOrigin/uAssets/issues/29370
+freegames.com##+js(nostif, moneyDetect)
+! nsfw aagmaal. com
+cdn1.site##+js(nowoif)
+cdn1.site##+js(rmnt, script, justDetectAdblock)
+cdn1.site##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+*$script,3p,denyallow=cloudflare.net|jquery.com|jsdelivr.net|lulucdn.com,domain=cdn1.site
+! https://github.com/AdguardTeam/AdguardFilters/issues/209784
+pantieshub.net##+js(aeld, play, openPopunder)
+! https://www.birminghammail.co.uk/news/midlands-news/uk-households-could-face-vpn-32152789
+birminghammail.co.uk,bristolpost.co.uk,dailyrecord.co.uk,liverpoolecho.co.uk,manchestereveningnews.co.uk,stokesentinel.co.uk##.sticky ~ header:style(top: 0 !important;)
+birminghammail.co.uk,bristolpost.co.uk,dailyrecord.co.uk,liverpoolecho.co.uk,manchestereveningnews.co.uk,stokesentinel.co.uk###h-line
+birminghammail.co.uk,bristolpost.co.uk,dailyrecord.co.uk,liverpoolecho.co.uk,manchestereveningnews.co.uk,stokesentinel.co.uk##div[data-testid^="non-commercial-"]
+birminghammail.co.uk,bristolpost.co.uk,dailyrecord.co.uk,liverpoolecho.co.uk,manchestereveningnews.co.uk,stokesentinel.co.uk##div[data-testid^="recommended-"]
+! https://github.com/uBlockOrigin/uAssets/issues/29383
+pstream.*##img[alt="ad banner"]
+pstream.*##.bg-buttons-purple:has(> button[aria-label="Dismiss ad"])
+! https://github.com/uBlockOrigin/uAssets/issues/29396
+||24o.it/js/*/chkablockc.min.js
+! https://github.com/uBlockOrigin/uBlock-issues/issues/3732
+policesecurity.com##+js(nosiif, EFFECTIVE_APPS_GCB_BLOCKED_MESSAGE)
+! https://github.com/uBlockOrigin/uAssets/issues/29405
+@@||tv.onefootball.com/assets/videojs-contrib-ads.$1p
