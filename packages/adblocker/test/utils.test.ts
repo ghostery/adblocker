@@ -124,8 +124,7 @@ describe('utils.ts', () => {
       expect(fastHash('')).to.equal(HASH_SEED);
       expect(fastHashBetween('', 0, 0)).to.equal(HASH_SEED);
 
-      // @ts-ignore
-      expect(fastHash([])).to.equal(HASH_SEED);
+      expect(fastHash([] as any)).to.equal(HASH_SEED);
     });
   });
 
