@@ -622,11 +622,6 @@ wcoforever.net###sidebar_r1
 @@||embed.watchanimesub.net^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/29349
 @@||embed.wcostream.com^$ghide
-!#if cap_html_filtering
-embed.wcostream.com##^script:has-text(/google_jobrunner|AdBlock|pubadx/i)
-!#else
-embed.wcostream.com##+js(rmnt, script, %2Fgoogle_jobrunner%7CAdBlock%7Cpubadx%2Fi)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/331
 ! https://github.com/uBlockOrigin/uAssets/issues/10133
 handelsblatt.com##+js(no-xhr-if, request%3Dadb)
@@ -4920,10 +4915,6 @@ dozarte.com###banana
 ! https://github.com/uBlockOrigin/uAssets/issues/4415
 shush.se##+js(set, check, true)
 ||shush.se/loader/load.js$script
-! https://github.com/uBlockOrigin/uAssets/issues/4399
-! https://www.reddit.com/r/uBlockOrigin/comments/u72fym/dailymotion_adblock_detected/
-||s3.amazonaws.com/dmas-public/rubicon/bundle.js$script,domain=dailymotion.com
-@@||dailymotion.com^$ghide
 ! cinemalibero .best popups/ ads
 cinemalibero.*##+js(nowoif)
 cinemalibero.*##+js(aopr, AaDetector)
