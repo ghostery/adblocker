@@ -297,9 +297,12 @@ kotaku.com#@##dfp-ad-1
 ! https://www.reddit.com/r/uBlockOrigin/comments/1109rgn/
 ! https://github.com/easylist/easylist/commit/c22014abecb3c95212c72e8462d4fac3df2eb878
 ! https://www.cbsnews.com/video/president-biden-ends-candidacy-60-minutes-video-2024-07-21/
-||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$script,domain=cbsnews.com,redirect=google-ima.js,important
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=cbsnews.com
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai_debug.js$script,domain=cbsnews.com
+||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$domain=cbsnews.com,redirect=google-ima.js,important
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$domain=cbsnews.com
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai_debug.js$domain=cbsnews.com
+! https://www.reddit.com/r/uBlockOrigin/comments/1mc47al/cbsnewscom_videos_dont_load_at_all_and_show/
+! https://www.cbsnews.com/newyork/news/nypd-officer-shot/
+@@||tealium.cbsnews.com/site/prod/utag.js^$1p
 ! https://github.com/uBlockOrigin/uAssets/issues/2357
 @@||pandora.com/web-version/*_comscore.$script,1p
 @@||pandora.com/web-version/*_googleAnalytics.$script,1p
@@ -791,6 +794,11 @@ wallpaperplay.com##.adsbygoogle
 @@||boatwizard.com/ads_prebid.min.js$script,domain=boattrader.com
 ! https://github.com/NanoMeow/QuickReports/issues/1652
 @@||shop.bbc.com/skin/$script,1p
+! https://github.com/uBlockOrigin/uAssets/issues/8850
+@@||fundingchoicesmessages.google.com^$script,domain=bbc.com
+! https://github.com/uBlockOrigin/uAssets/issues/29279
+bbc.com##+js(set, dvtag.getTargeting, trueFunc)
+||pub.doubleverify.com/dvtag/*/pub.js$script,domain=bbc.com,redirect=noop.js
 ! https://github.com/easylist/easylist/issues/3788
 @@||products.wera.de^$xhr,1p
 ! https://github.com/NanoMeow/QuickReports/issues/1668
@@ -1876,8 +1884,6 @@ uschovna.cz##.branding:upward([target="_blank"])
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=discoveryplus.in
 ! unbreak vermangasporno.com download button
 vermangasporno.com#@#a[target="_blank"][rel="noopener noreferrer"] > img
-! https://github.com/uBlockOrigin/uAssets/issues/8850
-@@||fundingchoicesmessages.google.com^$script,domain=bbc.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67655
 !#if env_firefox
 @@||dev.visualwebsiteoptimizer.com/j.php$domain=watch.impress.co.jp
@@ -3579,7 +3585,7 @@ commande.rhinov.pro##+js(set, Sentry.init, noopFunc)
 @@||thethings.com^$ghide
 thethings.com##.adsninja-ad-zone:not(.adsninja-valstream)
 ! https://github.com/uBlockOrigin/uAssets/issues/21780
-! [badfilter] ||awswaf.com^*/telemetry$badfilter
+@@||awswaf.com/*/telemetry$domain=rt.cpan.org
 ! https://github.com/uBlockOrigin/uAssets/issues/21771#issuecomment-1877992060
 ! https://www.nj.com/news/2023/06/scammed-swindled-or-mistreated-see-if-your-nj-county-will-take-on-your-consumer-problem.html paywall hidden
 @@||googletagmanager.com/gtm.js$script,3p,domain=al.com|cleveland.com|lehighvalleylive.com|masslive.com|mlive.com|nj.com|oregonlive.com|pennlive.com|silive.com|syracuse.com
@@ -4267,3 +4273,12 @@ tires.costco.com##+js(set, adobePageView, noopFunc)
 dragonnest.com##+js(rpnt, script, gtag%20!%3D%20null, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/29225
 /gtm.js$redirect=noopjs,domain=post.ch
+! https://github.com/uBlockOrigin/uAssets/issues/29312
+dukeofed.org##+js(aeld, click, , elements, .dropdown-menu%20a%5Bhref%5D)
+! https://github.com/uBlockOrigin/uAssets/issues/29273
+! [badfilter] ||data.bilibili.com^$badfilter
+@@||data.bilibili.com^$xhr,ping
+@@||data.bilibili.com/v2/log/web?$xhr,1p
+! https://github.com/uBlockOrigin/uAssets/issues/29317 - home button broken
+livemint.com##+js(set, dapTracker, %7B%7D)
+livemint.com##+js(set, dapTracker.track, noopFunc)
