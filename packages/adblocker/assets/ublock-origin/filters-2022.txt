@@ -1220,7 +1220,7 @@ photopea.com##div[style]:has(> a[href*="photopea.com"][href*="ads"])
 ! https://github.com/jared-schwalbe/remove-ads-from-photopea/blob/main/app.js
 ! https://github.com/uBlockOrigin/uAssets/issues/19697
 !#if cap_html_filtering
-||photopea.com^$doc,replace=/<head>/<head><script>if (typeof localStorage !== 'undefined' && typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined' && window.visualViewport.width != document.documentElement.offsetWidth+320) {const originalvisualViewport=window.visualViewport; Object.defineProperty(window, 'visualViewport', {value: new Proxy(originalvisualViewport, {get(target,property) {if (property === 'width') {return document.documentElement.offsetWidth+320} return target[property]}}), configurable:true});}<\/script>/
+||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
 !#else
 photopea.com##+js(trusted-rpnt, script, added%3Dfalse%3B, added%3Dfalse%3Bif%20(typeof%20localStorage%20!%3D%3D%20'undefined'%20%26%26%20typeof%20JSON.parse(localStorage._ppp)%5B'0_uid'%5D%20%3D%3D%3D%20'undefined'%20%26%26%20window.visualViewport.width%20!%3D%20document.documentElement.offsetWidth%2B320)%20%7Bconst%20originalvisualViewport%3Dwindow.visualViewport%3B%20Object.defineProperty(window%2C%20'visualViewport'%2C%20%7Bvalue%3A%20new%20Proxy(originalvisualViewport%2C%20%7Bget(target%2Cproperty)%20%7Bif%20(property%20%3D%3D%3D%20'width')%20%7Breturn%20document.documentElement.offsetWidth%2B320%7D%20return%20target%5Bproperty%5D%7D%7D)%2C%20configurable%3Atrue%7D)%3B%7D)
 !#endif

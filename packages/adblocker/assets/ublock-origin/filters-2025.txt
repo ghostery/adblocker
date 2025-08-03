@@ -404,6 +404,14 @@ ext=$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|pow
 *$frame,3p,denyallow=google.com,domain=powcloud.one
 *$script,3p,denyallow=googleapis.com|google.com|gstatic.com,domain=powcloud.one
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/4399
+! https://www.reddit.com/r/uBlockOrigin/comments/u72fym/dailymotion_adblock_detected/
+||s3.amazonaws.com/dmas-public/rubicon/bundle.js$script,domain=dailymotion.com
+@@||dailymotion.com^$ghide
+! https://github.com/uBlockOrigin/uAssets/commit/ddafd8d16d0c945ad7befcd2d6f35d846645c161
+!#if !env_mobile
+||dmxleo.dailymotion.com^
+!#endif
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -442,7 +450,7 @@ mp3.big.az##.blockreklam
 ! END: Regional lists
 ! https://github.com/uBlockOrigin/uAssets/issues/26682
 opentunnel.net##+js(no-xhr-if, ad.plus)
-@@||ad.plus/cdn-cgi/trace|$xhr,method=head,domain=opentunnel.net
+opentunnel.net##.mb-3.small.text-muted
 ! video.genyt.net - Popup
 video.genyt.net##+js(nowoif)
 ! sussytoons detection
@@ -794,7 +802,11 @@ theorg.com##[href="/advertise"]:upward(1)
 ||dmp.theadex.com/*/adex.js$script,domain=servustv.com,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/27293
 servustv.com##+js(nostif, , 10000-15000)
+servustv.com##+js(nostif, adex)
+servustv.com##+js(nosiif, %2Fadblock%2Fi)
 servustv.com##+js(no-fetch-if, doubleclick)
+servustv.com##+js(set, OneTrust, %7B%7D)
+servustv.com##+js(set, OneTrust.IsAlertBoxClosed, trueFunc)
 servustv.com##.backdrop-filter
 ! https://github.com/uBlockOrigin/uAssets/issues/27247
 filespayouts.com##+js(rmnt, script, window.open)
@@ -1129,6 +1141,10 @@ ripplehub.site##+js(rpnt, script, %2Fdocument.body.appendChild.*%3B%2F)
 ripplehub.site##+js(nowoif)
 ripplehub.site###close-ad-button
 footybite.to,rargb.to,totalsportek.*,totalsportekhd.com##+js(aeld, , open)
+! general
+/\/[0-9a-f]{32}\.js\b/$script,3p,to=com,from=fsportshd.xyz|stellarthread.com
+fsportshd.xyz>>##+js(rmnt, script, %2Fdelete%20window%7CpopundersPerIP%7CFingerprintJS%7CadserverDomain%2F)
+stellarthread.com##+js(rmnt, script, %2Fdelete%20window%7CpopundersPerIP%7CFingerprintJS%7CadserverDomain%2F)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/939
 zone.msn.com##+js(no-fetch-if, googlesyndication, length%3A40000-60000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204410#issuecomment-2855256390
@@ -1410,8 +1426,6 @@ thefappeningblog.com##.dogytop
 thefappeningblog.com##a[target="_blank"][href*="?"]:not([href*="thefappeningblog.com"])
 thefappeningblog.com##a[href="https://thefappeningbeta.com/a"]
 thefappeningblog.com##.textwidget > a[href][target="_blank"]:not([href*="thefappeningblog.com"])
-! https://github.com/uBlockOrigin/uAssets/issues/28416
-infomatricula.pt##+js(nostif, ads)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/205830
 pornharlot.net##+js(aeld, click, popupInterval)
 ! https://github.com/uBlockOrigin/uAssets/issues/28431
@@ -1684,7 +1698,9 @@ buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/28525#issuecomment-3064625698
 ! https://github.com/uBlockOrigin/uAssets/issues/29228
 ! https://arabshentai.com/episodes/%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d9%83%d8%a7%d9%86%d8%aa-%d9%81%d8%a7%d8%b3%d9%82%d8%a9-2/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mmvh01.xyz|movearnpre.com|nekovid.xyz
+! https://smoothpre.com/f/47li0zinsom8
+! https://mivalyo.com/file/47li0zinsom8
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cloudwish.xyz|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mivalyo.com|mmvh01.xyz|movearnpre.com|nekovid.xyz|smoothpre.com
 cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.*>>##+js(set, uas, %5B%5D)
 sextb.*>>##+js(nostif, ast)
 sextb.*>>##+js(trusted-set, premium, json%3A1)
@@ -1783,8 +1799,9 @@ hydrogen.lat##+js(aeld, load, %26%26)
 ||tchgdns.de/wp-content/themes/the-tchgdns/javascript/detector.min.js^
 ! https://www.bike-magazin.de/fahrraeder/mountainbike/downhill-bikes-freeride-bikes/canyon-sender-2025-die-eilsendung/ - anti-adb
 ||bf-ad.net^$redirect=noopjs,domain=bike-magazin.de
+! https://github.com/uBlockOrigin/uAssets/issues/28416
 ! https://forums.lanik.us/viewtopic.php?t=48805-infomatricula-pt
-infomatricula.pt##+js(nostif, setInterval)
+infomatricula.pt##+js(nostif, offsetHeight)
 infomatricula.pt##.container:has(.adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/29274
 idlixku.com##+js(acs, document.createElement, bait)
@@ -1826,7 +1843,7 @@ criticker.com##+js(json-prune, bannerad%20sidebar%20ti_sidebar)
 briefly.co.za##.c-adv
 briefly.co.za##.c-adv-branding__top
 ! https://github.com/uBlockOrigin/uAssets/issues/14480 - soft98.ir
-soft98.ir,~forum.soft98.ir##html::before:style(content: ' ⚠️ این وبسایت توسط جامعهٔ PersianBlocker یک وبسایت ضدکاربر تشخیص داده شده است؛ یعنی با جلوگیری از استفاده از افزونه‌های ضدتبلیغات، آزادی شماره صفرم شما (هر کاربر باید آزادی اینکه چه چیز را ببیند یا نبیند داشته باشد) را محدود کرده است. پیشنهاد می‌شود از وبسایت‌های جایگزین استفاده کنید. PersianBlocker 🄯 ⚠️ ' !important; color: red !important; font-weight: bold !important; font-size: x-large !important; overflow: visible !important; z-index: 856985698569 !important; position: absolute !important; background-color: black !important;)
+soft98.ir,~forum.soft98.ir##html::before:style(content: ' ⚠️ این وبسایت توسط جامعهٔ PersianBlocker یک وبسایت ضدکاربر تشخیص داده شده است؛ یعنی با جلوگیری از استفاده از افزونه‌های ضدتبلیغات، آزادی شماره صفرم شما (هر کاربر باید آزادی اینکه چه چیز را ببیند یا نبیند داشته باشد) را محدود کرده است. پیشنهاد می‌شود از وبسایت‌های جایگزین استفاده کنید. PersianBlocker 🄯 ⚠️ ' !important; color: #1E88E5 !important; font-weight: bold !important; font-size: x-large !important; overflow: visible !important; z-index: 856985698569 !important; position: fixed !important; background-color: white !important; border: 8px solid red !important; border-radius: 12px !important; padding: 1em !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/29362
 sourceb.in##.carbon
 ! popup on age verification
@@ -1855,4 +1872,26 @@ pstream.*##.bg-buttons-purple:has(> button[aria-label="Dismiss ad"])
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3732
 policesecurity.com##+js(nosiif, EFFECTIVE_APPS_GCB_BLOCKED_MESSAGE)
 ! https://github.com/uBlockOrigin/uAssets/issues/29405
-@@||tv.onefootball.com/assets/videojs-contrib-ads.$1p
+||tv.onefootball.com/assets/videojs-contrib-ads$script,redirect=noopjs
+tv.onefootball.com##+js(rpnt, script, function%20OptanonWrapper()%20%7B%7D, %2F*start*%2F(()%3D%3E%7Bconst%20o%3D%7Bapply%3A(o%2Ct%2Ce)%3D%3E(%22ads%22%3D%3D%3De%5B0%5D%26%26%22object%22%3D%3Dtypeof%20t%26%26null!%3D%3Dt%26%26(t.ads%3D()%3D%3E%7B%7D)%2CReflect.apply(o%2Ct%2Ce))%7D%3Bwindow.Object.prototype.hasOwnProperty%3Dnew%20Proxy(window.Object.prototype.hasOwnProperty%2Co)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2Ffunction%20OptanonWrapper()%20%7B%7D)
+! https://www.reddit.com/r/uBlockOrigin/comments/1mdtiuj/ad_blocker_detected_help/
+indexsubtitle.cc##+js(aopw, EnhancedAdBlockDetector)
+! https://github.com/AdguardTeam/AdguardFilters/issues/210444
+windroid777.com##+js(rmnt, script, detectAdBlock)
+! https://github.com/uBlockOrigin/uAssets/issues/29412
+mediamarkt.be##+js(no-fetch-if, method%3AHEAD)
+! Right side ad container
+lightningmaps.org###wb_right:has(.adsbygoogle):style(right: 0 !important)
+lightningmaps.org###Sidebar ~ #Content:has(.adsbygoogle):style(margin-right: 0 !important)
+! https://www.reddit.com/r/uBlockOrigin/comments/1mehur0/ad_block_detection_globalnovelpiacom/
+global.novelpia.com##+js(no-fetch-if, doubleclick)
+global.novelpia.com##body > #ad-novelpia:style(display: block !important; visibility: visible !important; opacity: 1 !important; width: 1px !important; height: 1px !important;)
+! tube.shegods .com (NSFW) - popups, ads
+||amateurdough.com/promomaterials/*/banners/$image,domain=shegods.com
+||tube.shegods.com/ads/
+tube.shegods.com##+js(nowoif)
+tube.shegods.com##.main-gal > .right-gallery
+! https://github.com/uBlockOrigin/uAssets/issues/29434
+fileq.games##+js(nowoif, _blank)
+! https://github.com/uBlockOrigin/uAssets/issues/29438
+animekai.*##+js(nowoif, _blank)
