@@ -236,6 +236,7 @@ sankei.com##div[id^="piano_special_Top_"]
 diamond.jp###contents > div.sub-column > div.title:has(+ #cx-recommed)
 diamond.jp###cx-recommed
 baseballpost.jp###highschool-pickup
+s.response.jp##.aside-box-relation-arti
 ! ziyu.net
 jin115.com,livedoor.biz#?#.plugin-memo:has(> div.side > script[src*="ziyu.net/"])
 okutta.net##.article__footer > div[style="height:500px; overflow-y:scroll;"]
@@ -3030,15 +3031,21 @@ thothd.to##+js(nostif, offsetWidth)
 ! https://github.com/uBlockOrigin/uAssets/issues/19715
 mediaset.es##+js(rmnt, script, adbl)
 ! https://github.com/uBlockOrigin/uAssets/issues/19724
-embedrise.com,lulustream.com,lulustream.live,luluvdo.com,playfmovies.*,viralvideotube.*,vtlinks.*,vtplayer.online,vvtlinks.*,vvtplayer.*##+js(nowoif)
+embedrise.com,lulustream.com,lulustream.live,luluvdo.com,luluvid.com,playfmovies.*,viralvideotube.*,vtlinks.*,vtplayer.online,vvtlinks.*,vvtplayer.*##+js(nowoif)
 lulustream.com,lulustream.live,luluvdo.com##+js(aeld, click, popunder)
-lulu.st,lulustream.com,lulustream.live,luluvdo.com##+js(acs, WebAssembly, Promise)
+lulu.st,lulustream.com,lulustream.live,luluvdo.com,luluvid.com##+js(acs, WebAssembly, Promise)
+lulu.st,lulustream.com,lulustream.live,luluvdo.com,luluvid.com##+js(acs, document.write, unescape)
+luluvid.com##+js(rmnt, script, popundersPerIP)
 vtplayer.online,vvtplayer.*##+js(set, adblockcheck, false)
 ||unpkg.com/videojs-vast-vpaid@2.0.2/bin/videojs_5.vast.vpaid.min.js$script,domain=playfmovies.*|vtplayer.online|vvtplayer.*
 ottlatest.com##div#wpsafe-link:style(display: block !important;)
 ottlatest.com##div#wpsafe-link:others()
 ||vvtplayer.*/cdn-cgi/trace
+||luluvid.com/js/new100.js
 *$script,3p,denyallow=cloudflare.net|jquery.com|jsdelivr.net|lulucdn.com,domain=lulustream.com|lulustream.live|luluvdo.com
+*$object,3p,domain=lulustream.com|lulustream.live|luluvdo.com|luluvid.com
+||programmaticmarket.com^
+||xmlwolf.com^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/161625
 hentai-moon.com##+js(set, flashvars.popunder_url, )
 ! https://github.com/uBlockOrigin/uAssets/issues/19753
