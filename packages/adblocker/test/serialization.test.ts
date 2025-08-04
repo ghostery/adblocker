@@ -54,9 +54,7 @@ describe('Serialization', () => {
       // Reload filter
       buffer.seekZero();
       const deserialized = Filter.deserialize(buffer);
-
-      // @ts-ignore
-      expect(deserialized.id).to.be.undefined;
+      expect(deserialized).property('id').to.be.undefined;
       expect(deserialized.getId()).to.equal(originalId);
       expect(deserialized).to.eql(filter);
     };
