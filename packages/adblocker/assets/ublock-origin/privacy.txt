@@ -646,7 +646,7 @@ threads.net##+js(json-prune, require.0.3.0.__bbox.define.%5B%5D.2.is_linkshim_su
 ! https://www.bleepingcomputer.com/news/security/googles-mysterious-searchapp-links-leave-android-users-concerned/
 ||search.app^*link=http$doc,urlskip=?link
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3206#issuecomment-2487392846
-bing.com##+js(href-sanitizer, a%5Bhref%5E%3D%22%2Frebates%2Fwelcome%3Furl%3Dhttp%22%5D, %3Furl)
+bing.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2Frebates%2Fwelcome%3Furl%3Dhttp%22%5D, %3Furl)
 ||bing.com/ck/a*^u=a1aHR0c$doc,urlskip=/[?&]u=a1(aHR0c[^&#]+)/ -safebase64
 ||bing.com/rebates/welcome?url=http$doc,urlskip=?url
 ||bing.com/alink/link?url=http$doc,urlskip=?url
@@ -797,6 +797,7 @@ variety.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fclicks.trx-hub.c
 ! https://www.engadget.com/samsung-galaxy-s23-ultra-review-specs-price-photo-and-video-take-center-stage-140034341.html
 engadget.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fshopping.yahoo.com%2Frdlw%3F%22%5D%5Bhref*%3D%22gcReferrer%3Dhttp%22%5D, %3FgcReferrer)
 ! https://github.com/uBlockOrigin/uAssets/issues/25754
+! https://www.reddit.com/r/uBlockOrigin/comments/1mgkapr/dow_to_always_bypass_this_page/
 ! https://soaps.sheknows.com/the-bold-and-the-beautiful/recaps/743811/finn-tells-li-luna-killed-tom-hollis/
 ! https://www.hunker.com/13770331/best-headboards/
 ! https://otherweb.com/n/jql8n85J
@@ -810,24 +811,24 @@ engadget.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fshopping.yahoo.
 ! https://www.notebookcheck.net/Affordable-HP-Victus-gaming-laptop-with-RTX-3050-beating-RX-6550M-gets-40-discount-in-Best-Buy-sale.873491.0.html
 ! https://www.popularmechanics.com/home/tools/g40081063/best-paper-shredders/
 cnet.com##+js(set, Object.prototype.updateModifiedCommerceUrl, noopFunc)
-cnet.com,dogfoodadvisor.com,hunker.com,insidehook.com,nbcnews.com,notebookcheck.net,pcgamingwiki.com,pcpartpicker.com,popularmechanics.com,purewow.com,sheknows.com,space.com,streetinsider.com,tomshardware.com,zdnet.com##+js(href-sanitizer, a%5Bhref*%3D%22%3F%22%5D%5Bhref*%3D%22u%3Dhttp%22%5D%3Ais(%5Bhref*%3D%22.com%2Fc%2F%22%5D%2C%5Bhref*%3D%22.io%2Fc%2F%22%5D%2C%5Bhref*%3D%22.net%2Fc%2F%22%5D%2C%5Bhref*%3D%22%3FsubId1%3D%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Faffportal.bhphoto.com%2Fdl%2Fredventures%2F%3F%22%5D), %3Fu)
-androidauthority.com,cnet.com,hunker.com,insidehook.com,jljbacktoclassic.com,nbcnews.com,otherweb.com,pcpartpicker.com,pcgamingwiki.com,popularmechanics.com,purewow.com,space.com,sport-passion.fr,tomshardware.com,zdnet.com##+js(href-sanitizer, a%5Bhref*%3D%22%3F%22%5D%5Bhref*%3D%22url%3Dhttp%22%5D%3Ais(%5Bhref%5E%3D%22https%3A%2F%2Fcc.%22%5D%5Bhref*%3D%22.com%2Fv1%2Fotc%2F%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fgo.skimresources.com%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fgo.redirectingat.com%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Finvol.co%2Faff_m%3F%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fshop-links.co%2Flink%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Ftrack.effiliation.com%2Fservlet%2Feffi.redir%3F%22%5D%2C%5Bhref*%3D%22.com%2Fa.ashx%3F%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fwww.%22%5D%5Bhref*%3D%22.com%2Ft%2F%22%5D%2C%5Bhref*%3D%22.prsm1.com%2Fr%3F%22%5D%2C%5Bhref*%3D%22.com%2Fclick-%22%5D%2C%5Bhref*%3D%22.net%2Fclick-%22%5D%2Ca%5Bhref*%3D%22.com%2Ft%2Ft%3Fa%3D%22%5D%2Ca%5Bhref*%3D%22.dk%2Ft%2Ft%3Fa%3D%22%5D), %3Furl)
-space.com,tomshardware.com,zdnet.com##+js(href-sanitizer, a%5Bhref*%3D%22%2FProxy.ashx%3F%22%5D%5Bhref*%3D%22GR_URL%3Dhttp%22%5D, %3FGR_URL)
+cnet.com,dogfoodadvisor.com,hunker.com,insidehook.com,nbcnews.com,notebookcheck.net,pcgamingwiki.com,pcpartpicker.com,popularmechanics.com,purewow.com,sheknows.com,space.com,streetinsider.com,tomshardware.com,zdnet.com##+js(href-sanitizer, body%20a%5Bhref*%3D%22%3F%22%5D%5Bhref*%3D%22u%3Dhttp%22%5D%3Ais(%5Bhref*%3D%22.com%2Fc%2F%22%5D%2C%5Bhref*%3D%22.io%2Fc%2F%22%5D%2C%5Bhref*%3D%22.net%2Fc%2F%22%5D%2C%5Bhref*%3D%22%3FsubId1%3D%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Faffportal.bhphoto.com%2Fdl%2Fredventures%2F%3F%22%5D), %3Fu)
+androidauthority.com,cnet.com,hunker.com,insidehook.com,jljbacktoclassic.com,nbcnews.com,otherweb.com,pcpartpicker.com,pcgamingwiki.com,popularmechanics.com,purewow.com,space.com,sport-passion.fr,tomshardware.com,zdnet.com##+js(href-sanitizer, body%20a%5Bhref*%3D%22%3F%22%5D%5Bhref*%3D%22url%3Dhttp%22%5D%3Ais(%5Bhref%5E%3D%22https%3A%2F%2Fcc.%22%5D%5Bhref*%3D%22.com%2Fv1%2Fotc%2F%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fgo.skimresources.com%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fgo.redirectingat.com%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Finvol.co%2Faff_m%3F%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fshop-links.co%2Flink%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Ftrack.effiliation.com%2Fservlet%2Feffi.redir%3F%22%5D%2C%5Bhref*%3D%22.com%2Fa.ashx%3F%22%5D%2C%5Bhref%5E%3D%22https%3A%2F%2Fwww.%22%5D%5Bhref*%3D%22.com%2Ft%2F%22%5D%2C%5Bhref*%3D%22.prsm1.com%2Fr%3F%22%5D%2C%5Bhref*%3D%22.com%2Fclick-%22%5D%2C%5Bhref*%3D%22.net%2Fclick-%22%5D%2Ca%5Bhref*%3D%22.com%2Ft%2Ft%3Fa%3D%22%5D%2Ca%5Bhref*%3D%22.dk%2Ft%2Ft%3Fa%3D%22%5D), %3Furl)
+space.com,techradar.com,tomshardware.com,zdnet.com##+js(href-sanitizer, body%20a%5Bhref*%3D%22%2FProxy.ashx%3F%22%5D%5Bhref*%3D%22GR_URL%3Dhttp%22%5D, %3FGR_URL)
 ! https://www.windowscentral.com/software-apps/opera-will-independently-continue-supporting-ublock-origin
-windowscentral.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fgo.redirectingat.com%2F%22%5D%5Bhref*%3D%22%26url%3Dhttp%22%5D, %3Furl)
+windowscentral.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fgo.redirectingat.com%2F%22%5D%5Bhref*%3D%22%26url%3Dhttp%22%5D, %3Furl)
 ! https://shutupandtakemyyen.com/product/pokemon-giant-cubone-skull-patch/
 ! https://www.thisiswhyimbroke.com/white-elephant-gifts/
-insidehook.com,nbcnews.com,shutupandtakemyyen.com,space.com,thisiswhyimbroke.com,xda-developers.com##+js(href-sanitizer, a%5Bhref*%3D%22awin1.com%2F%22%5D%5Bhref*%3D%22.php%3F%22%5D%5Bhref*%3D%22ued%3Dhttp%22%5D, %3Fued)
-insidehook.com,nbcnews.com,shutupandtakemyyen.com,space.com,thisiswhyimbroke.com,xda-developers.com##+js(href-sanitizer, a%5Bhref*%3D%22awin1.com%2F%22%5D%5Bhref*%3D%22.php%3F%22%5D%5Bhref*%3D%22p%3Dhttp%22%5D, %3Fp)
+insidehook.com,nbcnews.com,shutupandtakemyyen.com,space.com,thisiswhyimbroke.com,xda-developers.com##+js(href-sanitizer, body%20a%5Bhref*%3D%22awin1.com%2F%22%5D%5Bhref*%3D%22.php%3F%22%5D%5Bhref*%3D%22ued%3Dhttp%22%5D, %3Fued)
+insidehook.com,nbcnews.com,shutupandtakemyyen.com,space.com,thisiswhyimbroke.com,xda-developers.com##+js(href-sanitizer, body%20a%5Bhref*%3D%22awin1.com%2F%22%5D%5Bhref*%3D%22.php%3F%22%5D%5Bhref*%3D%22p%3Dhttp%22%5D, %3Fp)
 ! https://forums.redflagdeals.com/henrys-used-camera-equipment-20-off-90-day-warranty-ends-march-28-2024-2676433/
 forums.redflagdeals.com##+js(href-sanitizer, a.autolinker_link%5Bhref*%3D%22.com%2Ft%2F%22%5D%5Bhref*%3D%22url%3Dhttp%22%5D, %3Furl)
 ! https://www.sport-passion.fr/comparatifs/meilleurs-compteurs-gps-de-velo-et-vtt.php
-sport-passion.fr##+js(href-sanitizer, a%5Brel%3D%22sponsored%20nofollow%22%5D%5Bhref%5E%3D%22https%3A%2F%2Ffsx.i-run.fr%2F%3F%22%5D%5Bhref*%3D%22redir%3Dhttp%22%5D, %3Fredir)
-sport-passion.fr##+js(href-sanitizer, a%5Brel%3D%22sponsored%20nofollow%22%5D%5Bhref*%3D%22.tradeinn.com%2Fts%2F%22%5D%5Bhref*%3D%22trg%3Dhttp%22%5D, %3Ftrg)
+sport-passion.fr##+js(href-sanitizer, body%20a%5Brel%3D%22sponsored%20nofollow%22%5D%5Bhref%5E%3D%22https%3A%2F%2Ffsx.i-run.fr%2F%3F%22%5D%5Bhref*%3D%22redir%3Dhttp%22%5D, %3Fredir)
+sport-passion.fr##+js(href-sanitizer, body%20a%5Brel%3D%22sponsored%20nofollow%22%5D%5Bhref*%3D%22.tradeinn.com%2Fts%2F%22%5D%5Bhref*%3D%22trg%3Dhttp%22%5D, %3Ftrg)
 ! https://jljbacktoclassic.com/archives/16956
-insidehook.com,jljbacktoclassic.com##+js(href-sanitizer, a%5Bhref*%3D%22.com%2Fr.cfm%3F%22%5D%5Bhref*%3D%22urllink%3Dhttp%22%5D, %3Furllink)
+insidehook.com,jljbacktoclassic.com##+js(href-sanitizer, body%20a%5Bhref*%3D%22.com%2Fr.cfm%3F%22%5D%5Bhref*%3D%22urllink%3Dhttp%22%5D, %3Furllink)
 ! https://soundcloud.com/user-182079869/premera-klipa-leonid-agutin-vladimir-presnyakov-dnk
-soundcloud.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fgate.sc%22%5D%5Bhref*%3D%22%3Furl%3Dhttp%22%5D, %3Furl)
+soundcloud.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fgate.sc%22%5D%5Bhref*%3D%22%3Furl%3Dhttp%22%5D, %3Furl)
 ! https://github.com/uBlockOrigin/uAssets/issues/7950
 slant.co##+js(trusted-replace-argument, HTMLAnchorElement.prototype.getAttribute, 0, json%3A%22class%22, condition, data-direct-ad)
 ! https://voz.vn/
@@ -835,9 +836,9 @@ slant.co##+js(trusted-replace-argument, HTMLAnchorElement.prototype.getAttribute
 ||static.accesstrade.vn/js/atsmarttag.min.js
 voz.vn##a.link.link--external[href][data-proxy-href]:remove-attr(data-proxy-href)
 ! https://github.com/uBlockOrigin/uAssets/issues/28086
-spreaker.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fspreaker.onelink.me%2F%22%5D%5Bhref*%3D%22%26af_web_dp%3Dhttp%22%5D, %3Faf_web_dp)
+spreaker.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fspreaker.onelink.me%2F%22%5D%5Bhref*%3D%22%26af_web_dp%3Dhttp%22%5D, %3Faf_web_dp)
 ! https://www.dogdrip.net/dogdrip/648750601
-dogdrip.net##+js(href-sanitizer, a%5Bhref%5E%3D%22%2Flink.php%3Furl%3Dhttp%22%5D, %3Furl)
+dogdrip.net##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2Flink.php%3Furl%3Dhttp%22%5D, %3Furl)
 ! https://github.com/uBlockOrigin/uAssets/issues/24675 - click tracking
 ||cdn.digg.com/fragments/homepage/static/view-frontpage.js
 ! https://chataigpt.org
@@ -1741,5 +1742,7 @@ mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 ||redir.me/?$urlskip=/\?(https?:\/\/[^&]+)/
 ! https://github.com/uBlockOrigin/uAssets/issues/29433
 ||chess.com/service/user-activity/chesscom.user_activity.v1.UserActivityHttpBridgeService/DispatchEventBatch
+! https://github.com/uBlockOrigin/uAssets/issues/29442
+||truthsocial.com/api/*/impression?
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

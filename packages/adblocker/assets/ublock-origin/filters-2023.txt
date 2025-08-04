@@ -1898,7 +1898,14 @@ printablecreative.com##.gda-home-box
 ! https://juegosgratisonline.com.ar/ popup
 juegosgratisonline.com.ar##+js(aopr, popns)
 ! https://www.reddit.com/r/uBlockOrigin/comments/13q93ea/
-||truthsocial.com/api/*/ads$xhr,1p
+! https://github.com/uBlockOrigin/uAssets/issues/29442
+! ||truthsocial.com/api/*/ads$xhr,1p
+||truthsocial.com/proxy/$image,1p
+truthsocial.com##+js(trusted-click-element, button%5Bdata-testid%3D%22close-modal%22%5D)
+truthsocial.com###modal-overlay:has(+ div[data-testid="modal"] div[data-type="ad"])
+truthsocial.com##div[data-type="ad"]
+truthsocial.com##div[data-testid="modal"]:has(div[data-type="ad"])
+truthsocial.com##body:style(overflow: auto !important;)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/151833
 webmatrices.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/145039
@@ -2775,11 +2782,12 @@ crictracker.com##article > div[style="height:270px"]
 ||pagead2.googlesyndication.com/|$xhr,redirect=none:5,domain=client.falixnodes.net
 client.falixnodes.net##+js(rpnt, script, typeof%20window.loadtwo, typeof%20window.loadtwo%20%3D%3D%3D%20true)
 client.falixnodes.net##+js(rpnt, script, (window.loadtwo, (window.loadtwo%20%3D%3D%3D%20undefined%20%7C%7C%20true%20%7C%7C%20window.googlescriptloaded)
-client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fvery-please'%3B)
+client.falixnodes.net##+js(rpnt, script, window.location.href%20%3D%20'%2Fhey'%3B)
 client.falixnodes.net##+js(set, window.adngin, %7B%7D)
 client.falixnodes.net##+js(set, amzn_aps_csm, %7B%7D)
 client.falixnodes.net##+js(nostif, %2Flocation.href%7Clocation%20%3D%20atob%2F)
-client.falixnodes.net##+js(nostif, %2FadObj%7Camzn_aps_csm%7Cplease-disable%7Cfunction%20reportErrors%7CYW16bl9hcHNfY3Nt%7CcmVwb3J0RXJyb3Jz%7CL3ZlcnktcGxlYXNl%2F)
+client.falixnodes.net##+js(nostif, %2FadObj%7Camzn_aps_csm%7C%5C'%5C%2Fhey%5C'%7CYW16bl9hcHNfY3Nt%7CcmVwb3J0RXJyb3Jz%7CL3ZlcnktcGxlYXNl%2F)
+client.falixnodes.net##+js(nosiif, %2FadObj%7Camzn_aps_csm%7C%5C'%5C%2Fhey%5C'%7CYW16bl9hcHNfY3Nt%7CcmVwb3J0RXJyb3Jz%7CL3ZlcnktcGxlYXNl%2F)
 client.falixnodes.net##h6.text-muted:has-text(Advertisement)
 client.falixnodes.net###takeover[style="min-height: 250px;"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/15wqphp/anti_ad_block_needed/
@@ -2888,6 +2896,7 @@ techedubyte.com##+js(set, checkAdsStatus, noopFunc)
 techedubyte.com##+js(noeval-if, deblocker)
 techedubyte.com##+js(no-fetch-if, googlesyndication)
 techedubyte.com##+js(nostif, .redirect)
+techedubyte.com##+js(aeld, load, document.querySelectorAll)
 techedubyte.com###wpsafe-generate, #wpsafe-link:style(display: block !important;)
 techedubyte.com##[id^="wpsafe-wait"]
 techedubyte.com##.gmr-banner-insidecontent
