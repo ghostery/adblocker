@@ -54,9 +54,7 @@ describe('Serialization', () => {
       // Reload filter
       buffer.seekZero();
       const deserialized = Filter.deserialize(buffer);
-
-      // @ts-expect-error Testing the population of `id` property
-      expect(deserialized.id).to.be.undefined;
+      expect(deserialized).to.not.have.property('id');
       expect(deserialized.getId()).to.equal(originalId);
       expect(deserialized).to.eql(filter);
     };
