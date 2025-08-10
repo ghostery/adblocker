@@ -1221,7 +1221,7 @@ photopea.com##div[style]:has(> a[href*="photopea.com"][href*="ads"])
 !#if cap_html_filtering
 ||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
 !#else
-photopea.com##+js(trusted-rpnt, script, added%3Dfalse%3B, added%3Dfalse%3Bif%20(typeof%20localStorage%20!%3D%3D%20'undefined'%20%26%26%20typeof%20JSON.parse(localStorage._ppp)%5B'0_uid'%5D%20%3D%3D%3D%20'undefined'%20%26%26%20window.visualViewport.width%20!%3D%20document.documentElement.offsetWidth%2B320)%20%7Bconst%20originalvisualViewport%3Dwindow.visualViewport%3B%20Object.defineProperty(window%2C%20'visualViewport'%2C%20%7Bvalue%3A%20new%20Proxy(originalvisualViewport%2C%20%7Bget(target%2Cproperty)%20%7Bif%20(property%20%3D%3D%3D%20'width')%20%7Breturn%20document.documentElement.offsetWidth%2B320%7D%20return%20target%5Bproperty%5D%7D%7D)%2C%20configurable%3Atrue%7D)%3B%7D)
+photopea.com##+js(trusted-create-html, head, %3Cimg%20src%3D'%2Finvalid.jpg'%20onerror%3D'if%20(localStorage.length%20%3D%3D%3D%200%20%7C%7C%20typeof%20JSON.parse(localStorage._ppp)%5B%220_uid%22%5D%20%3D%3D%3D%20%22undefined%22)%20%7BObject.defineProperty(window%2C%20%22innerWidth%22%2C%20%7Bget()%20%7B%20return%20document.documentElement.offsetWidth%20%2B%20320%20%7D%7D)%3B%7D'%3E%3C%2Fimg%3E)
 !#endif
 !photopea.com##+js(rpnt, script, %2F%5E.*%3F(function%20gtag).*%24%2F, document.documentElement.setAttribute('onreset'%2C(function%20addCustomEvent()%7Bdocument.addEventListener('resizecanvas'%2C()%3D%3E%7Bwindow.innerWidth%3Ddocument.documentElement.clientWidth%2B(window.screen.width%3C1600%3F180%3A320)%7D)%7D)())%3Bdocument.documentElement.dispatchEvent(new%20CustomEvent('reset'))%3Bdocument.documentElement.removeAttribute('onreset')%3Bfunction%20resize(event%3D%7B%7D)%7Bif(!event.skip)%7Bdocument.dispatchEvent(new%20CustomEvent('resizecanvas'))%3Bconst%20resizeEvent%3Dnew%20Event('resize')%3BresizeEvent.skip%3Dtrue%3Bwindow.dispatchEvent(resizeEvent)%7D%7Dlet%20debounce%3Bwindow.addEventListener('resize'%2Cevent%3D%3E%7BclearTimeout(debounce)%3Bdebounce%3DsetTimeout(()%3D%3Eresize(event)%2C100)%7D)%3Bresize()%3B)
 ! https://github.com/uBlockOrigin/uAssets/issues/20232
@@ -2297,8 +2297,6 @@ iptvapps.net##[id*=id]:has([src*="/ads/"])
 @@||static.yieldmo.com/ym.adv.min.js$script,domain=cloud-computing-central.com|cloudcomputingtopics.net
 @@||ads.pubmatic.com/AdServer/js/pwt/*/pwt.js$script,domain=cloud-computing-central.com|cloudcomputingtopics.net
 cloudcomputingtopics.net##+js(set, distance, 0)
-! https://www.reddit.com/r/uBlockOrigin/comments/xguj3m/
-||pururin.to/assets/js/pop.js$script
 ! https://github.com/AdguardTeam/AdguardFilters/issues/150990
 null-scripts.net,nullscripts.net##+js(nostif, show)
 @@||nullscripts.net^$ghide
