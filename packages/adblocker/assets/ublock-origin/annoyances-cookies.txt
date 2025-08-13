@@ -496,6 +496,11 @@ ditjesendatjes.nl##+js(trusted-set-local-storage-item, user_consent, %7B%22analy
 trafino.fi##+js(trusted-set-cookie, _gdprConsents, essentials%3Atrue%7Canalytics%3Afalse%7Cpreferences%3Afalse%7Cmarketing%3Afalse, 1year)
 ! https://www.pirha.fi/
 pirha.fi##+js(trusted-set-cookie, p_cc, min, 1year)
+! https://github.com/uBlockOrigin/uAssets/issues/29570
+@@||consent.cookiebot.com^$script,domain=dimensione.com
+dimensione.com##+js(trusted-click-element, button%23CybotCookiebotDialogBodyButtonDecline)
+! https://github.com/uBlockOrigin/uAssets/issues/29571
+hvr-amazon.my.site.com##+js(trusted-set-cookie, apex__cookiePreferences, Operational)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -1388,11 +1393,13 @@ volksfreund.de,rp-online.de##+js(trusted-click-element, custom-button%5Bid%3D%22
 ! technical cookies only
 pekro.cz##+js(trusted-set-cookie, ck, bbc3afa1f99650a097dc655e829ea82db262c98c%257Ee452fcf3a43bf2d79554343150020333, , , reload, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/25759
-@@||cmp.inmobi.com^$script,domain=dailypost.co.uk|the-express.com
-@@||cmp.inmobi.com/*.json^$xhr,domain=dailypost.co.uk|the-express.com
+@@||cmp.inmobi.com^$script,domain=dailypost.co.uk|dailyrecord.co.uk|the-express.com
+@@||cmp.inmobi.com/*.json^$xhr,domain=dailypost.co.uk|dailyrecord.co.uk|the-express.com
+@@||cmp.inmobi.com/geoip$xhr,domain=dailypost.co.uk|dailyrecord.co.uk|the-express.com
 @@||cdn-images.the-express.com/*/dist/gdpr-$script,1p
 dailypost.co.uk,the-express.com##+js(trusted-click-element, button%5Bmode%3D%22primary%22%5D)
-dailypost.co.uk,the-express.com###qc-cmp2-container:style(visibility: hidden !important;)
+dailyrecord.co.uk##+js(trusted-click-element, %23qc-cmp2-container%20button%23accept-btn)
+! dailypost.co.uk,the-express.com###qc-cmp2-container:style(visibility: hidden !important;)
 ! reject
 bluray-disc.de,elio-systems.com,stagatha-fachklinik.de,tarife.mediamarkt.de,lz.de,gaggenau.com##+js(trusted-click-element, a.cmptxt_btn_no, , 1000)
 ! add to mediamarkt.be
