@@ -536,7 +536,7 @@ rooter.gg##+js(trusted-replace-fetch-response, %2F%22remainingWatchDuration%22%3
 rooter.gg##+js(trusted-replace-fetch-response, %2F%22midTierRemainingAdWatchCount%22%3A%5Cd%2B%2C%22showAds%22%3A(false%7Ctrue)%2F, %22midTierRemainingAdWatchCount%22%3A0%2C%22showAds%22%3Afalse, %2Fstream)
 ! animeflix.ltd popups
 animeflix.ltd##+js(nowoif)
-! https://community.brave.com/t/how-do-i-block-pop-ups-and-redirects/588486
+! https://community.brave.app/t/how-do-i-block-pop-ups-and-redirects/588486
 loader.fo##+js(ra, onclick, button%5Bonclick%5E%3D%22window.open%22%5D, stay)
 loader.fo##+js(ra, onclick, a%5Bhref%5D%5Bonclick%5E%3D%22openit%22%5D, stay)
 ! https://github.com/uBlockOrigin/uAssets/issues/26786
@@ -559,10 +559,6 @@ hunterscomics.com##+js(no-fetch-if, %2Fgooglesyndication%7Cdoubleclick%2F, lengt
 hunterscomics.com##+js(no-xhr-if, pubfuture, length%3A10)
 hunterscomics.com##+js(no-xhr-if, googlesyndication)
 /^https:\/\/hunterscomics\.com\/wp-content\/themes(\/[a-f]{6}){2}\.js\?ver=/$script,1p,domain=hunterscomics.com
-! https://bigwarp.io/co01erpwrn1h - ads
-bigwarp.*##+js(nowoif)
-||bigwarp.io/images/close.png$image
-bigwarp.*###blk1
 ! https://kshow123.tv/show/running-man/episode-736.html - detection
 ! https://github.com/uBlockOrigin/uAssets/issues/26907
 ghbrisk.com,iplayerhls.com##+js(rmnt, script, %23adbd)
@@ -977,8 +973,8 @@ darts-scoring.com##+js(no-fetch-if, googlesyndication)
 ###close-teaser
 ! https://github.com/uBlockOrigin/uAssets/issues/27519
 ###teaser3[style^="width: 100%;height:0;text-align: center;display: scroll;position:fixed;"]
-dramafren.net##+js(aeld, load, adblock)
-dramafren.net###btnOpnWinDiv
+dramafren.org##+js(noeval-if, rejectMethod)
+dramafren.org##+js(nowoif, _blank)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=ryderjet.com
 ||ryderjet.com/assets/jquery/css100.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/200629
@@ -1056,7 +1052,7 @@ breznikar.com##+js(nostif, modal)
 ! https://github.com/uBlockOrigin/uAssets/issues/27651
 sport.es##+js(no-fetch-if, mode%3Ano-cors)
 ! https://github.com/uBlockOrigin/uAssets/issues/27684
-||imasdk.googleapis.com/js/sdkloader/ima3.js^$redirect=google-ima.js,domain=isekaitube.cfd
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=isekaitube.cfd
 ! https://github.com/uBlockOrigin/uAssets/issues/27679
 zilla-xr.xyz##+js(nowoif)
 vidfast.pro##+js(aost, document.createElement, onload)
@@ -1092,6 +1088,9 @@ formatlibrary.com##+js(no-fetch-if, doubleclick)
 ! https://github.com/uBlockOrigin/uAssets/issues/29281
 /_static/delivery.js?nonce=$script,1p,header=server:/^openresty\//
 /_static/delivery.js?nonce=$script,1p,strict1p,ipaddress=23.239.3.104
+! https://www.reddit.com/r/uBlockOrigin/comments/1ms9n0b/cricfreesc_ad_blocker_detected_please_disable_ad/
+/\/_static\/[a-z0-9]{12}\.js\?nonce=\d+$/$script,1p,match-case,header=server:/openresty\//
+/\/_static\/[a-z0-9]{12}\.js\?nonce=\d+$/$script,1p,match-case,ipaddress=/^1(72\.104|39\.162)\.\d{3}\.\d{2,3}$/
 ! https://github.com/uBlockOrigin/uAssets/issues/27716
 ##.gliaplayer-container
 ||player.gliacloud.com^$3p
@@ -1149,9 +1148,12 @@ ripplehub.site##+js(nowoif)
 ripplehub.site###close-ad-button
 footybite.to,rargb.to,totalsportek.*,totalsportekhd.com##+js(aeld, , open)
 ! general
-/\/[0-9a-f]{32}\.js\b/$script,3p,to=com,from=fsportshd.xyz|stellarthread.com
-fsportshd.xyz>>##+js(rmnt, script, %2Fdelete%20window%7CpopundersPerIP%7CFingerprintJS%7CadserverDomain%2F)
-stellarthread.com##+js(rmnt, script, %2Fdelete%20window%7CpopundersPerIP%7CFingerprintJS%7CadserverDomain%2F)
+/\/[0-9a-f]{32}\.js/$script,xhr,3p,to=com,from=allevertakstream.space|fsportshd.xyz|stellarthread.com|totalsportek1000.com
+fsportshd.xyz>>,totalsportek1000.com>>##+js(rmnt, script, %2Fdelete%20window%7CpopundersPerIP%7CFingerprintJS%7CadserverDomain%7CglobalThis%3Bbreak%3Bcase%2F)
+fsportshd.xyz>>,totalsportek1000.com>>##+js(nowoif)
+! iframes
+allevertakstream.space,fsportshd.xyz,stellarthread.com,totalsportek1000.com##+js(rmnt, script, %2Fdelete%20window%7CpopundersPerIP%7CFingerprintJS%7CadserverDomain%7CglobalThis%3Bbreak%3Bcase%2F)
+allevertakstream.space,fsportshd.xyz,stellarthread.com,totalsportek1000.com##+js(nowoif)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/939
 zone.msn.com##+js(no-fetch-if, googlesyndication, length%3A40000-60000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204410#issuecomment-2855256390
@@ -1642,7 +1644,7 @@ gofile.download##.popup-box-ads
 @@||vedetta.org^$ghide
 vedetta.org##ins.adsbygoogle
 ! https://github.com/AdguardTeam/AdguardFilters/issues/208001
-||imasdk.googleapis.com/js/sdkloader/ima3.js^$redirect=google-ima.js,script,domain=ultrastream.online
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,script,domain=ultrastream.online
 ! https://ganz1912.com/ anti-adb detecting even without blocker
 /wp-content/plugins/dh-anti-adblocker/*$css
 ! https://www.reddit.com/r/uBlockOrigin/comments/1lhqnfg/is_there_a_way/
@@ -1733,7 +1735,7 @@ kijk.nl##+js(no-xhr-if, url%3Aad%2Fbanner.gif)
 ! https://github.com/uBlockOrigin/uAssets/issues/29080
 la7.it##+js(no-xhr-if, doubleclick)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/208840
-||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,3p,redirect=noopjs,domain=minefun.io
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=noopjs,domain=minefun.io
 ! https://github.com/uBlockOrigin/uAssets/issues/29088
 santafenewmexican.com##+js(nostif, TNCMS.DMP)
 ! https://github.com/uBlockOrigin/uAssets/issues/29087
@@ -1970,3 +1972,17 @@ vice.com##.code-block
 tvpassport.com##.divide-nav:style(height: 120px !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/29632
 negyzetmeterarak.hu##+js(rmnt, script, adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/29644
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=hlsfast.com
+! https://github.com/uBlockOrigin/uAssets/issues/24457#issuecomment-3191179258
+@@/wp-content/plugins/advanced-ads/admin/assets/js/advertisement.js$script,1p
+! https://github.com/uBlockOrigin/uAssets/issues/29655
+breednet.com.au##.CampaignType--fullscreen
+punters.com.au##.campaign-modal
+breednet.com.au,punters.com.au##body:style(overflow: auto !important)
+! kaliscan.io popups
+kaliscan.io##+js(rmnt, script, MutationObserver)
+! https://nexusgames.to/game/1-wreckfest-free-download-pc-vpc/
+nexusgames.to##+js(acs, document.addEventListener, window.open)
+nexusgames.to##+js(nowoif, _blank)
+||closercopy.cfd^$all

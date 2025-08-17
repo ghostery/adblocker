@@ -1393,7 +1393,6 @@ sportbar.*##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61065
 politico.com##.gallery-carousel-ad
 ! heavy-r .com popunder / ads
-heavy-r.com##+js(acs, document.createElement, insertBefore)
 heavy-r.com##[class^="adzone"]
 ||awdeliverynet.com^$3p
 ! https://github.com/NanoMeow/QuickReports/issues/4469
@@ -1412,7 +1411,7 @@ healthline.com##div[data-empty^="true"]:matches-css-before(content:/ADVERTISEMEN
 healthline.com##[class*="css"]:matches-css-before(content:/ADVERTISEMENT/)
 healthline.com##[href*="redirect"]:upward(section)
 healthline.com##hl-adsense
-! https://community.brave.com/t/website-kept-asking-leave-site-if-i-click-cancel-it-opened-new-window-i-couldnt-even-close-brave-without-end-process/
+! https://community.brave.app/t/website-kept-asking-leave-site-if-i-click-cancel-it-opened-new-window-i-couldnt-even-close-brave-without-end-process/
 video1tube.com##+js(set, popit, false)
 video1tube.com##+js(acs, btoa)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/61263
@@ -2794,8 +2793,8 @@ timesnownews.com##.add-wrap
 timesnownews.com##.gutterAdContainer
 timesnownews.com##.right-block > .section-six
 timesnownews.com##.right-block > .section-one
-||imasdk.googleapis.com/js/sdkloader/ima3.js^$script,redirect=google-ima.js,domain=timesnownews.com
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js^$script,domain=timesnownews.com
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=timesnownews.com
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=timesnownews.com
 @@*$ghide,domain=timesnownews.com|timesnowhindi.com|timesnowmarathi.com|zoomtventertainment.com
 timesnownews.com,timesnowhindi.com,timesnowmarathi.com,zoomtventertainment.com##.adunit
 timesnownews.com,timesnowhindi.com,timesnowmarathi.com,zoomtventertainment.com##+js(nostif, Adblock)
