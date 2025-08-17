@@ -114,6 +114,8 @@ lazyadmin.nl##+js(nostif, AdBlocker)
 iosgods.com###iGSupport
 ! https://www.reddit.com/r/uBlockOrigin/comments/1movfbz/how_to_remove_randomized_id_elements_from_website/
 mvlempyr.com##.ChapterContentWrapper > .ct-div-block:has(.report-ad)
+! https://github.com/uBlockOrigin/uAssets/issues/29672
+magesyrevolution.com##+js(aeld, load, adblock)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -2622,7 +2624,7 @@ htmlgames.com##.banner
 ! https://github.com/uBlockOrigin/uAssets/issues/8551
 pbinfo.ro##.text-warning
 ! https://github.com/uBlockOrigin/uAssets/issues/8555
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$script,redirect=googlesyndication_adsbygoogle.js,domain=hotcleaner.com
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=googlesyndication_adsbygoogle.js,domain=hotcleaner.com
 hotcleaner.com##.adsbygoogle:upward(1):remove()
 hotcleaner.com##body > div[id]:matches-css(position: fixed):style(visibility: hidden !important)
 ! vedantu. com (Fix right click and select text)
@@ -2761,7 +2763,7 @@ bemoneyaware.com##html:style(overflow: auto !important)
 ||cm.g.doubleclick.net/pixel$image,redirect=1x1.gif,domain=diep.io
 ||tpc.googlesyndication.com/pagead/images/x_button_blue2.svg$image,redirect=1x1.gif,domain=diep.io
 ! https://github.com/AdguardTeam/AdguardFilters/issues/80501
-||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js^$redirect=googlesyndication_adsbygoogle.js,script,domain=mifirm.net
+||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$redirect=googlesyndication_adsbygoogle.js,script,domain=mifirm.net
 ! gnt24365.net anti right click, select
 gnt24365.net##+js(acs, document.oncontextmenu)
 gnt24365.net##+js(acs, document.onselectstart)
@@ -4983,7 +4985,7 @@ hoca4u.com##+js(ra, oncontextmenu)
 hoca4u.com##+js(set, document.onmousedown, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/21554
 lowcygier.pl##+js(aeld, error, browser-plugin)
-! https://community.brave.com/t/asheville-com-ad-appearing/522978
+! https://community.brave.app/t/asheville-com-ad-appearing/522978
 asheville.com##+js(nostif, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/21577
 theasianparent.com##+js(acs, document.onselectstart, disableselect)
@@ -5665,7 +5667,7 @@ bcs16.ro##+js(aopw, document.oncontextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/26042
 time.is###attention
 time.is##html:style(overflow: auto !important;)
-! https://community.brave.com/t/bilibili/601806
+! https://community.brave.app/t/bilibili/601806
 !#if !cap_html_filtering
 bilibili.com##+js(aost, player.pause, %2FstackDepth%3A(9%7C10).%2Bhttps%3A%5B.%2F0-9a-z%5D%2B%5C%2Fvideo%5C.%5B0-9a-f%5D%2B%5C.js%3A1%5Cd%7B2%7D%3A1.%2B%5C.emit%2F)
 bilibili.com#@#+js(aost, player.pause, %2F%5B0-9a-f%5D%7B40%7D%5C.js%3A1%5Cd%7B2%7D(%5B%5CS%5Cs%5D%2B%5C.emit.%2Bcore%5C.)%7B3%7D%2F)
