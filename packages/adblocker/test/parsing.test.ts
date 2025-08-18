@@ -2424,6 +2424,8 @@ describe('scriptlets arguments parsing', () => {
   it('parses name with simple args', () => {
     for (const [scriptlet, expected] of [
       [`simple, "quoted", 'single'`, { name: 'simple', args: ['quoted', 'single'] }],
+      [`test, 'John\\'s'`, { name: 'test', args: [`John\\'s`] }],
+      [`test, "John\\"s"`, { name: 'test', args: [`John\\"s`] }],
       [`test, "nested"quotes"inside"`, { name: 'test', args: [`"nested"quotes"inside"`] }],
       [`test, 'nested'quotes'inside'`, { name: 'test', args: [`'nested'quotes'inside'`] }],
       [`test, "no"internal"quotes"`, { name: 'test', args: [`"no"internal"quotes"`] }],

@@ -798,13 +798,13 @@ export default class CosmeticFilter implements IFilter {
           (part.startsWith(`'`) &&
             part.endsWith(`'`) &&
             part.length >= 2 &&
-            part.slice(1, -1).indexOf(`'`) === -1 &&
-            part.slice(1, -1).indexOf(',') === -1) ||
+            !part.slice(1, -1).match(/[^\\]'/) &&
+            !part.slice(1, -1).includes(',')) ||
           (part.startsWith(`"`) &&
             part.endsWith(`"`) &&
             part.length >= 2 &&
-            part.slice(1, -1).indexOf(`"`) === -1 &&
-            part.slice(1, -1).indexOf(',') === -1)
+            !part.slice(1, -1).match(/[^\\]"/) &&
+            !part.slice(1, -1).includes(','))
         ) {
           return part.substring(1, part.length - 1);
         }
