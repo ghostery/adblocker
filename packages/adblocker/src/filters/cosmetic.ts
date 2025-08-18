@@ -795,8 +795,16 @@ export default class CosmeticFilter implements IFilter {
       .slice(1)
       .map((part) => {
         if (
-          (part.startsWith(`'`) && part.endsWith(`'`)) ||
-          (part.startsWith(`"`) && part.endsWith(`"`))
+          (part.startsWith(`'`) &&
+            part.endsWith(`'`) &&
+            part.length >= 2 &&
+            part.slice(1, -1).indexOf(`'`) === -1 &&
+            part.slice(1, -1).indexOf(',') === -1) ||
+          (part.startsWith(`"`) &&
+            part.endsWith(`"`) &&
+            part.length >= 2 &&
+            part.slice(1, -1).indexOf(`"`) === -1 &&
+            part.slice(1, -1).indexOf(',') === -1)
         ) {
           return part.substring(1, part.length - 1);
         }

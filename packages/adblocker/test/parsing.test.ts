@@ -2423,6 +2423,39 @@ describe('scriptlets arguments parsing', () => {
 
   it('parses name with simple args', () => {
     for (const [scriptlet, expected] of [
+      [`simple, "quoted", 'single'`, { name: 'simple', args: ['quoted', 'single'] }],
+      [`test, "nested"quotes"inside"`, { name: 'test', args: [`"nested"quotes"inside"`] }],
+      [`test, 'nested'quotes'inside'`, { name: 'test', args: [`'nested'quotes'inside'`] }],
+      [`test, "no"internal"quotes"`, { name: 'test', args: [`"no"internal"quotes"`] }],
+      [`test, 'no'internal'quotes'`, { name: 'test', args: [`'no'internal'quotes'`] }],
+      [`test, "quoted,with,commas"`, { name: 'test', args: [`"quoted,with,commas"`] }],
+      [`test, 'quoted,with,commas'`, { name: 'test', args: [`'quoted,with,commas'`] }],
+      [`a, b, c`, { name: 'a', args: ['b', 'c'] }],
+      [`  a  ,  " b "  ,  c  `, { name: 'a', args: [' b ', 'c'] }],
+      [`test, "a,b", c, 'x,y'`, { name: 'test', args: [`"a,b"`, 'c', `'x,y'`] }],
+      [String.raw`test, a\,b, c\,d, e`, { name: 'test', args: ['a,b', 'c,d', 'e'] }],
+      [String.raw`test, "a\"b"", c`, { name: 'test', args: [String.raw`"a\"b""`, 'c'] }],
+      [`a,,b`, { name: 'a', args: ['', 'b'] }],
+      [
+        String.raw`trusted-replace-outbound-text, JSON.stringify, "params":", "params":"yAEB, condition, /("contentPlaybackContext":{".*\,"params":"|"params":".*"contentPlaybackContext":{")/`,
+        {
+          name: 'trusted-replace-outbound-text',
+          args: [
+            'JSON.stringify',
+            `"params":"`,
+            `"params":"yAEB`,
+            'condition',
+            `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+          ],
+        },
+      ],
+      [
+        `acs, decodeURIComponent, "'shift'"`,
+        {
+          name: 'acs',
+          args: ['decodeURIComponent', String.raw`'shift'`],
+        },
+      ],
       ['acs, $, adb', { name: 'acs', args: ['$', 'adb'] }],
       [
         'abort-current-script, document.createElement, break;case $.',
