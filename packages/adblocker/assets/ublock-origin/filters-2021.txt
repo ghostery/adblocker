@@ -1921,6 +1921,15 @@ asiaon.top,asiaontop.com##+js(no-fetch-if, method%3AHEAD)
 *$script,redirect-rule=noopjs,3p,domain=asiaon.top|asiaontop.com
 asiaon.top,asiaontop.com##a[href^="https://theporndude.com/"]
 asiaon.top,asiaontop.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Flink.asiaon.top%2Ffull%3Fapi%3D%22%5D%5Bhref*%3D%22%26url%3DaHR0c%22%5D, %3Furl%20-base64)
+! https://www.reddit.com/r/uBlockOrigin/comments/1msremm/asiaontop_nsfw_forces_you_to_disable_ubo/
+||googlesyndication.com^$image,redirect=1x1.gif,domain=asiaontop.com|asiaon.top|asiaon.*
+||api.asiaon.top/index.php?graphql&operationName=GetAllSidebars
+||api.asiaon.top/index.php?graphql&operationName=GetHeaderAdScripts
+||api.asiaon.top/index.php?graphql&operationName=GetModulaGalleryAds
+||api.asiaon.top/index.php?graphql&operationName=GetContentWidgets
+asiaon.*,asiaontop.com##+js(json-edit-fetch-response, .pageProps.__APOLLO_STATE__.*%5B%3F.__typename%3D%3D%22AotSidebar%22%5D, propsToMatch, %2F_next%2Fdata)
+asiaon.*,asiaontop.com##+js(json-prune-fetch-response, pageProps.__TEMPLATE_QUERY_DATA__.aotFooterWidgets, , propsToMatch, %2F_next%2Fdata)
+asiaon.*,asiaontop.com##+js(json-prune, props.pageProps.data.aotHomepageTopBar%20props.pageProps.data.aotHomepageTopBar%20props.pageProps.data.aotHeaderAdScripts%20props.pageProps.data.aotFooterWidgets)
 ! https://github.com/uBlockOrigin/uAssets/issues/9534
 bestgamehack.top,hackofgame.com##+js(aopr, open)
 ! https://www.reddit.com/r/uBlockOrigin/comments/odfs9m/is_there_a_way_to_whitelist_a_site_from_specific/
