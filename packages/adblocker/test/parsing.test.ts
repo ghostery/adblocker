@@ -2568,6 +2568,23 @@ describe('scriptlets arguments parsing', () => {
           `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
         ],
       });
+      expect(CosmeticFilter.parse(`foo.com##+js(script-name, """)`)?.parseScript()).to.eql({
+        name: 'script-name',
+        args: [`"""`],
+      });
+      expect(
+        CosmeticFilter.parse(
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":", condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+        )?.parseScript(),
+      ).to.eql({
+        name: 'trusted-replace-outbound-text',
+        args: [
+          `JSON.stringify`,
+          `"params":"`,
+          `condition`,
+          `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+        ],
+      });
     });
   });
 
