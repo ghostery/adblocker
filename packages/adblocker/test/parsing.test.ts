@@ -2549,6 +2549,26 @@ describe('scriptlets arguments parsing', () => {
         args: [`{foo: "}", bar: '{'}`],
       });
     });
+
+    it('passthrough unescaped quotes', () => {
+      expect(CosmeticFilter.parse(`foo.com##+js(script-name, """)`)?.parseScript()).to.eql({
+        name: 'script-name',
+        args: [`"""`],
+      });
+      expect(
+        CosmeticFilter.parse(
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+        )?.parseScript(),
+      ).to.eql({
+        name: 'trusted-replace-outbound-text',
+        args: [
+          `JSON.stringify`,
+          `"params":"yAEB`,
+          `condition`,
+          `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+        ],
+      });
+    });
   });
 
   describe('handles regexp arguments', () => {

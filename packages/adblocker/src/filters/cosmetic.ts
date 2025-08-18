@@ -795,12 +795,23 @@ export default class CosmeticFilter implements IFilter {
       .slice(1)
       .map((part) => {
         if (
-          (part.startsWith(`'`) && part.endsWith(`'`)) ||
-          (part.startsWith(`"`) && part.endsWith(`"`))
+          !(part.startsWith(`'`) && part.endsWith(`'`)) &&
+          !(part.startsWith(`"`) && part.endsWith(`"`))
         ) {
-          return part.substring(1, part.length - 1);
+          return part;
         }
-        return part;
+        // Passthrough `part` if it contains unescaped quote
+        if (part.length > 2) {
+          for (let i = 1; i < part.length - 1; i++) {
+            if (
+              part.charCodeAt(i) === part.charCodeAt(0) &&
+              part.charCodeAt(i - 1) !== 92 /* '\\' */
+            ) {
+              return part;
+            }
+          }
+        }
+        return part.substring(1, part.length - 1);
       })
       .map((part) =>
         part
