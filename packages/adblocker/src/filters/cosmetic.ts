@@ -151,6 +151,7 @@ function computeFilterId(
   mask: number,
   selector: string | undefined,
   domains: Domains | undefined,
+  parentDomains: Domains | undefined,
   style: string | undefined,
 ): number {
   let hash = (HASH_SEED * HASH_INTERNAL_MULT) ^ mask;
@@ -162,7 +163,13 @@ function computeFilterId(
   }
 
   if (domains !== undefined) {
+    hash = (hash * HASH_INTERNAL_MULT) ^ 1;
     hash = domains.updateId(hash);
+  }
+
+  if (parentDomains !== undefined) {
+    hash = (hash * HASH_INTERNAL_MULT) ^ 253;
+    hash = parentDomains.updateId(hash);
   }
 
   if (style !== undefined) {
@@ -220,6 +227,7 @@ export default class CosmeticFilter implements IFilter {
     let mask = 0;
     let selector: string | undefined;
     let domains: Domains | undefined;
+    let parentDomains: Domains | undefined;
     let style: string | undefined;
     const sharpIndex = line.indexOf('#');
 
@@ -260,7 +268,25 @@ export default class CosmeticFilter implements IFilter {
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
     if (sharpIndex > 0) {
-      domains = Domains.parse(line.slice(0, sharpIndex), { debug });
+      const domainEntries = [];
+      const parentDomainEntries = [];
+      for (const entry of line.slice(0, sharpIndex).split(',')) {
+        if (entry.endsWith('>>')) {
+          parentDomainEntries.push(entry.slice(0, -2));
+        } else {
+          domainEntries.push(entry);
+        }
+      }
+      if (domainEntries.length !== 0) {
+        domains = Domains.parse(domainEntries.join(','), {
+          debug,
+        });
+      }
+      if (parentDomainEntries.length !== 0) {
+        parentDomains = Domains.parse(parentDomainEntries.join(','), {
+          debug,
+        });
+      }
     }
 
     if (line.endsWith(':remove()')) {
@@ -309,8 +335,10 @@ export default class CosmeticFilter implements IFilter {
     ) {
       // Generic scriptlets are invalid, unless they are un-hide
       if (
-        (domains === undefined ||
-          (domains.hostnames === undefined && domains.entities === undefined)) &&
+        ((domains === undefined && parentDomains === undefined) ||
+          (domains !== undefined &&
+            domains.hostnames === undefined &&
+            domains.entities === undefined)) &&
         getBit(mask, COSMETICS_MASK.unhide) === false
       ) {
         return null;
@@ -391,6 +419,7 @@ export default class CosmeticFilter implements IFilter {
       selector,
       style,
       domains,
+      parentDomains,
     });
   }
 
@@ -414,6 +443,7 @@ export default class CosmeticFilter implements IFilter {
       domains: (optionalParts & 1) === 1 ? Domains.deserialize(buffer) : undefined,
       rawLine: (optionalParts & 2) === 2 ? buffer.getRawCosmetic() : undefined,
       style: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
+      parentDomains: (optionalParts & 8) === 8 ? Domains.deserialize(buffer) : undefined,
     });
   }
 
@@ -422,6 +452,7 @@ export default class CosmeticFilter implements IFilter {
   public readonly selector: string;
 
   public readonly domains: Domains | undefined;
+  public readonly parentDomains: Domains | undefined;
 
   public readonly style: string | undefined;
   public readonly rawLine: string | undefined;
@@ -435,9 +466,11 @@ export default class CosmeticFilter implements IFilter {
     domains,
     rawLine,
     style,
+    parentDomains,
   }: {
     mask: number;
     domains: Domains | undefined;
+    parentDomains: Domains | undefined;
     rawLine: string | undefined;
     selector: string;
     style: string | undefined;
@@ -445,6 +478,7 @@ export default class CosmeticFilter implements IFilter {
     this.mask = mask;
     this.selector = selector;
     this.domains = domains;
+    this.parentDomains = parentDomains;
     this.style = style;
 
     this.id = undefined;
@@ -502,6 +536,11 @@ export default class CosmeticFilter implements IFilter {
       buffer.pushASCII(this.style);
     }
 
+    if (this.parentDomains !== undefined) {
+      optionalParts |= 8;
+      this.parentDomains.serialize(buffer);
+    }
+
     buffer.setByte(index, optionalParts);
   }
 
@@ -521,6 +560,10 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.domains !== undefined) {
       estimate += this.domains.getSerializedSize();
+    }
+
+    if (this.parentDomains !== undefined) {
+      estimate += this.parentDomains.getSerializedSize();
     }
 
     if (this.rawLine !== undefined) {
@@ -550,6 +593,20 @@ export default class CosmeticFilter implements IFilter {
         filter += this.domains.parts;
       } else {
         filter += '<hostnames>';
+      }
+    }
+
+    if (this.parentDomains !== undefined) {
+      if (this.domains !== undefined) {
+        filter += ',';
+      }
+      if (this.parentDomains.parts !== undefined) {
+        filter += this.parentDomains.parts
+          .split(',')
+          .map((part) => part + '>>')
+          .join(',');
+      } else {
+        filter += '<hostnames>>>';
       }
     }
 
@@ -616,6 +673,22 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.domains !== undefined) {
       const { hostnames, entities } = this.domains;
+
+      if (hostnames !== undefined) {
+        for (const hostname of hostnames) {
+          tokens.push(new Uint32Array([hostname]));
+        }
+      }
+
+      if (entities !== undefined) {
+        for (const entity of entities) {
+          tokens.push(new Uint32Array([entity]));
+        }
+      }
+    }
+
+    if (this.parentDomains !== undefined) {
+      const { hostnames, entities } = this.parentDomains;
 
       if (hostnames !== undefined) {
         for (const hostname of hostnames) {
@@ -842,13 +915,23 @@ export default class CosmeticFilter implements IFilter {
 
   public getId(): number {
     if (this.id === undefined) {
-      this.id = computeFilterId(this.mask, this.selector, this.domains, this.style);
+      this.id = computeFilterId(
+        this.mask,
+        this.selector,
+        this.domains,
+        this.parentDomains,
+        this.style,
+      );
     }
     return this.id;
   }
 
   public hasCustomStyle(): boolean {
     return this.style !== undefined;
+  }
+
+  public hasSubFrameScriptInject(): boolean {
+    return this.parentDomains !== undefined;
   }
 
   public getStyle(defaultStyle: string = DEFAULT_HIDING_STYLE): string {
