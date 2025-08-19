@@ -2570,6 +2570,8 @@ describe('scriptlets arguments parsing', () => {
         [`foo.com##+js(a, ''value'')`, [`''value''`]],
         [`foo.com##+js(a, \\"value")`, [`\\"value"`]],
         [`foo.com##+js(a, \\'value')`, [`\\'value'`]],
+        [`foo.com##+js(a, "va\\"lue")`, [`va"lue`]],
+        [`foo.com##+js(a, 'va\\'lue')`, [`va'lue`]],
         [`foo.com##+js(a, "value,another")`, [`value,another`]],
         [`foo.com##+js(a, 'value,another')`, [`value,another`]],
         [`foo.com##+js(a, "value""another")`, [`"value""another"`]],
