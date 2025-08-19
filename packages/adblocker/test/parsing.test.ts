@@ -2550,7 +2550,7 @@ describe('scriptlets arguments parsing', () => {
       });
     });
 
-    context('quoting', () => {
+    context.only('quoting', () => {
       for (const [filter, expected] of [
         ['foo.com##+js(a, "value")', ['value']],
         ['foo.com##+js(a, "value)', ['"value']],
@@ -2570,6 +2570,10 @@ describe('scriptlets arguments parsing', () => {
         [`foo.com##+js(a, ''value'')`, [`''value''`]],
         [`foo.com##+js(a, \\"value")`, [`\\"value"`]],
         [`foo.com##+js(a, \\'value')`, [`\\'value'`]],
+        // NOTE: backslash is not removed in case not required
+        // > example.com##+js(rpnt, #text, Example Domain, "'value'\,'another'", condition, Example, stay, 1)
+        [`foo.com##+js(a, "va\\,lue")`, [`va\\,lue`]],
+        [`foo.com##+js(a, 'va\\,lue')`, [`va\\,lue`]],
         [`foo.com##+js(a, "va\\"lue")`, [`va"lue`]],
         [`foo.com##+js(a, 'va\\'lue')`, [`va'lue`]],
         [`foo.com##+js(a, "value,another")`, [`value,another`]],
@@ -2583,7 +2587,7 @@ describe('scriptlets arguments parsing', () => {
         [`foo.com##+js(a, "value\\",another")`, [`value",another`]],
         [`foo.com##+js(a, 'value\\',another')`, [`value',another`]],
         [
-          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
           [
             `JSON.stringify`,
             `"params":"yAEB`,
