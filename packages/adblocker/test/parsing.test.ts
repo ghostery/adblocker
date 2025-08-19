@@ -2550,6 +2550,43 @@ describe('scriptlets arguments parsing', () => {
       });
     });
 
+    context('quoting', () => {
+      for (const [filter, expected] of [
+        ['foo.com##+js(a, "value")', ['value']],
+        ['foo.com##+js(a, "value)', ['"value']],
+        [`foo.com##+js(a, 'value')`, ['value']],
+        [`foo.com##+js(a, 'value)`, ["'value"]],
+        ['foo.com##+js(a, "value,")', ['value,']],
+        [`foo.com##+js(a, 'value,')`, ['value,']],
+        [`foo.com##+js(a, ",value")`, [',value']],
+        [`foo.com##+js(a, ',value')`, [',value']],
+        [`foo.com##+js(a, "value"")`, ['"value""']],
+        [`foo.com##+js(a, 'value'')`, [`'value''`]],
+        [`foo.com##+js(a, "'value'")`, [`'value'`]],
+        [`foo.com##+js(a, '"value"')`, [`"value"`]],
+        [`foo.com##+js(a, "value",")`, [`value`, `"`]],
+        [`foo.com##+js(a, 'value',')`, [`value`, `'`]],
+        [`foo.com##+js(a, ""value"")`, [`""value""`]],
+        [`foo.com##+js(a, ''value'')`, [`''value''`]],
+        [`foo.com##+js(a, \\"value")`, [`\\"value"`]],
+        [`foo.com##+js(a, \\'value')`, [`\\'value'`]],
+        [`foo.com##+js(a, "value,another")`, [`value,another`]],
+        [`foo.com##+js(a, 'value,another')`, [`value,another`]],
+        [`foo.com##+js(a, "value""another")`, [`"value""another"`]],
+        [`foo.com##+js(a, 'value''another')`, [`'value''another'`]],
+        [`foo.com##+js(a, "value"another")`, [`"value"another"`]],
+        [`foo.com##+js(a, 'value'another')`, [`'value'another'`]],
+        [`foo.com##+js(a, "'value','another'")`, [`'value','another'`]],
+        [`foo.com##+js(a, '"value","another"')`, [`"value","another"`]],
+        [`foo.com##+js(a, "value\\",another")`, [`value",another`]],
+        [`foo.com##+js(a, 'value\\',another')`, [`value',another`]],
+      ] satisfies [string, string[]][]) {
+        it(filter, () => {
+          expect(CosmeticFilter.parse(filter)!.parseScript()!.args).to.eql(expected);
+        });
+      }
+    });
+
     it('passthrough unescaped quotes', () => {
       expect(CosmeticFilter.parse(`foo.com##+js(script-name, """)`)?.parseScript()).to.eql({
         name: 'script-name',
