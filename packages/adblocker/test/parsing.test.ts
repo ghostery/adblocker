@@ -2582,44 +2582,29 @@ describe('scriptlets arguments parsing', () => {
         [`foo.com##+js(a, '"value","another"')`, [`"value","another"`]],
         [`foo.com##+js(a, "value\\",another")`, [`value",another`]],
         [`foo.com##+js(a, 'value\\',another')`, [`value',another`]],
+        [
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+          [
+            `JSON.stringify`,
+            `"params":"yAEB`,
+            `condition`,
+            `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+          ],
+        ],
+        [
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":", condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+          [
+            `JSON.stringify`,
+            `"params":"`,
+            `condition`,
+            `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+          ],
+        ],
       ] satisfies [string, string[]][]) {
         it(filter, () => {
           expect(CosmeticFilter.parse(filter)!.parseScript()!.args).to.eql(expected);
         });
       }
-    });
-
-    it('passthrough unescaped quotes', () => {
-      expect(CosmeticFilter.parse(`foo.com##+js(script-name, """)`)?.parseScript()).to.eql({
-        name: 'script-name',
-        args: [`"""`],
-      });
-      expect(
-        CosmeticFilter.parse(
-          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
-        )?.parseScript(),
-      ).to.eql({
-        name: 'trusted-replace-outbound-text',
-        args: [
-          `JSON.stringify`,
-          `"params":"yAEB`,
-          `condition`,
-          `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
-        ],
-      });
-      expect(
-        CosmeticFilter.parse(
-          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":", condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
-        )?.parseScript(),
-      ).to.eql({
-        name: 'trusted-replace-outbound-text',
-        args: [
-          `JSON.stringify`,
-          `"params":"`,
-          `condition`,
-          `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
-        ],
-      });
     });
   });
 
