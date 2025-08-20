@@ -2550,7 +2550,7 @@ describe('scriptlets arguments parsing', () => {
       });
     });
 
-    context.only('quoting', () => {
+    context('quoting', () => {
       for (const [filter, expected] of [
         ['foo.com##+js(a, "value")', ['value']],
         ['foo.com##+js(a, "value)', ['"value']],
