@@ -46,6 +46,8 @@ export const DEFAULT_HIDING_STYLE: string = 'display: none !important;';
 const REGEXP_UNICODE_COMMA = new RegExp(/\\u002C/, 'g');
 const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
 const REGEXP_ESCAPED_COMMA = new RegExp(/\\,/, 'g');
+const REGEXP_ESCAPED_SINGLE_QUOTE = new RegExp(/\\'/, 'g');
+const REGEXP_ESCAPED_DOUBLE_QUOTE = new RegExp(/\\"/, 'g');
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
@@ -794,13 +796,26 @@ export default class CosmeticFilter implements IFilter {
     const args = parts
       .slice(1)
       .map((part) => {
+        const openingCode = part.charCodeAt(0);
         if (
-          (part.startsWith(`'`) && part.endsWith(`'`)) ||
-          (part.startsWith(`"`) && part.endsWith(`"`))
+          !(openingCode === 39 /* `'` */ && part.endsWith(`'`)) &&
+          !(openingCode === 34 /* `"` */ && part.endsWith(`"`))
         ) {
-          return part.substring(1, part.length - 1);
+          return part;
         }
-        return part;
+        // Passthrough `part` if it contains unescaped quote
+        if (part.length > 2) {
+          for (let i = 1; i < part.length - 1; i++) {
+            if (part.charCodeAt(i) === openingCode && part.charCodeAt(i - 1) !== 92 /* '\\' */) {
+              return part;
+            }
+          }
+        }
+        const escaped = part.substring(1, part.length - 1);
+        if (openingCode === 39 /* `'` */) {
+          return escaped.replace(REGEXP_ESCAPED_SINGLE_QUOTE, "'");
+        }
+        return escaped.replace(REGEXP_ESCAPED_DOUBLE_QUOTE, '"');
       })
       .map((part) =>
         part
