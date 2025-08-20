@@ -1,3 +1,15 @@
+# v2.11.4 (Wed Aug 20 2025)
+
+#### :house: Internal
+
+- chore(internal): use `@ts-expect-error` directive instead [#5025](https://github.com/ghostery/adblocker/pull/5025) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.2 (Thu Jul 17 2025)
 
 #### :nut_and_bolt: Dependencies
