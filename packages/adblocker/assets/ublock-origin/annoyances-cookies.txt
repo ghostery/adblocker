@@ -43,6 +43,10 @@ israelnationalnews.com##.cookie-consent
 cellcom.co.il##.cookies_popup_container
 partner.co.il##.cookie-message
 ||globetel.fi/wp-content/plugins/gdpr-cookie-compliance/
+! https://github.com/uBlockOrigin/uAssets/issues/29701
+||iubenda.com^$domain=my-personaltrainer.it
+! https://github.com/uBlockOrigin/uAssets/issues/29719
+musee-moyenage.fr##body.tac-modal-open:style(overflow: auto !important;)
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -609,7 +613,7 @@ telekom.com,telekom.de##+js(trusted-click-element, button%5Bid%3D%22rejectAll%22
 hemmersbach.com##+js(trusted-set-cookie, cookiefirst-consent, %257B%2522cookiefirst%2522%253Atrue%252C%2522google_analytics%2522%253Atrue%252C%2522google_tag_manager%2522%253Atrue%252C%2522linkedin_ads%2522%253Afalse%252C%2522hubspot%2522%253Atrue%252C%2522twitter%2522%253Afalse%252C%2522active-campaign%2522%253Atrue%252C%2522email-marketing%2522%253Atrue%252C%2522bing_ads%2522%253Afalse%252C%2522type%2522%253A%2522granular%2522%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20523
 ! https://github.com/uBlockOrigin/uAssets/issues/20595
-abola.pt,flytap.com,ansons.de,blick.ch,buienradar.be,crunchyroll.com,digi24.ro,digisport.ro,digitalfoundry.net,egx.net,emirates.com,eurogamer.it,foto-erhardt.de,gmx.*,kizi.com,mail.com,mcmcomiccon.com,nachrichten.at,nintendolife.com,oe24.at,paxsite.com,peacocktv.com,player.pl,plus500.*,pricerunner.com,pricerunner.se,pricerunner.dk,proximus.be,proximus.com,purexbox.com,pushsquare.com,rugbypass.com,southparkstudios.com,southwest.com,starwarscelebration.com,sweatybetty.com,theaa.ie,thehaul.com,timeextension.com,travelandleisure.com,tunein.com,uefa.com,videoland.com,wizzair.com,wetter.at##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
+abola.pt,flytap.com,ansons.de,blick.ch,buienradar.be,crunchyroll.com,digi24.ro,digisport.ro,digitalfoundry.net,egx.net,emirates.com,eurogamer.it,foto-erhardt.de,gmx.*,kizi.com,mail.com,mcmcomiccon.com,nachrichten.at,nintendolife.com,oe24.at,observatornews.ro,paxsite.com,peacocktv.com,player.pl,plus500.*,pricerunner.com,pricerunner.se,pricerunner.dk,proximus.be,proximus.com,purexbox.com,pushsquare.com,rugbypass.com,southparkstudios.com,southwest.com,starwarscelebration.com,sweatybetty.com,theaa.ie,thehaul.com,timeextension.com,travelandleisure.com,tunein.com,tvn24.pl,uefa.com,videoland.com,wizzair.com,wetter.at,wowbiz.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
 dicebreaker.com,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20and%20continue%22%5D)
 dicebreaker.com,eurogamer.es,eurogamer.net,eurogamer.nl,eurogamer.pl,eurogamer.pt,gamesindustry.biz,reedpop.com,rockpapershotgun.com,thepopverse.com,vg247.com,videogameschronicle.com##+js(trusted-click-element, button%5Btitle%3D%22Accept%20All%20Cookies%22%5D)
 eurogamer.de##+js(trusted-click-element, .accept-all)
@@ -1183,15 +1187,13 @@ derstandard.at,derstandard.de,faz.net##+js(trusted-click-element, button%5Btitle
 ! https://github.com/uBlockOrigin/uAssets/issues/20299#issuecomment-3170662344
 !#if env_safari
 !#if env_mobile
-ansa.it##+js(trusted-click-element, button.iubenda-cs-customize-btn, , 2000)
-ansa.it##+js(trusted-click-element, button.iub-btn-accept, , 2500)
-ansa.it##+js(trusted-click-element, button%23iubFooterBtn, , 3000)
+ansa.it##+js(rpnt, script, %24(function(), window.addEventListener(%22load%22%2C()%3D%3E%7B_iub.cs.acceptAll(%22bannerAcceptClicked%22)%3B_iub.cs.ui.banner.removeBanner()%7D)%3B%24(function(), sedCount, 1)
 !#endif
 !#endif
-automoto.it,ansa.it,delladio.it,huffingtonpost.it,internazionale.it,lastampa.it,macitynet.it,moto.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,skuola.net,spaziogames.it,tuttoandroid.net,tuttotech.net##+js(trusted-click-element, button.iubenda-cs-accept-btn, , 2000)
+automoto.it,ansa.it,delladio.it,huffingtonpost.it,internazionale.it,lastampa.it,macitynet.it,moto.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,skuola.net,spaziogames.it,today.it,tuttoandroid.net,tuttotech.net##+js(trusted-click-element, button.iubenda-cs-accept-btn, , 2000)
 !#if !ext_ubol
-automoto.it,ansa.it,delladio.it,huffingtonpost.it,internazionale.it,lastampa.it,macitynet.it,moto.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,skuola.net,spaziogames.it,tuttoandroid.net,tuttotech.net###iubenda-cs-banner:style(visibility: hidden !important; opacity: 0 !important;)
-automoto.it,ansa.it,delladio.it,huffingtonpost.it,internazionale.it,lastampa.it,macitynet.it,moto.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,skuola.net,spaziogames.it,tuttoandroid.net,tuttotech.net##html:style(overflow: auto !important;)
+automoto.it,ansa.it,delladio.it,huffingtonpost.it,internazionale.it,lastampa.it,macitynet.it,moto.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,skuola.net,spaziogames.it,today.it,tuttoandroid.net,tuttotech.net###iubenda-cs-banner:style(visibility: hidden !important; opacity: 0 !important;)
+automoto.it,ansa.it,delladio.it,huffingtonpost.it,internazionale.it,lastampa.it,macitynet.it,moto.it,movieplayer.it,multiplayer.it,repubblica.it,tomshw.it,skuola.net,spaziogames.it,today.it,tuttoandroid.net,tuttotech.net##html:style(overflow: auto !important;)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/pull/25606
 ! https://github.com/uBlockOrigin/uAssets/pull/25324
@@ -3530,11 +3532,8 @@ pointcool-service.fi##+js(trusted-set-cookie, cookie-consent-v2, %7B%22necessary
 spk-schaumburg.de##+js(trusted-click-element, %5Bdata-form%3D%22.eprivacy_optin_decline%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/25993#issuecomment-3063527309
 computerbase.de##+js(trusted-click-element, %23cookie-consent-button, , 1500)
-! https://github.com/uBlockOrigin/uAssets/issues/29154
-wowbiz.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler)
 ! https://github.com/uBlockOrigin/uAssets/issues/29206
 @@||cookie-cdn.cookiepro.com/scripttemplates/*/otBannerSdk.js$script,domain=observatornews.ro
-observatornews.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler)
 ! https://github.com/uBlockOrigin/uAssets/pull/29250
 ! Only necessary
 comdirect.de##+js(trusted-click-element, com-consent-layer%20%3E%3E%3E%20%23cmpDenyAll, , 2500)

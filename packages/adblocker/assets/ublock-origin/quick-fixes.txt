@@ -63,12 +63,12 @@ youtube.com#@##player-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-2964564722
 !www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, contentPlaybackContext%22%3A%7B, contentPlaybackContext%22%3A%7B%22isInlinePlaybackNoAd%22%3Atrue%2C, condition, contentPlaybackContext)
 ! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-2998301771
-! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, clientScreen%22%3A%22WATCH, clientScreen%22%3A%22ADUNIT, condition, contentPlaybackContext)
+! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, %22clientScreen%22%3A%22WATCH%22, %22clientScreen%22%3A%22ADUNIT%22, condition, contentPlaybackContext)
 ! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-3124430383
 www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22, %2Fget_watch%3F)
 ! www.youtube.com##+js(trusted-json-edit-fetch-request, .context.client%2B%3D%7B%22clientScreen%22%3A%22ADUNIT%22%7D, %2Fget_watch%3F)
 ! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-3167545931
-! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, params%22%3A, %22params%22%3A%22yAEB, condition, %2F(%22contentPlaybackContext%22%3A%7B%22.*%2C%22params%22%3A%22%7C%22params%22%3A%22.*%22contentPlaybackContext%22%3A%7B%22)%2F)
+! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, %22params%22%3A%22, %22params%22%3A%22yAEB, condition, %2F(%22contentPlaybackContext%22%3A%7B%22.*%2C%22params%22%3A%22%7C%22params%22%3A%22.*%22contentPlaybackContext%22%3A%7B%22)%2F)
 ! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, %22contentCheckOk%22%3Afalse, %22params%22%3A%22yAEB%22%2C%22contentCheckOk%22%3Afalse, condition, %2F%5E(%3F%3D.*%22contentPlaybackContext%22%3A%7B%22)(%3F!.*%22params%22%3A%22).*%24%2F)
 ! https://github.com/uBlockOrigin/uBOL-home/discussions/153#discussioncomment-14056823
 /\.googlevideo\.com\/videoplayback\?expire=(?:[02-9]+|1[1-68-9]\d+|17[1-48-9]\d+)&/$xhr,3p,method=get,domain=www.youtube.com
@@ -241,7 +241,7 @@ pvpoke-re.com##.nitro-any
 pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep, %5B%22t%22%2C16002%5D)
 pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep_date, 2025-08-29T00%3A00%3A00)
 pvpoke-re.com##+js(trusted-set-local-storage-item, google_tg_rep_attr7, %5B%22a432dca07ed31c98702eb7c134ba7a8bf51430735e2581dc66b0f0f6efe1ca0c%22%2C%22user404957%22%2C%222025-07-29T20%3A00%3A00Z%22%2C9151913%5D)
-pvpoke-re.com##+js(trusted-replace-node-text, script, var%20menuSlideProtection, %60if(!PrePl)%7BPrePl%3Dtrue%7D%3BlocalStorage.setItem('google_tg_rep', %5B%22t%22%2C16002%5D')%3BlocalStorage.setItem('google_tg_rep_date, 2025-08-29T00%3A00%3A00')%3BlocalStorage.setItem('google_tg_rep_attr7, '%5B%22a432dca07ed31c98702eb7c134ba7a8bf51430735e2581dc66b0f0f6efe1ca0c%22%2C%22user404957%22%2C%222025-07-29T20%3A00%3A00Z%22%2C9151913%5D')%3Bvar%20menuSlideProtection%60)
+pvpoke-re.com##+js(trusted-replace-node-text, script, var%20menuSlideProtection, %60if(!PrePl)%7BPrePl%3Dtrue%7D%3BlocalStorage.setItem('google_tg_rep', '%5B%22t%22%2C16002%5D')%3BlocalStorage.setItem('google_tg_rep_date', '2025-08-29T00%3A00%3A00')%3BlocalStorage.setItem('google_tg_rep_attr7', '%5B%22a432dca07ed31c98702eb7c134ba7a8bf51430735e2581dc66b0f0f6efe1ca0c%22%2C%22user404957%22%2C%222025-07-29T20%3A00%3A00Z%22%2C9151913%5D')%3Bvar%20menuSlideProtection%60)
 ! https://github.com/uBlockOrigin/uAssets/issues/27884
 ! https://github.com/uBlockOrigin/uAssets/issues/27886
 ! royalroad.com##+js(trusted-set, nitroAds, json%3A%7B%22version%22%3A%2220250402%20de32690%22%2C%22createAd%22%3A%22placement%20generation%22%7D)
@@ -268,6 +268,7 @@ vook.vc##.note-sp-spnsr
 ! FP by Phishing URL Blocklist
 ! [badfilter] ||sbisec.co.jp/etgate/^$all,badfilter
 ! [badfilter] ||banei-keiba.or.jp^$badfilter
+! [badfilter] ||preview.studio.site^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/28776
 nontonx.com##+js(rpnt, script, %2F%2Ftele()%3B, telek3()%3B)
 nontonx.com##+js(rpnt, script, %2F!%5C(Object%5C.values.*%3Freturn%20false%3B%2Fg)
@@ -307,3 +308,5 @@ shinshi-manga.net#@#+js(abort-current-script, document.createElement, waqool)
 ! https://github.com/easylist/easylist/issues/22209
 ! [badfilter] ||alicdn.com^$badfilter
 ! [badfilter] ||aliexpress-media.com^$badfilter
+! https://github.com/AdguardTeam/AdguardFilters/commit/7c24a684163b47fa15802d40ba993b9e1a7b7b64
+newsphere.jp#@#.wprt-container > center
