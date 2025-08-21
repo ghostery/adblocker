@@ -89,7 +89,10 @@ techpp.com##section.brxe-section > div[class="brxe-container"] .adsbygoogle:upwa
 ! https://github.com/easylist/easylist/issues/14573
 streamtb.me##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/16453
+! https://github.com/uBlockOrigin/uAssets/issues/29682
+!#if !env_safari
 *$script,3p,denyallow=cloudflare.com|cloudflare.net|fastly.net|googleapis.com|jsdelivr.net|stripst.com|strpst.com|datatables.net|jwpcdn.com,domain=javplayer.org|pubjav.com|sextb.net|sextb.date
+!#endif
 ! https://github.com/easylist/easylist/pull/14565
 jizzbunker2.com##.partner-site
 ||cdn3x.com/*/js/*.vast.
@@ -3233,12 +3236,6 @@ y2down.cc##+js(nowoif)
 @@||btloader.com/tag?$xhr,domain=quackr.io
 ! https://github.com/uBlockOrigin/uAssets/pull/20138
 haveibeenpwned.com##+js(rpnt, P, %2F%5C.%5B%5E.%5D%2B(1Password%20password%20manager%7Cdownload%201Password)%5B%5E.%5D%2B%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/19890
-!#if cap_html_filtering
-pig69.com##^script:has-text(detectAdBlock)
-!#else
-pig69.com##+js(rmnt, script, detectAdBlock)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/20156
 ||mathcrave.com/core/modules/*/assets/vendor/js/abdetector.script.min.js
 ||mathcrave.com/core/modules/*/assets/vendor/css/abdetector.style.css
@@ -3815,8 +3812,6 @@ coin-profits.xyz##+js(nostif, nextFunction)
 ckxsfm.com##+js(acs, document.getElementById, fakeElement)
 ! yottachess .com anti-adb
 yottachess.com##+js(no-xhr-if, googlesyndication)
-! https://github.com/AdguardTeam/AdguardFilters/issues/167905
-cosplay18.pics##+js(rmnt, script, detectAdBlock)
 ! NSFW pum-overlay sites
 curs-germana.com##.pum-overlay
 curs-germana.com##.pum-open-overlay:style(overflow: auto !important;)
