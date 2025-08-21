@@ -48,6 +48,7 @@ const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
 const REGEXP_ESCAPED_COMMA = new RegExp(/\\,/, 'g');
 const REGEXP_ESCAPED_SINGLE_QUOTE = new RegExp(/\\'/, 'g');
 const REGEXP_ESCAPED_DOUBLE_QUOTE = new RegExp(/\\"/, 'g');
+const REGEXP_ESCAPED_BACKTICK = new RegExp(/\\`/, 'g');
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
@@ -729,6 +730,7 @@ export default class CosmeticFilter implements IFilter {
     let lastComaIndex = -1;
     let inDoubleQuotes = false;
     let inSingleQuotes = false;
+    let inBackticks = false;
     let inRegexp = false;
     let objectNesting = 0;
     let lastCharIsBackslash = false;
@@ -746,6 +748,10 @@ export default class CosmeticFilter implements IFilter {
           if (char === "'") {
             inSingleQuotes = false;
           }
+        } else if (inBackticks === true) {
+          if (char === '`') {
+            inBackticks = false;
+          }
         } else if (objectNesting !== 0) {
           if (char === '{') {
             objectNesting += 1;
@@ -755,6 +761,8 @@ export default class CosmeticFilter implements IFilter {
             inDoubleQuotes = true;
           } else if (char === "'") {
             inSingleQuotes = true;
+          } else if (char === '`') {
+            inBackticks = true;
           }
         } else if (inRegexp === true) {
           if (char === '/') {
@@ -768,6 +776,8 @@ export default class CosmeticFilter implements IFilter {
               inDoubleQuotes = true;
             } else if (char === "'" && selector.indexOf("'", index + 1) > 0) {
               inSingleQuotes = true;
+            } else if (char === '`' && selector.indexOf('`', index + 1) > 0) {
+              inBackticks = true;
             } else if (char === '{' && selector.indexOf('}', index + 1) > 0) {
               objectNesting += 1;
             } else if (char === '/' && selector.indexOf('/', index + 1) > 0) {
@@ -799,7 +809,8 @@ export default class CosmeticFilter implements IFilter {
         const openingCode = part.charCodeAt(0);
         if (
           !(openingCode === 39 /* `'` */ && part.endsWith(`'`)) &&
-          !(openingCode === 34 /* `"` */ && part.endsWith(`"`))
+          !(openingCode === 34 /* `"` */ && part.endsWith(`"`)) &&
+          !(openingCode === 96 /* '`' */ && part.endsWith('`'))
         ) {
           return part;
         }
@@ -814,8 +825,10 @@ export default class CosmeticFilter implements IFilter {
         const escaped = part.substring(1, part.length - 1);
         if (openingCode === 39 /* `'` */) {
           return escaped.replace(REGEXP_ESCAPED_SINGLE_QUOTE, "'");
+        } else if (openingCode === 34 /* '"' */) {
+          return escaped.replace(REGEXP_ESCAPED_DOUBLE_QUOTE, '"');
         }
-        return escaped.replace(REGEXP_ESCAPED_DOUBLE_QUOTE, '"');
+        return escaped.replace(REGEXP_ESCAPED_BACKTICK, '`');
       })
       .map((part) =>
         part
