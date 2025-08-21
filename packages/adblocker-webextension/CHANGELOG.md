@@ -1,3 +1,15 @@
+# v2.11.5 (Thu Aug 21 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5120](https://github.com/ghostery/adblocker/pull/5120) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.8.0 (Mon Jun 23 2025)
 
 #### :nut_and_bolt: Dependencies

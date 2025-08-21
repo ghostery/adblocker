@@ -1,3 +1,25 @@
+# v2.11.5 (Thu Aug 21 2025)
+
+#### :bug: Bug Fix
+
+- feat: support backtick as a quoting character [#5121](https://github.com/ghostery/adblocker/pull/5121) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5114](https://github.com/ghostery/adblocker/pull/5114) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5120](https://github.com/ghostery/adblocker/pull/5120) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.4 (Wed Aug 20 2025)
 
 #### :bug: Bug Fix

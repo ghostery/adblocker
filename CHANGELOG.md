@@ -1,3 +1,32 @@
+# v2.11.5 (Thu Aug 21 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - feat: support backtick as a quoting character [#5121](https://github.com/ghostery/adblocker/pull/5121) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5114](https://github.com/ghostery/adblocker/pull/5114) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump rollup from 4.46.3 to 4.46.4 [#5117](https://github.com/ghostery/adblocker/pull/5117) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - Update dependencies [#5120](https://github.com/ghostery/adblocker/pull/5120) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump puppeteer from 24.16.2 to 24.17.0 [#5115](https://github.com/ghostery/adblocker/pull/5115) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.4 (Wed Aug 20 2025)
 
 #### :bug: Bug Fix
