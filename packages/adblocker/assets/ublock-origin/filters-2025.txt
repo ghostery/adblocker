@@ -392,6 +392,7 @@ ext=$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|pow
 ||wontent.powvideo.net^
 ||zontent.powvideo.net^
 ||ctent.povvverz.one^
+||powcloud.*/js/hpu.js
 ||powcloud.*/pu*.min.js
 /js/fpu3/pu4.min.js
 /js/gpu3/pu5.min.js
@@ -401,6 +402,11 @@ ext=$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|pow
 *$frame,3p,denyallow=google.com,domain=powcloud.one
 *$script,3p,denyallow=googleapis.com|google.com|gstatic.com,domain=powcloud.one
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/29731
+powcloud.org##+js(aeld, %2Fclick%7Cmouse%7Ctouch%2F, _0x)
+powcloud.org##+js(set, puOverlay, noopFunc)
+powcloud.org##+js(aopw, opopnso)
+powcloud.org##+js(aopw, c0ZZ)
 ! https://github.com/uBlockOrigin/uAssets/issues/4399
 ! https://www.reddit.com/r/uBlockOrigin/comments/u72fym/dailymotion_adblock_detected/
 ||s3.amazonaws.com/dmas-public/rubicon/bundle.js$script,domain=dailymotion.com
@@ -422,6 +428,15 @@ hltv.org##a[href^="/matches/"][href*="~"]:has(div,img)
 hltv.org##a[class*="odds"]
 hltv.org##.teamodds
 hltv.org##.leftCol div[style*="cta"]
+! https://www.reddit.com/r/uBlockOrigin/comments/e7v537/fluid_player_doesnt_work_when_ublock_is_on/
+porn00.org##+js(nowoif)
+porn00.org##.table
+porn00.org##div.headline[style]
+||ang-content.com/*.mp4$media,redirect=noopmp3-0.1s,domain=porn00.org
+! https://github.com/uBlockOrigin/uAssets/issues/29732
+porn00.*##.member2link
+porn00.*##.content [class^="headline"][style^="margin:"]
+porn00.*##a[href="https://porn00.org/best-casino/"]
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -1493,9 +1508,6 @@ pokemon-project.com##+js(rmnt, script, closePlayer)
 ||fuseplatform.net^$redirect=noopjs,domain=pokemon-project.com
 ! https://github.com/uBlockOrigin/uAssets/issues/28542
 anime3rb.com##div[x-data*="countdown"]
-! https://github.com/AdguardTeam/AdguardFilters/issues/204150
-3minx.com,555fap.com,ai18.pics,blackwidof.org,cnpics.org,cnxx.me,cosplay18.pics,fc2ppv.stream,hentai4f.com,hentaipig.com,javball.com,javbee.vip,javring.com,javsunday.com,kin8-av.com,porn4f.org,sweetie-fox.com,xcamcovid.com##+js(rmnt, script, %2Fdetect%7CWebAssembly%2F)
-||2489may2024.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/28548
 gadgetbond.com##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/28531
@@ -1637,8 +1649,6 @@ condorsoft.co##+js(no-xhr-if, googlesyndication)
 ||poweredby.jads.co/js/jads.js$script,domain=216.219.94.112,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/21941
 /\.gsmarena\.com\/[0-9]+\.php3/$xhr,1p,domain=gsmarena.com
-! https://github.com/AdguardTeam/AdguardFilters/issues/207808
-cosplay-xxx.com##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207864
 remotejobzone.online##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207736
@@ -2009,5 +2019,11 @@ greatandhra.com##.great_andhra_body > div[class^="great_andhra_main_"]:has(> div
 greatandhra.com,~epaper.greatandhra.com##a:not([href*="greatandhra.com/"]):not([href^='/']) > img
 greatandhra.com##.sortable-list > li.sortable-item:has(> div > a > img[width="300"][height="50"])
 greatandhra.com##.add__txt
-greatandhra.com##li:has(> .mtitle > span:has-text(Advertisement))
+greatandhra.com##li > .mtitle > span:has-text(Advertisement):upward(li)
 greatandhra.com##.ads_blocks
+! https://github.com/uBlockOrigin/uAssets/issues/29734 - video breakage
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=promobil.de
+! https://github.com/uBlockOrigin/uAssets/issues/29726
+! bad filter from  [ee]  ee: Eesti saitidele kohandatud filter
+! [badfilter] /js/ads.$badfilter
+@@||img.cartooncdn.xyz/js/ads.js$script,domain=kimcartoon.si

@@ -1496,9 +1496,11 @@ ubi.com##+js(trusted-set-cookie, UBI_PRIVACY_CUSTOMIZATION_OPTOUT, true, , , dom
 ubi.com##+js(trusted-set-cookie, UBI_PRIVACY_POLICY_ACCEPTED, true, , , domain, ubi.com)
 ubi.com##+js(trusted-set-cookie, UBI_PRIVACY_POLICY_VIEWED, true, , , domain, ubi.com)
 ! https://github.com/uBlockOrigin/uAssets/issues/26343 - accept all
-aedt.de,berlin-live.de,bike-magazin.de,connect.de,gutefrage.net,insideparadeplatz.ch,morgenpost.de,play3.de,thueringen24.de##+js(trusted-click-element, a.cmptxt_btn_yes)
-aedt.de,berlin-live.de,bike-magazin.de,connect.de,gutefrage.net,insideparadeplatz.ch,morgenpost.de,play3.de,thueringen24.de##body:has(.cmpboxinner):style(overflow: auto !important;)
-aedt.de,berlin-live.de,bike-magazin.de,connect.de,gutefrage.net,insideparadeplatz.ch,morgenpost.de,play3.de,thueringen24.de##[id^="cmpbox"]:style(visibility: hidden !important;)
+aedt.de,berlin-live.de,bike-magazin.de,connect.de,gutefrage.net,insideparadeplatz.ch,morgenpost.de,thueringen24.de##+js(trusted-click-element, a.cmptxt_btn_yes)
+aedt.de,berlin-live.de,bike-magazin.de,connect.de,gutefrage.net,insideparadeplatz.ch,morgenpost.de,thueringen24.de##body:has(.cmpboxinner):style(overflow: auto !important;)
+aedt.de,berlin-live.de,bike-magazin.de,connect.de,gutefrage.net,insideparadeplatz.ch,morgenpost.de,thueringen24.de##[id^="cmpbox"]:style(visibility: hidden !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/29716
+play3.de##+js(rpnt, script, function%20lazyLoadThumb, (()%3D%3E%7Bconst%20click%3D()%3D%3E%7Bif(typeof%20window.cmpmngr%3D%3D%3D%22object%22%26%26typeof%20window.cmpmngr.setConsentViaBtn%3D%3D%3D%22function%22)%7Bwindow.cmpmngr.setConsentViaBtn(1)%7D%7D%3Bconst%20handler%3D%7Bconstruct%3A(target%2CthisArg%2CargList)%3D%3E%7Bclick()%3BsetTimeout((()%3D%3E%7Bclick()%7D)%2C1e3)%3Breturn%20Reflect.construct(target%2CthisArg%2CargList)%7D%7D%3Bwindow.Event%3Dnew%20Proxy(window.Event%2Chandler)%7D)()%3Bfunction%20lazyLoadThumb, sedCount, 1)
 ! accept
 pdfupload.io##+js(trusted-click-element, button%5Bdata-action%3D%22adverts%23accept%22%5D, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/26340

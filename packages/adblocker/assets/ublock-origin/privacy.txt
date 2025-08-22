@@ -16,6 +16,9 @@
 ||google-analytics.com/cx/api.js$script,redirect=google-analytics.com/cx/api.js:5
 ! https://www.reddit.com/r/uBlockOrigin/comments/xif3tf/
 ||googletagmanager.com/gtag/js$script,xhr,redirect=googletagmanager_gtm.js:5
+! https://github.com/uBlockOrigin/uAssets/issues/29730
+||googletagmanager.com/gtag/js?id=$removeparam=gtm
+||googletagmanager.com/gtag/js?id=$removeparam=cx
 ! https://github.com/gorhill/uBlock/issues/1411
 ! https://www.reddit.com/r/firefox/comments/3pwcey/firefox_extension_download_manager_s3_asks_for/
 ! https://www.reddit.com/r/chrome/comments/473ves/help_how_to_remove_qipru_redirect_when_searching/
@@ -1670,7 +1673,8 @@ evropa2.cz##+js(set-local-storage-item, %2Fcnc_alien_invasion_code%7CpixelsLastF
 ! https://grok.com/
 grok.com##+js(no-fetch-if, url%3A%2Fapi%2Fstatsig%2Flog_event%20method%3APOST)
 ! https://www.formel1.de/news/grand-prix-berichte/2025-04-06/ralf-schumacher-jack-doohan-nicht-sicher-beim-naechsten-rennen-dabei
-||cdn.stroeerdigitalgroup.de/metatag/live/
+! https://github.com/uBlockOrigin/uAssets/issues/29735
+||cdn.stroeerdigitalgroup.de/metatag/live/$domain=~golem.de
 ! https://px.a8.net/svt/ejp?a8mat=2TMZ7K+6IKXR6+NA2+BW0YB&a8ejpredirect=https%3A%2F%2Fwww.amiami.jp%2Ftop%2Fdetail%2Fdetail%3Fgcode%3DFIGURE-180018
 ||px.a8.net/svt/ejp?*&a8ejpredirect=$doc,urlskip=?a8ejpredirect -uricomponent
 ! https://github.com/AdguardTeam/AdguardFilters/commit/32cecef77d862d6922e585f86161686ba8925525
@@ -1709,8 +1713,6 @@ abs-cbn.com##+js(set-session-storage-item, VR-INJECTOR-INSTANCES-MAP, %24remove%
 ||track.vtcnews.vn^
 ! https://github.com/uBlockOrigin/uAssets/issues/28450
 ||trueachievements.com/tgn/ana?*page_view
-! https://github.com/uBlockOrigin/uAssets/issues/28625
-||vidembed.re/js/script.outbound-links.pageview-props.tagged-events.js
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3650
 ||prod.outgoing.prod.webservices.mozgcp.net/v1/$urlskip=/\/v1\/\w+\/(http.+)$/ -uricomponent +https
 ! https://github.com/uBlockOrigin/uAssets/issues/749
@@ -1799,5 +1801,9 @@ mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 ||monitor.*/test?rnd=$xhr,3p
 /measurements/*.ts?rnd=$xhr,3p
 !#endif
+! https://www.netflix.com/
+||netflix.com/log/
+! https://www.serienjunkies.de/
+/iomm/latest/bootstrap/loader.js
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
