@@ -2558,11 +2558,6 @@ vidco.pro##+js(rmnt, script, adserverDomain)
 mlbbox.me##.position-absolute
 mlbbox.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 mlbbox.me##+js(acs, document.documentElement, break%3Bcase%20%24.)
-!#if cap_html_filtering
-mlbbox.me##^script:has-text(FingerprintJS)
-!#else
-mlbbox.me##+js(rmnt, script, FingerprintJS)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25073
 ||heraldnet.com/wp-content/plugins/incognito_dectector/
 ! https://github.com/AdguardTeam/AdguardFilters/issues/187059
@@ -2720,7 +2715,6 @@ boardgameoracle.com##main div.MuiBox-root > span.MuiTypography-subtitle2:has-tex
 ||inmanga.com/ads/$xhr,1p,redirect=nooptext
 ! https://github.com/uBlockOrigin/uAssets/issues/25400
 x-video.tube##+js(acs, Math.floor, src_pop)
-x-video.tube##+js(rmnt, script, wpadmngr.com)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/189357
 roselife.site##a[href][onclick="this.remove()"]
 ! https://github.com/uBlockOrigin/uAssets/issues/25414
@@ -2871,7 +2865,6 @@ luxmovies.*,nohost.one,southfreak.*##+js(nowoif)
 nohost.one##+js(rmnt, script, HTMLAllCollection)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/198930
 vikingf1le.us.to##+js(nowoif, zigi_tag_id)
-vikingf1le.us.to##+js(rmnt, script, FingerprintJS)
 vikingf1le.us.to##+js(aopr, atob)
 vikingf1le.us.to##+js(aeld, DOMContentLoaded, history.go)
 ||gxh1yqz2v.xyz^
@@ -3210,8 +3203,6 @@ fileplanet.com##a[href^="https://url.totaladblock.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/26145
 handirect.fr##body::before:style(background-image: unset !important;)
 handirect.fr##+js(rmnt, script, kmtAdsData)
-! https://github.com/uBlockOrigin/uAssets/issues/26152
-animefenix.tv##+js(rmnt, script, wpadmngr)
 ! https://github.com/uBlockOrigin/uAssets/issues/26158
 tempinbox.xyz##+js(rmnt, script, insertAdjacentHTML)
 ! https://github.com/uBlockOrigin/uAssets/issues/26160
@@ -3349,8 +3340,6 @@ getfiles.co.uk##+js(rmnt, script, checkAdBlock)
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1h5lvjw/tptv_brightcove_adverts/
 tptvencore.co.uk##+js(no-xhr-if, springserve.com)
-! https://github.com/uBlockOrigin/uAssets/issues/26287
-poophd.cc##+js(rmnt, script, wpadmngr.com)
 ! https://community.brave.app/t/redirects-on-animelatinohd-com/584414
 animelatinohd.com##+js(aeld, load, popMagic)
 ! https://github.com/uBlockOrigin/uAssets/issues/11152
@@ -3419,8 +3408,6 @@ dhtpre.com##^script:has-text(setADBFlag)
 !#else
 dhtpre.com##+js(rmnt, script, setADBFlag)
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/26454
-anroll.net##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ! https://github.com/uBlockOrigin/uAssets/issues/26460
 dynamicminister.net##+js(aeld, click, window.open)
 ||redditsoccerstreams.watch/wp-content/uploads/2024/10/watch-live-stream.gif$image
@@ -3518,8 +3505,8 @@ wvt.free.nf##+js(nowoif)
 wvt.free.nf##+js(acs, document.getElementById, window.open)
 wvt.free.nf##.tracking-btn
 ! https://github.com/uBlockOrigin/uAssets/issues/26573
-||cdn.jwplayer.com/libraries/QSNV25sR.js^$script,domain=www.ratemyprofessors.com
-ratemyprofessors.com##[class^="Ad"]
+! https://github.com/uBlockOrigin/uAssets/issues/29740
+||cdn.jwplayer.com/libraries/*.js$script,3p,domain=www.ratemyprofessors.com
 ! https://github.com/uBlockOrigin/uAssets/issues/26599
 faceittracker.net##+js(no-fetch-if, fundingchoicesmessages)
 @@||faceittracker.net^$script,1p
@@ -3551,9 +3538,3 @@ fmovies0.cc##+js(nostif, offsetHeight)
 fmovies0.cc##+js(no-fetch-if, %2Fgooglesyndication%7Cgoogletagservices%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/26669
 flatai.org##+js(rmnt, script, adblock)
-! https://github.com/uBlockOrigin/uAssets/issues/26671
-!#if cap_html_filtering
-windowsreport.com##^script:has-text(wpadmngr.com)
-!#else
-windowsreport.com##+js(rmnt, script, wpadmngr.com)
-!#endif

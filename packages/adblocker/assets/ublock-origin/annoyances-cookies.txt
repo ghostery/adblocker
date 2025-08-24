@@ -47,6 +47,10 @@ partner.co.il##.cookie-message
 ||iubenda.com^$domain=my-personaltrainer.it
 ! https://github.com/uBlockOrigin/uAssets/issues/29719
 musee-moyenage.fr##body.tac-modal-open:style(overflow: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/29738
+!#if ext_ubol
+@@||usercentrics.eu^$script,xhr,domain=zalando.be|zalando.com|zalando.es|zalando.fr|zalando.it|zalando.nl|zalando.pl|zalando.se
+!#endif
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
