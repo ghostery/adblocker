@@ -437,6 +437,20 @@ porn00.org##div.headline[style]
 porn00.*##.member2link
 porn00.*##.content [class^="headline"][style^="margin:"]
 porn00.*##a[href="https://porn00.org/best-casino/"]
+! https://github.com/uBlockOrigin/uAssets/issues/5988
+||videorolls.row.aiv-cdn.net/*.mp4$media,redirect=noopmp3-0.1s,domain=amazon.com
+! https://github.com/uBlockOrigin/uAssets/issues/14512
+! https://www.reddit.com/r/uBlockOrigin/comments/14ftp7a/
+! https://www.reddit.com/r/uBlockOrigin/comments/1ahd08o/amazon_prime_freevee_with_ads_showing_ads_never/
+www.amazon.co.jp,www.amazon.co.uk,www.amazon.com,www.amazon.de,www.primevideo.com##+js(json-prune, cuepointPlaylist%20vodPlaybackUrls.result.playbackUrls.cuepoints)
+www.amazon.co.jp,www.amazon.co.uk,www.amazon.com,www.amazon.de,www.primevideo.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5B%40value%3D%22Ad%22%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), %5Bvalue%3D%22Ad%22%5D, .mpd)
+primevideo.com##+js(set, ue_adb_chk, 1)
+/GetPlaybackResources?$xhr,removeparam=deviceAdInsertionTypeOverride,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
+!#if ext_ubol
+/(.*\/GetPlaybackResources\?.*)%2CCuepointPlaylist(%2C.*)/$xhr,uritransform=//$1$2/,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
+!#else
+/GetPlaybackResources?*%2CCuepointPlaylist%2C$xhr,uritransform=/%2CCuepointPlaylist%2C/%2C/,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
+!#endif
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -708,7 +722,7 @@ avforums.com##.m2n-ads-slot
 jobnib.com##.kln.mlb.blox
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ig78f9/annoying_popups/
 18adultgames.com##+js(set, URLlist, %5B%5D)
-royale-games.com##+js(acs, navigator, FingerprintJS)
+royale-games.com##+js(acs, document.addEventListener, localStorage)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/197613
 russland.jetzt##+js(nostif, displayMessage)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/197564
@@ -776,11 +790,7 @@ quotesshine.com##+js(set, detectAdBlock, noopFunc)
 flixhouse.com##+js(rpnt, script, %2Fwindow.location.href%5B%5E%3F%5D%2Bthis%5B%5E%3F%5D%2B%3B%2F)
 flixhouse.com##.bottom-left.jq-toast-wrap
 ! https://fuckflix.click/hustler-hs-tv-online/
-!#if cap_html_filtering
-fuckflix.click##^script:has-text(wpadmngr.com)
-!#else
-fuckflix.click##+js(rmnt, script, wpadmngr.com)
-!#endif
+||fuckflix.click/assets/js/trafficstars_ads.js
 ! https://github.com/uBlockOrigin/uAssets/issues/27151
 videezy.com##+js(acs, %24, underpop)
 ! https://teracourses.com/ar/courses/cSharp - anti-adb
@@ -911,11 +921,6 @@ euronews.com##.c-timeline-items__ads
 euronews.com##.vuukle-ads
 ! https://github.com/uBlockOrigin/uAssets/issues/27388
 ! https://github.com/uBlockOrigin/uAssets/issues/27420
-!#if cap_html_filtering
-khatrimazafull.*##^script:has-text(wpadmngr.com)
-!#else
-khatrimazafull.*##+js(rmnt, script, wpadmngr.com)
-!#endif
 *$script,3p,domain=khatrimazafull.makeup
 khatrimazafull.*##+js(aopr, LieDetector)
 ! antiadb diskmovies.com
@@ -960,7 +965,6 @@ mov2day.*##+js(aopr, LieDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/27495
 *$script,3p,domain=bebasbokep.online,denyallow=fastly.net|jwpcdn.com|googleapis.com
 bebasbokep.online##+js(acs, document.createElement, zoneid)
-bebasbokep.online##+js(acs, WebAssembly, atob)
 bebasbokep.online##+js(trusted-suppress-native-method, HTMLScriptElement.prototype.setAttribute, %22data-cfasync%22, abort)
 ||com/on.js?var=$script,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/20527
@@ -1371,7 +1375,7 @@ stickers.gg##+js(no-xhr-if, adsbygoogle)
 asianboy.fans##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22, prevent, stack, %2Fwp-content%5C%2Fuploads%5C%2F%5Ba-z%5D%2B%5C%2F%5Ba-z%5D%2B%5C.js%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28189
 @@||seelen.io^$script,1p
-seelen.io##+js(no-fetch-if, googlesyndication)
+seelen.io##+js(prevent-fetch, pagead2.googlesyndication.com%2Fpagead%2Fjs%2Fadsbygoogle.js, war%3Agooglesyndication_adsbygoogle.js)
 ! https://github.com/uBlockOrigin/uAssets/pull/28192
 ||physicsandmathstutor.com/pdf-pages/?pdf=http$doc,urlskip=?pdf
 ! https://github.com/uBlockOrigin/uAssets/issues/28195
@@ -1595,6 +1599,7 @@ watch.yosintvlive.com##+js(acs, addEventListener, detect)
 kio.ac##[data-placement-id^="revbid-"]
 kio.ac##canvas[width="300"][height="150"]
 kio.ac##+js(no-fetch-if, mode%3Ano-cors)
+kio.ac##+js(nostif, mode%3A%22no-cors%22)
 *$script,3p,redirect-rule=noopjs,domain=kio.ac
 ||probableregret.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/28793
@@ -2027,3 +2032,16 @@ greatandhra.com##.ads_blocks
 ! bad filter from  [ee]  ee: Eesti saitidele kohandatud filter
 ! [badfilter] /js/ads.$badfilter
 @@||img.cartooncdn.xyz/js/ads.js$script,domain=kimcartoon.si
+! https://github.com/uBlockOrigin/uAssets/issues/29736
+kalileaks.com##+js(no-xhr-if, adsbygoogle)
+kalileaks.com##[href^="https://alexhost.com/"]
+! https://www.reddit.com/r/uBlockOrigin/comments/1mwjk1i/ubol_filter_to_remove_adblocker_detected_overlay/
+call4cloud.nl##+js(set, detectAdblock, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/29739
+anime4up.*##+js(nowoif)
+! https://www.reddit.com/r/uBlockOrigin/comments/1mwze7p/adblock_detection_on_mockupbeecom/
+@@||mockupbee.com/wp-content/plugins/wordpress-popup/assets/js/$1p
+! https://torbobit.net/download/free/1df8ydha53j8
+||torbobit.net/pus/script
+torbobit.net###__bgd_link
+torbobit.net###__bgd_link2
