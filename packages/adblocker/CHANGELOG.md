@@ -1,3 +1,23 @@
+# v2.11.6 (Tue Aug 26 2025)
+
+#### :bug: Bug Fix
+
+- fix: scriptlet parsing with escaped ending quote [#5131](https://github.com/ghostery/adblocker/pull/5131) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5130](https://github.com/ghostery/adblocker/pull/5130) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5124](https://github.com/ghostery/adblocker/pull/5124) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5122](https://github.com/ghostery/adblocker/pull/5122) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.5 (Thu Aug 21 2025)
 
 #### :bug: Bug Fix
