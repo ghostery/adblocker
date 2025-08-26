@@ -814,6 +814,10 @@ export default class CosmeticFilter implements IFilter {
         ) {
           return part;
         }
+        // Passthrough `part` if it ends with escaped quote
+        if (part.charCodeAt(part.length - 2) === 92 /* '\\' */) {
+          return part;
+        }
         // Passthrough `part` if it contains unescaped quote
         if (part.length > 2) {
           for (let i = 1; i < part.length - 1; i++) {
