@@ -209,7 +209,7 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 07c225f3.online,content-loader.com,css-load.com,html-load.com,img-load.com##html:not(:has(> head > style:only-child:has-text(width:399px;height:411px))):style(filter: opacity(0) !important; pointer-events: none !important;)
 /^https:\/\/www\.[0-9a-z-]{8,}\.(?:com|xyz)\/script\/(?:[-.0-9A-Za-z]+\.)?[-0-9A-Za-z]{2,30}\.js$/$script,3p,match-case,header=x-length
 ://html-load.com/loader.min.js$domain=~dogdrip.net|~infinityfree.com|~smsonline.cloud
-/^https:\/\/(?:as(?:loader)?|loader)\.[-0-9A-Za-z]+.[-A-Za-z]{2,30}\/loader.min.js$/$script,1p,strict3p
+/^https:\/\/(?:as(?:loader)?|loader)\.[-0-9A-Za-z]+\.[-A-Za-z]{2,16}\/loader\.min\.js$/$script,1p,strict3p,match-case,domain=~edu|~gov
 !#if ext_ubol
 /^https:\/\/loader\.[-0-9a-z]+\.[a-z][a-z][a-z]?\/loader\.min\.js$/$script,1p,match-case,domain=~edu|~gov
 !#endif
@@ -303,14 +303,6 @@ global.novelpia.com##+js(no-fetch-if, favicon, length%3A252)
 global.novelpia.com##div[id^="novelpia_"]:remove()
 ! https://tv6.idlixku.com/
 ! [badfilter] ||idlixku.com^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/29635
-! [badfilter] ||coomer.st/api/v1/creators|$badfilter
-! [badfilter] ||kemono.cr/api/v1/creators|$badfilter
-! https://github.com/AdguardTeam/AdguardFilters/commit/26de373c6bae6173ad53c5d58c27535ff51d9b5c
-shinshi-manga.net#@#+js(abort-current-script, document.createElement, waqool)
-! https://github.com/easylist/easylist/issues/22209
-! [badfilter] ||alicdn.com^$badfilter
-! [badfilter] ||aliexpress-media.com^$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/commit/7c24a684163b47fa15802d40ba993b9e1a7b7b64
 newsphere.jp#@#.wprt-container > center
 ! https://github.com/uBlockOrigin/uAssets/issues/29734
