@@ -799,10 +799,6 @@ export default class CosmeticFilter implements IFilter {
 
     parts.push(selector.slice(lastComaIndex + 1).trim());
 
-    if (parts.length === 0) {
-      return undefined;
-    }
-
     const args = parts
       .slice(1)
       .map((part) => {
