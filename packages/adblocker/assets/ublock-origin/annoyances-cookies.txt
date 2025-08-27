@@ -166,8 +166,7 @@ chase.co.uk##+js(trusted-set-cookie, CookieConsents, %7B%22StrictlyNecessary%22%
 ! https://www.svt.se/sport/fotboll/dejan-kulusevski-tippar-ems-mastare-och-storsta-flopp
 svt.se##+js(trusted-set-cookie, cookie-consent-news-3, %7B%22optedIn%22%3Atrue%2C%22statistics%22%3Afalse%2C%22functionality%22%3Afalse%7D)
 ! https://www.komoot.com
-komoot.com##+js(trusted-set-cookie, kmt_rd, no-consent, , , reload, 1)
-komoot.com##+js(trusted-set-local-storage-item, kmt_config_web, %7B%22created_at%22%3A%22%24currentDate%24%22%2C%22anonymous%22%3A%22%22%2C%22gdpr_ga%22%3Afalse%2C%22gdpr_exp%22%3Afalse%7D)
+komoot.com##+js(trusted-set-local-storage-item, komoot_gdpr_data, %7B%22requestDone%22%3Atrue%2C%22technicalAcceptedTrackers%22%3A%5B%5D%2C%22analyticsAcceptedTrackers%22%3A%5B%5D%2C%22profilingAcceptedTrackers%22%3A%5B%5D%2C%22lastAcceptedVersion%22%3A1%7D)
 ! https://chatreplay.stream/
 chatreplay.stream##+js(trusted-set-cookie, cr_consent, 2%7Ctracking%3Dfalse%2Banalytics%3Dfalse%2Bmarketing%3Dfalse, , , reload, 1)
 ! https://www.screen.studio/
@@ -1587,6 +1586,8 @@ zara.com##+js(trusted-click-element, button%5Baria-label%3D%22Close%22%5D, , 100
 negociardivida.spcbrasil.org.br##+js(trusted-click-element, button.sc-9a9fe76b-0.jgpQHZ, , 1000)
 ! accept, consent-wall
 pons.com##+js(trusted-click-element, button%5Bdata-e2e%3D%22pure-accept-ads%22%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/discussions/25330
+pons.com##+js(trusted-set-cookie, pons-pure, consent-given, , , domain, .pons.com)
 ! accept, only option (mobile UA)
 cnn.com##+js(trusted-set-local-storage-item, wbdLTP, 687f8fa8)
 ! reject
@@ -3097,6 +3098,8 @@ winparts.eu,winparts.ie,winparts.se##+js(trusted-click-element, a.aanvaarden.gre
 ! necessary
 sportano.*##+js(trusted-click-element, button.button--preferences, , 900)
 sportano.*##+js(trusted-click-element, button.button--confirm, , 1100)
+! accept-wall
+kleinanzeigen.de##+js(trusted-click-element, button%23gdpr-banner-accept, , 1000)
 ! reject
 crocs.*##+js(trusted-click-element, button.js-btn-reject-all, , 1300)
 ! chronext regionals (reject)

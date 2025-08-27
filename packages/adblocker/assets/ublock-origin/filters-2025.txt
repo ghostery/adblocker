@@ -64,9 +64,7 @@ sbs.com.au##+js(trusted-prevent-xhr, securepubads.g.doubleclick.net%2Fpagead%2Fi
 appnee.com##ins.adsbygoogle
 appnee.com###babasbmsgx
 appnee.com##[href^="https://appnee.com/advertising/"] > [src^="https://img.appnee.com/other/"][alt="Ads Place"]
-appnee.com##+js(noeval-if, %2Fchp_%3Fad%2F)
-appnee.com##+js(nostif, adsbygoogle)
-appnee.com##+js(set, HTMLScriptElement.prototype.onerror, undefined)
+appnee.com##+js(rmnt, script, getComputedStyle)
 ! https://github.com/uBlockOrigin/uAssets/issues/506
 ! https://github.com/uBlockOrigin/uAssets/issues/6568
 ||msn.com/advertisement.ad.js$script,1p,important
@@ -317,8 +315,8 @@ daddylive.*##+js(nowebrtc)
 daddylive.*##+js(aopw, afStorage)
 daddylive.*##^script:has-text(decodeURIComponent)
 daddylive.*##+js(nowoif)
-daddylive.*>>,dlhd.*>>,thedaddy.*>>,~chatango.com##+js(nowoif)
-daddylive.*>>,dlhd.*>>,thedaddy.*>>,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+daddylive.*>>,daddylivestream.com>>,dlhd.*>>,thedaddy.*>>,~chatango.com##+js(nowoif)
+daddylive.*>>,daddylivestream.com>>,dlhd.*>>,thedaddy.*>>,~chatango.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 dlhd.sx##+js(aopw, u_cfg)
 /adblock.php$script,domain=dlhd.sx
 dlhd.sx##+js(nostif, (), 150)
@@ -1685,9 +1683,9 @@ txxx.com##.sugggestio
 ! https://tusachmanga.com/truyen/19128-sousou-no-frieren/c1318316-chap-139/ - ads / popups
 tusachmanga.com##+js(nowoif, _blank)
 ||assets.tusachmanga.com/ads/ads.js^
-! https://github.com/AdguardTeam/AdguardFilters/issues/208036
-friv.com##+js(aeld, DOMContentLoaded, determineVisibility)
-friv.com##+js(nostif, determineVisibility)
+! https://www.reddit.com/r/uBlockOrigin/comments/1n0csfl/adblock_detected_right_click_disabled_on_frivcom/
+friv.com##+js(aeld, DOMContentLoaded, Visibility)
+friv.com##+js(nostif, Visibility)
 ! https://www.reddit.com/r/Piracy/comments/1lieoqd/how_to_bypass_these_adblocker_blockers/
 fileszero.com,viralharami.com,wstream.cloud##+js(rmnt, script, destroyContent)
 viralharami.com##+js(nostif, window.open)
@@ -1973,7 +1971,7 @@ pogdesign.co.uk##.box728
 ! https://olamovies.mom/generate/?id=8395 - anti-adb and browser
 olamovies.*##+js(aeld, DOMContentLoaded, %2Fnavigator%7Clocation%5C.href%2F)
 olamovies.*##+js(no-xhr-if, googlesyndication)
-olamovies.*##+js(no-fetch-if, %2F%5E%2F)
+olamovies.*##+js(no-fetch-if, %2F%5C%2F%5C%2F.%7B1%2C5%7D%5C..*%5C..%7B2%2C7%7D%5C%2F.%7B1%2C20%7D%5C%2F%5Cd%2B%24%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/29569
 online-smss.com##+js(no-fetch-if, widgets.outbrain.com)
 online-smss.com##+js(no-fetch-if, mode%3Ano-cors)
@@ -2044,3 +2042,13 @@ torbobit.net###__bgd_link2
 ! https://github.com/uBlockOrigin/uAssets/issues/29764
 sampledrive.org##+js(noeval-if, style.display)
 sampledrive.org##div.stream-item.stream-item-mag.mag-box
+sampledrive.org##.hustle-popup
+sampledrive.org##html:style(overflow: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/29774
+watchluna.com##+js(nowoif, _blank)
+!#if !env_safari
+*$script,3p,domain=watchluna.com
+!#endif
+||suburban-anxiety.com^$all
+! https://github.com/uBlockOrigin/uAssets/issues/29775
+z80ne.com##+js(rmnt, script, detectAdBlock)

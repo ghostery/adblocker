@@ -1219,7 +1219,7 @@ photopea.com##div[style]:has(> a[href*="photopea.com"][href*="ads"])
 ! https://github.com/jared-schwalbe/remove-ads-from-photopea/blob/main/app.js
 ! https://github.com/uBlockOrigin/uAssets/issues/19697
 !#if cap_html_filtering
-! ||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
+||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
 !#else
 ! photopea.com##+js(trusted-create-html, head, %3Cimg%20src%3D'%2Finvalid.jpg'%20onerror%3D'if%20(localStorage.length%20%3D%3D%3D%200%20%7C%7C%20typeof%20JSON.parse(localStorage._ppp)%5B%220_uid%22%5D%20%3D%3D%3D%20%22undefined%22)%20%7BObject.defineProperty(window%2C%20%22innerWidth%22%2C%20%7Bget()%20%7B%20return%20document.documentElement.offsetWidth%20%2B%20320%20%7D%7D)%3B%7D'%3E%3C%2Fimg%3E)
 !#endif
