@@ -55,7 +55,7 @@ vidsrc.*##+js(aopr, Adcash)
 vidsrc.*##+js(rmnt, script, adserverDomain)
 vidsrc.*##^script:has-text(/\{delete window\[/)
 vidsrc.*###pop_asdf
-||vidsrc.net/*.js?_=$script,1p
+||vidsrc.net/*.js?_=$script
 ||vidsrc.pro/uwu-js^$script
 ||annotationsincereexistence.com^
 ||reminderasking.com^$all
@@ -600,6 +600,7 @@ a2zapk.*##+js(acs, %24, alertmsg)
 @@||dl.a2zapk.*/getred.php$xhr,domain=a2zapk.*
 @@||tmp.a2zapk.*/js/advertisement/$frame,domain=a2zapk.*
 ||googlesyndication.com^$image,redirect=1x1.gif,domain=a2zapk.*
+||googlesyndication.com^$image,redirect=1x1.gif,domain=a2zapk.io
 ! https://github.com/uBlockOrigin/uAssets/issues/5141
 @@||virginmediatelevision.ie/player/$xhr,1p
 @@||virginmediatelevision.ie/includes/js/cookienotice.js.pagespeed.$script,1p
@@ -656,8 +657,8 @@ $popup,3p,domain=ds2play.com,badfilter
 ! https://www.reddit.com/r/Piracy/comments/1fwlxsq/anyone_knows_how_to_remove_this_pop_up_ad_on/
 hianime.to##[href="https://1flix.to/"]
 ###vidcloud-player > #overlay-container
-/embed-1/ajax/e-1/banners|$xhr,1p
-/embed-1/e-1/banners|$xhr,1p
+/embed-1/ajax/e-1/banners|$xhr
+/embed-1/e-1/banners|$xhr
 ||iili.io/JvfIu1a.gif$image
 ! https://forums.lanik.us/viewtopic.php?f=90&t=40441
 ! https://github.com/uBlockOrigin/uAssets/issues/5223
@@ -1749,7 +1750,7 @@ thejakartapost.com##.tjp-single__content-ads:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/25417#issuecomment-3017980757
 !#if !ext_ubol
 !#if env_firefox
-$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streambucket.net|~streamingnow.*|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.nl|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=1jour1film.*|456movie.com|animefever.cc|animeunity.to|anitaku.bz|antennasports.ru|bingemaster.netlify.app|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|euro2024direct.ru|flickystream.com|freek.to|freeshot.live|hydrahd.cc|javx.*|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|lk21official.pics|moflix-stream.day|movie3k.net|netplayz.ru|novafork.com|osteusfilmestuga.online|phimmoifhd.com|popcornmovies.to|primeflix-web.vercel.app|putlockers.*|rivestream.*|roselife.site|roshy.tv|seriescultes.store|smashystream.com|soccerinhd.com|uira.live|visualnewshub.com|watchf1full.com|xsportbox.com
+$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streambucket.net|~streamingnow.*|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.nl|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=1jour1film.*|456movie.com|animefever.cc|animeunity.to|anitaku.bz|antennasports.ru|bingemaster.netlify.app|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|euro2024direct.ru|flickystream.com|freek.to|freeshot.live|hydrahd.cc|javx.*|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|lk21official.pics|moflix-stream.day|movie3k.net|netplayz.ru|novafork.com|osteusfilmestuga.online|phimmoifhd.com|popcornmovies.to|primeflix-web.vercel.app|putlockers.*|roselife.site|roshy.tv|seriescultes.store|smashystream.com|soccerinhd.com|uira.live|visualnewshub.com|watchf1full.com|xsportbox.com
 !#else
 $frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~embed.su|~emturbovid.com|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~ply4.com|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streambucket.net|~streamingnow.*|~topembed.pw|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.*|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=456movie.com|animefever.cc|animeunity.to|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|flickystream.com|freeshot.live|hydrahd.cc|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|netplayz.ru|novafork.com|phimmoifhd.com|primeflix-web.vercel.app|seriescultes.store|soccerinhd.com|visualnewshub.com|xsportbox.com
 !#endif
@@ -1969,6 +1970,8 @@ raidrush.net###top_ga:style(position: absolute !important; left: -10000px !impor
 netu.frembed.lol##+js(nowoif)
 netu.frembed.lol##+js(set, adblockcheck, false)
 frembed.*##+js(acs, atob, %2FpopundersPerIP%5B%5Cs%5CS%5D*%3FDate%5B%5Cs%5CS%5D*%3FgetElementsByTagName%5B%5Cs%5CS%5D*%3FinsertBefore%2F)
+godriveplayer.com##+js(nowoif)
+godriveplayer.com##.pppx
 ! https://github.com/uBlockOrigin/uAssets/issues/24024
 flixlatam.com##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/24027

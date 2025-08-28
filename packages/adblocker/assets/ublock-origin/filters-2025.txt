@@ -777,7 +777,8 @@ bgmiupdate.com.in##+js(set, HTMLImageElement.prototype.onerror, undefined)
 lewdgames.to##a.downloadLink[data-wpel-link="external"]
 lewdgames.to##+js(rpnt, script, %2FvastSource.*%3F%2C%2F, vastSource%3A''%2C)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/790#discussioncomment-12108629
-/\/js\/script_\d{2}\.\d{2}\.js\?\d+$/$script,1p,strict1p
+! https://github.com/uBlockOrigin/uAssets/issues/29807
+/\/js\/script_[0-9][0-9]\.[0-9][0-9]\.js\?[0-9]+$/$script,1p,match-case
 ! https://kissjav.com/
 kissjav.*##+js(acs, WebAssembly, Promise)
 kissjav.*##.asside-link
@@ -1760,8 +1761,6 @@ santafenewmexican.com##+js(nostif, TNCMS.DMP)
 ! https://github.com/uBlockOrigin/uAssets/issues/29087
 wowtv.de##+js(set, window.__CONFIGURATION__.adInsertion.enabled, false)
 wowtv.de##+js(set, window.__CONFIGURATION__.features.enableAdBlockerDetection, false)
-! https://github.com/uBlockOrigin/uAssets/issues/16244
-141jav.com##+js(acs, document.createElement, data-domain)
 ! https://github.com/uBlockOrigin/uAssets/issues/23911
 jsfiddle.net##+js(set, _carbonads, %7B%7D)
 jsfiddle.net##+js(set, _bsa, %7B%7D)
@@ -2052,3 +2051,17 @@ watchluna.com##+js(nowoif, _blank)
 ||suburban-anxiety.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/29775
 z80ne.com##+js(rmnt, script, detectAdBlock)
+! https://github.com/uBlockOrigin/uAssets/issues/29783
+scriptsrbx.com##+js(no-xhr-if, googlesyndication)
+! https://www.reddit.com/r/uBlockOrigin/comments/1n0fzb6/how_to_block_the_click_on_ad/
+toono.in##+js(set-cookie, skipAd, 1, , reload, 1)
+! notunmovie. net ad popups
+notunmovie.net##+js(nowoif)
+||tremblesyringeillusive.com^$all
+! toonhub4u.me intermediate ad annoyance
+toonhub4u.me##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Ftoonhub4u.com%2Fredirect%2F%22%5D, %3Furl%20-base64)
+! anime site ads
+animahd.com##+js(nowoif, _blank)
+anime4u.pro##+js(rpnt, script, %2Fwindow%5C.location%5C.href.*%3F%3B%2F)
+||quarterbackchangeless.com^$doc,popup
+links4u.shop##[src^="https://iili.io/"]

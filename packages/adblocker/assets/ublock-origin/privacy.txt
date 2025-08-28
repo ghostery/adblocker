@@ -73,7 +73,6 @@ old.reddit.com##a.outbound[data-outbound-url]:remove-attr(data-outbound-url)
 www.reddit.com##+js(json-prune, data.*.elements.edges.%5B%5D.node.outboundLink)
 www.reddit.com##+js(json-prune, data.children.%5B%5D.data.outbound_link)
 ||redditstatic.com/shreddit/sentry-$domain=reddit.com
-||www.reddit.com/|$xhr,1p,method=post
 ||reddit.com^$doc,removeparam=/web_only=/
 ||reddit.com^$doc,removeparam=/deep_link=/
 ||reddit.com^$doc,removeparam=correlation_id
@@ -847,6 +846,9 @@ voz.vn##a.link.link--external[href][data-proxy-href]:remove-attr(data-proxy-href
 spreaker.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fspreaker.onelink.me%2F%22%5D%5Bhref*%3D%22%26af_web_dp%3Dhttp%22%5D, %3Faf_web_dp)
 ! https://www.dogdrip.net/dogdrip/648750601
 dogdrip.net##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2Flink.php%3Furl%3Dhttp%22%5D, %3Furl)
+! https://forum.donanimhaber.com/hepsiburada-ve-firsatlari-ana-konu--150987015-1787#161998768
+||forum.donanimhaber.com/ExternalLinkRedirect?*^url=http$doc,urlskip=?url
+forum.donanimhaber.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2FExternalLinkRedirect%3F%22%5D%5Bhref*%3D%22url%3Dhttp%22%5D, %3Furl)
 ! https://github.com/uBlockOrigin/uAssets/issues/24675 - click tracking
 ||cdn.digg.com/fragments/homepage/static/view-frontpage.js
 ! https://github.com/uBlockOrigin/uAssets/issues/29572
@@ -1821,10 +1823,9 @@ mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 ! https://github.com/uBlockOrigin/uAssets/issues/29376
 ||app.gitbook.com/__session?proposed=
 ||api.gitbook.com/v1/orgs/*/insights/events
-! https://vnexpress.net/
+! https://vnexpress.net/new-york-khong-con-la-thanh-pho-khong-ngu-4931634.html - scroll breakage
 ||ps.vnexpress.net/ps/chk?
 ||vnexpress.net/microservice/fc^
-||vnecdn.net/vnexpress/restruct/*/eclick/
 ||static.eclick.vn^$image,redirect=1x1.gif
 ! carparts.com,nba.com
 ! https://github.com/uBlockOrigin/uAssets/issues/29384
@@ -1845,6 +1846,9 @@ mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 ! https://github.com/uBlockOrigin/uAssets/issues/29561
 /js/script.outbound-links.pageview-props.tagged-events.js
 /js/script.outbound-links.pageview-props.tagged-events.manual.js
+! https://github.com/uBlockOrigin/uAssets/issues/29789
+||linklog.tiagorangel.com/api/script.js
+linklog.tiagorangel.com##+js(set, data, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/29578
 ||brighteon.com/api-v*/public/visit-tracking
 ! https://www.cbssports.com/nfl/
@@ -1885,5 +1889,13 @@ mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/29764
 ||api-widget.soundcloud.com/me?client_id=
+! https://app.labelbox.com/
+||editor.labelbox.com/metrics
+! https://www.abebooks.com/
+! test on uBO first
+!#if !ext_ubol
+||assets.prod.abebookscdn.com/*/scripts/digitaldata/analytics-
+||assets.prod.abebookscdn.com/*/scripts/utilities/PixelRenderer-
+!#endif
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
