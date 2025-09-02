@@ -25,7 +25,8 @@
     "build": "rollup --config ./rollup.config.js",
     "watch": "rollup --config ./rollup.config.js --watch",
     "start:firefox": "npx web-ext run --source-dir='.'",
-    "start:chromium": "npx web-ext run --source-dir='.' --target chromium"
+    "start:chromium": "npx web-ext run --source-dir='.' --target chromium",
+    "test": "playwright test e2e/checkadb.test.ts"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
@@ -36,9 +37,11 @@
     "webextension-polyfill": "^0.12.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.55.0",
     "@rollup/plugin-commonjs": "^28.0.6",
     "@rollup/plugin-node-resolve": "^16.0.1",
     "@rollup/plugin-typescript": "^12.1.4",
+    "@seia-soto/checkadb": "^1.0.0",
     "@types/chrome": "^0.1.4",
     "@types/webextension-polyfill": "^0.12.3",
     "eslint": "^9.33.0",
