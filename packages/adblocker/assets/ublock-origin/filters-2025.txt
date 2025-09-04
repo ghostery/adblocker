@@ -446,10 +446,12 @@ www.amazon.co.jp,www.amazon.co.uk,www.amazon.com,www.amazon.de,www.primevideo.co
 primevideo.com##+js(set, ue_adb_chk, 1)
 /GetPlaybackResources?$xhr,removeparam=deviceAdInsertionTypeOverride,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
 !#if ext_ubol
-/(.*\/GetPlaybackResources\?.*)%2CCuepointPlaylist(%2C.*)/$xhr,uritransform=//$1$2/,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
+/(.*\/GetPlaybackResources\?.*)%2CCuepointPlaylist(.*)/$xhr,uritransform=//$1$2/,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
 !#else
-/GetPlaybackResources?*%2CCuepointPlaylist%2C$xhr,uritransform=/%2CCuepointPlaylist%2C/%2C/,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
+/GetPlaybackResources?*%2CCuepointPlaylist$xhr,uritransform=/%2CCuepointPlaylist//,domain=www.amazon.co.jp|www.amazon.co.uk|www.amazon.com|www.amazon.de|www.primevideo.com
 !#endif
+! https://www.reddit.com/r/uBlockOrigin/comments/1n7ujvm/amazon_prime_video_uk_displaying_ads_in_content/
+||amazon.dev/getVideoAds
 ! https://github.com/uBlockOrigin/uAssets/issues/6694
 9gag.com##[id^="sidebar-stream-"] > h4:has-text(Advertisement)
 9gag.com##.billboard-top-wrapper
@@ -1640,6 +1642,7 @@ condorsoft.co##+js(no-xhr-if, googlesyndication)
 ||poweredby.jads.co/js/jads.js$script,domain=216.219.94.112,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/21941
 /\.gsmarena\.com\/[0-9]+\.php3/$xhr,1p,domain=gsmarena.com
+/\.gsmarena\.com\/[0-9]+\.php\?sSearch=/$xhr,1p,domain=gsmarena.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207864
 remotejobzone.online##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207736
@@ -1964,6 +1967,7 @@ olamovies.*##+js(aeld, DOMContentLoaded, %2Fnavigator%7Clocation%5C.href%2F)
 olamovies.*##+js(no-xhr-if, googlesyndication)
 olamovies.*##+js(no-fetch-if, %2F%5C%2F%5C%2F.%7B1%2C5%7D%5C..*%5C..%7B2%2C7%7D%5C%2F.%7B1%2C20%7D%5C%2F%5Cd%2B%24%2F)
 olamovies.*##+js(no-fetch-if, mode%3Acors)
+olamovies.*##+js(rpnt, script, showAdBlockMessage, hideAdBlockMessage)
 ! https://github.com/uBlockOrigin/uAssets/issues/29569
 online-smss.com##+js(no-fetch-if, widgets.outbrain.com)
 online-smss.com##+js(no-fetch-if, mode%3Ano-cors)
@@ -1973,6 +1977,7 @@ porn4fans.com##.fp-brand
 porn4fans.com##.top-links
 porn4fans.com##.bottom-links
 ||go.*.com/smartpop/$all
+||go.*.com/easy?$all
 ! https://github.com/uBlockOrigin/uAssets/issues/18846#issuecomment-3172977584
 vice.com##.code-block
 ##.wp-block-savage-platform-primis-video
@@ -2077,16 +2082,19 @@ embed4me.com##+js(nowoif, _blank)
 /media/player/videojs/videojs.ima.js
 /media/player/videojs/videojs.ads.min.js
 ! ads/popups
-movied.link##+js(nowoif, !notunmovie)
+flixhub.co,movied.link,notunmovie.org##+js(nowoif, !notunmovie)
 instantcloud.site,linksheild.site,notunmovie.link,xflixbd.com##+js(nowoif)
 ! https://moviedokan.my/movies/param-sundari-2025/
 dldokan.store,fastdour.store##+js(aeld, DOMContentLoaded, handleRedirect)
 ||link.onlinekosh.com^$doc,urlskip=?url
-||bureaubittercomic.com^
-||endangerunderneathcar.com^
-||meantimesubside.com^
-||sanynouncem.org^
 9jarocks.net##[href^="https://sanynouncem.org/"]
 notunmovie.link##[href^="https://tremblesyringeillusive.com/"]
 movied.link###singleDownloadBtn
 notunmovie.link##[href^="https://meantimesubside.com/"]
+! https://github.com/uBlockOrigin/uAssets/issues/29852
+finya.de##div[class^="sc-"]:has(> div[class^="sc-"]:only-child > #desktop_top[style="min-height: 250px;"]:empty)
+! https://www.forbes.com/sites/jacksonweimer/2021/04/10/that-twitter-family-tree-trend-is-secretly-following-random-accounts--without-your-consent/ - "related" video ads
+||elements.video^
+forbes.com##.recirc-rail
+forbes.com##main div[class][style^="top:"]:has-text(FORBES’ FEATURED Video)
+forbes.com##main div[class][style^="top:"]:has(> div > fbs-video[ad-unit-path])

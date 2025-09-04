@@ -510,6 +510,14 @@ dimensione.com##+js(trusted-click-element, button%23CybotCookiebotDialogBodyButt
 hvr-amazon.my.site.com##+js(trusted-set-cookie, apex__cookiePreferences, Operational)
 ! https://bockscornerbrewery.com/
 bockscornerbrewery.com##+js(trusted-set-cookie, website_cookies_bar, %7B%22required%22%3A%20true%2C%20%22optional%22%3A%20false%7D, 1year)
+! https://www.vpd.fi/
+vpd.fi##+js(trusted-set-cookie, amcookie_allowed, 1, 1year, , domain, www.vpd.fi)
+vpd.fi##+js(trusted-set-cookie, amcookie_disallowed, recently_viewed_product%252Crecently_viewed_product_previous%252Crecently_compared_product%252Crecently_compared_product_previous%252C_ga%252C_gid%252C_gat, 1year, , domain, www.vpd.fi)
+! https://github.com/uBlockOrigin/uAssets/issues/29884
+@@||cmp.pubtech.ai/*/pubtech-cmp-v2*.js$script,domain=everyeye.it
+everyeye.it##+js(trusted-click-element, %23pubtech-cmp%20button%5Baria-label%3D%22Continue%20without%20accepting%22%5D)
+! https://github.com/uBlockOrigin/uAssets/issues/29900
+godtlevert.no##+js(trusted-set-local-storage-item, reduxStore, %7B%22tracking%22%3A%7B%22consents%22%3A%7B%22All%22%3Afalse%2C%22functional%22%3Afalse%2C%22Segment.io%22%3Afalse%7D%2C%22dialog%22%3A%7B%22open%22%3Afalse%2C%22dirty%22%3Afalse%7D%2C%22isConfigured%22%3Atrue%7D%2C%22loyalty%22%3A%7B%22hasSeenLoyaltyPage%22%3Afalse%7D%7D)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -3567,3 +3575,5 @@ healf.com##+js(trusted-set-local-storage-item, cookie-banner-preferences, %7B%22
 teippimestarit.fi##+js(trusted-set-cookie, consent-policy, %257B%2522ess%2522%253A1%252C%2522func%2522%253A1%252C%2522anl%2522%253A0%252C%2522adv%2522%253A0%252C%2522dt3%2522%253A1%252C%2522ts%2522%253A29230412%257D, 1year)
 ! https://supreme.com - close
 supreme.com##+js(trusted-set-local-storage-item, cookie_bar, manually%20closed)
+! https://github.com/uBlockOrigin/uAssets/issues/29888 - video
+helsenorge.no##+js(trusted-set-cookie, HN-Cookie-Consent, base64%3AeyJWaWRlb0Nvb2tpZXMiOnRydWUsIkFuYWx5dGljc0Nvb2tpZXMiOmZhbHNlfQ%3D%3D, , , domain, .helsenorge.no)
