@@ -1263,7 +1263,8 @@ tv.wp.pl#@#html, html > body:style(overflow: auto !important;)
 /fbevents.js^$domain=open.fm,script,redirect=noop.js
 ||open.fm^$csp=worker-src 'none'
 ! https://github.com/uBlockOrigin/uAssets/issues/29812
-wirtualnemedia.pl##+js(rmnt, script, randvar)
+! https://github.com/uBlockOrigin/uAssets/issues/29859
+||std.wpcdn.pl^$domain=wirtualnemedia.pl
 wirtualnemedia.pl##.wm-categoryteasersection-ad-large
 wirtualnemedia.pl##.wp-screening-placeholder-container
 wirtualnemedia.pl##body div[class]:not([id]):has(> img[src="/staticfiles/wm-placeholder.png"])
@@ -3398,6 +3399,8 @@ freex2line.online##+js(no-fetch-if, url%3Adoubleclick.net, war%3Agoogletagservic
 freex2line.online##+js(no-xhr-if, tpc.googlesyndication.com, war%3A32x32.png)
 cimanow.cc##+js(set, HTMLImageElement.prototype.onerror, undefined)
 freex2line.online##+js(set, HTMLImageElement.prototype.onload, undefined)
+cimanow.cc,freex2line.onlinex##+js(no-fetch-if, googlesyndication)
+@@||tpc.googlesyndication.com^$xhr,domain=freex2line.online
 ! https://github.com/uBlockOrigin/uAssets/issues/20516
 ! https://github.com/uBlockOrigin/uAssets/issues/21046
 qiwi.gg##+js(aeld, , sessionStorage)

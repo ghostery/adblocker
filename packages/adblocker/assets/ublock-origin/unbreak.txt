@@ -297,9 +297,14 @@ kotaku.com#@##dfp-ad-1
 ! https://www.reddit.com/r/uBlockOrigin/comments/1109rgn/
 ! https://github.com/easylist/easylist/commit/c22014abecb3c95212c72e8462d4fac3df2eb878
 ! https://www.cbsnews.com/video/president-biden-ends-candidacy-60-minutes-video-2024-07-21/
+! https://github.com/uBlockOrigin/uBOL-home/issues/177
 ! https://github.com/uBlockOrigin/uAssets/issues/29695
+! https://github.com/uBlockOrigin/uAssets/issues/29878
 !#if !ext_ubol
 ||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$domain=cbsnews.com,redirect=google-ima.js,important
+!#else
+cbsnews.com>>##+js(no-fetch-if, v.fwmrm.net%2Fad%2Fg%2F, war%3Anoop-vmap1.xml)
+cbsnews.com>>##+js(no-xhr-if, v.fwmrm.net%2Fad%2Fg%2F, war%3Anoop-vmap1.xml)
 !#endif
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$domain=cbsnews.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai_debug.js$domain=cbsnews.com
@@ -1364,7 +1369,10 @@ order-order.com#@#.tag-sponsored
 ! https://www.thelallantop.com/sports/post/champions-trophy-hosted-by-pakistan-one-match-cost-millions-to-board - webpage error
 ||amazon-adsystem.com/*apstag.js^$redirect=amazon_apstag.js:5,domain=~republicbharat.com|~thelallantop.com
 ! https://www.ign.com/articles/microsoft-raises-the-price-of-all-xbox-series-consoles-xbox-games-confirmed-to-hit-80-this-holiday - video breakage
+! https://github.com/uBlockOrigin/uAssets/issues/29816
+!#if !env_safari
 ||aps.amazon-adsystem.com^$script,redirect=amazon_apstag.js:5
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/7397
 @@||reference.medscape.com/public/vptrack_iframe.html$frame,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/7399
@@ -4293,3 +4301,9 @@ usmagazine.com#@#.ami-video-placeholder
 ! https://github.com/uBlockOrigin/uAssets/issues/29712
 @@||d2r1yp2w7bby2u.cloudfront.net/js/a.js$script,domain=bmshosting.in
 @@||wzrkt.com^$script,domain=bmshosting.in
+! https://github.com/uBlockOrigin/uAssets/issues/29860
+login.asda.com##+js(set, newrelic, %7B%7D)
+login.asda.com##+js(set, newrelic.setCustomAttribute, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/29880
+@@||api-*.datadome.co^$frame,xhr,domain=venmo.com
+@@||ct.ddc.venmo.com.fpc.datadome.co^$script,domain=id.venmo.com
