@@ -1002,9 +1002,7 @@ lexpress.fr##+js(set-local-storage-item, etx-settings, %24remove%24)
 ! https://humbot.ai/
 aihumanizer.ai,humbot.ai##+js(set-local-storage-item, %2F__anon_id%7CbrowserId%2F, %24remove%24)
 ! test with uBO first
-!#if !ext_ubol
 /api/trpc/event.tracking|$xhr
-!#endif
 ! https://www.hk01.com/
 hk01.com##+js(remove-cookie, %2F_pk_id%7Chk01_annonymous_id%2F, when, scroll%20keydown)
 ! https://oilprice.com/
@@ -1019,18 +1017,14 @@ allrecipes.com##+js(set-local-storage-item, %2F_li_duid%7C_lc2_fpi%2F, %24remove
 ||collect.trendyol.com^
 ! test on uBO first
 ! https://www.trendyol.com/kadin-mont-x-g1-c118
-!#if !ext_ubol
 ||cdn.dsmcdn.com/sfx/mergen/
 trendyol.com##+js(set, process, %7B%7D)
 trendyol.com##+js(set, process.env, %7B%7D)
-!#endif
 trendyol.com##+js(remove-cookie, %2FanonUserId%7Cpid%7Csid%2F)
 ! https://www.bostonscally.com/
 bostonscally.com##+js(remove-cookie, %2F__ta_%7C_shopify_y%2F, when, scroll%20keydown)
 ! test on uBO first
-!#if !ext_ubol
 ||api.intelligems.io/v*/track|
-!#endif
 ! https://www.4gamers.com.tw/
 4gamers.com.tw##+js(remove-cookie, _pkc, when, scroll%20keydown)
 ! https://eu.4game.com/
@@ -1072,6 +1066,8 @@ $removeparam=gclsrc
 $removeparam=gclid
 ! https://support.google.com/google-ads/answer/13327296
 $removeparam=gad_source
+! https://support.google.com/analytics/answer/16479993
+$removeparam=gad_campaignid
 ! https://support.google.com/analytics/answer/10071811
 $removeparam=_gl
 ! https://developers.google.com/analytics/devguides/collection/protocol/v1/parameters
@@ -1929,6 +1925,18 @@ linklog.tiagorangel.com##+js(set, data, true)
 !#if !ext_ubol
 ||c.bookwalker.jp/v/louis/*/tracks.js
 ||bookwalker.jp/ex/browser-viewer/unitag_bv.js
+!#endif
+! https://lovo.ai/
+! test on uBO first
+!#if !ext_ubol
+||tolt.io^$3p
+!#endif
+! https://github.com/AdguardTeam/AdguardFilters/issues/212827
+! https://github.com/AdguardTeam/AdguardFilters/issues/212830
+! test on uBO first
+!#if !ext_ubol
+/dfxaf3-*.js|$script
+||terabox.app/wfm/jnqp
 !#endif
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
