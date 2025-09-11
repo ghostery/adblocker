@@ -632,6 +632,7 @@ wcoforever.net###sidebar_r1
 @@||embed.watchanimesub.net^$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/29349
 @@||embed.wcostream.com^$ghide
+embed.wcostream.com##+js(remove-cookie, PHPSESSID)
 ! https://github.com/uBlockOrigin/uAssets/issues/331
 ! https://github.com/uBlockOrigin/uAssets/issues/10133
 handelsblatt.com##+js(no-xhr-if, request%3Dadb)
@@ -788,7 +789,6 @@ spaste.com##h5 > a[href^="http://amzn.to/"]
 dailyuploads.net##+js(acs, %24, window.open)
 dailyuploads.net##+js(nowoif)
 *$script,3p,denyallow=google.com|gstatic.com,domain=dailyuploads.net
-||coertiest.click^
 ! https://github.com/uBlockOrigin/uAssets/issues/739
 ||zergnet.com/zerg-inf-multi$3p,script
 ! https://github.com/gorhill/uBlock/issues/3114
@@ -1370,15 +1370,6 @@ noticias.gospelmais.com.br##+js(set, blockAdBlock, true)
 songs.*##+js(aopr, AaDetector)
 ! https://github.com/uBlockOrigin/uAssets/issues/1076
 mel.fm##+js(nofab)
-! https://github.com/uBlockOrigin/uAssets/issues/1083
-@@||spiele.heise.de^$ghide
-heise.de###topBannerContainer
-heise.de##.keygameBannerContainer
-heise.de##.ad-microsites
-heise.de##.tipps-content-ad
-heise.de##.hbs-ad
-heise.de##.stage-advertising
-heise.de##.ad
 ! https://github.com/uBlockOrigin/uAssets/issues/1101
 dailygeekshow.com##+js(aopr, jQuery.hello)
 ! https://github.com/uBlockOrigin/uAssets/issues/1093
@@ -2668,7 +2659,6 @@ vipbox.*##^script:has-text(/delete window|adserverDomain|FingerprintJS/)
 !#else
 vipbox.*##+js(rmnt, script, %2Fdelete%20window%7CadserverDomain%7CFingerprintJS%2F)
 !#endif
-||moorsmerops.top^
 ! https://github.com/uBlockOrigin/uAssets/issues/2104
 wkyc.com##+js(acs, btoa)
 wkyc.com##.grid__sticky-column_side_left
@@ -2934,7 +2924,6 @@ camwhores.*##+js(set, flashvars.video_click_url, )
 ||camwhores.tv/contents/*/preroll$media,important,1p
 ||h-cdn.com/loader.js$script,domain=camwhores.tv
 ||lexozfldkklgvc.com^$3p
-||virtwishmodels.com^$frame,3p
 ||enjoyx.com^$frame,3p
 ||kuvirixa.com^
 camwhores.*##.table
@@ -3302,7 +3291,7 @@ pornblade.com###e_v + aside[id]
 *$xhr,3p,domain=hd-easyporn.com
 hd-easyporn.com##[rel*="sponsored"]
 ||pornojenny.com/api/widget/$3p
-/static/exnb/froload.js?v=$script,1p
+/static/*/froload.js?v=$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/2659
 filehorse.com##+js(set, isAdBlockActive, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/6572
@@ -4003,8 +3992,6 @@ hardmob.com.br#?#.postcontainer:has(.usertitle:has-text(Publicidade))
 @@||v.fwmrm.net/crossdomain.xml$xhr,domain=live.bleacherreport.com
 ! https://forums.lanik.us/viewtopic.php?f=62&t=41761#p141302
 downloadming.*##+js(aopw, decodeURIComponent)
-! https://github.com/NanoMeow/QuickReports/issues/125
-nfl.com##[class$="adblock"]
 ! https://github.com/uBlockOrigin/uAssets/issues/3565
 guidetnt.com##+js(set, isAdBlockActive, false)
 ! https://www.reddit.com/r/uBlockOrigin/comments/9j5bxk
@@ -4519,7 +4506,6 @@ javmost.*##center > div[style^="width:100%; height: 100px"]
 ! vidmoly . me | .to popups
 vidmoly.*##+js(nowoif)
 vidmoly.to##+js(set, HTMLAnchorElement.prototype.click, noopFunc)
-||apptospace.com^
 ||boyfriendmeaningless.com^
 ||disproveknob.com^
 vidmoly.*###mg_vd
@@ -4536,10 +4522,6 @@ comnuan.com##+js(set, cmnnrunads, true)
 mega-p2p.net##+js(aopr, open)
 ! https://github.com/uBlockOrigin/uAssets/issues/4156
 audioz.download,peeplink.in##+js(acs, String.fromCharCode, shift)
-! https://github.com/uBlockOrigin/uAssets/issues/22511
-@@||savelinks.*^$ghide
-savelinks.*##+js(aopr, LieDetector)
-savelinks.*##+js(nowoif)
 ! uppit. com ads
 ||uppit.com^$document,csp=script-src 'self' 'unsafe-eval' 'unsafe-inline' data: *.cloudflare.com
 @@||uppit.com^$ghide
@@ -5657,7 +5639,6 @@ luzernerzeitung.ch,tagblatt.ch##+js(nostif, adblock, 5)
 @@||egydead.*^$ghide
 egydead.*##.adHolder
 egydead.*##.FooterAds
-||herdethi.net^
 ! mangamanga. ml popups
 mangamanga.*##+js(aeld, keydown)
 ! fuckdy .com popups
@@ -5965,7 +5946,6 @@ shemalepower.xyz##+js(nowoif)
 ssrmovies.*##+js(nowoif)
 ||get-link.xyz^
 ||hitcashtag.com^$3p
-||techbumper.info^$3p
 ||techcdn.com^$3p
 ! https://github.com/NanoMeow/QuickReports/issues/1090
 shrib.com##+js(nostif, adb, 6000)
