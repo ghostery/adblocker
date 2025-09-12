@@ -229,7 +229,8 @@ hintergrundbild.org#@#.ads1
 @@||ign.com/newsfeed-block$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/27666
 ! https://github.com/uBlockOrigin/uAssets/issues/27836
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=ign.com
+! https://github.com/uBlockOrigin/uAssets/issues/29816
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=it.ign.com
 @@||cdn.ziffstatic.com/pg/ign.$script,domain=ign.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1747
 @@||cxense.com/cx.js$script,domain=letelegramme.fr
@@ -4307,3 +4308,12 @@ login.asda.com##+js(set, newrelic.setCustomAttribute, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/29880
 @@||api-*.datadome.co^$frame,xhr,domain=venmo.com
 @@||ct.ddc.venmo.com.fpc.datadome.co^$script,domain=id.venmo.com
+! https://github.com/uBlockOrigin/uAssets/issues/29925
+tires.costco.ca##+js(set, adobePageView, noopFunc)
+! unbreak hindustantimes.com articles
+!#if !env_mobile
+hindustantimes.com#@#.rgtAdSection
+hindustantimes.com##.rgtWidget.ht-ad-holder-right
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/29972
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cnews.cz

@@ -580,8 +580,6 @@ desitelugusex.com##+js(set, D4zz, noopFunc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/112293
 ! https://github.com/uBlockOrigin/uAssets/issues/14527
 aresmanga.com##+js(acs, eval, replace)
-! https://github.com/AdguardTeam/AdguardFilters/issues/112280
-||doubleclick.net^$xhr,redirect-rule=nooptext,domain=soccerstreams-100.*
 ! https://github.com/AdguardTeam/AdguardFilters/issues/112322
 mobilanyheter.net##+js(nostif, ai_)
 ! https://github.com/uBlockOrigin/uAssets/issues/4574#issuecomment-1062577877
@@ -1202,7 +1200,7 @@ photopea.com##div[style]:has(> a[href*="photopea.com"][href*="ads"])
 !#if cap_html_filtering
 ||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
 !#else
-! photopea.com##+js(trusted-create-html, head, %3Cimg%20src%3D'%2Finvalid.jpg'%20onerror%3D'if%20(localStorage.length%20%3D%3D%3D%200%20%7C%7C%20typeof%20JSON.parse(localStorage._ppp)%5B%220_uid%22%5D%20%3D%3D%3D%20%22undefined%22)%20%7BObject.defineProperty(window%2C%20%22innerWidth%22%2C%20%7Bget()%20%7B%20return%20document.documentElement.offsetWidth%20%2B%20320%20%7D%7D)%3B%7D'%3E%3C%2Fimg%3E)
+www.photopea.com##+js(trusted-create-html, head, %3Cimg%20src%3D'%2Fad-choices.png'%20onerror%3D'if%20(localStorage.length%20!%3D%3D%200%20%7C%7C%20typeof%20JSON.parse(localStorage._ppp)%5B%220_uid%22%5D%20!%3D%3D%20%22undefined%22)%20%7BObject.defineProperty(window%2C%20%22innerWidth%22%2C%20%7Bget()%20%7B%20return%20document.documentElement.offsetWidth%20%2B%20320%20%7D%7D)%3B%7D'%3E%3C%2Fimg%3E)
 !#endif
 !photopea.com##+js(rpnt, script, %2F%5E.*%3F(function%20gtag).*%24%2F, document.documentElement.setAttribute('onreset'%2C(function%20addCustomEvent()%7Bdocument.addEventListener('resizecanvas'%2C()%3D%3E%7Bwindow.innerWidth%3Ddocument.documentElement.clientWidth%2B(window.screen.width%3C1600%3F180%3A320)%7D)%7D)())%3Bdocument.documentElement.dispatchEvent(new%20CustomEvent('reset'))%3Bdocument.documentElement.removeAttribute('onreset')%3Bfunction%20resize(event%3D%7B%7D)%7Bif(!event.skip)%7Bdocument.dispatchEvent(new%20CustomEvent('resizecanvas'))%3Bconst%20resizeEvent%3Dnew%20Event('resize')%3BresizeEvent.skip%3Dtrue%3Bwindow.dispatchEvent(resizeEvent)%7D%7Dlet%20debounce%3Bwindow.addEventListener('resize'%2Cevent%3D%3E%7BclearTimeout(debounce)%3Bdebounce%3DsetTimeout(()%3D%3Eresize(event)%2C100)%7D)%3Bresize()%3B)
 ! https://github.com/uBlockOrigin/uAssets/issues/20232
@@ -2526,7 +2524,7 @@ cloud-computing-central.com##+js(nostif, -0x)
 @@||static.yieldmo.com/ym.adv.min.js$script,domain=okdebrid.com|youdebrid.com
 @@||partner.googleadservices.com/gampad/cookie.js?$script,domain=okdebrid.com|youdebrid.com
 ! https://github.com/uBlockOrigin/uAssets/issues/15311
-expresskaszubski.pl##+js(nostif, offsetHeight)
+expresskaszubski.pl##+js(nosiif, childNodes)
 ! nudostar.com,slutmesh.net ad script
 nudostar.com,slutmesh.net##+js(aopw, __aaZoneid)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1fpax7b/a_script_filter_to_block_top_banner_ai_ad/

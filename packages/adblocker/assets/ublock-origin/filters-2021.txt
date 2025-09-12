@@ -389,8 +389,10 @@ cybermania.ws##+js(acs, document.getElementById, showModal, %2F%5Edata%3Atext%5C
 cybermania.ws##+js(no-xhr-if, %2Fdoubleclick%7Cgooglesyndication%2F)
 cybermania.ws##+js(no-fetch-if, doubleclick.net%2Finstream%2Fad_status.js, war%3Adoubleclick_instream_ad_status.js)
 cybermania.ws##+js(aost, document.getElementsByTagName, adsBlocked)
-cybermania.ws##+js(aost, Math.random, %2F(%3F%3D%5E(%3F!.*(%2Fakismet-frontend%5C.js%7Cgstatic%7Cjquery%2F)))%2F)
+! cybermania.ws##+js(aost, Math.random, %2F(%3F%3D%5E(%3F!.*(%2Fakismet-frontend%5C.js%7Cgstatic%7Cjquery%2F)))%2F)
 *$script,redirect-rule=noopjs,domain=cybermania.ws
+cybermania.ws##+js(rmnt, script, adblock)
+cybermania.ws###zdn-adblock-overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/8468
 love4porn.com##+js(set, flashvars.popunder_url, )
 love4porn.com##div[style="position: absolute; inset: 0px; overflow: hidden; z-index: 160; background: transparent none repeat scroll 0% 0%; display: block;"]
@@ -767,8 +769,6 @@ imginn.com##+js(acs, document.createElement, unblocker)
 ! https://github.com/easylist/easylist/pull/7248
 fpo.xxx##+js(set, flashvars.adv_pause_html, )
 fpo.xxx##+js(set, flashvars.adv_pre_src, )
-! https://github.com/AdguardTeam/AdguardFilters/issues/75838
-rscripts.net##+js(nobab)
 ! https://www.reddit.com/r/uBlockOrigin/comments/lt4xqd/please_fix_those_annoying/
 dogecoin.*##+js(aopr, app_vars.force_disable_adblock)
 ||coinad.*^$3p
@@ -864,10 +864,6 @@ freevstplugins.net##+js(acs, document.getElementById, adsBlocked)
 @@||freevstplugins.net^$ghide
 freevstplugins.net##ins.adsbygoogle
 freevstplugins.net##.advert-wrap
-! https://github.com/uBlockOrigin/uAssets/issues/8699
-@@||genelpara.com^$ghide
-genelpara.com##ins.adsbygoogle
-genelpara.com##[class^="rklm"]
 ! https://github.com/easylist/easylist/issues/7395#issuecomment-796787384
 ! https://github.com/uBlockOrigin/uAssets/issues/24423
 ||freeuseporn.com/backdrop.js
@@ -2699,6 +2695,7 @@ fapcat.com##.fade.top
 fapcat.com##.spot-horizontal
 fapcat.com##.spot-list
 ||a.fapcat.com^
+||s.fapcat.com/static/js/goldfish.js
 ! https://github.com/uBlockOrigin/uAssets/issues/10296
 ||gamefz.com/c.asp$frame
 ! https://github.com/uBlockOrigin/uAssets/issues/10297

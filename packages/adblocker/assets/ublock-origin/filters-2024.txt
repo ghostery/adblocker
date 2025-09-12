@@ -158,7 +158,7 @@ workink.click##+js(nowoif, !direct)
 work.ink##+js(nosiif, a0b)
 work.ink##+js(no-fetch-if, %2Foutbrain%7Ccriteo%7Cthisiswaldo%7Cmedia%5C.net%7Cohbayersbur%7Cadligature%7Cquantserve%7Csrvtrck%7C%5C.css%7C%5C.js%2F)
 work.ink##+js(no-fetch-if, mode%3Ano-cors)
-work.ink##+js(nostif, Ad, 5000)
+work.ink##+js(nostif, , 2000-5000)
 work.ink##div[id^="bsa-zone_"]
 work.ink##ins.adsbygoogle
 work.ink##body > div:has(> a#link)
@@ -209,7 +209,6 @@ crackle.com##.vjs-ad-break-marker-adjustment
 ! https://www.reddit.com/r/uBlockOrigin/comments/137arti/
 ! https://github.com/uBlockOrigin/uAssets/issues/23390
 crackle.com##+js(json-prune-fetch-response, data.device.adsParams%20data.device.adSponsorshipTemplate, , propsToMatch, url%3A%2Fappconfig)
-||heartbeat.crackle.com/tp.png
 ! https://github.com/uBlockOrigin/uAssets/issues/6738
 ! https://github.com/uBlockOrigin/uAssets/issues/17145
 fmovies.*##+js(nowoif)
@@ -441,6 +440,7 @@ channel4.com##.block--mpu
 ! https://github.com/uBlockOrigin/uAssets/issues/24873
 channel4.com##+js(json-prune, adverts.breaks)
 ! mail.yahoo.com stuff
+mail.yahoo.com##+js(json-prune, result.responses.%5B%5D.response.result.cards.%5B-%5D.data.offers)
 mail.yahoo.com##[data-test-id="right-rail-ad"]
 ! https://github.com/uBlockOrigin/uAssets/issues/13439
 mail.yahoo.com##[data-test-id="video-container"]
@@ -463,6 +463,8 @@ www.yahoo.com##.sticky[class*="top-"]:has(style)
 www.yahoo.com##div[id]:has(> div[id^="top_center-frontpage_"])
 ! https://sports.yahoo.com/mlb/gamechannel/
 sports.yahoo.com###defaultLDRB-sizer
+! https://github.com/uBlockOrigin/uAssets/issues/17012
+mail.yahoo.com##+js(nostif, ADB)
 ! https://github.com/uBlockOrigin/uAssets/issues/1802
 jpopsingles.eu##+js(nano-sib, downloadTimer)
 jpopsingles.eu##+js(noeval-if, adsBlocked)
@@ -473,11 +475,11 @@ jpopsingles.eu##+js(noeval-if, adsBlocked)
 ||jpopsingles.eu/generate-link/aHR0c$doc,urlskip=/\/generate-link\/(aHR0c[^?#]+)/ -base64
 ||adslink.pw/webroot/link/api?url=http$doc,urlskip=?url
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dyvn5w/ubo_getting_detected_on_jpopsingleseu/
-jpopsingles.eu##+js(acs, document.createElement, break%3Bcase)
 jpopsingles.eu##+js(aeld, DOMContentLoaded, document.documentElement.lang.toLowerCase)
 jpopsingles.eu##+js(rmnt, script, adsSrc)
 jpopsingles.eu##+js(no-fetch-if, %2Fads%7Cgoogle%2F, length%3A10, %7B%22type%22%3A%20%22cors%22%7D)
 jpopsingles.eu##+js(aost, atob, injectedScript)
+jpopsingles.eu##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/29244#issuecomment-3232411228
 adslink.pw##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 adslink.pw##+js(rmnt, script, %2FpopMagic%7Cpop1stp%2F)
@@ -1514,6 +1516,8 @@ m4u.*,xprime4u.*##.onclick-input
 @@||v.fwmrm.net/ad/g/$xhr,domain=rtlplay.be
 ||v.fwmrm.net/ad/g/$xhr,3p,removeparam=caid,domain=rtlplay.be
 ! https://github.com/uBlockOrigin/uAssets/issues/23182
+! https://cmod-na.live.streamtheworld.com/
+! https://yield-op-idsync.live.streamtheworld.com/
 ||live.streamtheworld.com/ondemand/ars?$xhr,3p
 ||vader.amperwave.net/*/instream/$xhr,3p
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-9038266
@@ -1602,7 +1606,7 @@ animeunity.to##+js(rmnt, script, Popup)
 ! https://github.com/uBlockOrigin/uAssets/issues/22840
 ! https://github.com/uBlockOrigin/uAssets/issues/27337
 !#if env_chromium
-decrypt.day##[id="aswift_0_host"], [id="aswift_1_host"], [id="aswift_2_host"], [id="aswift_3_host"], [id="aswift_4_host"], [id="aswift_5_host"]:style(opacity: 0 !important; pointer-events: none !important;)
+decrypt.day##[style*="border"]:not(.checker):is([id="aswift_0_host"], [id="aswift_1_host"], [id="aswift_2_host"], [id="aswift_3_host"], [id="aswift_4_host"], [id="aswift_5_host"]):style(opacity: 0 !important; pointer-events: none !important;)
 !#else
 decrypt.day##ins.adsbygoogle > *:style(position: relative !important; left: -10000px !important;)
 !#endif
@@ -1992,7 +1996,12 @@ pererecadoida.life,bullrun2024.online###overover
 pererecadoida.life,bullrun2024.online###obrazek
 pererecadoida.life,bullrun2024.online###bannerInCenter
 myp2p.*###reklama_sidebar
-myp2p.*##a[rel="sponsored"]
+! https://github.com/uBlockOrigin/uAssets/issues/29938
+mip2p.*,myp2p.*##[href^="https://lightbrights.xyz/"]
+mip2p.*,myp2p.*##[href^="https://bestgugo.xyz/"]
+mip2p.*,myp2p.*##a[rel="sponsored"][href*="cldbt.cloud"]:style(pointer-events: none !important;)
+mip2p.*,myp2p.*##a[rel="sponsored"][href*="cldbt.cloud"] table.links a:style(pointer-events: auto !important;)
+mip2p.*,myp2p.*##a[rel="sponsored"][href*="cldbt.cloud"] iframe:style(pointer-events: auto !important;)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/181628
 game8.co##.js-side-ads-movie-container:remove()
 ! https://github.com/uBlockOrigin/uAssets/discussions/24177#discussioncomment-9821526
@@ -2661,6 +2670,9 @@ koramaup.com##[href^="http://u87yuo9ojh.world/"]
 koramaup.com##div.text-center.col-md-12:has([href*="//gjxmcla.pro/"])
 ! https://github.com/uBlockOrigin/uAssets/issues/25464
 callofwar.com##+js(rmnt, script, Anzeige)
+! https://github.com/uBlockOrigin/uAssets/issues/29914
+callofwar.com###inGameAdsContainer:remove()
+||callofwar.com/clients/ww2-uber/ww2-uber_live/$image
 ! https://github.com/uBlockOrigin/uAssets/issues/25469
 4edtcixl.xyz##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/25483
@@ -2878,6 +2890,9 @@ fastdokan.top,moviedokan.*##.resps
 ||jayabaji3.com/bn-bd?aff=$doc
 ! https://github.com/uBlockOrigin/uAssets/issues/25826
 videovak.com##+js(aeld, click, PopUnder)
+videovak.com##+js(acs, document.addEventListener, location.href)
+||adaptunemployed.com^
+||rectangularfoundation.com^
 ! linkupload. pro ads
 ||linkupload.pro^$csp=script-src 'self' *.googleapis.com google.com gstatic.com
 ! govtportal. org antiadb(file hosting)
