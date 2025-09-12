@@ -92,7 +92,6 @@ export class BlockingContext {
   public async disable(): Promise<void> {
     if (this.blocker.config.loadNetworkFilters) {
       this.page.off('request', this.onRequest);
-      await this.page.setRequestInterception(false);
     }
 
     if (this.blocker.config.loadCosmeticFilters) {
