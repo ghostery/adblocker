@@ -3436,7 +3436,11 @@ twitter.com,x.com,~platform.twitter.com##+js(json-prune-xhr-response, data.user.
 twitter.com,x.com,~platform.twitter.com##+js(json-prune-xhr-response, data.immersiveMedia.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FImmersiveMedia)
 ! https://github.com/uBlockOrigin/uAssets/issues/29749#issuecomment-3277237498
 x.com##article[data-testid="tweet"] a[href^="https://linkneverdiel.com"]
-x.com##+js(nowoif, %2F%5Cblinkneverdie.*%5C.php%5Cb.*_blank%2F)
+x.com##+js(nowoif, %2F%5C.php%5Cb.*_blank%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/29749#issuecomment-3281040355
+x.com##+js(trusted-json-edit, .%5B%3F.media_entities.*.video_info.variants%5D..url_data.url%3D%22https%3A%2F%2Ftwitter.undefined%22)
+x.com##+js(nowoif, twitter.undefined)
+x.com##a[href="https://twitter.undefined/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/20800
 jornadaperfecta.com##+js(rmnt, script, ad-block-activated)
 ! https://github.com/uBlockOrigin/uAssets/issues/20802
