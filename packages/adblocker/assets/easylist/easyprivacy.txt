@@ -1,9 +1,9 @@
 [Adblock Plus 1.1]
-! Version: 202509111038
+! Version: 202509150529
 ! Title: EasyPrivacy
-! Last modified: 11 Sep 2025 10:38 UTC
+! Last modified: 15 Sep 2025 05:29 UTC
 ! Expires: 4 days (update frequency)
-! Commit: 2eea2ff6fa00e4e09af78bb099c567a8737f064c
+! Commit: e6ee67650422b76e7b7b355b8af76c86940874ef
 ! *** easylist:template_header.txt ***
 !
 ! Please report any unblocked adverts or problems
@@ -1280,6 +1280,7 @@
 /jquery.google-analytics.js
 /jquery.iframetracker-
 /jquery.trackstar.js
+/js-responsive/minimal-analytics-$script
 /js-sdk-event.min.js
 /js/_analytics.js
 /js/analitics.js
@@ -2368,6 +2369,7 @@
 /trace/record?
 /trace?sessionid=
 /traces.php?
+/tracifyv2.js
 /track-event.js
 /track-focus.min.js
 /track-imp?
@@ -2603,6 +2605,7 @@
 /v1/log/web-vitals$xmlhttprequest
 /v1/pixel.js
 /v1/pixel?
+/v1/rgstr|
 /v1/stats/track
 /v1/tracker.js
 /v1/viewport_events
@@ -2898,6 +2901,7 @@
 ?type=page&event=
 ?type=pageview&
 ?v=2&tid=G-$~third-party
+?wmcAction=wmcTrack&
 _beacon?
 _c.gif?c=
 _chartbeat.js
@@ -3298,7 +3302,9 @@ _WebVitalsReporter_
 ://email.*/o/$image
 ://links.flickr.com/s/eo/$image
 ://links.paypal.*/eos/$image
+://mailmag.hhcross.hankyu-hanshin.jp/c/*.gif
 ://parcel-api.delivery-status.*/open/$image
+://sg1.wizrocketmail.net/r?e=$image
 ://t.*/open^$image
 ://t.order.*/r/?id=$image
 ^endpoint=track^$image
@@ -3576,6 +3582,7 @@ omni.soundestlink.com$image
 ||matheranalytics.com^
 ||mathilde-ads.com^
 ||matomo3.org^
+||maxclientstatapi.com^
 ||maxepv.com^
 ||mb-tracking.com^
 ||mbmgivexdvpajr.com^
@@ -3623,6 +3630,7 @@ omni.soundestlink.com$image
 ||ostrichesica.com^
 ||p7cloud.net^
 ||pageid.info^
+||partnerlinks.io^
 ||peiq.services^
 ||permutive.app^
 ||pippio.com^
@@ -4786,6 +4794,7 @@ omni.soundestlink.com$image
 ||getstatistics.se^$third-party
 ||getstats.org^$third-party
 ||getviously.com^$third-party
+||getwarmly.com^$third-party
 ||gez.io^$third-party
 ||giddyuptrk.com^$third-party
 ||gigcount.com^$third-party
@@ -4883,6 +4892,7 @@ omni.soundestlink.com$image
 ||hittracker.com^$third-party
 ||hitwake.com^$third-party
 ||hitwebcounter.com^$third-party
+||hlstatus.com^$third-party
 ||hmstats.com^$third-party
 ||hockeystack.com^$third-party
 ||holdonstranger.com^$third-party
@@ -5717,6 +5727,7 @@ omni.soundestlink.com$image
 ||referforex.com^$third-party
 ||referralrock.com^$third-party
 ||refersion.com^$third-party
+||refix.ai^$third-party
 ||reinvigorate.net^$third-party
 ||relead.com^$third-party
 ||relevant-digital.com^$third-party
@@ -6180,6 +6191,7 @@ omni.soundestlink.com$image
 ||traceless.me^$third-party
 ||tracemyip.org^$third-party
 ||traceworks.com^$third-party
+||tracify.ai^$third-party
 ||track-re01.com^$third-party
 ||track-web.net^$third-party
 ||trackadshub.com^$third-party
@@ -7175,6 +7187,7 @@ omni.soundestlink.com$image
 ||eatablesquare.com^
 ||echoinghaven.com^
 ||economysoil.com^
+||educationcar.com^
 ||educrated.com^
 ||effervescentcoral.com^
 ||effervescentvista.com^
@@ -7494,6 +7507,7 @@ omni.soundestlink.com$image
 ||incompetentjoke.com^
 ||inconclusiveaction.com^
 ||infamousstream.com^
+||infinityhedge.com^
 ||informalbook.com^
 ||innocentlamp.com^
 ||inputicicle.com^
@@ -10025,6 +10039,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||api.wipmania.com^
 ||apibaza.com/pixel/
 ||apm-engine.meteor.com^$third-party,xmlhttprequest
+||app.abralytics.com/assets/tracker/index.js
 ||app.adjust.com^$third-party
 ||app.carnow.com/dealers/track_visitor
 ||app.link/_r?$script,third-party
@@ -10122,6 +10137,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||b8cdn.com/assets/v1/analytics-
 ||backend.alia-cloudflare.com/launcher/events/
 ||backend.alia-cloudflare.com/user/events
+||backend.leadconnectorhq.com/attribution_service/user_session_v3/update_session/
 ||backend.leadconnectorhq.com/forms/form-survey-event
 ||backend.verbolia.com/content/js/velw.min.js
 ||baidu.com/pixel?
@@ -10258,6 +10274,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cdn.sphlabs.com/suid/
 ||cdn.stamped.io/cdn/images/pixel.png
 ||cdn.statically.io/gh/opcdn/analytics/main/script.js
+||cdn.super.com/remote-event-registry.json
 ||cdn.usefathom.com^
 ||cdnjs.work/metrics.js
 ||cdnma.com/apps/capture.js
@@ -10405,6 +10422,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||collector.automote.co.nz^
 ||collector.clareity.net^
 ||collector.contentexchange.me^$third-party
+||collector.ex.co^
 ||collector.getyourguide.com^
 ||collector.mazeberry.com^
 ||collector.net-logger.com^
@@ -10642,6 +10660,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||event-listener.air.tv^
 ||event-logger.tagboard.com^
 ||event-service.letslinc.com^
+||event-store.sitebehaviour.com^
 ||event-stream.spot.im^
 ||event.api.drift.com^
 ||event.collector.scopely.io^
@@ -10700,11 +10719,11 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||evt.24.com^
 ||evt.collarity.com^$image
 ||evt.houzz.com^
+||ewe.loudcrowd.com^
 ||ex.co/content/monetization/legacy-pixels/
 ||exacttarget.com^$~subdocument,third-party
 ||excite.ie/?click_in=
-! [dup] from ublock-origin/privacy.txt
-! ||execute-api.*.amazonaws.com/forms-impressions
+||execute-api.*.amazonaws.com/forms-impressions
 ||exitintel.com/log/$third-party
 ||expedia.com/static/default/default/scripts/siteAnalytics.js
 ||expedia.com/vaclog/
@@ -10766,6 +10785,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||flixster.com^*/analytics.
 ||flocdn.com^*/dpl/
 ||flocktory.com^*/tracks/
+||fls-na.amazon.com^
 ||flux-cdn.com/plugin/common/analytics/
 ||flux.com/geo.html?
 ||fmnetwork.nl/tracking/
@@ -11185,6 +11205,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||loglady.skypicker.com^
 ||logs-api.shoprunner.com^
 ||logs.animaapp.com^
+||logs.betterstack.com^
 ||logs.datadoghq.com^$third-party
 ||logs.dynamicauth.com^
 ||logs.mezmo.com^
@@ -11273,6 +11294,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||metrics.nsureapi.com^
 ||metrics.onshape.com^
 ||metrics.pico.tools^
+||metrics.rapidedge.io^
 ||metrics.scribblelive.com^
 ||metrics.userguiding.com^
 ||metrix.emagister.com^
@@ -11428,7 +11450,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||opinary.com/v1/events
 ||oply.hearstapps.com^
 ||optimeeze.appspot.com^
-||optimizer.poxo.com^
+||optimizer.poxo.com/ca2/analytics.js
 ||optmn.cloud/hb/
 ||ora.tv/j/ora_evttracking.js
 ||orb.ee/collect
@@ -11764,6 +11786,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||scribd.com/api/v1/events
 ||scribol.com/traffix/widget_tracker/
 ||script-api.kinja.com/script?
+||script.claspo.io/forms/v1/event
 ||scripts.psyma.com^
 ||scripts.stay22.com/letmeallez.js
 ||scripts.swifteq.com/hc_events.js
@@ -12644,6 +12667,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||d2wu036mkcz52n.cloudfront.net^
 ||d2wy8f7a9ursnm.cloudfront.net^
 ||d2z0bn1jv8xwtk.cloudfront.net^
+||d2zd0wa1vpt7j9.cloudfront.net^
 ||d31bfnnwekbny6.cloudfront.net/customers/
 ||d31y97ze264gaa.cloudfront.net^
 ||d34ko97cxuv4p7.cloudfront.net^
@@ -12882,6 +12906,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||beagle.prod.tda.link^
 ||blacktri-a.akamaihd.net^
 ||cdn.c-i.as^$script,third-party
+||cesar-it.de/collect/
 ||cgicounter.onlinehome.de^
 ||clipkit.de/metrics?
 ||cloudfront.net/customers/24868.min.js
@@ -13451,6 +13476,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tag.triboomedia.it^
 ||tourmake.it^*/stat/
 ||tourmake.it^*/stats?
+||tps.trovaprezzi.it^
 ||tr.brand-fresh.it^
 ||tr.bt.matrixspa.it^
 ||track.cedsdigital.it^
@@ -14053,6 +14079,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||a-da.invideo.io^
 ||a-reporting.nytimes.com^
 ||a.electerious.com^
+||a.sputniknews.com/js/sputnik.js
 ||a.tellonym.me^
 ||a10.nationalreview.com^
 ||aa.avvo.com^
@@ -14348,6 +14375,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||carsandbids.com/a/p
 ||cbc.ca/g/stats/
 ||cc.cc/visit_log_ajax/visit_log_save_ajax.php?
+||cdn.gov.cfigroup.com/webmon/s/source/webmon/$domain=weather.gov
 ||cdn.jsdelivr.net/npm/@adshield/
 ||centerblog.net/stats.js
 ||cgtn.com/api/collect/
@@ -14475,6 +14503,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||dailymail.co.uk/geo/
 ||dailymail.co.uk/rta2/
 ||dailymotion.com/logger/
+||dap.digitalgov.gov/Universal-Federated-Analytics-Min.js
 ||darkreader.org/data/top-backers.json
 ||darkreader.org/elements/backers-
 ||darkreader.org/elements/statistics.js
@@ -14580,6 +14609,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||el.quizlet.com^
 ||eldorado.gg/white-house/white_house_script_data_
 ||elements.video/tr/
+||elevenlabs.io/hog/
 ||elitesingles.com/cs/tp.png?
 ||embed.reddit.com/svc/shreddit
 ||embedme.top/embed/extra
@@ -14649,6 +14679,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||exr-mms.expertreviews.co.uk^
 ||extendoffice.com/analytics.js
 ||f.cdngeek.com^$domain=edugeek.net
+! [dup] from ublock-origin/privacy.txt
+! ||f.pie.org^
 ||f362.nola.com^
 ||facebook.com/a/bz?
 ||facebook.com/ajax/*/log.php
@@ -15032,6 +15064,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||manua.ls/gtag
 ||mapcarta.com/logs
 ||mapquest.com/logger
+||market.samm.com/0/sendeventv2
 ||marketing.alibaba.com^
 ||marketing.dropbox.com^
 ||marketing.taskus.com^
@@ -15068,6 +15101,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||metrics.freemake.com^
 ||metrics.hackerrank.com^
 ||metrics.hyperliquid.xyz^
+||metrics.imdb.com^
 ||metrics.onewegg.com^
 ||metrics.roblox.com^
 ||metrics.spkt.io^
@@ -15094,6 +15128,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||modanisa.com/al/j/analytics.js
 ||mollusk.apis.ign.com/metrics/
 ||mon.us.tiktokv.com^
+||monetarygoldgroup.com/_ub/
 ||moneycontrol.com/news/services/get_comscore_pageview/
 ||monitor.channel4.com^
 ||monitor.lifemiles.com/collect
@@ -15235,6 +15270,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||phonearena.com/_track.php
 ||pi.ai/proxy/api/event
 ||pie.org/g/collect?
+! [dup] from ublock-origin/privacy.txt
+! ||pie.org/v1/experiments/view
 ||pikbest.com/?m=Stats&
 ! [dup] from ublock-origin/privacy.txt
 ! ||ping.anizm.net^
@@ -15353,6 +15390,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||reports.tunein.com^
 ||researchgate.net/beacon/
 ||researchgate.net/track/
+||reservationday.com/metrics/
 ||reverbnation.com/api/user/app_events
 ||revolut.com/api/t/errors
 ||rfk.biglots.com^
@@ -15389,6 +15427,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||rvo-cohesion.healthline.com^
 ||s.gofile.io^
 ||s.infogram.com^
+||s.joinhoney.com/evs
 ||s.smallpdf.com/static/track-js-
 ||s.sofoot.com/script.js
 ||s.wayfair.com^
@@ -15462,6 +15501,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||solarwinds.com/ra-$script
 ||solidcams.com/api/metrics
 ||solvusoft.com^*/scripts/visitor.js
+||sonic.fdp.api.flipkart.com/4/data/collector/
 ||sortlist.cloud/log
 ||soundcloud.com^$ping
 ||source.chromium.org/v1/logging
@@ -15620,6 +15660,8 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||t.pagesix.com^
 ||t.paypal.com^$image
 ||t.perigold.com^
+! [dup] from ublock-origin/privacy.txt
+! ||t.pie.org^
 ||t.poki.io^
 ||t.prageru.com^
 ||t.regionsjob.com^
@@ -15772,6 +15814,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||trackr.vivenu.com^
 ||tradingview-widget.com/static/bundles/embed/snowplow-embed-widget-tracker.$script
 ||tradingview.com/ping
+||trafficid.brandwell.ai^
 ||traveloka.com/api/v1/tvlk/events
 ||trck.coomeet.com^
 ||trckng.dainese.com^
@@ -15780,6 +15823,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||tredir.go.com^
 ||trends.privacywall.org^
 ||trip.com/bee/collect
+||trip.com/bf.gif?
 ||tripadvisor.*/BALinkImpressionTracking/
 ||tripadvisor.*/CookiePingback?
 ||tripadvisor.*/GARecord^
@@ -15789,13 +15833,12 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||trivago.com/tracking/
 ||trk.decido.io^
 ||trk.tirto.id^
-! [dup] from ublock-origin/privacy.txt
-! ||trueachievements.com/tgn/ana?*page_view
 ||trumba.com/et.aspx?
 ||trustradius.com/api/v1/pageview
 ||trustradius.com/api/v2/collectMetrics
 ||truthsocial.com/instance/innovid.js
 ||trx3.famousfix.com^
+||try.elevenlabs.io/pr/js
 ||ts.delfi.lt^
 ||tsmate.com/api/metrics
 ||tubepornstars.com/js/analytics
@@ -16218,7 +16261,9 @@ $csp=child-src 'none'; frame-src *; worker-src 'none',domain=thepiratebay.org|vi
 ||crunchbase.com/rw7M6iAV/init.js
 ||ctinsider.com/413gkwMT/init.js
 ||ctpost.com/413gkwMT/init.js
+||cubbyathome.com/jAYekY18/init.js
 ||discount.hk-hotel.com/QUkd4lO9/init.js
+||dormtherapy.com/jAYekY18/init.js
 ||drupal.org/VnPBBfwe/init.js
 ||expressnews.com/413gkwMT/init.js
 ||fiverr.com/px/client/PXK3bezZfO/main.min.js
@@ -53733,6 +53778,7 @@ bitdefender.com##body[style="opacity: 0;"]:style(opacity: 1 !important;)
 ||yachtingnetwork.it/stat/
 ! Japanese
 ||abema-tv.com/v1/stats/
+||ad-bls-tracking.lemino.docomo.ne.jp^
 ||ad-platform.jmty.jp^
 ||altema-log.com^
 ||amazonaws.com/ai-img/aia.js
@@ -53762,6 +53808,9 @@ bitdefender.com##body[style="opacity: 0;"]:style(opacity: 1 !important;)
 ||beat.yourtv.jp^
 ||bookoffonline.co.jp/files/inc_js/ac/
 ||bookoffonline.co.jp/files/tracking/
+||bookwalker.jp/custom/unitag/
+||bookwalker.jp/ex/browser-viewer/unitag_bv.js
+||bookwalker.jp/v/louis/*/tracks.js
 ||carview.co.jp/include_api/log/
 ||clb.yahoo.co.jp^
 ||contx.net/collect.js
@@ -53923,6 +53972,7 @@ bitdefender.com##body[style="opacity: 0;"]:style(opacity: 1 !important;)
 ||log.kinolights.com^
 ||log.tossinvest.com^
 ||log.zdnet.co.kr^
+||nam.veta.naver.com^
 ||naver.com/jackpotlog/
 ||naver.com/PostView.nhn?$image
 ||ntm.pstatic.net/scripts/ntm_$domain=naver.com
@@ -53933,7 +53983,9 @@ bitdefender.com##body[style="opacity: 0;"]:style(opacity: 1 !important;)
 ||shinsegae.com/topNPopup.do
 ||sp.naver.com^
 ||ssgdfs.com/kr/common/getPageIcfCd
+||ssl.pstatic.net/static.news/*/js/generated/aside.statistics.js$domain=media.naver.com|news.naver.com
 ||ssl.pstatic.net/static/coreplayer/mclog/media-capable-log.js$domain=naver.com
+||ssl.pstatic.net/tveta/libs/glad/*/gfp-display-sentry-logger.js$domain=news.naver.com
 ||stat.i3.dmm.com^
 ||stat.tiara.daum.net^
 ||stat.tiara.kakao.com^
