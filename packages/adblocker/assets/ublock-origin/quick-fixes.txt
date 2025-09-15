@@ -79,8 +79,10 @@ www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22
 ! web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeed.nodes.0.%7B-%7D.nodes.0.rhc_ad, , propsToMatch, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.viewer.sideFeedUnit.nodes.%5B%5D.new_adverts.nodes.%5B-%5D.sponsored_data)
 web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.sideFeedUnit.nodes.%5B%5D.new_adverts.nodes.%5B-%5D.sponsored_data)
+web.facebook.com,www.facebook.com##+js(json-edit, ..sideFeed.nodes.*%5B%3F.__typename%3D%3D%22AdsSideFeedUnit%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-3060431385
 web.facebook.com,www.facebook.com##div[role="complementary"] a[aria-labelledby][attributionsrc^="/privacy_sandbox/comet/register/source/?eid="][href^="http"][target="_blank"]
+web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcompletion="ignore-dynamic"] a[aria-label][attributionsrc="_blank"][href*="utm_medium"][href*="utm_source"][href*="utm_id"][href*="utm_content"][href*="utm_term"][href*="utm_campaign"]
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
 web.facebook.com,www.facebook.com##+js(json-edit, ..__bbox.result.data.node%5B%3F%40.*.__typename%3D%3D%22SponsoredData%22%5D)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, , propsToMatch, %2Fgraphql)
@@ -139,6 +141,7 @@ japscan.*##+js(trusted-replace-argument, String.prototype.indexOf, 0, json%3A'',
 japscan.*##+js(trusted-replace-argument, String.prototype.split, 0, json%3A'', condition, function%20runAutoTag()%20%7B%20%5Bnative%20code%5D%20%7D)
 japscan.*##+js(nostif, %2F%26%26%5Cs*%5BA-Z%5D%7B4%2C%7D%5C(%5C)%2F)
 japscan.*##+js(nostif, %2F%5C(%5Cs*%5B%5Cs%240-9A-Z_a-z%5D*%5C)%5Cs*%3D%3E%7C%5E%5Cs*function%5Cs*%5C(%5Cs*%5B%5Cs%240-9A-Z_a-z%5D*%5C)%5Cs*%5C%7B.%7B10%2C100%7D%2F, 1000)
+japscan.*##+js(trusted-suppress-native-method, Document.prototype.querySelector, %22%2F%5E%5B.%23%5D%5BA-Za-z%5D%2B_%5BA-Za-z%5D*%24%2F%22, prevent, %2FstackDepth%3A4.%2BinlineScript%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/21064
 ! https://github.com/uBlockOrigin/uAssets/issues/24220
 ! https://github.com/uBlockOrigin/uAssets/issues/25121#issuecomment-2325357098
@@ -246,16 +249,11 @@ faqwiki.*##+js(rmnt, script, %2Fadblock%2Fi)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/199124
 pvpoke-re.com##+js(trusted-suppress-native-method, Element.prototype.insertAdjacentHTML, %22afterbegin%22, prevent, %2F%5C%2F%5BA-Za-z%5D%2B%5C.min%5C.js%5C%3F%2F)
 pvpoke-re.com##.nitro-any
-pvpoke-re.com#@#div[id^="nitro"]
 @@||pvpoke-re.com^$ghide
 pvpoke-re.com##+js(no-xhr-if, %2F%5Ehttps%3A%5C%2F%5C%2Fpagead2%5C.googlesyndication%5C.com%5C%2Fpagead%5C%2Fjs%5C%2Fadsbygoogle%5C.js%5C%3Fclient%3Dca-pub-3497863494706299%24%2F)
 ||g.doubleclick.net/pagead/ads?client=ca-pub-3497863494706299$frame,redirect=noop.html,domain=pvpoke-re.com
-pvpoke-re.com##+js(trusted-create-html, .adsbygoogle%3Ahas(%3E%20%23aswift_1), %3Cdiv%20id%3D%22aswift_1_host%22%20style%3D%22height%3A%20280px%3B%20width%3A%20800px%3B%20position%3A%20absolute%3B%20left%3A-4001px%22%3E%3Ciframe%20src%3D%22https%3A%2F%2Fgoogleads.g.doubleclick.net%2Fpagead%2Fads%3Fclient%3Dca-pub-3497863494706299%22%20style%3D%22width%3A800px%3Bheight%3A280px%3B%22%20width%3D%22800%22%20height%3D%22280%22%3E%3C%2Fiframe%3E%3C%2Fdiv%3E)
-pvpoke-re.com##+js(trusted-create-html, .adsbygoogle%3Ahas(%3E%20%23aswift_2), %3Cdiv%20id%3D%22aswift_2_host%22%20style%3D%22height%3A%20280px%3B%20width%3A%20367px%3B%20position%3A%20absolute%3B%20right%3A4000px%22%3E%3Ciframe%20src%3D%22https%3A%2F%2Fgoogleads.g.doubleclick.net%2Fpagead%2Fads%3Fclient%3Dca-pub-3497863494706299%22%20style%3D%22width%3A367px%3Bheight%3A280px%3B%22%20width%3D%22367%22%20height%3D%22280%22%3E%3C%2Fiframe%3E%3C%2Fdiv%3E)
-pvpoke-re.com###main div#nitro-body-desktop > p:style(color: transparent !important;)
-pvpoke-re.com###main div#nitro-top > p:style(color: transparent !important;)
-pvpoke-re.com##+js(spoof-css, %23aswift_1_host, left, auto)
-pvpoke-re.com##+js(spoof-css, %23aswift_2_host, right, auto)
+pvpoke-re.com##+js(trusted-create-html, .adsbygoogle%3Ahas(%3E%20%23aswift_1), %3Cdiv%20id%3D%22aswift_1_host%22%20style%3D%22height%3A%20280px%3B%20width%3A%20780px%3B%20position%3A%20absolute%3B%22%3E%3Ciframe%20src%3D%22https%3A%2F%2Fgoogleads.g.doubleclick.net%2Fpagead%2Fads%3Fclient%3Dca-pub-3497863494706299%26output%3Dhtml%26h%3D280%26slotname%3D3999999999%26adk%3D1777777777%26adf%3D345678901%26pi%3Dt.ma~as.3999999999%26w%3D780%26fwrn%3D1%26fwrnh%3D0%26lmt%3D1777777777%26rafmt%3D1%26armr%3D3%26format%3D780x280%26url%3Dhttps%253A%252F%252Fpvpoke-re.com%252F%26fwr%3D0%26fwrattr%3Dfalse%26rpe%3D1%26resp_fmts%3D3%26wgl%3D1%26aieuf%3D1%26uach%3DWyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQwLjAuNzMzOS4xMjciLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDAuMC43MzM5LjEyNyJdLFsiTm90PUE_QnJhbmQiLCIyNC4wLjAuMCJdLFsiR29vZ2xlIENocm9tZSIsIjE0MC4wLjczMzkuMTI3Il1dLDBd%26abgtt%3D6%26dt%3D1777777777777%26bpp%3D1%26bdt%3D252%26idt%3D113%26shv%3Dr20250910%26mjsv%3Dm202509090101%26ptt%3D9%26saldr%3Daa%26abxe%3D1%26cookie_enabled%3D1%26eoidce%3D1%26prev_fmts%3D0x0%26nras%3D1%26correlator%3D272184725288%26frm%3D20%26pv%3D1%26rplot%3D4%26u_tz%3D540%26u_his%3D2%26u_h%3D1080%26u_w%3D1920%26u_ah%3D1032%26u_aw%3D1920%26u_cd%3D24%26u_sd%3D1%26dmc%3D8%26adx%3D431%26ady%3D1160%26biw%3D1600%26bih%3D800%26scr_x%3D0%26scr_y%3D0%26eid%3D31004570%252C31094653%252C95366795%252C95370519%252C95370776%252C95371477%252C95371688%26oid%3D2%26pvsid%3D7778888888888890%26tmod%3D1111111111%26uas%3D0%26nvt%3D1%26fc%3D1920%26brdim%3D165%252C55%252C165%252C55%252C1920%252C0%252C1673%252C901%252C1657%252C806%26vis%3D1%26rsz%3D%257C%257CpoeEbr%257C%26abl%3DCS%26pfx%3D0%26fu%3D128%26bc%3D31%26bz%3D1.01%26td%3D1%26tdf%3D2%26psd%3DW251bGwsbnVsbCxudWxsLDNd%26nt%3D1%26ifi%3D2%26uci%3Da!2%26btvi%3D1%26fsb%3D1%26dtd%3D116%22%20style%3D%22width%3A780px%3Bheight%3A280px%3B%22%20width%3D%22780%22%20height%3D%22280%22%3E%3C%2Fiframe%3E%3C%2Fdiv%3E)
+pvpoke-re.com##+js(trusted-create-html, .adsbygoogle%3Ahas(%3E%20%23aswift_2), %3Cdiv%20id%3D%22aswift_2_host%22%20style%3D%22height%3A%20280px%3B%20width%3A%20396px%3B%22%3E%3Ciframe%20src%3D%22https%3A%2F%2Fgoogleads.g.doubleclick.net%2Fpagead%2Fads%3Fclient%3Dca-pub-3497863494706299%26output%3Dhtml%26h%3D280%26slotname%3D4999999999%26adk%3D1222222222%26adf%3D1000000000%26pi%3Dt.ma~as.4999999999%26w%3D396%26fwrn%3D1%26fwrnh%3D100%26lmt%3D1777777777%26rafmt%3D1%26format%3D396x280%26url%3Dhttps%253A%252F%252Fpvpoke-re.com%252F%26fwr%3D0%26fwrattr%3Dfalse%26rpe%3D1%26resp_fmts%3D3%26wgl%3D1%26aieuf%3D1%26uach%3DWyJXaW5kb3dzIiwiMTkuMC4wIiwieDg2IiwiIiwiMTQwLjAuNzMzOS4xMjciLG51bGwsMCxudWxsLCI2NCIsW1siQ2hyb21pdW0iLCIxNDAuMC43MzM5LjEyNyJdLFsiTm90PUE_QnJhbmQiLCIyNC4wLjAuMCJdLFsiR29vZ2xlIENocm9tZSIsIjE0MC4wLjczMzkuMTI3Il1dLDBd%26abgtt%3D6%26dt%3D1777777777777%26bpp%3D1%26bdt%3D253%26idt%3D118%26shv%3Dr20250910%26mjsv%3Dm202509090101%26ptt%3D9%26saldr%3Daa%26abxe%3D1%26cookie_enabled%3D1%26eoidce%3D1%26prev_fmts%3D0x0%252C780x280%26nras%3D1%26correlator%3D277777777777%26frm%3D20%26pv%3D1%26u_tz%3D540%26u_his%3D2%26u_h%3D1080%26u_w%3D1920%26u_ah%3D1032%26u_aw%3D1920%26u_cd%3D24%26u_sd%3D1%26dmc%3D8%26adx%3D5%26ady%3D95%26biw%3D1600%26bih%3D800%26scr_x%3D0%26scr_y%3D0%26eid%3D31004570%252C31094653%252C95366795%252C95370519%252C95370776%252C95371477%252C95371688%26oid%3D2%26pvsid%3D7778888888888890%26tmod%3D1111111111%26uas%3D0%26nvt%3D1%26fc%3D1920%26brdim%3D165%252C55%252C165%252C55%252C1920%252C0%252C1673%252C901%252C1657%252C806%26vis%3D1%26rsz%3D%257C%257CfoeE%257C%26abl%3DCF%26pfx%3D0%26fu%3D128%26bc%3D31%26bz%3D1.01%26td%3D1%26tdf%3D2%26psd%3DW251bGwsbnVsbCxudWxsLDNd%26nt%3D1%26ifi%3D3%26uci%3Da!3%26fsb%3D1%26dtd%3D119%22%20style%3D%22width%3A396px%3Bheight%3A280px%3B%22%20width%3D%22396%22%20height%3D%22280%22%3E%3C%2Fiframe%3E%3C%2Fdiv%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/27884
 ! https://github.com/uBlockOrigin/uAssets/issues/27886
 ! royalroad.com##+js(trusted-set, nitroAds, json%3A%7B%22version%22%3A%2220250402%20de32690%22%2C%22createAd%22%3A%22placement%20generation%22%7D)
@@ -312,14 +310,6 @@ global.novelpia.com##+js(no-fetch-if, g.doubleclick.net, length%3A100000)
 global.novelpia.com##+js(trusted-replace-argument, String.prototype.includes, 0, , condition, %2FCopyright%7Cdoubleclick%24%2F)
 global.novelpia.com##+js(no-fetch-if, favicon, length%3A252)
 global.novelpia.com##div[id^="novelpia_"]:remove()
-! https://github.com/uBlockOrigin/uAssets/issues/23691#issuecomment-3239425448
-! [badfilter] ||dmxleo.dailymotion.com/cdn/manifest/video/$xhr,domain=dailymotion.com,badfilter
-! https://github.com/AdguardTeam/AdguardFilters/commit/22969ea2d8a459f0b6e985a7fbc133a8a4008b0e
-! [badfilter] ||richlink.blogsys.jp^$domain=nwknews.jp,badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/26146
-! [badfilter] ||uspssmartpackagelockers.com^$all,badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/29910
-androidauthority.com#@#[href^="https://www.androidauthority.com/deals"]:upward(1)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1nc7jwl/nsfw_site_seems_to_be_blocking_trailers_with/
 ! [badfilter] ||trailerhg.xyz^$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/29995
@@ -333,3 +323,7 @@ shopee.sg#@#.shopee-search-item-result__item:has-text(Ad)
 ||youtube.com/api/stats/qoe?*page&ns=yt&fexp=v1%*&event=streamingstats&$xhr,method=post
 ||youtube.com/ptracking?html5=1&video_id=*&cpn=*&ei=*&ptk=youtube_*&pltype=content$xhr,method=get
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/30034
+unsplash.com#@#div:has(> div[data-affiliates-grid-container])
+! https://github.com/AdguardTeam/AdguardFilters/commit/8d0b2d4457328f85b96ceb9e279e6cb3c2c4ba22
+lemino.docomo.ne.jp##+js(json-prune, ad_flg%20ad_url%20data.adData%20data.adTagUrl)
