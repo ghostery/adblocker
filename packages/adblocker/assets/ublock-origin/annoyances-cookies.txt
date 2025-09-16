@@ -1740,6 +1740,11 @@ mywot.com##+js(trusted-set-cookie, cookies_consent_disclaimer, closed, , , reloa
 mojehobby.pl,super-hobby.*##+js(trusted-click-element, a%5Bonclick%3D%22AcceptAllCookies(true)%3B%20%22%5D, , 1000)
 ! accept (consent wall)
 sp.stylevamp.de,cmp.wetteronline.de##+js(trusted-click-element, button%5Btitle%3D%22Akzeptieren%20%26%20Weiter%22%5D, , 1000)
+! accept (consent wall)
+sp.stylevamp.com,sp.stylevamp.de##+js(trusted-click-element, button%5Btitle%3D%22Accept%20%26%20Continue%22%5D, , 1000)
+! functional
+miles-and-more.com##+js(trusted-set-cookie, consent_date, %24now%24)
+miles-and-more.com##+js(set-cookie, consent_choice, functional)
 ! reject
 easyjet.com,experian.co.uk,postoffice.co.uk,tescobank.com##.ensNotifyBanner
 easyjet.com,experian.co.uk,postoffice.co.uk###ensBannerBG
@@ -2489,7 +2494,7 @@ steiners.shop##+js(trusted-click-element, span.btn-btn-save, , 1500)
 ! essential
 javeahouses.com##+js(trusted-set-cookie, cookieControlPrefs, %5B%22essential%22%5D)
 ! essential
-ecmrecords.com,malaikaraiss.com,koch-mit.de,zeitreisen.zeit.de##+js(trusted-click-element, a%23CookieBoxSaveButton, , 1000)
+ecmrecords.com,invidis.com,malaikaraiss.com,koch-mit.de,zeitreisen.zeit.de##+js(trusted-click-element, a%23CookieBoxSaveButton, , 1000)
 ! refuse
 wefashion.com##+js(trusted-click-element, span%5Bdata-content%3D%22WEIGEREN%22%5D, , 1000)
 ! save
@@ -3595,3 +3600,8 @@ myprivacy.dpgmedia.nl,myprivacy.dpgmedia.be,www.dpgmediagroup.com##+js(trusted-c
 myprivacy.dpgmediagroup.net##+js(set-cookie, dummy, 1, , reload, 1)
 ! Necessary + preferences
 viper.patriotmemory.com##+js(trusted-set-cookie, fs-cc, %25257B%252522id%252522%25253A%252522WsCwWq4mY23eR7nPDUKlP%252522%25252C%252522consents%252522%25253A%25257B%252522analytics%252522%25253Afalse%25252C%252522essential%252522%25253Atrue%25252C%252522marketing%252522%25253Afalse%25252C%252522personalization%252522%25253Atrue%25252C%252522uncategorized%252522%25253Afalse%25257D%25257D, 1year)
+! https://github.com/uBlockOrigin/uAssets/issues/30047
+migros.com.tr##+js(trusted-set-cookie, cookieSettings, %257B%2522indicatorSeen%2522%253Atrue%252C%2522analyseCookies%2522%253Afalse%252C%2522marketingCookies%2522%253Afalse%252C%2522systemCookies%2522%253Afalse%257D)
+migros.com.tr##+js(trusted-set-local-storage-item, efl-saved-consent, %7B%22categories%22%3A%7B%22essential%22%3Atrue%2C%22functional%22%3Afalse%2C%22marketing%22%3Afalse%2C%22other%22%3Afalse%7D%7D)
+@@||bundles.efilli.com/migros.com.tr.prod.js$domain=migros.com.tr
+migros.com.tr##sm-mobile-app-popup
