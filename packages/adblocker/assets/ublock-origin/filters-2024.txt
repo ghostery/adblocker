@@ -1084,7 +1084,7 @@ qwant.com##div[data-testid="pam.container"]:style(max-height: 1px !important; op
 @@||spite.cz^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/22203
 civitai.com,civitai.green##+js(no-fetch-if, googlesyndication)
-civitai.com,civitai.green##div:is(.shadow, .flex.w-full.justify-center[style=""]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
+civitai.com,civitai.green##div:is(.shadow, .flex.w-full.justify-center[style=""], .flex.flex-col.items-center.justify-center.gap-2[style^="min-height:"]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
 civitai.com,civitai.green##div[id][class^="mantine-"].flex.relative.box-content:style(min-height: 0px !important; visibility: collapse !important; padding: 0px !important;)
 ||ads.civitai.$script,1p,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
@@ -2732,6 +2732,7 @@ vidlink.pro##+js(aopr, aclib)
 vidlink.pro##+js(acs, clearTimeout, popundersPerIP)
 vidlink.pro##+js(nosiif, aclib)
 vidlink.pro##+js(nowoif, _blank)
+vidlink.pro##+js(aost, document.createElement, createInvisibleTrigger)
 ||eyewondermedia.com^$all
 ! https://www.walmart.com/ip/Apple-Watch-SE-2nd-Gen-GPS-40mm-Starlight-Aluminum-Case-Sport-Band-S-M-Fitness-Sleep-Tracker-Crash-Detection-Heart-Rate-Monitor/5033741510?classType=VARIANT&clickid=SkzWZTVCbxyPT7YTPl3ahWrPUkC1I02xuzdpWU0&irgwc=1&sourceid=imp_SkzWZTVCbxyPT7YTPl3ahWrPUkC1I02xuzdpWU0&veh=aff&wmlspartner=imp_159047&affiliates_ad_id=565706&campaign_id=9383&sharedid=cnet
 ! ^clickid=*&sourceid=$doc
@@ -3064,8 +3065,9 @@ live-sport.duktek.pro##[href*="?key"][target="_blank"]:remove-attr(href)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193698
 *$doc,ipaddress=199.59.243.227,to=~parked.domain|animeseries.so|audiobookbay.li|hhdstreams.club|janitor.ai|kahoo.it|pix4link.com|sshagan.net
 ! https://github.com/uBlockOrigin/uAssets/issues/26078
-akirabox.com##+js(aeld, click, Ads)
-akirabox.com##+js(nowoif, _blank)
+akirabox.com,akirabox.to##+js(aeld, DOMContentLoaded, open)
+akirabox.com,akirabox.to##+js(nowoif, _blank)
+*$popup,3p,domain=akirabox.com|akirabox.to
 ||shareease.link^$all
 ||fastfilehost.link^$all
 ||rapidsend.cfd^$all
