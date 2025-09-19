@@ -480,6 +480,20 @@ op.gg##.max-w-none:has(> .mb-2 > div[style^="width:"] > div[data-opgg-beer-id])
 ||opgg.beer^
 ! https://github.com/uBlockOrigin/uAssets/issues/13023
 op.gg##[id^="div-gpt-ad"]:not([class]):upward(div[class])
+! https://github.com/uBlockOrigin/uAssets/issues/6306
+pornoxo.com##+js(popads-dummy)
+*$popunder,3p,domain=m.pornoxo.com
+||pushpad.xyz^$3p
+pornoxo.com##+js(rmnt, script, %2FPopunder%7CBanner%2F)
+pornoxo.com##a.blinker
+pornoxo.com##a[rel="sponsored"]
+pornoxo.com##li.media-item.no-popup
+pornoxo.com##.detail-info-links > li:has(> .ads-stripchat-link)
+pornoxo.com##.js-toggle-content-wrapper:has(> .adblock)
+pornoxo.com##.wgt-container
+||pornoxo.com/pxo/www/js-v*.min.js?url=
+||pornoxo.com/link/out/
+||pornoxo.com/ads/
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -1392,8 +1406,15 @@ series9movies.com##a[href*="?key="][target="_blank"]
 ||simptown.su/api/juice/all
 ! https://turbostream.tv//watch.php?id=370 - popups, detection
 ||mowcoordinateegypt.com^$popup,doc
+! https://github.com/uBlockOrigin/uAssets/issues/7631
+! https://github.com/uBlockOrigin/uAssets/issues/18102
 ! https://stickers.gg/ - anti-adb
-stickers.gg##+js(no-xhr-if, adsbygoogle)
+||intergient.com^$script,domain=emoji.gg,redirect=noopjs
+emoji.gg,pngs.gg,stickers.gg,soundboards.gg##+js(no-xhr-if, adsbygoogle)
+emoji.gg##+js(rmnt, script, self.loadPW)
+! https://github.com/uBlockOrigin/uAssets/issues/10824
+pfps.gg##+js(set, ga, trueFunc)
+pfps.gg##+js(rmnt, script, onload)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204502
 asianboy.fans##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22, prevent, %2Fwp-content%5C%2Fuploads%5C%2F%5Ba-z%5D%2B%5C%2F%5Ba-z%5D%2B%5C.js%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28189
@@ -2204,3 +2225,8 @@ www.parkers.co.uk##.async-hide:style(opacity: 1.0 !important)
 ! https://streamflash.sx/watch.php?v=EnkIGcI1Li anti-adb, popup
 streamflash.sx##+js(trusted-rpnt, script, playerUnlocked%20%3D%20false, playerUnlocked%20%3D%20true)
 streamflash.sx###adOverlay
+! uyeshare.cc ad popups
+uyeshare.cc##+js(nowoif)
+uyeshare.cc##+js(rmnt, script, pop1stp)
+! https://github.com/AdguardTeam/AdguardFilters/issues/213512
+marinetraffic.live##+js(rmnt, script, %2Fadblock%2Fi)
