@@ -142,13 +142,14 @@ vipleague.*##.bg-dark.ratio > .position-absolute
 */script/formula.js|$script
 vipleague.*##.m-1.btn-danger.btn
 !#if cap_html_filtering
-buffsports.*,fbstreams.*,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
+buffsports.*,fbstreams.*,omuzaani.me,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
 !#else
-buffsports.*,fbstreams.*,vipleague.*,wavewalt.me##+js(rmnt, script, %2FadserverDomain%7Cdelete%20window%7CFingerprintJS%2F)
-buffsports.*,fbstreams.*,vipleague.*,wavewalt.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+buffsports.*,fbstreams.*,omuzaani.me,vipleague.*,wavewalt.me##+js(rmnt, script, %2FadserverDomain%7Cdelete%20window%7CFingerprintJS%2F)
+buffsports.*,fbstreams.*,omuzaani.me,vipleague.*,wavewalt.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/30016
-wavewalt.me#@#.Ad-Container:not(.adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/30168
+omuzaani.me,wavewalt.me#@#.Ad-Container:not(.adsbygoogle)
 ! https://forums.lanik.us/viewtopic.php?f=64&t=29322
 ! https://github.com/uBlockOrigin/uAssets/issues/11710
 mma-core.*##+js(nostif, displayAdBlockedVideo)
@@ -462,7 +463,8 @@ primevideo.com##+js(set, ue_adb_chk, 1)
 ! https://github.com/NanoMeow/QuickReports/issues/125
 nfl.com##[class$="adblock"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213076
-nfl.com##+js(no-fetch-if, imasdk)
+! https://www.reddit.com/r/uBlockOrigin/comments/1nl6v6o/adblock_detection_on_nfl_team_sites/
+baltimoreravens.com,nfl.com,seahawks.com##+js(no-fetch-if, imasdk)
 ! https://github.com/uBlockOrigin/uAssets/issues/22511
 @@||savelinks.*^$ghide
 savelinks.*##+js(aopr, LieDetector)
@@ -480,6 +482,20 @@ op.gg##.max-w-none:has(> .mb-2 > div[style^="width:"] > div[data-opgg-beer-id])
 ||opgg.beer^
 ! https://github.com/uBlockOrigin/uAssets/issues/13023
 op.gg##[id^="div-gpt-ad"]:not([class]):upward(div[class])
+! https://github.com/uBlockOrigin/uAssets/issues/6306
+pornoxo.com##+js(popads-dummy)
+*$popunder,3p,domain=m.pornoxo.com
+||pushpad.xyz^$3p
+pornoxo.com##+js(rmnt, script, %2FPopunder%7CBanner%2F)
+pornoxo.com##a.blinker
+pornoxo.com##a[rel="sponsored"]
+pornoxo.com##li.media-item.no-popup
+pornoxo.com##.detail-info-links > li:has(> .ads-stripchat-link)
+pornoxo.com##.js-toggle-content-wrapper:has(> .adblock)
+pornoxo.com##.wgt-container
+||pornoxo.com/pxo/www/js-v*.min.js?url=
+||pornoxo.com/link/out/
+||pornoxo.com/ads/
 ! END: Rules from filters.txt
 ! START: Regional lists
 ! <<<<< ABPVN >>>>>
@@ -795,6 +811,9 @@ rebajagratis.com,tv.latinlucha.es##+js(rmnt, script, %2FadsBlocked%7C%22popunder
 ! https://github.com/uBlockOrigin/uAssets/issues/28212
 ! https://rpmshare.rpmvip.com/#klagy
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=anichin.rpmvid.com|disneycdn.net|rpmhub.site|rpmplay.me|rpmplay.xyz|rpmvip.com
+! https://www.desicinema.org/movies/sarangapani-jathakam/ ad popups
+rpmplay.xyz##+js(aopr, open)
+||boaststockingsaucer.com^
 ! bemyhole .com (NSFW) - ads, popups
 bemyhole.com##+js(rmnt, script, egoTab)
 bemyhole.com##.headline-sidebar
@@ -1392,8 +1411,15 @@ series9movies.com##a[href*="?key="][target="_blank"]
 ||simptown.su/api/juice/all
 ! https://turbostream.tv//watch.php?id=370 - popups, detection
 ||mowcoordinateegypt.com^$popup,doc
+! https://github.com/uBlockOrigin/uAssets/issues/7631
+! https://github.com/uBlockOrigin/uAssets/issues/18102
 ! https://stickers.gg/ - anti-adb
-stickers.gg##+js(no-xhr-if, adsbygoogle)
+||intergient.com^$script,domain=emoji.gg,redirect=noopjs
+emoji.gg,pngs.gg,stickers.gg,soundboards.gg##+js(no-xhr-if, adsbygoogle)
+emoji.gg##+js(rmnt, script, self.loadPW)
+! https://github.com/uBlockOrigin/uAssets/issues/10824
+pfps.gg##+js(set, ga, trueFunc)
+pfps.gg##+js(rmnt, script, onload)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/204502
 asianboy.fans##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22, prevent, %2Fwp-content%5C%2Fuploads%5C%2F%5Ba-z%5D%2B%5C%2F%5Ba-z%5D%2B%5C.js%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28189
@@ -1672,7 +1698,7 @@ condorsoft.co##+js(no-xhr-if, googlesyndication)
 ||poweredby.jads.co/js/jads.js$script,domain=216.219.94.112,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/21941
 /\.gsmarena\.com\/[0-9]+\.php3/$xhr,1p,domain=gsmarena.com
-/\.gsmarena\.com\/[0-9]+\.[a-z]+\?sSearch=/$xhr,1p,domain=gsmarena.com
+/\.gsmarena\.com\/[0-9]+\.[a-z]+\?s?Search=/$xhr,1p,domain=gsmarena.com
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207864
 remotejobzone.online##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207736
@@ -1905,7 +1931,7 @@ briefly.co.za##.c-adv-branding__top
 ! https://github.com/uBlockOrigin/uAssets/issues/29362
 sourceb.in##.carbon
 ! popup on age verification
-artificialnudes.com,bdsmkingdom.xyz,cosplaynsfw.xyz,crazytoys.xyz,handypornos.net,hardcorelesbian.xyz,pornahegao.xyz,pornobait.com,pornfeet.xyz,sexontheboat.xyz##+js(set, dclm_ajax_var.disclaimer_redirect_url, )
+artificialnudes.com,bdsmkingdom.xyz,cosplaynsfw.xyz,crazytoys.xyz,handypornos.net,hardcorelesbian.xyz,pornahegao.xyz,pornobait.com,pornfeet.xyz,romanticlesbian.com,sexontheboat.xyz,traumporno.com##+js(set, dclm_ajax_var.disclaimer_redirect_url, )
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210206
 india.marathinewz.in##+js(no-fetch-if, adsbygoogle, war%3Agooglesyndication_adsbygoogle.js)
 ! https://github.com/uBlockOrigin/uAssets/issues/29370
@@ -2114,9 +2140,13 @@ yespornpleasexxx.com##a[href^="https://go.rmhfrtnd.com"]
 embed4me.com##+js(aeld, click, adId)
 embed4me.com##+js(nowoif, _blank)
 ! https://141tube.com/
-/videojs-vast-vpaid/*
 /media/player/videojs/videojs.ima.js
 /media/player/videojs/videojs.ads.min.js
+! https://github.com/uBlockOrigin/uAssets/issues/30114
+||camonster.io^$3p
+gifhq.com,hardgif.com,nsfwmonster.com##.unique-banner
+gifhq.com,hardgif.com,nsfwmonster.com##+js(acs, %24, window.open)
+gifhq.com,hardgif.com,nsfwmonster.com##+js(nowoif, .php)
 ! ads/popups
 flixhub.co,movied.link,notunmovie.org##+js(nowoif, !notunmovie)
 instantcloud.site,linksheild.site,notunmovie.link,xflixbd.com##+js(nowoif)
@@ -2204,3 +2234,28 @@ www.parkers.co.uk##.async-hide:style(opacity: 1.0 !important)
 ! https://streamflash.sx/watch.php?v=EnkIGcI1Li anti-adb, popup
 streamflash.sx##+js(trusted-rpnt, script, playerUnlocked%20%3D%20false, playerUnlocked%20%3D%20true)
 streamflash.sx###adOverlay
+! uyeshare.cc ad popups
+uyeshare.cc##+js(nowoif)
+uyeshare.cc##+js(rmnt, script, pop1stp)
+! https://github.com/AdguardTeam/AdguardFilters/issues/213512
+marinetraffic.live##+js(rmnt, script, %2Fadblock%2Fi)
+! video ads https://moviekhhd.biz/watch?id=6881
+moviekhhd.biz##+js(rpnt, script, %2Fself.%2Bads.%2B%3B%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/30122
+scribd.com##+js(set, docManager.doDynamicBlurring, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/30137
+myplexi.fr##+js(aeld, click, location)
+myplexi.fr##center:has([href])
+! https://github.com/uBlockOrigin/uAssets/issues/30139
+techbloat.com##+js(rmnt, script, randPrefix)
+! https://cricfy.net/ - placeholders and popups
+cricfy.net##+js(acs, googletag)
+cricfy.net##.code-block
+! djmaza/hdvideo9 ad popups
+djmaza.my,hdvideo9.com##+js(nowoif)
+||code.adclickppc.com^
+||cryptokhoj.com^$popup,3p
+! https://en.azrhymes.com/ - anti-adb
+||stpd.cloud^$script,redirect=noop.js,domain=azrhymes.com
+! https://github.com/uBlockOrigin/uAssets/issues/30151
+archive.org##+js(nowoif)
