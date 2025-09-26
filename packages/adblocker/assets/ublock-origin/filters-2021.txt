@@ -741,7 +741,8 @@ pcgamer.com##.listingResult:has(> div.sponsored-post)
 ! https://github.com/uBlockOrigin/uAssets/issues/8592
 gaminggorilla.com##+js(aopr, history.replaceState)
 ! https://github.com/uBlockOrigin/uAssets/issues/8594
-pagalworld.us##+js(nowoif)
+! pagalworld.video ad popups
+pagalworld.us,pagalworld.video##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/75264
 codesnail.com##+js(nostif, css_class.show)
 codesnail.com##.widget_custom_html
@@ -976,8 +977,8 @@ uploadshare.net##.advert-wrapper
 /js/static/header/sda/ppsuma*.js$script
 xnxx.com##.videoad-title
 ! https://github.com/uBlockOrigin/uAssets/issues/26374
-xnxx.com,xvideos.*##+js(aeld, DOMContentLoaded, %2Fdyn%5C.ads%7CloadAdsDelayed%2F)
-xnxx.com,xvideos.*##+js(set, xv.sda.pp.init, noopFunc)
+xnxx.*,xvideos.*##+js(aeld, DOMContentLoaded, %2Fdyn%5C.ads%7CloadAdsDelayed%2F)
+xnxx.*,xvideos.*##+js(set, xv.sda.pp.init, noopFunc)
 ! https://forums.lanik.us/viewtopic.php?p=159178#p159178
 @@||cache.marieclaire.fr/media/videojs/videojs.ads.min.js$script,domain=marieclaire.fr
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=marieclaire.fr
@@ -2460,9 +2461,9 @@ notformembersonly.com###post-separate > p > .local-link
 @@||cdn.jsdelivr.net/npm/*/fuckadblock.min.js$script,3p
 ! https://www.reddit.com/r/uBlockOrigin/comments/psgq8c/unsplash_ads/
 ! https://www.reddit.com/r/uBlockOrigin/comments/pufp7v/unsplashcom_sponsored_ads/
+! https://github.com/uBlockOrigin/uAssets/issues/30034
 unsplash.com##div[style^="--row-gutter"] > div a[href="/brands"]:upward(div[style^="--row-gutter"] > div)
 unsplash.com##div[data-test="SearchInFeedAd-AffiliateFallback-Container"]
-unsplash.com##div:has(> div[data-affiliates-grid-container])
 ! https://www.reddit.com/r/uBlockOrigin/comments/1acckcx/unsplashcom/
 unsplash.com##div[data-test^="masonry-grid"] > div[style^="--row"] > div:not([itemprop="image"])
 ! https://github.com/AdguardTeam/AdguardFilters/issues/95275
@@ -2677,7 +2678,7 @@ rtilinks.com##+js(acs, eval, replace)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/97605
 ! https://github.com/uBlockOrigin/uAssets/issues/17329
 mp3juices.*##+js(aost, Math.random, computed)
-mp3juices.*##+js(nowoif)
+mp3juices.*,mp3juice.*##+js(nowoif)
 mp3juices.*##[class^="result_two__"][target="_blank"]
 mp3juices.icu##+js(nano-sib, temp)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/97744
@@ -3115,6 +3116,8 @@ gifhq.com##+js(acs, %24, open)
 ! https://github.com/uBlockOrigin/uAssets/pull/10721
 ibomma.*##[style="display:none"]:style(display: block !important;)
 ibomma.*###abEnabled-note
+rto.bappam.eu,one.ibomma.pw##+js(nowoif)
+rto.bappam.eu,one.ibomma.pw###u-verify
 ! torpedogratis.org
 torpedogratis.org###ads
 ! https://github.com/uBlockOrigin/uAssets/issues/10722
@@ -3167,9 +3170,6 @@ goduke.com##+js(no-xhr-if, %2Fanalytics%7Clivestats%2F)
 itudong.com##+js(aeld, load, nextFunction)
 ! https://github.com/uBlockOrigin/uAssets/issues/10820
 tainhanhvn.com##+js(aeld, load, %2FnextFunction%7C2000%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/10824
-pfps.gg##+js(set, ga, trueFunc)
-pfps.gg##+js(rmnt, script, onload)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/98082
 ! https://www.reddit.com/r/uBlockOrigin/comments/11ckgph/
 claimtrx.com##+js(aeld, load, block)
@@ -3316,7 +3316,7 @@ ma-bank.net,rxlife.net,video.tv-tokyo.co.jp#@##adspace:not([style^="position: ab
 ###banner468:not([style^="position: absolute; left: -5000px"])
 ###banner728x90:not([style^="position: absolute; left: -5000px"])
 ! temp specific rules
-xnxx.com,xvideos.*###ad-footer
+xnxx.*,xvideos.*###ad-footer
 ! https://github.com/AdguardTeam/AdguardFilters/issues/116868
 ! https://github.com/AdguardTeam/AdguardFilters/issues/116826
 ! https://github.com/uBlockOrigin/uAssets/issues/14191
@@ -3332,6 +3332,16 @@ mmiyue.com#@#.google-ad:not(.testAd)
 /prebid-article-ad-ad-300x250.js$script,redirect=prebid-ads.js
 ! https://github.com/uBlockOrigin/uAssets/commit/036e13101ea60a14b4a416f47609793da7434b16
 @@/js/prebid-ads.js$script,1p
+!
+! https://xcandid.top/ anti-adb - needs resource-redirect too, not for EL
+#@#.adslot
+#@#.adslot_1
+#@#.ad_slot
+#@#.adunit
+~apkmirror.com,~tuxpi.com##.adslot:not(.text-ad)
+##.adslot_1:not(.text-ad)
+##.ad_slot:not(.text-ad)
+##.adunit:not(.text-ad)
 ! CHP Ads Block Detector
 #@#.ad-link
 ##.ad-link:not(.adsbox)
