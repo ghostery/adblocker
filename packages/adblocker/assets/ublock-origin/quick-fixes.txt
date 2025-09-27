@@ -257,9 +257,11 @@ cdn.gledaitv.*##+js(trusted-replace-argument, decodeURIComponent, 0, , condition
 ! https://github.com/uBlockOrigin/uAssets/issues/29059#issuecomment-3327077921
 !cdn.gledaitv.*##+js(trusted-replace-argument, String.prototype.substr, this, , condition, %2F%5E%5Ba-z0-9%5D%7B2000%2C%7D%24%2Fi)
 cdn.gledaitv.*##+js(trusted-replace-outbound-text, atob, %2F.%2B%2Fg, , condition, script.innerHTML)
-cdn.gledaitv.*##+js(prevent-innerHTML, , %2Ftest.%7B1000%2C%7Donerror.%7B1000%2C%7D%2Fs)
+cdn.gledaitv.*##+js(no-fetch-if, method%3A%2Fhead%2Fi)
+cdn.gledaitv.*##+js(no-xhr-if, !%2F%5C.(m3u8%7Cts)%5C%3F%2F)
 cdn.gledaitv.*##+js(nosiif, await)
 cdn.bg-gledai.*,cdn.gledaitv.*##[id^="anti-pedali-"]
+@@||cdn.gledaitv.$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/28024
 ! https://www.reddit.com/r/uBlockOrigin/comments/1jef4qb/having_adblock_issues_with_faqwikius/
 faqwiki.us##+js(nostif, .offsetHeight%3E0)
