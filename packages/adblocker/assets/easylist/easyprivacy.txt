@@ -1,9 +1,9 @@
 [Adblock Plus 1.1]
-! Version: 202509260532
+! Version: 202509280526
 ! Title: EasyPrivacy
-! Last modified: 26 Sep 2025 05:32 UTC
+! Last modified: 28 Sep 2025 05:26 UTC
 ! Expires: 4 days (update frequency)
-! Commit: 942f2e9059e8ab8c90d79e6114b602ebe56a0d9d
+! Commit: 850a51e192db05871792174800bfe53defba79ad
 ! *** easylist:template_header.txt ***
 !
 ! Please report any unblocked adverts or problems
@@ -2132,7 +2132,7 @@
 /smetrics.*/b/ss/*
 /smetrics.*/id?
 /smg_tracking/js/onthe.io.js
-/Smile_ElasticsuiteTracker/*$script
+/Smile_ElasticsuiteTracker/js/tracking.min.js
 /smmch-mine.js
 /smmch-own.js
 /snowman.gif?p=
@@ -10073,6 +10073,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||api.ipgeolocation.io/getip
 ||api.iris.tv/update
 ||api.june.so^
+||api.mambasms.com/monitorEvent/
 ||api.picox.bendingspoons.com/v1/events
 ||api.sardine.ai/assets/loader.min.js$third-party
 ||api.visitorapi.com^$third-party
@@ -10334,6 +10335,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||cgicounter.puretec.de^
 ||chanalytics.merchantadvantage.com^
 ||channelexco.com/events
+||channelexco.com/ppx/
 ||chaport.com/api/public/v1/stats/
 ||chargebee.com/api/internal/track_info_error
 ||check.ddos-guard.net^$third-party
@@ -10559,6 +10561,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||crowdtwist.com/trck/$script
 ||crta.and.co.uk^
 ||crta.dailymail.co.uk^
+||cs.zg-api.com^
 ||csi.gstatic.com^
 ||csp-collector.appspot.com^
 ||csp-reporting.cloudflare.com^
@@ -11316,6 +11319,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||measure.refinery89.com^
 ||media-imdb.com/twilight/?
 ||media-lab.ai/ana-sentry.js
+||media-lab.ai/events
 ||media-platform.com/common/js/lib/cxense/
 ||mediabong.com/t/
 ||mediabong.net/t/
@@ -11816,6 +11820,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||s.srvsynd.com^
 ||s.vibe.co^
 ||s3.amazonaws.com/www.audiencenetwork.ai/
+||sa.recoding.tech^
 ||sa.scorpion.co^
 ||saasexch.com/bapi/fe/usd/report/
 ||safe-iplay.com/logger
@@ -12602,7 +12607,6 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||x.babe.today^
 ||x.disq.us^
 ||x.weather.com^
-||xeno.media-lab.ai/events
 ||xp2023-pix.s3.amazonaws.com^
 ||yahoo.co.jp/js/s_retargeting.js
 ||yahoo.com/sync/casale/
@@ -14310,6 +14314,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||api.takealot.com^$ping
 ||api.tsc.ca/Tracking/v1/events/
 ||api.vk.com/method/statEvents.
+||aplus.qwen.ai/aplus.monitor.log_arrival_rate
 ||app-bnkr.b-cdn.net/js/lv.js
 ||app.box.com/app-api/split-proxy/api/metrics
 ||app.box.com/gen204
@@ -15358,6 +15363,7 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||pixel.facebook.com^
 ||pixel.ionos.com^
 ||pixel.nine.com.au^
+||pixel.patch.com^
 ||pixel.tuko.co.ke^
 ||pixelzirkus.gameforge.com^
 ||pixiedust.buzzfeed.com^
@@ -16115,11 +16121,11 @@ $third-party,xmlhttprequest,domain=opensubtitles.org
 ||youtube-nocookie.com/robots.txt?
 ||youtube-nocookie.com/youtubei/v1/log_event?
 ||youtube.com/api/stats/ads?
-! ||youtube.com/api/stats/atr?ns=
-! ||youtube.com/api/stats/qoe?fmt=
+||youtube.com/api/stats/atr?ns=*&ver=2&cmt=1.*&fs=0&*&euri&lact=
+||youtube.com/api/stats/qoe?*page&ns=yt&fexp=v1%*&event=streamingstats&
 ||youtube.com/get_video?
 ||youtube.com/pcs/activeview?
-! ||youtube.com/ptracking?html5=1&
+||youtube.com/ptracking?html5=1&video_id=*&cpn=*&ei=*&ptk=youtube_*&pltype=content
 ||youtube.com/set_awesome?
 ||youtube.com/youtubei/v1/log_event?
 ||youtube.googleapis.com/youtubei/v1/log_event?
@@ -16550,6 +16556,13 @@ bitdefender.com##body[style="opacity: 0;"]:style(opacity: 1 !important;)
 ||googletagmanager.com/gtm.js$domain=nexon.com,important
 ||nakanohito.jp^*/bi.js$domain=nexon.com,important
 ! #endif
+! Youtube
+! [badfilter] ||youtube.com/api/stats/atr?ns=*&ver=2&cmt=1.*&fs=0&*&euri&lact=$badfilter
+! [badfilter] ||youtube.com/api/stats/qoe?*page&ns=yt&fexp=v1%*&event=streamingstats&$badfilter
+! [badfilter] ||youtube.com/ptracking?html5=1&video_id=*&cpn=*&ei=*&ptk=youtube_*&pltype=content$badfilter
+||youtube.com/api/stats/atr?ns=*&ver=2&cmt=1.*&fs=0&*&euri&lact=$xhr,method=post
+||youtube.com/api/stats/qoe?*page&ns=yt&fexp=v1%*&event=streamingstats&$xhr,method=post
+||youtube.com/ptracking?html5=1&video_id=*&cpn=*&ei=*&ptk=youtube_*&pltype=content$xhr,method=get
 ! -----------------Individual cname tracking systems-----------------!
 ! *** easylist:easyprivacy/easyprivacy_specific_cname_dataunlocker.txt ***
 ! easyprivacy_specific_cname_dataunlocker.txt
@@ -55300,6 +55313,7 @@ bitdefender.com##body[style="opacity: 0;"]:style(opacity: 1 !important;)
 ! ---------- Polish ----------
 !
 @@||gemius.pl/gstream.js
+@@||gildia.pl/static/*/Smile_ElasticsuiteTracker/js/tracking.min.js$~third-party
 @@||hit.gemius.pl/__/redataredir?$domain=ing.pl
 @@||hit.interia.pl/iwa_core$script,~third-party
 @@||iwa.iplsc.com/iwa.js$script
