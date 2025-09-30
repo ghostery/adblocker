@@ -1424,7 +1424,11 @@ pfps.gg##+js(rmnt, script, onload)
 asianboy.fans##+js(trusted-suppress-native-method, DOMTokenList.prototype.add, %22-%22, prevent, %2Fwp-content%5C%2Fuploads%5C%2F%5Ba-z%5D%2B%5C%2F%5Ba-z%5D%2B%5C.js%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28189
 @@||seelen.io^$script,1p
+!#if ext_ubol
+seelen.io##+js(trusted-prevent-fetch, pagead2.googlesyndication.com%2Fpagead%2Fjs%2Fadsbygoogle.js, google)
+!#else
 seelen.io##+js(prevent-fetch, pagead2.googlesyndication.com%2Fpagead%2Fjs%2Fadsbygoogle.js, war%3Agooglesyndication_adsbygoogle.js)
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/pull/28192
 ||physicsandmathstutor.com/pdf-pages/?pdf=http$doc,urlskip=?pdf
 ! https://github.com/uBlockOrigin/uAssets/issues/28195
@@ -1787,7 +1791,7 @@ buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://smoothpre.com/f/47li0zinsom8
 ! https://mivalyo.com/file/47li0zinsom8
 ! https://www.reddit.com/r/uBlockOrigin/comments/1nc7jwl/nsfw_site_seems_to_be_blocking_trailers_with/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=cloudwish.xyz|fapsharing.com|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mivalyo.com|mmvh01.xyz|movearnpre.com|nekovid.xyz|smoothpre.com|trailerhg.xyz
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=cloudwish.xyz|fapsharing.com|fc2stream.tv|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mivalyo.com|mmvh01.xyz|movearnpre.com|nekovid.xyz|smoothpre.com|trailerhg.xyz
 cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,arabshentai.com>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.*>>##+js(set, uas, %5B%5D)
 sextb.*>>##+js(nostif, ast)
 sextb.*>>##+js(trusted-set, premium, json%3A1)
@@ -1892,7 +1896,7 @@ hydrogen.lat##+js(aeld, load, %26%26)
 infomatricula.pt##+js(nostif, offsetHeight)
 infomatricula.pt##.container:has(.adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/29274
-idlixku.com##+js(rmnt, script, bait)
+idlixku.com##+js(rmnt, script, %2Fbait%7Cadblock%2Fi)
 ! https://tv4.idlixku.com/movie/lilo-stitch-2025/ - ads countdown
 idlixku.com##+js(trusted-set, dtGonza.playeradstime, json%3A%220%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/29287
@@ -1931,7 +1935,7 @@ briefly.co.za##.c-adv-branding__top
 ! https://github.com/uBlockOrigin/uAssets/issues/29362
 sourceb.in##.carbon
 ! popup on age verification
-artificialnudes.com,bdsmkingdom.xyz,cosplaynsfw.xyz,crazytoys.xyz,handypornos.net,hardcorelesbian.xyz,pornahegao.xyz,pornobait.com,pornfeet.xyz,romanticlesbian.com,sexontheboat.xyz,traumporno.com##+js(set, dclm_ajax_var.disclaimer_redirect_url, )
+artificialnudes.com,bdsmkingdom.xyz,cosplaynsfw.xyz,crazytoys.xyz,handypornos.net,hardcorelesbian.xyz,platinporno.com,pornahegao.xyz,pornobait.com,pornfeet.xyz,romanticlesbian.com,sexontheboat.xyz,traumporno.com##+js(set, dclm_ajax_var.disclaimer_redirect_url, )
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210206
 india.marathinewz.in##+js(no-fetch-if, adsbygoogle, war%3Agooglesyndication_adsbygoogle.js)
 ! https://github.com/uBlockOrigin/uAssets/issues/29370
@@ -2283,4 +2287,15 @@ claudelog.com##+js(nostif, adsbygoogle)
 ||go.ezodn.com/hb/dall.js
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3814
 ||kwai.net/bs2/ad-i18n-dsp/
+||fans.91selfie.com^$domain=91porn.com
+91porn.com##+js(set, player.preroll, noopFunc)
 91porn.com##div#videodetails.videodetails-yakov:nth-of-type(1) > div:nth-of-type(1)
+! https://github.com/uBlockOrigin/uAssets/issues/30203
+sporx.com##+js(rpnt, script, jQuery.fn.center, window.addEventListener(%22load%22%2C()%3D%3E%7Bif%20(typeof%20load_3rdparties%3D%3D%3D%22function%22)%7Bload_3rdparties()%7D%7D)%3BjQuery.fn.center)
+! https://github.com/uBlockOrigin/uAssets/issues/30206
+meteolive.it##+js(no-xhr-if, adsbygoogle)
+meteolive.it###gmpSkinMobileSpacer
+! https://github.com/uBlockOrigin/uAssets/issues/30194
+@@||securepubads.g.doubleclick.net/tag/js/gpt.js$script,domain=poczta.wp.pl|poczta.o2.pl
+! https://github.com/uBlockOrigin/uAssets/issues/30221
+mangacrab.org##+js(rmnt, script, Datafadace)
