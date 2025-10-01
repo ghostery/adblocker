@@ -988,7 +988,7 @@ imgtaxi.com###image_details:style(margin-top: 30px !important)
 sxyprn.*##+js(acs, decodeURI, decodeURIComponent)
 sxyprn.*##+js(set, vast_urls, %7B%7D)
 sxyprn.*##+js(aopr, popns)
-sxyprn.*##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
+sxyprn.*##+js(acs, document.createElement, l.parentNode.insertBefore(s)
 sxyprn.*##+js(aopw, __aaZoneid)
 sxyprn.*##.tbd
 sxyprn.*##.cbd
@@ -1744,7 +1744,7 @@ gogoanime.*##+js(acs, atob, decodeURIComponent)
 gogoanime.*,gogoanimes.*##+js(nowoif)
 gogoanime.*##+js(set, console.clear, undefined)
 gogoanime.*##+js(set, check_adblock, true)
-gogoanime.*##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
+gogoanime.*##+js(acs, document.createElement, l.parentNode.insertBefore(s)
 gogoanime.*##.banner_center
 gogoanime.*##.anime_video_body_cate > div[style]:has(> div[id] + script[src])
 gogoanime.*##.adx
@@ -3269,23 +3269,6 @@ porndoe.com##.-h-ticker
 naughtymachinima.com##+js(acs, __htapop)
 naughtymachinima.com##.col-md-8 > a[href][target="_blank"]
 ||chaturbate.com^$frame,domain=naughtymachinima.com
-! https://github.com/uBlockOrigin/uAssets/issues/2655
-! https://github.com/uBlockOrigin/uAssets/issues/3262
-! https://github.com/uBlockOrigin/uAssets/issues/11241
-||pornblade.com/*.php
-||twincdn.com^$3p,script,image
-||pornblade.com^$xhr,1p
-||pornfelix.com^$xhr,1p
-hd-easyporn.com##+js(aeld, getexoloader)
-! playing video => detection
-pornblade.com,pornfelix.com##+js(rpnt, script, a.onerror, xxx)
-hd-easyporn.com,pornblade.com,pornfelix.com##.vjs-overlayed
-hd-easyporn.com,pornblade.com,pornfelix.com###wrapper_content > aside[id]
-pornblade.com###e_v + aside[id]
-*$xhr,3p,domain=hd-easyporn.com
-hd-easyporn.com##[rel*="sponsored"]
-||pornojenny.com/api/widget/$3p
-/static/*/froload.js?v=$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/2659
 filehorse.com##+js(set, isAdBlockActive, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/6572
@@ -5362,7 +5345,7 @@ pingit.*,~pingit.com##+js(set, blurred, false)
 ||pingit.*/sw.js$script,1p,domain=~pingit.com
 *$script,3p,denyallow=cdn77.org|google.com|gstatic.com|recaptcha.net|smartsuppcdn.com|smartsuppchat.com,domain=pingit.*|~pingit.com
 ! https://github.com/uBlockOrigin/uAssets/issues/4988
-hdfull.*##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
+hdfull.*##+js(acs, document.createElement, l.parentNode.insertBefore(s)
 hdfull.*##+js(aeld, mousedown, !!%7B%7D)%3B)
 hdfull.*##+js(nano-stb)
 ! developerinsider.co anti adb
@@ -5551,28 +5534,18 @@ keepvid.*##+js(nowoif)
 ! https://github.com/NanoMeow/QuickReports/issues/880
 ||player.ooyala.com/static/*/ad-plugin/*$script,redirect=noopjs,domain=dragons.com.au
 ! https://github.com/uBlockOrigin/uAssets/issues/5190
-@@||cdn.taboola.com/libtrc/$script,domain=ndtv.com
-@@||trc.taboola.com/ndtv$script,domain=ndtv.com
-@@||trc.taboola.com/ndtv-ndtvmobile/$frame,domain=ndtv.com
-@@||trc.taboola.com/ndtv*/log/*$domain=trc.taboola.com
 ndtv.com##.trc-content-sponsored
 ndtv.com##.composite-branding.branding:has-text(/sponsored/i):xpath(..)
-@@||cdn.ampproject.org/*amp-ad$script,domain=ndtv.com
-@@||cdn.taboola.com/libtrc/ndtv-ndtvmobile/loader.js$script,domain=ampproject.net
-@@||cdn.taboola.com/libtrc/impl.$script,domain=ampproject.net
-@@||trc.taboola.com/ndtv-ndtvmobile/$script,domain=ampproject.net
-ndtv.com#@#amp-embed[type="taboola"]
 ndtv.com##[id^="adslot"]
 ndtv.com##:xpath(//div[contains(text(),"Advert")])
 ampproject.net##.trc-content-sponsored
 food.ndtv.com##.ads
 food.ndtv.com###jeocontainer > span:has-text(Promoted)
 ||hotdeals360.com^$3p
-ndtv.com#@##taboola-below-article-thumbnails
 ndtv.com##.tbl-feed-card:has(.trc-content-sponsored)
-@@||trc.taboola.com/ndtv*/trc/*/json$xhr,domain=ndtv.com
 ndtv.com##.inline.ads
 ndtv.com##.tbl-wrp:has(.i-amphtml-fill-content)
+food.ndtv.com##.overlay__side-nav
 /pup.php?$script
 ! https://www.reddit.com/r/uBlockOrigin/comments/b67qlj/ustreamyxcom_popups_block/
 ustream.*##+js(nowoif)
@@ -5908,7 +5881,7 @@ sendvid.com###vjs-logo-top-bar
 sendvid.com###ftr
 ! https://github.com/uBlockOrigin/uAssets/issues/5448
 imgdawgknuttz.com##+js(aopw, atOptions)
-imgdawgknuttz.com##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
+imgdawgknuttz.com##+js(acs, document.createElement, l.parentNode.insertBefore(s)
 imgdawgknuttz.com##+js(aost, atob, inlineScript)
 imgdawgknuttz.com##+js(aopr, Pub2a)
 ||imgdawgknuttz.com/*.php$script,1p
@@ -7320,7 +7293,7 @@ zimabdko.com##+js(nowebrtc)
 ! https://github.com/uBlockOrigin/uAssets/issues/6981
 leechall.*###adBanner:style(height:25px !important;left:-3000px !important;position:absolute !important)
 leechall.*##+js(nano-sib)
-leechall.com##+js(acs, document.createElement, %2Fl%5C.parentNode%5C.insertBefore%5C(s%2F)
+leechall.com##+js(acs, document.createElement, l.parentNode.insertBefore(s)
 leechall.*##.text-center.alert-info.alert
 @@||leechall.download^$ghide
 @@||leechall.download^$script,1p
