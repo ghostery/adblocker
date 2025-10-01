@@ -64,6 +64,7 @@ opisanie-kartin.com,painting-planet.com##+js(aopr, LieDetector)
 helpnetsecurity.com##+js(acs, jQuery, Object)
 ! https://github.com/NanoMeow/QuickReports/issues/3575
 thepiratebay.org##+js(aopr, exoJsPop101)
+||thepiratebay.org/sw.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/53580
 kollhong.com##+js(aopr, adBlockDetected)
 ||cointiply.com^$3p
@@ -958,10 +959,6 @@ v1.safevideo.click###custom-video
 v1.safevideo.click###video-container
 ! https://github.com/AdguardTeam/AdguardFilters/issues/58505
 arabianbusiness.com##+js(aopr, adBlockDetected)
-! https://github.com/uBlockOrigin/uAssets/issues/7631
-! https://github.com/uBlockOrigin/uAssets/issues/18102
-||intergient.com^$script,domain=emoji.gg,redirect=noopjs
-emoji.gg##+js(no-xhr-if, adsbygoogle)
 ! https://github.com/NanoMeow/QuickReports/issues/4243
 tattle.life##+js(nostif, prompt, 1000)
 tattle.life##.visitorAdPost
@@ -2290,7 +2287,7 @@ taufiqhdyt.com###big-ads
 ! https://github.com/AdguardTeam/AdguardFilters/issues/68438
 ! https://github.com/uBlockOrigin/uAssets/issues/16498
 ! https://github.com/uBlockOrigin/uAssets/issues/21742
-beverfood.com##+js(nosiif, adblock)
+beverfood.com##+js(nosiif, .offsetHeight)
 beverfood.com###backy
 beverfood.com##.switchabig
 ||beverfood.com/immagini/*1920$image
@@ -2439,8 +2436,8 @@ pikkado.com###dest_rev
 ||gartic.io/videos/*$media,1p,redirect=noopmp4-1s
 ! https://github.com/uBlockOrigin/uAssets/issues/8340
 hindustantimes.com##+js(no-fetch-if, adsbygoogle.js)
-hindustantimes.com##+js(nostif, checkAdBlockerOn)
 hindustantimes.com##+js(ra, onclick, a%5Bhref%5D%5Bonclick%5E%3D%22getFullStory%22%5D)
+hindustantimes.com##.adBlockerPopup
 hindustantimes.com##.adBlocker
 hindustantimes.com##.blackOverlay
 hindustantimes.com##.desktopAd
@@ -2484,6 +2481,8 @@ mp4hentai.com###custom_html-5
 hentaihd.net##.active-item
 ! nypost.com PH
 nypost.com##img[src$="/knewz_300x250.png"]:upward(.widget_text)
+! https://github.com/uBlockOrigin/uAssets/issues/28257#issuecomment-3288078833
+nypost.com##.entry-content > .nyp-video-player
 ! xmegadrive.com popup
 xmegadrive.com##+js(set, flashvars.adv_pause_html, )
 xmegadrive.com##.table

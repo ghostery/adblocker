@@ -229,7 +229,8 @@ hintergrundbild.org#@#.ads1
 @@||ign.com/newsfeed-block$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/27666
 ! https://github.com/uBlockOrigin/uAssets/issues/27836
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=ign.com
+! https://github.com/uBlockOrigin/uAssets/issues/29816
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=it.ign.com
 @@||cdn.ziffstatic.com/pg/ign.$script,domain=ign.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1747
 @@||cxense.com/cx.js$script,domain=letelegramme.fr
@@ -2897,9 +2898,10 @@ jacksonguitars.com##+js(set, analytics, %7B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/16850
 @@||manchestereveningnews.co.uk^$xhr,script,1p
 @@||mirror.co.uk^$script,xhr,1p
-@@/@trinitymirrordigital/withnail/*prebid$script,xhr,1p
-@@||bcp.crwdcntrl.net/*/data$xhr
-@@||tags.crwdcntrl.net^$script,domain=dailystar.co.uk|liverpoolecho.co.uk|football.london|devonlive.com|buzz.ie|inyourarea.co.uk|cornwalllive.com|coventrytelegraph.net|dublinlive.ie|glasgowlive.co.uk|kentlive.news|essexlive.news|lincolnshirelive.co.uk|insider.co.uk|bathchronicle.co.uk|birminghammail.co.uk|cheshire-live.co.uk|corkbeo.ie|crewechronicle.co.uk|croydonadvertiser.co.uk|dailypost.co.uk|dailyrecord.co.uk|derbytelegraph.co.uk|edinburghlive.co.uk|examinerlive.co.uk|gazettelive.co.uk|getreading.co.uk|getsurrey.co.uk|grimsbytelegraph.co.uk|hampshirelive.news|hulldailymail.co.uk|irishmirror.ie|liverpool.com|mylondon.news|nottinghampost.com|rossendalefreepress.co.uk|southportvisiter.co.uk|staffordshire-live.co.uk|stokesentinel.co.uk|walesonline.co.uk
+@@/@trinitymirrordigital/withnail/*prebid$script,xhr,1p,domain=~glasgowlive.co.uk
+@@||bcp.crwdcntrl.net/*/data$xhr,domain=~glasgowlive.co.uk
+@@||tags.crwdcntrl.net^$script,domain=dailystar.co.uk|liverpoolecho.co.uk|football.london|devonlive.com|buzz.ie|inyourarea.co.uk|cornwalllive.com|coventrytelegraph.net|dublinlive.ie|kentlive.news|essexlive.news|lincolnshirelive.co.uk|insider.co.uk|bathchronicle.co.uk|birminghammail.co.uk|cheshire-live.co.uk|corkbeo.ie|crewechronicle.co.uk|croydonadvertiser.co.uk|dailypost.co.uk|dailyrecord.co.uk|derbytelegraph.co.uk|edinburghlive.co.uk|examinerlive.co.uk|gazettelive.co.uk|getreading.co.uk|getsurrey.co.uk|grimsbytelegraph.co.uk|hampshirelive.news|hulldailymail.co.uk|irishmirror.ie|liverpool.com|mylondon.news|nottinghampost.com|rossendalefreepress.co.uk|southportvisiter.co.uk|staffordshire-live.co.uk|stokesentinel.co.uk|walesonline.co.uk
+||scorecardresearch.com^*/streamingtag_plugin_jwplayer.js$important,domain=glasgowlive.co.uk
 ! https://github.com/uBlockOrigin/uAssets/issues/25759
 @@||micro.rubiconproject.com/prebid/dynamic/$script,domain=dailypost.co.uk|dailystar.co.uk|mirror.co.uk
 dailypost.co.uk,dailystar.co.uk,mirror.co.uk##+js(nano-stb, native%20code, 15000, 0.001)
@@ -4307,3 +4309,28 @@ login.asda.com##+js(set, newrelic.setCustomAttribute, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/29880
 @@||api-*.datadome.co^$frame,xhr,domain=venmo.com
 @@||ct.ddc.venmo.com.fpc.datadome.co^$script,domain=id.venmo.com
+! https://github.com/uBlockOrigin/uAssets/issues/29925
+tires.costco.ca##+js(set, adobePageView, noopFunc)
+! unbreak hindustantimes.com articles
+!#if !env_mobile
+hindustantimes.com#@#.rgtAdSection
+hindustantimes.com##.rgtWidget.ht-ad-holder-right
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/29972
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cnews.cz
+! https://github.com/uBlockOrigin/uAssets/issues/30065
+mandai.com##+js(set, adobeDataLayer, %7B%7D)
+mandai.com##+js(set, adobeDataLayer.push, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/30079
+@@||ads.adthrive.com/sites/*/ads.min.$script,css,domain=damndelicious.net
+@@||ads.adthrive.com/builds/core/*/js/adthrive.min.js$script,domain=damndelicious.net
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=damndelicious.net
+damndelicious.net##+js(set, Object.prototype._adsDisabled, true)
+damndelicious.net##+js(trusted-replace-argument, Object.defineProperty, 1, json%3A%22_adsEnabled%22, condition, _adsDisabled)
+damndelicious.net#@#.adthrive
+damndelicious.net#@#.adthrive-video-player
+! https://github.com/uBlockOrigin/uAssets/issues/30142
+/fingerprint2.min.js$redirect=fingerprint2.js,domain=support.halabtech.com
+! https://github.com/uBlockOrigin/uAssets/issues/30160
+brother-usa.com##+js(set, utag, %7B%7D)
+brother-usa.com##+js(set, utag.link, noopFunc)

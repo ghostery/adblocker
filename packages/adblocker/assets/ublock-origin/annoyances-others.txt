@@ -59,8 +59,9 @@ abstream.to##+js(acs, document.onkeydown)
 e-panigiria.gr##+js(rmnt, script, oncontextmenu)
 e-panigiria.gr###body *:not(input):not(textarea):style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1lpy21u/animekai_anti_dev_tools/
-animekai.*,anigo.to,yflix.to##+js(nostif, %7C%7C!!)
-animekai.*,yflix.to##+js(nosiif, devtool)
+animekai.*,anigo.to,sflix.fi,yflix.to##+js(nostif, %7C%7C!!)
+! https://www.reddit.com/r/uBlockOrigin/comments/1nalnl4/rightclick_dev_tool_disable_and_redirect_to_ads/
+webnoveltranslations.com##+js(aeld, %2Fcontextmenu%7Ccopy%7Ccut%7Ckey%2F, , elements, document)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -122,6 +123,13 @@ pokeos.com##+js(no-fetch-if, doubleclick)
 ! https://github.com/uBlockOrigin/uAssets/issues/29791
 ! https://github.com/uBlockOrigin/uAssets/issues/29904
 ##.inset-x-0[x-data="adblockBanner()"]
+! https://github.com/uBlockOrigin/uAssets/issues/29921
+granfondo-cycling.com##+js(no-xhr-if, googlesyndication, length%3A10)
+###steadyAdblockContainer
+! https://github.com/uBlockOrigin/uAssets/issues/14055#issuecomment-3289876013
+vodafone.de###adbl
+! https://www.flagle.io/
+flagle.io##+js(nostif, googlesyndication)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -3991,6 +3999,8 @@ jamilacuisine.ro##+js(aost, Object, %2F(%3F%3D%5E(%3F!.*(jquery%7CinlineScript))
 ! https://www.slideshare.net/secret/r4TGJDeZF0s9jt anti adb, exit-modal
 slideshare.net##+js(acs, ab_tests)
 slideshare.net##+js(aeld, mouseleave, scribd_ad)
+! https://github.com/uBlockOrigin/uAssets/issues/30122
+scribd.com###sidebar div[data-testid="sticky-wrapper"]
 ! https://coinsparty.com/9FYmRWQ anti right click
 coinsparty.com##+js(aeld, contextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/15598
@@ -5480,7 +5490,7 @@ japonhentai.com##^style:has-text(::selection)
 japonhentai.com##+js(rmnt, style, %3A%3Aselection)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25926
-rutube.ru##+js(trusted-click-element, %23app%20%3E%20%5Bdata-testid%3D%22embed-wrapper%22%5D%20%5Baria-label*%3D%22%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%82%D1%8C%22%5D)
+! rutube.ru##+js(trusted-click-element, %23app%20%3E%20%5Bdata-testid%3D%22embed-wrapper%22%5D%20%5Baria-label*%3D%22%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%B8%D1%82%D1%8C%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/25990
 karistudio.com##div.confuse:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/26023
@@ -5613,8 +5623,8 @@ astoryofmasasstruggles.com##style:has-text(@media print):remove()
 ! https://github.com/AdguardTeam/AdguardFilters/issues/156165
 lemon8-app.com##+js(trusted-click-element, .seo-landing-modal-cancel-btn%20.design-system-button-container, , 500)
 ! animekai.me anti-devtools
-animekai.*,anigo.to,yflix.to##+js(aeld, keydown, %7C%7C)
-animekai.*,anigo.to,megaup.cc,rapidshare.cc,yflix.to##+js(set, console.clear, throwFunc)
+animekai.*,anigo.to,sflix.fi,yflix.to##+js(aeld, keydown, %2F%5Efunction%5C(.*%5C%7C%5C%7C.*%7D%24%2F)
+animekai.*,anigo.to,megaup.cc,megaup.live,megaup.site,rapidshare.cc,sflix.fi,yflix.to##+js(set, console.clear, throwFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/27010
 loverslab.com##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/16606
@@ -5739,3 +5749,7 @@ shein.com##+js(trusted-replace-outbound-text, String.prototype.trim, iframe, non
 odysee.com##body:style(cursor: revert !important)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1n2595k/bhaskarcom_content_hidden/
 bhaskar.com##+js(aost, Array.prototype.findIndex, isWithinLimits)
+! https://github.com/uBlockOrigin/uAssets/issues/29349
+||embed.wcostream.com/inc/embed/index.php?file=$uritransform=/index/video-js/
+! https://github.com/uBlockOrigin/uAssets/issues/30132
+modxvm.com##+js(trusted-set-local-storage-item, xvmDialogLastShown, %24now%24)
