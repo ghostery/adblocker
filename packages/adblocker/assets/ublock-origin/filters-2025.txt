@@ -706,6 +706,8 @@ uexpress.com##[class^="Header_headerContainer"]:style(top: 0px !important;)
 uexpress.com##.ue-app-container:style(margin-top: 60px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/26963
 *$script,3p,denyallow=challenges.cloudflare.com,domain=bitcine.app|cineby.app
+! https://github.com/uBlockOrigin/uAssets/issues/30245
+@@||challenge.seyra.online/challenge.js?api_key=$script
 ! moviesnation. video ads
 moviesnation.*##+js(aopw, onpopstate)
 moviesnation.*##+js(nowoif, _blank)
@@ -1899,6 +1901,9 @@ infomatricula.pt##.container:has(.adsbygoogle)
 idlixku.com##+js(rmnt, script, %2Fbait%7Cadblock%2Fi)
 ! https://tv4.idlixku.com/movie/lilo-stitch-2025/ - ads countdown
 idlixku.com##+js(trusted-set, dtGonza.playeradstime, json%3A%220%22)
+! https://tv9.idlixku.com/movie/wonder-woman-1984-2020/ ads
+*.mp4$media,domain=jeniusplay.com,redirect=noopmp3-0.1s
+idlixku.com##+js(nostif, start)
 ! https://github.com/uBlockOrigin/uAssets/issues/29287
 agar.io##html:style(--bottom-banner-height: 0 !important;)
 ! https://daftsex.biz DL timer
@@ -2302,4 +2307,7 @@ mangacrab.org##+js(rmnt, script, Datafadace)
 ! https://github.com/uBlockOrigin/uAssets/issues/30231
 av1encodes.com##+js(set, HTMLScriptElement.prototype.onerror, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/25437#issuecomment-3352823969
-||api.adinplay.com/libs/aiptag/$redirect=noopjs
+! https://github.com/uBlockOrigin/uAssets/issues/30250
+||api.adinplay.com/libs/aiptag/$redirect=noopjs,domain=play.gamepix.com
+! https://pes6stars.com anti-adb
+@@||pes6stars.com/pageear.js$script,1p
