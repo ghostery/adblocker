@@ -89,10 +89,15 @@ export class BlockingContext {
     }
   }
 
-  public async disable(): Promise<void> {
+  public async disable({
+    keepRequestInterception = false,
+  }: { keepRequestInterception?: boolean | undefined } = {}): Promise<void> {
     if (this.blocker.config.loadNetworkFilters) {
       this.page.off('request', this.onRequest);
-      await this.page.setRequestInterception(false);
+
+      if (keepRequestInterception === false) {
+        await this.page.setRequestInterception(false);
+      }
     }
 
     if (this.blocker.config.loadCosmeticFilters) {
