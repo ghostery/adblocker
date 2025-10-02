@@ -1,3 +1,16 @@
+# v2.12.0 (Thu Oct 02 2025)
+
+#### :rocket: New Feature
+
+- feat(puppeteer): allow keeping request interception on disable [#5161](https://github.com/ghostery/adblocker/pull/5161) ([@Kikobeats](https://github.com/Kikobeats) [@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Kiko Beats ([@Kikobeats](https://github.com/Kikobeats))
+
+---
+
 # v2.11.5 (Thu Aug 21 2025)
 
 #### :nut_and_bolt: Dependencies
