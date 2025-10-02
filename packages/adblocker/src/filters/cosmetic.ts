@@ -786,22 +786,27 @@ export default class CosmeticFilter implements IFilter {
               inArgument = true;
             }
           }
-          if (char === ',') {
-            parts.push(selector.slice(lastComaIndex + 1, index).trim());
-            lastComaIndex = index;
-            inArgument = false;
-          }
         }
+      }
+
+      // Split on comma only if not inside quotes, regexp, and not escaped
+      if (
+        lastCharIsBackslash === false &&
+        char === ',' &&
+        inDoubleQuotes === false &&
+        inSingleQuotes === false &&
+        inBackticks === false &&
+        inRegexp === false
+      ) {
+        parts.push(selector.slice(lastComaIndex + 1, index).trim());
+        lastComaIndex = index;
+        inArgument = false;
       }
 
       lastCharIsBackslash = char === '\\';
     }
 
     parts.push(selector.slice(lastComaIndex + 1).trim());
-
-    if (parts.length === 0) {
-      return undefined;
-    }
 
     const args = parts
       .slice(1)
@@ -834,12 +839,20 @@ export default class CosmeticFilter implements IFilter {
         }
         return escaped.replace(REGEXP_ESCAPED_BACKTICK, '`');
       })
-      .map((part) =>
-        part
+      .map((part) => {
+        // Only convert escaped commas that are NOT inside object literals
+        // Object literals are detected by checking if the part starts with '{'
+        const isObjectLiteral = part.trim().startsWith('{');
+        let result = part
           .replace(REGEXP_UNICODE_COMMA, ',')
-          .replace(REGEXP_UNICODE_BACKSLASH, '\\')
-          .replace(REGEXP_ESCAPED_COMMA, ','),
-      );
+          .replace(REGEXP_UNICODE_BACKSLASH, '\\');
+
+        if (!isObjectLiteral) {
+          result = result.replace(REGEXP_ESCAPED_COMMA, ',');
+        }
+
+        return result;
+      });
 
     this.scriptletDetails = { name: parts[0], args };
 
