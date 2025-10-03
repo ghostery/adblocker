@@ -1,3 +1,15 @@
+# v2.12.1 (Fri Oct 03 2025)
+
+#### :nail_care: Polish
+
+- chore(internal): update dependencies and replace node 18 with 24 [#5220](https://github.com/ghostery/adblocker/pull/5220) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.11.5 (Thu Aug 21 2025)
 
 #### :nut_and_bolt: Dependencies
