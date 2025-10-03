@@ -803,7 +803,7 @@ export default class CosmeticFilter implements IFilter {
         inArgument = false;
       }
 
-      lastCharIsBackslash = char === '\\';
+      lastCharIsBackslash = char === '\\' && !lastCharIsBackslash;
     }
 
     parts.push(selector.slice(lastComaIndex + 1).trim());
@@ -840,8 +840,6 @@ export default class CosmeticFilter implements IFilter {
         return escaped.replace(REGEXP_ESCAPED_BACKTICK, '`');
       })
       .map((part) => {
-        // Only convert escaped commas that are NOT inside object literals
-        // Object literals are detected by checking if the part starts with '{'
         const isObjectLiteral = part.trim().startsWith('{');
         let result = part
           .replace(REGEXP_UNICODE_COMMA, ',')

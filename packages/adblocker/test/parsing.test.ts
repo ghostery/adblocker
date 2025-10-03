@@ -2408,10 +2408,10 @@ describe('Filters list', () => {
 
 describe('scriptlets arguments parsing', () => {
   it('parses empty argument list', () => {
-    const filter = CosmeticFilter.parse('foo.com#@#+js()');
+    const filter = CosmeticFilter.parse('foo.com#@#+js()')!;
     expect(filter).to.not.be.null;
-    expect(filter?.isScriptInject()).to.be.true;
-    expect(filter?.parseScript()).to.be.undefined;
+    expect(filter.isScriptInject()).to.be.true;
+    expect(filter.parseScript()).to.be.undefined;
   });
 
   it('parses name without args', () => {
@@ -2709,11 +2709,22 @@ describe('scriptlets arguments parsing', () => {
           ],
         ],
         [
-          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\\,"contentPlaybackContext", condition, currentUrl":"/watch))`,
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext", condition, currentUrl":"/watch)`,
           [
             `JSON.stringify`,
             `{"contentPlaybackContext"`,
-            `{"adPlaybackContext":{"pyv":true}\\,"contentPlaybackContext"`,
+            String.raw`{"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext"`,
+            `condition`,
+            `currentUrl":"/watch`,
+          ],
+        ],
+        [
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\\,"contentPlaybackContext", condition, currentUrl":"/watch))`,
+          [
+            `JSON.stringify`,
+            `{"contentPlaybackContext"`,
+            String.raw`{"adPlaybackContext":{"pyv":true}\\`,
+            `contentPlaybackContext`,
             `condition`,
             `currentUrl":"/watch)`,
           ],
