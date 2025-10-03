@@ -2406,88 +2406,253 @@ describe('Filters list', () => {
   });
 });
 
-describe('scriptlets arguments parsing', () => {
-  it('parses empty argument list', () => {
-    const filter = CosmeticFilter.parse('foo.com#@#+js()')!;
-    expect(filter).to.not.be.null;
-    expect(filter.isScriptInject()).to.be.true;
-    expect(filter.parseScript()).to.be.undefined;
-  });
+describe('Scriptlet argument parsing', () => {
+  describe('basic argument splitting', () => {
+    it('parses empty argument list', () => {
+      const filter = CosmeticFilter.parse('foo.com#@#+js()')!;
+      expect(filter).to.not.be.null;
+      expect(filter.isScriptInject()).to.be.true;
+      expect(filter.parseScript()).to.be.undefined;
+    });
 
-  it('parses name without args', () => {
-    expect(CosmeticFilter.parse('foo.com##+js(script-name)')?.parseScript()).to.eql({
-      name: 'script-name',
-      args: [],
+    it('parses name without args', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: [],
+      });
+    });
+
+    it('splits arguments at unescaped commas', () => {
+      for (const [scriptlet, expected] of [
+        ['acs, $, adb', { name: 'acs', args: ['$', 'adb'] }],
+        [
+          'abort-current-script, document.createElement, break;case $.',
+          { name: 'abort-current-script', args: ['document.createElement', 'break;case $.'] },
+        ],
+        ['acs, atob, -0x1', { name: 'acs', args: ['atob', '-0x1'] }],
+        ["acs, Date, ='\\x", { name: 'acs', args: ['Date', "='\\x"] }],
+        [
+          'acs, document.getElementById, showModal, /^data:text\\/javascript/',
+          {
+            name: 'acs',
+            args: ['document.getElementById', 'showModal', '/^data:text\\/javascript/'],
+          },
+        ],
+        ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
+      ] as const) {
+        expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
+          expected,
+        );
+      }
+    });
+
+    it('preserves commas inside quotes', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(a, "value,another")')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['value,another'],
+      });
+      expect(CosmeticFilter.parse("foo.com##+js(a, 'value,another')")?.parseScript()).to.eql({
+        name: 'a',
+        args: ['value,another'],
+      });
+      expect(CosmeticFilter.parse('foo.com##+js(a, `value,another`)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['value,another'],
+      });
+    });
+
+    it('preserves commas inside regexps', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(acs, $, /.fadeIn|.show(.?)/)')?.parseScript(),
+      ).to.eql({
+        name: 'acs',
+        args: ['$', '/.fadeIn|.show(.?)/'],
+      });
+      expect(
+        CosmeticFilter.parse(
+          'foo.com##+js(acis, document.createElement, /break;case $.|popunder/)',
+        )?.parseScript(),
+      ).to.eql({
+        name: 'acis',
+        args: ['document.createElement', '/break;case $.|popunder/'],
+      });
+      expect(
+        CosmeticFilter.parse(
+          `foo.com##+js(acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/)`,
+        )?.parseScript(),
+      ).to.eql({
+        name: 'acs',
+        args: ['document.getElementById', `/\\$\\('body'\\)|\\$\\("body"\\)/`],
+      });
+    });
+
+    it('handles empty arguments', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(script-name,, , foo,   ,     bar)')?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['', '', 'foo', '', 'bar'],
+      });
     });
   });
 
-  it('parses name with simple args', () => {
-    for (const [scriptlet, expected] of [
-      ['acs, $, adb', { name: 'acs', args: ['$', 'adb'] }],
-      [
-        'abort-current-script, document.createElement, break;case $.',
-        { name: 'abort-current-script', args: ['document.createElement', 'break;case $.'] },
-      ],
-      ['acs, $, /.fadeIn|.show(.?)/', { name: 'acs', args: ['$', '/.fadeIn|.show(.?)/'] }],
-      [
-        'acis, document.createElement, /break;case $.|popunder/',
-        { name: 'acis', args: ['document.createElement', '/break;case $.|popunder/'] },
-      ],
-      ['acs, atob, -0x1', { name: 'acs', args: ['atob', '-0x1'] }],
-      ["acs, atob, 'shift'", { name: 'acs', args: ['atob', 'shift'] }],
-      ["acs, Date, ='\\x", { name: 'acs', args: ['Date', "='\\x"] }],
-      [
-        `acs, decodeURIComponent, "'shift'"`,
-        { name: 'acs', args: ['decodeURIComponent', `'shift'`] },
-      ],
-      [
-        `acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/`,
-        { name: 'acs', args: ['document.getElementById', `/\\$\\('body'\\)|\\$\\("body"\\)/`] },
-      ],
-      [
-        'acs, document.getElementById, showModal, /^data:text\\/javascript/',
-        {
-          name: 'acs',
-          args: ['document.getElementById', 'showModal', '/^data:text\\/javascript/'],
-        },
-      ],
-      ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
-    ] as const) {
-      expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
-        expected,
-      );
-    }
-  });
+  describe('escaped comma handling', () => {
+    it('treats escaped commas as part of argument', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['foo ,bar'],
+      });
+    });
 
-  it('parses name with empty args', () => {
-    expect(
-      CosmeticFilter.parse('foo.com##+js(script-name,, , foo,   ,     bar)')?.parseScript(),
-    ).to.eql({
-      name: 'script-name',
-      args: ['', '', 'foo', '', 'bar'],
+    it('converts escaped commas to regular commas in output', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(a, arg1\\,arg2)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['arg1,arg2'],
+      });
+    });
+
+    it('handles multiple escaped commas in single argument', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(script-name, arg1\\,arg2\\,arg3, arg4)')?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['arg1,arg2,arg3', 'arg4'],
+      });
     });
   });
 
-  it('removes wrapping quotes', () => {
-    expect(CosmeticFilter.parse('foo.com##+js(script-name, "a")')?.parseScript()).to.eql({
-      name: 'script-name',
-      args: ['a'],
+  describe('quote handling', () => {
+    it('removes wrapping quotes from arguments', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, "a")')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['a'],
+      });
+      expect(CosmeticFilter.parse("foo.com##+js(script-name, 'a')")?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['a'],
+      });
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, `a`)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['a'],
+      });
     });
-    expect(CosmeticFilter.parse("foo.com##+js(script-name, 'a')")?.parseScript()).to.eql({
-      name: 'script-name',
-      args: ['a'],
+
+    it('removes nested quotes when properly wrapped', () => {
+      expect(
+        CosmeticFilter.parse(`foo.com##+js(acs, decodeURIComponent, "'shift'")`)?.parseScript(),
+      ).to.eql({
+        name: 'acs',
+        args: ['decodeURIComponent', `'shift'`],
+      });
+      expect(CosmeticFilter.parse(`foo.com##+js(a, "'value',")`)?.parseScript()).to.eql({
+        name: 'a',
+        args: [`'value',`],
+      });
+    });
+
+    it('handles mismatched quotes', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(a, "value)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['"value'],
+      });
+      expect(CosmeticFilter.parse("foo.com##+js(a, 'value)")?.parseScript()).to.eql({
+        name: 'a',
+        args: ["'value"],
+      });
+    });
+
+    it('handles escaped quotes inside quoted strings', () => {
+      expect(CosmeticFilter.parse(`foo.com##+js(a, "va\\"lue")`)?.parseScript()).to.eql({
+        name: 'a',
+        args: ['va"lue'],
+      });
+      expect(CosmeticFilter.parse(`foo.com##+js(a, 'va\\'lue')`)?.parseScript()).to.eql({
+        name: 'a',
+        args: ["va'lue"],
+      });
+      expect(CosmeticFilter.parse('foo.com##+js(a, `va\\`lue`)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['va`lue'],
+      });
     });
   });
 
-  it('handles escaping of comas', () => {
-    expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
-      name: 'script-name',
-      args: ['foo ,bar'],
-    });
-  });
+  describe('object literal arguments', () => {
+    describe('quoted objects (correct syntax - commas preserved)', () => {
+      it('requires quotes for object literals with multiple keys', () => {
+        expect(
+          CosmeticFilter.parse('foo.com##+js(script-name, "{foo: 1, bar: 2}")')?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}'],
+        });
+      });
 
-  describe('object literals as arguments', () => {
-    describe('unquoted objects (incorrect syntax - commas split arguments)', () => {
+      it('works with single quotes', () => {
+        expect(
+          CosmeticFilter.parse("foo.com##+js(script-name, '{foo: 1, bar: 2}')")?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}'],
+        });
+      });
+
+      it('works with backticks', () => {
+        expect(
+          CosmeticFilter.parse('foo.com##+js(script-name, `{foo: 1, bar: 2}`)')?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}'],
+        });
+      });
+
+      it('handles multiple arguments with quoted objects', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(script-name, "{foo: 1, bar: 2}", arg2, "{baz: 3}")',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}', 'arg2', '{baz: 3}'],
+        });
+      });
+
+      it('handles nested objects in quoted string', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(script-name, "{foo: {a: 1, b: 2}, bar: 3}")',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: {a: 1, b: 2}, bar: 3}'],
+        });
+      });
+
+      it('handles complex real-world object with quoted syntax', () => {
+        expect(
+          CosmeticFilter.parse(
+            `foo.com##+js(aeld, '{ "type": "click", "pattern": "popMagic", "runAt": "idle" }')`,
+          )?.parseScript(),
+        ).to.eql({
+          name: 'aeld',
+          args: ['{ "type": "click", "pattern": "popMagic", "runAt": "idle" }'],
+        });
+      });
+
+      it('preserves escaped commas in object literals (even when quoted)', () => {
+        // Object literals preserve escaped commas (detected by starting with '{')
+        expect(
+          CosmeticFilter.parse(
+            String.raw`foo.com##+js(script-name, "{foo: 1\, bar: 2}")`,
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: [String.raw`{foo: 1\, bar: 2}`],
+        });
+      });
+    });
+
+    describe('unquoted objects (incorrect syntax - demonstrates splitting behavior)', () => {
       it('empty object stays as one argument', () => {
         expect(CosmeticFilter.parse('foo.com##+js(script-name, {})')?.parseScript()).to.eql({
           name: 'script-name',
@@ -2555,82 +2720,45 @@ describe('scriptlets arguments parsing', () => {
         });
       });
     });
+  });
 
-    describe('quoted objects (correct syntax - commas preserved)', () => {
-      it('keeps quoted object together with double quotes', () => {
-        expect(
-          CosmeticFilter.parse('foo.com##+js(script-name, "{foo: 1, bar: 2}")')?.parseScript(),
-        ).to.eql({
-          name: 'script-name',
-          args: ['{foo: 1, bar: 2}'],
-        });
-      });
-
-      it('keeps quoted object together with single quotes', () => {
-        expect(
-          CosmeticFilter.parse("foo.com##+js(script-name, '{foo: 1, bar: 2}')")?.parseScript(),
-        ).to.eql({
-          name: 'script-name',
-          args: ['{foo: 1, bar: 2}'],
-        });
-      });
-
-      it('keeps quoted object together with backticks', () => {
-        expect(
-          CosmeticFilter.parse('foo.com##+js(script-name, `{foo: 1, bar: 2}`)')?.parseScript(),
-        ).to.eql({
-          name: 'script-name',
-          args: ['{foo: 1, bar: 2}'],
-        });
-      });
-
-      it('handles multiple arguments with quoted objects', () => {
-        expect(
-          CosmeticFilter.parse(
-            'foo.com##+js(script-name, "{foo: 1, bar: 2}", arg2, "{baz: 3}")',
-          )?.parseScript(),
-        ).to.eql({
-          name: 'script-name',
-          args: ['{foo: 1, bar: 2}', 'arg2', '{baz: 3}'],
-        });
-      });
-
-      it('handles nested objects in quoted string', () => {
-        expect(
-          CosmeticFilter.parse(
-            'foo.com##+js(script-name, "{foo: {a: 1, b: 2}, bar: 3}")',
-          )?.parseScript(),
-        ).to.eql({
-          name: 'script-name',
-          args: ['{foo: {a: 1, b: 2}, bar: 3}'],
-        });
-      });
-
-      it('preserves escaped commas in object literals (even when quoted)', () => {
-        // Object literals preserve escaped commas (detected by starting with '{')
-        expect(
-          CosmeticFilter.parse(
-            String.raw`foo.com##+js(script-name, "{foo: 1\, bar: 2}")`,
-          )?.parseScript(),
-        ).to.eql({
-          name: 'script-name',
-          args: [String.raw`{foo: 1\, bar: 2}`],
-        });
-      });
-
-      it('handles complex real-world object with quoted syntax', () => {
-        expect(
-          CosmeticFilter.parse(
-            `foo.com##+js(aeld, '{ "type": "click", "pattern": "popMagic", "runAt": "idle" }')`,
-          )?.parseScript(),
-        ).to.eql({
-          name: 'aeld',
-          args: ['{ "type": "click", "pattern": "popMagic", "runAt": "idle" }'],
-        });
+  describe('combined escaping scenarios', () => {
+    it('handles escaped commas with quoted strings', () => {
+      expect(
+        CosmeticFilter.parse(
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`
+        )?.parseScript(),
+      ).to.eql({
+        name: 'trusted-replace-outbound-text',
+        args: [
+          'JSON.stringify',
+          '"params":"yAEB',
+          'condition',
+          '/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/',
+        ],
       });
     });
 
-    context('quoting', () => {
+    it('handles complex real-world examples', () => {
+      expect(
+        CosmeticFilter.parse(
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext", condition, currentUrl":"/watch)`
+        )?.parseScript(),
+      ).to.eql({
+        name: 'trusted-replace-outbound-text',
+        args: [
+          'JSON.stringify',
+          '{"contentPlaybackContext"',
+          String.raw`{"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext"`,
+          'condition',
+          'currentUrl":"/watch',
+        ],
+      });
+    });
+  });
+
+  describe('edge cases and comprehensive quote tests', () => {
+    context('quoting variations', () => {
       for (const [filter, expected] of [
         ['foo.com##+js(a, "value")', ['value']],
         ['foo.com##+js(a, "value)', ['"value']],
