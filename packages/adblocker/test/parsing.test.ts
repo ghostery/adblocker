@@ -2440,9 +2440,10 @@ describe('Scriptlet argument parsing', () => {
         ],
         ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
       ] as const) {
-        expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
-          expected,
-        );
+        expect(
+          CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(),
+          scriptlet,
+        ).to.eql(expected);
       }
     });
 
@@ -2726,7 +2727,7 @@ describe('Scriptlet argument parsing', () => {
     it('handles escaped commas with quoted strings', () => {
       expect(
         CosmeticFilter.parse(
-          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
         )?.parseScript(),
       ).to.eql({
         name: 'trusted-replace-outbound-text',
@@ -2742,7 +2743,7 @@ describe('Scriptlet argument parsing', () => {
     it('handles complex real-world examples', () => {
       expect(
         CosmeticFilter.parse(
-          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext", condition, currentUrl":"/watch)`
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext", condition, currentUrl":"/watch)`,
         )?.parseScript(),
       ).to.eql({
         name: 'trusted-replace-outbound-text',
