@@ -331,6 +331,8 @@ export default class CosmeticFilterBucket {
   public getCosmeticsFilters({
     domain,
     hostname,
+    parentDomain,
+    parentHostname,
 
     classes = [],
     hrefs = [],
@@ -347,6 +349,8 @@ export default class CosmeticFilterBucket {
   }: {
     domain: string;
     hostname: string;
+    parentDomain?: string | undefined;
+    parentHostname?: string | undefined;
 
     classes: string[] | undefined;
     hrefs: string[] | undefined;
@@ -366,6 +370,10 @@ export default class CosmeticFilterBucket {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
     const hostnameTokens = createLookupTokens(hostname, domain);
+    const parentHostnameTokens =
+      parentDomain !== undefined && parentHostname !== undefined
+        ? createLookupTokens(parentHostname, parentDomain)
+        : undefined;
     const filters: CosmeticFilter[] = [];
 
     // =======================================================================
@@ -386,6 +394,23 @@ export default class CosmeticFilterBucket {
         }
         return true;
       });
+      if (parentHostnameTokens) {
+        this.hostnameIndex.iterMatchingFilters(parentHostnameTokens, (filter: CosmeticFilter) => {
+          // The subframe matching cosmetic filters are only subject to
+          // scriptlets.
+          if (
+            filter.hasSubFrameScriptInject() === true &&
+            (allowSpecificHides === true || filter.isScriptInject() === true) &&
+            // Existence of `parentHostnameTokens` ensures `parentHostname`
+            // and `parentDomain` are populated.
+            filter.match(parentHostname!, parentDomain!) &&
+            !isFilterExcluded?.(filter)
+          ) {
+            filters.push(filter);
+          }
+          return true;
+        });
+      }
     }
 
     // =======================================================================
@@ -460,6 +485,22 @@ export default class CosmeticFilterBucket {
 
         return true;
       });
+      if (parentHostnameTokens) {
+        this.hostnameIndex.iterMatchingFilters(parentHostnameTokens, (filter: CosmeticFilter) => {
+          // The subframe matching cosmetic filters are only subject to
+          // scriptlets.
+          if (
+            filter.hasSubFrameScriptInject() === true &&
+            // Existence of `parentHostnameTokens` ensures `parentHostname`
+            // and `parentDomain` are populated.
+            filter.match(parentHostname!, parentDomain!) &&
+            !isFilterExcluded?.(filter)
+          ) {
+            filters.push(filter);
+          }
+          return true;
+        });
+      }
     }
 
     return {
