@@ -840,7 +840,7 @@ export default class CosmeticFilter implements IFilter {
         return escaped.replace(REGEXP_ESCAPED_BACKTICK, '`');
       })
       .map((part) => {
-        const isObjectLiteral = part.trim().startsWith('{');
+        const isObjectLiteral = part.startsWith('{');
         let result = part
           .replace(REGEXP_UNICODE_COMMA, ',')
           .replace(REGEXP_UNICODE_BACKSLASH, '\\');
