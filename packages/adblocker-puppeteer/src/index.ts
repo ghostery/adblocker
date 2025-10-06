@@ -132,14 +132,17 @@ export class PuppeteerBlocker extends FiltersEngine {
     return context;
   }
 
-  public async disableBlockingInPage(page: puppeteer.Page): Promise<void> {
+  public async disableBlockingInPage(
+    page: puppeteer.Page,
+    { keepRequestInterception = false }: { keepRequestInterception?: boolean | undefined } = {},
+  ): Promise<void> {
     const context: undefined | BlockingContext = this.contexts.get(page);
     if (context === undefined) {
       throw new Error('Trying to disable blocking which was not enabled');
     }
 
     this.contexts.delete(page);
-    await context.disable();
+    await context.disable({ keepRequestInterception });
   }
 
   public isBlockingEnabled(page: puppeteer.Page): boolean {
