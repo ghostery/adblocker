@@ -1825,7 +1825,9 @@ foo.com###selector
         getRulesFromDOM: true,
       });
       expect(matches.length).to.be.eql(1);
-      expect(matches[0].exception).not.to.be.undefined;
+      expect(matches[0].exception?.isNetworkFilter()).to.be.true;
+      expect(matches[0].exception!.isGenericHide()).to.be.true;
+      expect((matches[0].exception as NetworkFilter).isException()).to.be.true;
     });
   });
 

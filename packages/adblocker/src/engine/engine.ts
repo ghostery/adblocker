@@ -40,9 +40,9 @@ import { IPattern } from './metadata/patterns.js';
 
 export const ENGINE_VERSION = 811;
 
-function shouldApplyHideException(filters: NetworkFilter[]): boolean {
+function shouldApplyHideException(filters: NetworkFilter[]): NetworkFilter | undefined {
   if (filters.length === 0) {
-    return false;
+    return;
   }
 
   // Get $Xhide filter with highest priority:
@@ -64,11 +64,15 @@ function shouldApplyHideException(filters: NetworkFilter[]): boolean {
   }
 
   if (genericHideFilter === undefined) {
-    return false;
+    return;
   }
 
   // Check that there is at least one $generichide match and no exception
-  return genericHideFilter.isException();
+  if (genericHideFilter.isException() === false) {
+    return;
+  }
+
+  return genericHideFilter;
 }
 
 export interface BlockingResponse {
@@ -1046,7 +1050,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const filters = [];
 
     for (const { filter, exception } of matches) {
-      if (exception === undefined) {
+      if (filter !== undefined && exception === undefined) {
         filters.push(filter);
       }
     }
@@ -1174,16 +1178,32 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     callerContext?: any | undefined;
   }): {
-    matches: {
-      filter: CosmeticFilter;
-      exception: CosmeticFilter | undefined;
-    }[];
+    matches: (
+      | {
+          filter: CosmeticFilter | undefined;
+          exception: CosmeticFilter | undefined;
+        }
+      | {
+          filter: undefined;
+          exception: NetworkFilter | undefined;
+        }
+    )[];
     allowGenericHides: boolean;
   } {
     domain ||= '';
 
-    let allowGenericHides = true;
-    let allowSpecificHides = true;
+    const matches: (
+      | {
+          filter: CosmeticFilter | undefined;
+          exception: CosmeticFilter | undefined;
+        }
+      | {
+          filter: undefined;
+          exception: NetworkFilter | undefined;
+        }
+    )[] = [];
+    let genericHideException: NetworkFilter | undefined;
+    let specificHideException: NetworkFilter | undefined;
 
     const exceptions = this.hideExceptions.matchAll(
       Request.fromRawDetails({
@@ -1202,8 +1222,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const specificHides: NetworkFilter[] = [];
     for (const filter of exceptions) {
       if (filter.isElemHide()) {
-        allowGenericHides = false;
-        allowSpecificHides = false;
+        genericHideException = filter;
+        specificHideException = filter;
         break;
       }
 
@@ -1214,12 +1234,24 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    if (allowGenericHides === true) {
-      allowGenericHides = shouldApplyHideException(genericHides) === false;
+    if (genericHideException === undefined) {
+      genericHideException = shouldApplyHideException(genericHides);
     }
 
-    if (allowSpecificHides === true) {
-      allowSpecificHides = shouldApplyHideException(specificHides) === false;
+    if (specificHideException === undefined) {
+      specificHideException = shouldApplyHideException(specificHides);
+    }
+
+    if (genericHideException !== undefined) {
+      matches.push({
+        filter: undefined,
+        exception: genericHideException,
+      });
+    } else if (specificHideException !== undefined) {
+      matches.push({
+        filter: undefined,
+        exception: specificHideException,
+      });
     }
 
     const { filters, unhides } = this.cosmetics.getCosmeticsFilters({
@@ -1230,8 +1262,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       hrefs,
       ids,
 
-      allowGenericHides,
-      allowSpecificHides,
+      allowGenericHides: genericHideException === undefined,
+      allowSpecificHides: specificHideException === undefined,
 
       getRulesFromDOM,
       getRulesFromHostname,
@@ -1256,8 +1288,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         );
       }
     }
-
-    const matches: { filter: CosmeticFilter; exception: CosmeticFilter | undefined }[] = [];
 
     for (const filter of filters) {
       if (filter.isExtended() && getExtendedRules === false) {
@@ -1295,7 +1325,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
 
     return {
       matches,
-      allowGenericHides,
+      allowGenericHides: genericHideException === undefined,
     };
   }
 
