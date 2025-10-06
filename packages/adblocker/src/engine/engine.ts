@@ -1192,16 +1192,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   } {
     domain ||= '';
 
-    const matches: (
-      | {
-          filter: CosmeticFilter | undefined;
-          exception: CosmeticFilter | undefined;
-        }
-      | {
-          filter: undefined;
-          exception: NetworkFilter | undefined;
-        }
-    )[] = [];
+    const matches: ReturnType<FilterEngine['matchCosmeticFilters']>['matches'] = [];
     let genericHideException: NetworkFilter | undefined;
     let specificHideException: NetworkFilter | undefined;
 
