@@ -1247,7 +1247,9 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
         filter: undefined,
         exception: genericHideException,
       });
-    } else if (specificHideException !== undefined) {
+    }
+
+    if (specificHideException !== undefined) {
       matches.push({
         filter: undefined,
         exception: specificHideException,

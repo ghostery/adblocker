@@ -1815,8 +1815,11 @@ foo.com###selector
   });
 
   describe('#matchCosmeticFilters', () => {
-    it('reports generic hide exceptions', () => {
-      const engine = FilterEngine.parse('###ad\n@@||foo.com^$generichide');
+    it('reports generic hide exception', () => {
+      const engine = FilterEngine.parse(`
+        ###ad
+        @@||foo.com^$generichide
+      `);
       const { matches } = engine.matchCosmeticFilters({
         url: 'https://foo.com',
         hostname: 'foo.com',
@@ -1825,9 +1828,34 @@ foo.com###selector
         getRulesFromDOM: true,
       });
       expect(matches.length).to.be.eql(1);
-      expect(matches[0].exception?.isNetworkFilter()).to.be.true;
-      expect(matches[0].exception!.isGenericHide()).to.be.true;
-      expect((matches[0].exception as NetworkFilter).isException()).to.be.true;
+      const match = matches[0];
+      expect(match.filter).to.be.undefined;
+      expect(match.exception).to.satisfy(
+        (filter: NetworkFilter) => filter.isGenericHide() && filter.isException(),
+      );
+    });
+
+    it('reports both generic and specific hide exceptions', () => {
+      const engine = FilterEngine.parse(`
+        ###ad
+        @@||foo.com^$generichide
+        @@||foo.com^$specifichide
+      `);
+      const { matches } = engine.matchCosmeticFilters({
+        url: 'https://foo.com',
+        hostname: 'foo.com',
+        domain: 'foo.com',
+        classes: ['ad'],
+        getRulesFromDOM: true,
+      });
+      expect(matches.length).to.be.eql(2);
+      for (const match of matches) {
+        expect(match.filter).to.be.undefined;
+        expect(match.exception).to.satisfy(
+          (filter: NetworkFilter) =>
+            (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
+        );
+      }
     });
   });
 
