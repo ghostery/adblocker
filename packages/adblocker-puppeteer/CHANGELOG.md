@@ -1,3 +1,15 @@
+# v2.12.3 (Mon Oct 06 2025)
+
+#### :bug: Bug Fix
+
+- fix(puppeteer): expose option for `disableBlockingInPage` [#5231](https://github.com/ghostery/adblocker/pull/5231) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.12.1 (Fri Oct 03 2025)
 
 #### :nail_care: Polish

@@ -1,3 +1,22 @@
+# v2.12.3 (Mon Oct 06 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker-puppeteer`
+  - fix(puppeteer): expose option for `disableBlockingInPage` [#5231](https://github.com/ghostery/adblocker/pull/5231) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 38.2.0 to 38.2.1 [#5223](https://github.com/ghostery/adblocker/pull/5223) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.1.21 to 0.1.22 [#5227](https://github.com/ghostery/adblocker/pull/5227) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.12.2 (Mon Oct 06 2025)
 
 #### :bug: Bug Fix
