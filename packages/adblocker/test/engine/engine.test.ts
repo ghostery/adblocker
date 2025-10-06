@@ -1814,6 +1814,21 @@ foo.com###selector
     );
   });
 
+  describe('#matchCosmeticFilters', () => {
+    it('reports generic hide exceptions', () => {
+      const engine = FilterEngine.parse('###ad\n@@||foo.com^$generichide');
+      const { matches } = engine.matchCosmeticFilters({
+        url: 'https://foo.com',
+        hostname: 'foo.com',
+        domain: 'foo.com',
+        classes: ['ad'],
+        getRulesFromDOM: true,
+      });
+      expect(matches.length).to.be.eql(1);
+      expect(matches[0].exception).not.to.be.undefined;
+    });
+  });
+
   describe('#getHtmlFilters', () => {
     const config = {
       enableHtmlFiltering: true,
