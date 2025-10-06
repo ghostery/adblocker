@@ -1,3 +1,21 @@
+# v2.12.2 (Mon Oct 06 2025)
+
+#### :bug: Bug Fix
+
+- fix: improve scriptlet argument parsing for escaped commas objects [#5217](https://github.com/ghostery/adblocker/pull/5217) ([@chrmod](https://github.com/chrmod))
+
+#### :house: Internal
+
+- Update local assets [#5218](https://github.com/ghostery/adblocker/pull/5218) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.12.1 (Fri Oct 03 2025)
 
 #### :nail_care: Polish
