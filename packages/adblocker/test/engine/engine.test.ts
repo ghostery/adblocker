@@ -1849,13 +1849,18 @@ foo.com###selector
         getRulesFromDOM: true,
       });
       expect(matches.length).to.be.eql(2);
-      for (const match of matches) {
-        expect(match.filter).to.be.undefined;
-        expect(match.exception).to.satisfy(
-          (filter: NetworkFilter) =>
-            (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
-        );
-      }
+      const match1 = matches[0];
+      expect(match1.filter).to.be.undefined;
+      expect(match1.exception).to.satisfy(
+        (filter: NetworkFilter) =>
+          (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
+      );
+      const match2 = matches[1];
+      expect(match2.filter).to.be.undefined;
+      expect(match2.exception).to.satisfy(
+        (filter: NetworkFilter) =>
+          (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
+      );
     });
   });
 
