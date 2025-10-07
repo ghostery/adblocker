@@ -1180,12 +1180,12 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   }): {
     matches: (
       | {
-          filter: CosmeticFilter | undefined;
+          filter: CosmeticFilter;
           exception: CosmeticFilter | undefined;
         }
       | {
           filter: undefined;
-          exception: NetworkFilter | undefined;
+          exception: NetworkFilter;
         }
     )[];
     allowGenericHides: boolean;
