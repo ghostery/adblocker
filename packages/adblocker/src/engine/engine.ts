@@ -40,7 +40,7 @@ import { IPattern } from './metadata/patterns.js';
 
 export const ENGINE_VERSION = 811;
 
-function shouldApplyHideException(filters: NetworkFilter[]): NetworkFilter | undefined {
+function findApplicableHideException(filters: NetworkFilter[]): NetworkFilter | undefined {
   if (filters.length === 0) {
     return;
   }
@@ -1219,8 +1219,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    const genericHideException = shouldApplyHideException(genericHides);
-    const specificHideException = shouldApplyHideException(specificHides);
+    const genericHideException = findApplicableHideException(genericHides);
+    const specificHideException = findApplicableHideException(specificHides);
 
     if (genericHideException !== undefined) {
       matches.push({
