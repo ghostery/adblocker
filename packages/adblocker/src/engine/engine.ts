@@ -47,7 +47,7 @@ function shouldApplyHideException(filters: NetworkFilter[]): NetworkFilter | und
 
   // Get $Xhide filter with highest priority:
   // $Xhide,important > $Xhide > @@$Xhide
-  let genericHideFilter: NetworkFilter | undefined;
+  let hideFilter: NetworkFilter | undefined;
   let currentScore = 0;
   for (const filter of filters) {
     // To encode priority between filters, we create a bitmask with the following:
@@ -59,20 +59,20 @@ function shouldApplyHideException(filters: NetworkFilter[]): NetworkFilter | und
     // Highest `score` has precedence
     if (score >= currentScore) {
       currentScore = score;
-      genericHideFilter = filter;
+      hideFilter = filter;
     }
   }
 
-  if (genericHideFilter === undefined) {
+  if (hideFilter === undefined) {
     return;
   }
 
   // Check that there is at least one $generichide match and no exception
-  if (genericHideFilter.isException() === false) {
+  if (hideFilter.isException() === false) {
     return;
   }
 
-  return genericHideFilter;
+  return hideFilter;
 }
 
 export interface BlockingResponse {
