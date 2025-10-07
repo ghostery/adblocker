@@ -1862,6 +1862,26 @@ foo.com###selector
           (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
       );
     });
+
+    it('report `$elemhide` as a singular exception', () => {
+      const engine = FilterEngine.parse(`
+        ###ad
+        @@||foo.com^$elemhide
+      `);
+      const { matches } = engine.matchCosmeticFilters({
+        url: 'https://foo.com',
+        hostname: 'foo.com',
+        domain: 'foo.com',
+        classes: ['ad'],
+        getRulesFromDOM: true,
+      });
+      expect(matches.length).to.be.eql(1);
+      const match = matches[0];
+      expect(match.filter).to.be.undefined;
+      expect(match.exception).to.satisfy(
+        (filter: NetworkFilter) => filter.isElemHide() && filter.isException(),
+      );
+    });
   });
 
   describe('#getHtmlFilters', () => {

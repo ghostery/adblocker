@@ -1240,7 +1240,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       });
     }
 
-    if (specificHideException !== undefined) {
+    if (
+      specificHideException !== undefined &&
+      // The filter can be $elemhide which get set both for ghide and shide
+      genericHideException !== specificHideException
+    ) {
       matches.push({
         filter: undefined,
         exception: specificHideException,
