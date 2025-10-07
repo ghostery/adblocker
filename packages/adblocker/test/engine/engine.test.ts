@@ -1852,14 +1852,12 @@ foo.com###selector
       const match1 = matches[0];
       expect(match1.filter).to.be.undefined;
       expect(match1.exception).to.satisfy(
-        (filter: NetworkFilter) =>
-          (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
+        (filter: NetworkFilter) => filter.isGenericHide() && filter.isException(),
       );
       const match2 = matches[1];
       expect(match2.filter).to.be.undefined;
       expect(match2.exception).to.satisfy(
-        (filter: NetworkFilter) =>
-          (filter.isGenericHide() || filter.isSpecificHide()) && filter.isException(),
+        (filter: NetworkFilter) => filter.isSpecificHide() && filter.isException(),
       );
     });
 

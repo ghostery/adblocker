@@ -1193,9 +1193,6 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     domain ||= '';
 
     const matches: ReturnType<FilterEngine['matchCosmeticFilters']>['matches'] = [];
-    let genericHideException: NetworkFilter | undefined;
-    let specificHideException: NetworkFilter | undefined;
-
     const exceptions = this.hideExceptions.matchAll(
       Request.fromRawDetails({
         domain,
@@ -1212,26 +1209,17 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const genericHides: NetworkFilter[] = [];
     const specificHides: NetworkFilter[] = [];
     for (const filter of exceptions) {
-      if (filter.isElemHide()) {
-        genericHideException = filter;
-        specificHideException = filter;
-        break;
-      }
-
+      // $elemhide is expressed as both ghide and shide enabled together
       if (filter.isSpecificHide()) {
         specificHides.push(filter);
-      } else if (filter.isGenericHide()) {
+      }
+      if (filter.isGenericHide()) {
         genericHides.push(filter);
       }
     }
 
-    if (genericHideException === undefined) {
-      genericHideException = shouldApplyHideException(genericHides);
-    }
-
-    if (specificHideException === undefined) {
-      specificHideException = shouldApplyHideException(specificHides);
-    }
+    const genericHideException = shouldApplyHideException(genericHides);
+    const specificHideException = shouldApplyHideException(specificHides);
 
     if (genericHideException !== undefined) {
       matches.push({
