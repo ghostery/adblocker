@@ -2414,4 +2414,58 @@ describe('events', () => {
     expect(filter!.toString()).to.be.equal('||bar.com');
     expect(exception!.toString()).to.be.equal('@@||bar.com');
   });
+
+  it('emits generichide exceptions in filter-matched', async () => {
+    const generichide = '@@||bar.com^$generichide';
+    const engine = createEngine(generichide);
+    const awaiter = createEventAwaiter(engine, 'filter-matched');
+
+    engine.matchCosmeticFilters({
+      url: 'https://bar.com',
+      hostname: 'bar.com',
+      domain: 'bar.com',
+      getRulesFromDOM: true,
+    });
+
+    const [[{ filter, exception }]] = await awaiter;
+
+    expect(filter).to.be.undefined;
+    expect(exception!.toString()).to.be.equal(generichide);
+  });
+
+  it('emits specifichide exceptions in filter-matched', async () => {
+    const specifichide = '@@||bar.com^$generichide';
+    const engine = createEngine(specifichide);
+    const awaiter = createEventAwaiter(engine, 'filter-matched');
+
+    engine.matchCosmeticFilters({
+      url: 'https://bar.com',
+      hostname: 'bar.com',
+      domain: 'bar.com',
+      getRulesFromDOM: true,
+    });
+
+    const [[{ filter, exception }]] = await awaiter;
+
+    expect(filter).to.be.undefined;
+    expect(exception!.toString()).to.be.equal(specifichide);
+  });
+
+  it('emits elemhide exceptions in filter-matched', async () => {
+    const elemhide = '@@||bar.com^$elemhide';
+    const engine = createEngine(elemhide);
+    const awaiter = createEventAwaiter(engine, 'filter-matched');
+
+    engine.matchCosmeticFilters({
+      url: 'https://bar.com',
+      hostname: 'bar.com',
+      domain: 'bar.com',
+      getRulesFromDOM: true,
+    });
+
+    const [[{ filter, exception }]] = await awaiter;
+
+    expect(filter).to.be.undefined;
+    expect(exception!.toString()).to.be.equal(elemhide);
+  });
 });

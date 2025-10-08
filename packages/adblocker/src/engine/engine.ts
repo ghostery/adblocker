@@ -1223,9 +1223,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const specificHideException = findApplicableHideException(specificHides);
 
     if (genericHideException !== undefined) {
-      matches.push({
+      const match = {
         filter: undefined,
         exception: genericHideException,
+      };
+      matches.push(match);
+      this.emit('filter-matched', match, {
+        url,
+        callerContext,
+        filterType: FilterType.COSMETIC,
       });
     }
 
@@ -1234,9 +1240,15 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       // The filter can be $elemhide which get set both for ghide and shide
       genericHideException !== specificHideException
     ) {
-      matches.push({
+      const match = {
         filter: undefined,
         exception: specificHideException,
+      };
+      matches.push(match);
+      this.emit('filter-matched', match, {
+        url,
+        callerContext,
+        filterType: FilterType.COSMETIC,
       });
     }
 
