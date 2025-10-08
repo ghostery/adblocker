@@ -1816,7 +1816,7 @@ foo.com###selector
     );
   });
 
-  describe.only('#matchCosmeticFilters', () => {
+  describe('#matchCosmeticFilters', () => {
     it('reports specific hide exception', () => {
       const engine = FilterEngine.parse(`
         ###ad
