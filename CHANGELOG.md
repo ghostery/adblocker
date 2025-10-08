@@ -1,3 +1,16 @@
+# v2.12.4 (Wed Oct 08 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: `matchCosmeticFilters` should report generic hide exceptions [#5232](https://github.com/ghostery/adblocker/pull/5232) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.12.3 (Mon Oct 06 2025)
 
 #### :bug: Bug Fix
