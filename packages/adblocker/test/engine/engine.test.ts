@@ -1824,7 +1824,7 @@ foo.com###selector
         url: 'https://foo.com',
         hostname: 'foo.com',
         domain: 'foo.com',
-        classes: ['ad'],
+        ids: ['ad'],
         getRulesFromDOM: true,
       });
       expect(matches.length).to.be.eql(1);
@@ -1845,7 +1845,7 @@ foo.com###selector
         url: 'https://foo.com',
         hostname: 'foo.com',
         domain: 'foo.com',
-        classes: ['ad'],
+        ids: ['ad'],
         getRulesFromDOM: true,
       });
       expect(matches.length).to.be.eql(2);
@@ -1870,7 +1870,7 @@ foo.com###selector
         url: 'https://foo.com',
         hostname: 'foo.com',
         domain: 'foo.com',
-        classes: ['ad'],
+        ids: ['ad'],
         getRulesFromDOM: true,
       });
       expect(matches.length).to.be.eql(1);
