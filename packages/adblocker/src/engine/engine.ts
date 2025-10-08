@@ -1209,8 +1209,8 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const genericHides: NetworkFilter[] = [];
     const specificHides: NetworkFilter[] = [];
     for (const filter of exceptions) {
-      // A filter is classified as $elemhide when bits for $ghide and $shide are both enabled.
-      // $elemhide is treated as both $ghide and $shide here to calculate the priority later on.
+      // A filter can be both specific ($shide) and generic ($ghide).
+      // In that case, it is an $elemhide, and we have to consider both cases here to calculate the priority later on.
       if (filter.isSpecificHide()) {
         specificHides.push(filter);
       }

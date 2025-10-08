@@ -20,6 +20,8 @@ import requests from '../data/requests.js';
 import { loadEasyListFilters, typedArrayEqual } from '../utils.js';
 import FilterEngine from '../../src/engine/engine.js';
 import { Metadata } from '../../src/engine/metadata.js';
+import { CosmeticFilter } from '../../src/index.js';
+import { Domains } from '../../src/engine/domains.js';
 
 /**
  * Helper function used in the Engine tests. All the assertions are performed by
@@ -1814,10 +1816,36 @@ foo.com###selector
     );
   });
 
-  describe('#matchCosmeticFilters', () => {
+  describe.only('#matchCosmeticFilters', () => {
+    it('reports specific hide exception', () => {
+      const engine = FilterEngine.parse(`
+        ###ad
+        foo.com###ad
+        @@||foo.com^$specifichide
+      `);
+      const { matches } = engine.matchCosmeticFilters({
+        url: 'https://foo.com',
+        hostname: 'foo.com',
+        domain: 'foo.com',
+        ids: ['ad'],
+        getRulesFromDOM: true,
+      });
+      expect(matches.length).to.be.eql(2);
+      const match1 = matches[0];
+      expect(match1.filter).to.be.undefined;
+      expect(match1.exception).to.satisfy(
+        (filter: NetworkFilter) => filter.isSpecificHide() && filter.isException(),
+      );
+      const match2 = matches[1];
+      expect(match2.filter).to.be.instanceOf(CosmeticFilter);
+      expect(match2.filter).to.have.property('domains').to.be.undefined;
+      expect(match2.exception).to.be.undefined;
+    });
+
     it('reports generic hide exception', () => {
       const engine = FilterEngine.parse(`
         ###ad
+        foo.com###ad
         @@||foo.com^$generichide
       `);
       const { matches } = engine.matchCosmeticFilters({
@@ -1827,17 +1855,22 @@ foo.com###selector
         ids: ['ad'],
         getRulesFromDOM: true,
       });
-      expect(matches.length).to.be.eql(1);
-      const match = matches[0];
-      expect(match.filter).to.be.undefined;
-      expect(match.exception).to.satisfy(
+      expect(matches.length).to.be.eql(2);
+      const match1 = matches[0];
+      expect(match1.filter).to.be.undefined;
+      expect(match1.exception).to.satisfy(
         (filter: NetworkFilter) => filter.isGenericHide() && filter.isException(),
       );
+      const match2 = matches[1];
+      expect(match2.filter).to.be.instanceOf(CosmeticFilter);
+      expect(match2.filter).to.have.property('domains').to.deep.equal(Domains.parse('foo.com'));
+      expect(match2.exception).to.be.undefined;
     });
 
     it('reports both generic and specific hide exceptions', () => {
       const engine = FilterEngine.parse(`
         ###ad
+        foo.com###ad
         @@||foo.com^$generichide
         @@||foo.com^$specifichide
       `);
@@ -1864,6 +1897,7 @@ foo.com###selector
     it('report `$elemhide` as a singular exception', () => {
       const engine = FilterEngine.parse(`
         ###ad
+        foo.com###ad
         @@||foo.com^$elemhide
       `);
       const { matches } = engine.matchCosmeticFilters({
