@@ -1159,6 +1159,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM = true,
     getRulesFromHostname = true,
     getInjectionRules,
+    getTrustedInjectionRules = true,
     getExtendedRules,
 
     callerContext,
@@ -1174,6 +1175,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     getRulesFromDOM?: boolean;
     getRulesFromHostname?: boolean;
     getInjectionRules?: boolean;
+    getTrustedInjectionRules?: boolean;
     getExtendedRules?: boolean;
 
     callerContext?: any | undefined;
@@ -1297,6 +1299,13 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       );
 
       if (filter.isScriptInject()) {
+        // There should be no exception as the flag is explicitly set
+        if (
+          getTrustedInjectionRules === false &&
+          this.resources.scriptletsByName.get(filter.getScriptName())
+        ) {
+          continue;
+        }
         if (injectionsDisabledFilter !== undefined) {
           exception = injectionsDisabledFilter;
         }

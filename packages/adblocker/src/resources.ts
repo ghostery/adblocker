@@ -247,7 +247,7 @@ export default class Resources {
   public readonly checksum: string;
   public readonly scriptlets: Scriptlet[];
   public readonly resources: Resource[];
-  private readonly scriptletsByName: Map<string, Scriptlet>;
+  public readonly scriptletsByName: Map<string, Scriptlet>;
   private readonly resourcesByName: Map<string, Resource>;
   private readonly scriptletsCache: Map<string, string>;
 

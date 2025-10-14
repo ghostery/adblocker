@@ -714,6 +714,18 @@ export default class CosmeticFilter implements IFilter {
     return tokens;
   }
 
+  public getScriptName(): string {
+    if (this.scriptletDetails !== undefined) {
+      return this.scriptletDetails.name;
+    }
+
+    const selector = this.getSelector();
+    const firstDelimiterIndex = selector.indexOf(',');
+    const openerIndex = selector.indexOf('(');
+
+    return selector.slice(openerIndex, firstDelimiterIndex);
+  }
+
   public parseScript(): { name: string; args: string[] } | undefined {
     if (this.scriptletDetails !== undefined) {
       return this.scriptletDetails;
