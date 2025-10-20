@@ -331,8 +331,8 @@ export default class CosmeticFilterBucket {
   public getCosmeticsFilters({
     domain,
     hostname,
-    parentDomain,
-    parentHostname,
+    parentDomains = [],
+    parentHostnames = [],
 
     classes = [],
     hrefs = [],
@@ -349,8 +349,8 @@ export default class CosmeticFilterBucket {
   }: {
     domain: string;
     hostname: string;
-    parentDomain?: string | undefined;
-    parentHostname?: string | undefined;
+    parentDomains?: string[];
+    parentHostnames?: string[];
 
     classes: string[] | undefined;
     hrefs: string[] | undefined;
@@ -370,10 +370,19 @@ export default class CosmeticFilterBucket {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
     const hostnameTokens = createLookupTokens(hostname, domain);
-    const parentHostnameTokens =
-      parentDomain !== undefined && parentHostname !== undefined
-        ? createLookupTokens(parentHostname, parentDomain)
-        : undefined;
+
+    let parentHostnameTokens: ReturnType<typeof createLookupTokens>[] | undefined = undefined;
+    if (
+      parentDomains !== undefined &&
+      parentDomains.length !== 0 &&
+      parentDomains?.length === parentHostnames?.length
+    ) {
+      parentHostnameTokens = [];
+      for (let i = 0; i < parentDomains.length; i++) {
+        parentHostnameTokens.push(createLookupTokens(parentDomains[i], parentHostnames[i]));
+      }
+    }
+
     const filters: CosmeticFilter[] = [];
 
     // =======================================================================
@@ -394,22 +403,28 @@ export default class CosmeticFilterBucket {
         }
         return true;
       });
-      if (parentHostnameTokens) {
-        this.hostnameIndex.iterMatchingFilters(parentHostnameTokens, (filter: CosmeticFilter) => {
-          // The subframe matching cosmetic filters are only subject to
-          // scriptlets.
-          if (
-            filter.hasSubFrameScriptInject() === true &&
-            (allowSpecificHides === true || filter.isScriptInject() === true) &&
-            // Existence of `parentHostnameTokens` ensures `parentHostname`
-            // and `parentDomain` are populated.
-            filter.match(parentHostname!, parentDomain!) &&
-            !isFilterExcluded?.(filter)
-          ) {
-            filters.push(filter);
-          }
-          return true;
-        });
+
+      if (parentHostnameTokens !== undefined) {
+        for (let i = 0; i < parentHostnameTokens.length; i++) {
+          this.hostnameIndex.iterMatchingFilters(
+            parentHostnameTokens[i],
+            (filter: CosmeticFilter) => {
+              // The subframe matching cosmetic filters are only subject to
+              // scriptlets.
+              if (
+                filter.hasSubFrameScriptInject() === true &&
+                (allowSpecificHides === true || filter.isScriptInject() === true) &&
+                // Existence of `parentHostnameTokens` ensures `parentHostname`
+                // and `parentDomain` are populated.
+                filter.match(parentHostnames[i], parentDomains[i]) &&
+                !isFilterExcluded?.(filter)
+              ) {
+                filters.push(filter);
+              }
+              return true;
+            },
+          );
+        }
       }
     }
 
@@ -485,21 +500,27 @@ export default class CosmeticFilterBucket {
 
         return true;
       });
-      if (parentHostnameTokens) {
-        this.hostnameIndex.iterMatchingFilters(parentHostnameTokens, (filter: CosmeticFilter) => {
-          // The subframe matching cosmetic filters are only subject to
-          // scriptlets.
-          if (
-            filter.hasSubFrameScriptInject() === true &&
-            // Existence of `parentHostnameTokens` ensures `parentHostname`
-            // and `parentDomain` are populated.
-            filter.match(parentHostname!, parentDomain!) &&
-            !isFilterExcluded?.(filter)
-          ) {
-            filters.push(filter);
-          }
-          return true;
-        });
+
+      if (parentHostnameTokens !== undefined) {
+        for (let i = 0; i < parentHostnameTokens.length; i++) {
+          this.hostnameIndex.iterMatchingFilters(
+            parentHostnameTokens[i],
+            (filter: CosmeticFilter) => {
+              // The subframe matching cosmetic filters are only subject to
+              // scriptlets.
+              if (
+                filter.hasSubFrameScriptInject() === true &&
+                // Existence of `parentHostnameTokens` ensures `parentHostname`
+                // and `parentDomain` are populated.
+                filter.match(parentHostnames[i], parentDomains[i]) &&
+                !isFilterExcluded?.(filter)
+              ) {
+                filters.push(filter);
+              }
+              return true;
+            },
+          );
+        }
       }
     }
 
