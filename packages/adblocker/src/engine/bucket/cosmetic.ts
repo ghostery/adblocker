@@ -372,11 +372,7 @@ export default class CosmeticFilterBucket {
     const hostnameTokens = createLookupTokens(hostname, domain);
 
     let parentHostnameTokens: ReturnType<typeof createLookupTokens>[] | undefined = undefined;
-    if (
-      parentDomains !== undefined &&
-      parentDomains.length !== 0 &&
-      parentDomains?.length === parentHostnames?.length
-    ) {
+    if (parentDomains.length !== 0 && parentDomains.length === parentHostnames.length) {
       parentHostnameTokens = [];
       for (let i = 0; i < parentDomains.length; i++) {
         parentHostnameTokens.push(createLookupTokens(parentDomains[i], parentHostnames[i]));
