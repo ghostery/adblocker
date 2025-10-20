@@ -1745,6 +1745,7 @@ function cosmetic(filter: string, expected: any) {
     const verbose = {
       // Attributes
       domains: parsed.domains,
+      parentDomains: parsed.parentDomains,
       selector: parsed.getSelector(),
       style: parsed.getStyle(),
 
@@ -1802,6 +1803,12 @@ describe('Cosmetic filters', () => {
       checkToString('~foo.com##.selector', '<hostnames>##.selector');
       checkToString('~foo.*##.selector', '<hostnames>##.selector');
       checkToString('foo.*##.selector', '<hostnames>##.selector');
+    });
+
+    it('pprint with parent hostnames', () => {
+      checkToString('foo.com>>##+js(foo.js)', '<hostnames>>>##+js(foo.js)');
+      checkToString('foo.com>>,bar.com>>##+js(foo.js)', '<hostnames>>>##+js(foo.js)');
+      checkToString('foo.com>>,bar.com##+js(foo.js)', '<hostnames>,<hostnames>>>##+js(foo.js)');
     });
 
     it('pprint with debug=true', () => {
@@ -1972,6 +1979,40 @@ describe('Cosmetic filters', () => {
         parts: undefined,
       },
       selector: 'selector',
+    });
+  });
+
+  it('parses parent hostnames', () => {
+    cosmetic('foo.com>>##+js(scriptlet)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      selector: 'scriptlet',
+      isScriptInject: true,
+      parentDomains: {
+        entities: undefined,
+        hostnames: h(['foo.com']),
+        notEntities: undefined,
+        notHostnames: undefined,
+        parts: undefined,
+      },
+    });
+    cosmetic('foo.com>>,bar.com##+js(scriptlet)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      selector: 'scriptlet',
+      isScriptInject: true,
+      domains: {
+        entities: undefined,
+        hostnames: h(['bar.com']),
+        notEntities: undefined,
+        notHostnames: undefined,
+        parts: undefined,
+      },
+      parentDomains: {
+        entities: undefined,
+        hostnames: h(['foo.com']),
+        notEntities: undefined,
+        notHostnames: undefined,
+        parts: undefined,
+      },
     });
   });
 
