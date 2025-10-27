@@ -2072,6 +2072,7 @@ export function isAnchoredByHostname(
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
   const pattern = filter.getFilter();
+  const url = request.normalizedUrl;
 
   if (filter.isHostnameAnchor() === true) {
     // Make sure request is anchored by hostname before proceeding to matching
@@ -2091,15 +2092,13 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // ||pattern*^
       return filter
         .getRegex()
-        .test(request.url.slice(request.url.indexOf(filterHostname) + filterHostname.length));
+        .test(url.slice(url.indexOf(filterHostname) + filterHostname.length));
     } else if (filter.isRightAnchor() && filter.isLeftAnchor()) {
       // |||pattern|
       // Since this is not a regex, the filter pattern must follow the hostname
       // with nothing in between. So we extract the part of the URL following
       // after hostname and will perform the matching on it.
-      const urlAfterHostname = request.url.slice(
-        request.url.indexOf(filterHostname) + filterHostname.length,
-      );
+      const urlAfterHostname = url.slice(url.indexOf(filterHostname) + filterHostname.length);
 
       // Since it must follow immediatly after the hostname and be a suffix of
       // the URL, we conclude that filter must be equal to the part of the
@@ -2119,7 +2118,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
         );
       } else {
         // pattern|
-        return request.url.endsWith(pattern);
+        return url.endsWith(pattern);
       }
     } else if (filter.isLeftAnchor()) {
       // ||pattern + left-anchor => This means that a plain pattern needs to appear
@@ -2127,10 +2126,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
       // Since this is not a regex, the filter pattern must follow the hostname
       // with nothing in between. So we extract the part of the URL following
       // after hostname and will perform the matching on it.
-      return request.url.startsWith(
-        pattern,
-        request.url.indexOf(filterHostname) + filterHostname.length,
-      );
+      return url.startsWith(pattern, url.indexOf(filterHostname) + filterHostname.length);
     }
 
     if (filter.hasFilter() === false) {
@@ -2138,22 +2134,19 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     }
 
     // We consider this a match if the plain patter (i.e.: filter) appears anywhere.
-    return (
-      request.url.indexOf(pattern, request.url.indexOf(filterHostname) + filterHostname.length) !==
-      -1
-    );
+    return url.indexOf(pattern, url.indexOf(filterHostname) + filterHostname.length) !== -1;
   } else if (filter.isRegex()) {
     // pattern*^
-    return filter.getRegex().test(request.url);
+    return filter.getRegex().test(url);
   } else if (filter.isLeftAnchor() && filter.isRightAnchor()) {
     // |pattern|
-    return request.url === pattern;
+    return url === pattern;
   } else if (filter.isLeftAnchor()) {
     // |pattern
-    return request.url.startsWith(pattern);
+    return url.startsWith(pattern);
   } else if (filter.isRightAnchor()) {
     // pattern|
-    return request.url.endsWith(pattern);
+    return url.endsWith(pattern);
   }
 
   // pattern
@@ -2161,7 +2154,7 @@ function checkPattern(filter: NetworkFilter, request: Request): boolean {
     return true;
   }
 
-  return request.url.indexOf(pattern) !== -1;
+  return url.indexOf(pattern) !== -1;
 }
 
 function checkOptions(filter: NetworkFilter, request: Request): boolean {

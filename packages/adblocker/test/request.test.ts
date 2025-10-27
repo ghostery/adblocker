@@ -29,14 +29,6 @@ describe('#Request', () => {
       });
     });
 
-    it('converts url to lower case', () => {
-      expect(Request.fromRawDetails({ url: 'https://sub.FOO.cOm/bar' })).to.deep.include({
-        domain: 'foo.com',
-        hostname: 'sub.foo.com',
-        url: 'https://sub.foo.com/bar',
-      });
-    });
-
     it('parses url', () => {
       expect(Request.fromRawDetails({ url: 'https://sub.foo.com/bar' })).to.deep.include({
         domain: 'foo.com',
