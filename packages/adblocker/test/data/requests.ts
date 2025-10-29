@@ -52921,4 +52921,12 @@ export default [
     type: 'script',
     url: 'https://www1.swatchseries.to/public/js/bootstrap-modal.js',
   },
+  {
+    filters: [
+      '||assets.adobedtm.com/extensions/*/AppMeasurement_Module_ActivityMap.min.js$script,domain=euronews.com',
+    ],
+    sourceUrl: 'https://euronews.com',
+    type: 'script',
+    url: 'https://assets.adobedtm.com/extensions/EP31dbb9c60e404ba1aa6e746d49be6f29/AppMeasurement_Module_ActivityMap.min.js',
+  },
 ];
