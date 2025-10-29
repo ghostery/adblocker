@@ -1,3 +1,23 @@
+# v2.12.5 (Wed Oct 29 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix(adblocker): ensure case insensitive matching [#5277](https://github.com/ghostery/adblocker/pull/5277) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump @types/chrome from 0.1.22 to 0.1.24 [#5249](https://github.com/ghostery/adblocker/pull/5249) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/node from 24.6.2 to 24.7.1 [#5246](https://github.com/ghostery/adblocker/pull/5246) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 7.0.16 to 7.0.17 [#5247](https://github.com/ghostery/adblocker/pull/5247) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.12.4 (Wed Oct 08 2025)
 
 #### :bug: Bug Fix

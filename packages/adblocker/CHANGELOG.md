@@ -1,3 +1,15 @@
+# v2.12.5 (Wed Oct 29 2025)
+
+#### :bug: Bug Fix
+
+- fix(adblocker): ensure case insensitive matching [#5277](https://github.com/ghostery/adblocker/pull/5277) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 1
+
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.12.4 (Wed Oct 08 2025)
 
 #### :bug: Bug Fix
