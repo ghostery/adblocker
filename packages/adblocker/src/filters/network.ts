@@ -1795,7 +1795,12 @@ export default class NetworkFilter implements IFilter {
       if (this.filter !== undefined) {
         const skipLastToken = !this.isRightAnchor();
         const skipFirstToken = !this.isLeftAnchor();
-        tokenizeWithWildcardsInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+        tokenizeWithWildcardsInPlace(
+          this.isCaseSensitive ? this.filter : this.filter.toLowerCase(),
+          skipFirstToken,
+          skipLastToken,
+          TOKENS_BUFFER,
+        );
       }
 
       // Append tokens from hostname, if any
@@ -1808,7 +1813,10 @@ export default class NetworkFilter implements IFilter {
         );
       }
     } else if (this.filter !== undefined) {
-      tokenizeRegexInPlace(this.filter, TOKENS_BUFFER);
+      tokenizeRegexInPlace(
+        this.isCaseSensitive ? this.filter : this.filter.toLowerCase(),
+        TOKENS_BUFFER,
+      );
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch
