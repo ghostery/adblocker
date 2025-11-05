@@ -71,6 +71,7 @@ function network(filter: string, expected: any) {
       fromXmlHttpRequest: parsed.fromXmlHttpRequest(),
       isImportant: parsed.isImportant(),
       thirdParty: parsed.thirdParty(),
+      isCaseSensitive: parsed.isCaseSensitive,
     };
     expect(verbose).to.deep.include(
       expected,
@@ -544,7 +545,6 @@ describe('Network filters', () => {
       network('||foo.com$first-party', { fromAny: true });
       network('||foo.com$third-party', { fromAny: true });
       network('||foo.com$domain=test.com', { fromAny: true });
-      network('||foo.com$domain=test.com,match-case', { fromAny: true });
     });
 
     [
@@ -1023,9 +1023,17 @@ describe('Network filters', () => {
 
     describe('match-case', () => {
       it('parses match-case', () => {
-        network('||foo.com$match-case', {});
-        network('||foo.com$image,match-case', {});
-        network('||foo.com$media,match-case,image', {});
+        // $match-case is not supported on URL filters
+        network('||foo.com$match-case', null);
+      });
+
+      it('parses match-case with regexp', () => {
+        // case-sensitivity should be preserved
+        network('/Foo/$match-case', {
+          filter: '/Foo/',
+          isRegex: true,
+          isCaseSensitive: true,
+        });
       });
 
       it('parses ~match-case', () => {

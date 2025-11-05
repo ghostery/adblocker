@@ -382,6 +382,7 @@ function compileRegex(
   isLeftAnchor: boolean,
   isRightAnchor: boolean,
   isFullRegex: boolean,
+  isCaseSensitive?: boolean,
 ): RegExp {
   if (isFullRegex === true) {
     return new RegExp(filter.slice(1, filter.length - 1), 'i');
@@ -405,7 +406,7 @@ function compileRegex(
     filter = `^${filter}`;
   }
 
-  return new RegExp(filter);
+  return new RegExp(filter, isCaseSensitive ? '' : 'i');
 }
 
 /**
@@ -708,6 +709,7 @@ export default class NetworkFilter implements IFilter {
     let domains: Domains | undefined;
     let denyallow: Domains | undefined;
     let optionValue: string | undefined;
+    let isCaseSensitive: boolean = false;
 
     // Start parsing
     let filterIndexStart: number = 0;
@@ -785,7 +787,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            // We currently consider all filters to be case-insensitive.
+            isCaseSensitive = true;
             break;
           case '3p':
           case 'third-party':
@@ -1057,6 +1059,7 @@ export default class NetworkFilter implements IFilter {
           false /* isLeftAnchor */,
           false /* isRightAnchor */,
           true /* isFullRegex */,
+          isCaseSensitive,
         );
       } catch (ex) {
         return null; // invalid RegExp
@@ -1064,6 +1067,11 @@ export default class NetworkFilter implements IFilter {
 
       mask = setBit(mask, NETWORK_FILTER_MASK.isFullRegex);
     } else {
+      // `$match-case` is not supported on URL pattern filters
+      if (isCaseSensitive) {
+        return null;
+      }
+
       // Deal with hostname pattern
       if (filterIndexEnd > 0 && line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
         mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
@@ -1187,15 +1195,16 @@ export default class NetworkFilter implements IFilter {
       }
 
       if (filterIndexEnd - filterIndexStart > 0) {
-        filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-
+        filter = line.slice(filterIndexStart, filterIndexEnd);
         mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
-        if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.isRegex,
-            checkIsRegex(filter, 0, filter.length),
-          );
+        if (
+          getBit(mask, NETWORK_FILTER_MASK.isRegex) === false &&
+          checkIsRegex(filter, 0, filter.length)
+        ) {
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, true);
+        } else {
+          // URL filters are not case-sensitive at all per spec unlike regexp filters
+          filter = filter.toLowerCase();
         }
       }
 
@@ -1220,6 +1229,7 @@ export default class NetworkFilter implements IFilter {
       optionValue,
       rawLine: debug === true ? line : undefined,
       regex: undefined,
+      isCaseSensitive,
     });
   }
 
@@ -1260,6 +1270,7 @@ export default class NetworkFilter implements IFilter {
               : buffer.getUTF8()
           : undefined,
       regex: undefined,
+      isCaseSensitive: (optionalParts & 64) === 64,
     });
   }
 
@@ -1269,6 +1280,7 @@ export default class NetworkFilter implements IFilter {
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
   public readonly optionValue: string | undefined;
+  public readonly isCaseSensitive: boolean | undefined;
 
   // Set only in debug mode
   public readonly rawLine: string | undefined;
@@ -1286,6 +1298,7 @@ export default class NetworkFilter implements IFilter {
     optionValue,
     rawLine,
     regex,
+    isCaseSensitive = false,
   }: {
     filter: string | undefined;
     hostname: string | undefined;
@@ -1295,6 +1308,7 @@ export default class NetworkFilter implements IFilter {
     optionValue: string | undefined;
     rawLine: string | undefined;
     regex: RegExp | undefined;
+    isCaseSensitive: boolean | undefined;
   }) {
     this.filter = filter;
     this.hostname = hostname;
@@ -1302,6 +1316,7 @@ export default class NetworkFilter implements IFilter {
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
+    this.isCaseSensitive = isCaseSensitive;
 
     this.rawLine = rawLine;
 
@@ -1429,6 +1444,10 @@ export default class NetworkFilter implements IFilter {
       } else {
         buffer.pushUTF8(this.optionValue);
       }
+    }
+
+    if (this.isCaseSensitive) {
+      optionalParts |= 64;
     }
 
     buffer.setByte(index, optionalParts);
@@ -1612,6 +1631,10 @@ export default class NetworkFilter implements IFilter {
       }
     }
 
+    if (this.isCaseSensitive) {
+      options.push('match-case');
+    }
+
     if (options.length > 0) {
       if (typeof modifierReplacer === 'function') {
         filter += `$${options.map(modifierReplacer).join(',')}`;
@@ -1743,6 +1766,7 @@ export default class NetworkFilter implements IFilter {
               this.isLeftAnchor(),
               this.isRightAnchor(),
               this.isFullRegex(),
+              this.isCaseSensitive,
             )
           : MATCH_ALL;
     }
@@ -2072,7 +2096,7 @@ export function isAnchoredByHostname(
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
   const pattern = filter.getFilter();
-  const url = request.normalizedUrl;
+  const url = filter.isRegex() ? request.url : request.url.toLowerCase();
 
   if (filter.isHostnameAnchor() === true) {
     // Make sure request is anchored by hostname before proceeding to matching
