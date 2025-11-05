@@ -52929,4 +52929,10 @@ export default [
     type: 'script',
     url: 'https://assets.adobedtm.com/extensions/EP31dbb9c60e404ba1aa6e746d49be6f29/AppMeasurement_Module_ActivityMap.min.js',
   },
+  {
+    filters: ['/ManuallyAddedAdFrameSample/$match-case'],
+    sourceUrl: 'http://foo.com',
+    type: 'script',
+    url: 'http://example.com/ManuallyAddedAdFrameSample',
+  },
 ];
