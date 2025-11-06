@@ -335,6 +335,7 @@ export default class Request<T = any | undefined> {
   public readonly id: string;
   public readonly tabId: number;
   public readonly url: string;
+  public readonly normalizedUrl: string;
   public readonly hostname: string;
   public readonly domain: string;
 
@@ -367,6 +368,7 @@ export default class Request<T = any | undefined> {
     this.type = type;
 
     this.url = url;
+    this.normalizedUrl = url.toLowerCase();
     this.hostname = hostname;
     this.domain = domain;
 
@@ -446,7 +448,7 @@ export default class Request<T = any | undefined> {
       // Add token corresponding to request type
       TOKENS_BUFFER.push(NORMALIZED_TYPE_TOKEN[this.type]);
 
-      tokenizeNoSkipInPlace(this.url.toLowerCase(), TOKENS_BUFFER);
+      tokenizeNoSkipInPlace(this.normalizedUrl, TOKENS_BUFFER);
 
       this.tokens = TOKENS_BUFFER.slice();
     }

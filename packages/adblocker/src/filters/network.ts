@@ -157,6 +157,16 @@ export const enum NETWORK_FILTER_MASK {
   // network filter option is needed.
 }
 
+export const enum NETWORK_FILTER_OPTIONALS_MASK {
+  hasFilter = 1 << 0,
+  hasHostname = 1 << 1,
+  hasDomains = 1 << 2,
+  hasRawLine = 1 << 3,
+  hasDenyallow = 1 << 4,
+  hasOptionValue = 1 << 5,
+  isCaseSensitive = 1 << 6,
+}
+
 /**
  * Mask used when a network filter can be applied on any content type.
  */
@@ -1251,26 +1261,32 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      filter:
-        (optionalParts & 1) === 1
-          ? isUnicode
-            ? buffer.getUTF8()
-            : buffer.getNetworkFilter()
-          : undefined,
-      hostname: (optionalParts & 2) === 2 ? buffer.getNetworkHostname() : undefined,
-      domains: (optionalParts & 4) === 4 ? Domains.deserialize(buffer) : undefined,
-      rawLine: (optionalParts & 8) === 8 ? buffer.getRawNetwork() : undefined,
-      denyallow: (optionalParts & 16) === 16 ? Domains.deserialize(buffer) : undefined,
-      optionValue:
-        (optionalParts & 32) === 32
-          ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
-            ? buffer.getNetworkCSP()
-            : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
-              ? buffer.getNetworkRedirect()
-              : buffer.getUTF8()
-          : undefined,
+      filter: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasFilter)
+        ? isUnicode
+          ? buffer.getUTF8()
+          : buffer.getNetworkFilter()
+        : undefined,
+      hostname: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasHostname)
+        ? buffer.getNetworkHostname()
+        : undefined,
+      domains: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasDomains)
+        ? Domains.deserialize(buffer)
+        : undefined,
+      rawLine: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasRawLine)
+        ? buffer.getRawNetwork()
+        : undefined,
+      denyallow: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasDenyallow)
+        ? Domains.deserialize(buffer)
+        : undefined,
+      optionValue: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasOptionValue)
+        ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
+          ? buffer.getNetworkCSP()
+          : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
+            ? buffer.getNetworkRedirect()
+            : buffer.getUTF8()
+        : undefined,
       regex: undefined,
-      isCaseSensitive: (optionalParts & 64) === 64,
+      isCaseSensitive: getBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.isCaseSensitive),
     });
   }
 
@@ -1406,7 +1422,7 @@ export default class NetworkFilter implements IFilter {
     let optionalParts = 0;
 
     if (this.filter !== undefined) {
-      optionalParts |= 1;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasFilter);
       if (this.isUnicode()) {
         buffer.pushUTF8(this.filter);
       } else {
@@ -1415,28 +1431,27 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.hostname !== undefined) {
-      optionalParts |= 2;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasHostname);
       buffer.pushNetworkHostname(this.hostname);
     }
 
     if (this.domains !== undefined) {
-      optionalParts |= 4;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasDomains);
       this.domains.serialize(buffer);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts |= 8;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasRawLine);
       buffer.pushRawNetwork(this.rawLine);
     }
 
     if (this.denyallow !== undefined) {
-      optionalParts |= 16;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasDenyallow);
       this.denyallow.serialize(buffer);
     }
 
     if (this.optionValue !== undefined) {
-      optionalParts |= 32;
-
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.hasOptionValue);
       if (this.isCSP()) {
         buffer.pushNetworkCSP(this.optionValue);
       } else if (this.isRedirect()) {
@@ -1447,7 +1462,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.isCaseSensitive) {
-      optionalParts |= 64;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONALS_MASK.isCaseSensitive);
     }
 
     buffer.setByte(index, optionalParts);
@@ -2104,7 +2119,7 @@ export function isAnchoredByHostname(
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
   const pattern = filter.getFilter();
-  const url = filter.isRegex() ? request.url : request.url.toLowerCase();
+  const url = filter.isRegex() ? request.url : request.normalizedUrl;
 
   if (filter.isHostnameAnchor() === true) {
     // Make sure request is anchored by hostname before proceeding to matching
