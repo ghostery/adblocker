@@ -1725,6 +1725,7 @@ describe('Network filters', () => {
         [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
       ],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
+      ['||some.primewire.c*/sw$script,1p', [hashStrings(['some', 'primewire'])]],
     ] as const) {
       it(`get tokens for ${filter}`, () => {
         const parsed = NetworkFilter.parse(filter, true);
