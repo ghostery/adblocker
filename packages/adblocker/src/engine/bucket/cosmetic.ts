@@ -349,8 +349,8 @@ export default class CosmeticFilterBucket {
   }: {
     domain: string;
     hostname: string;
-    parentDomains?: string[];
-    parentHostnames?: string[];
+    parentDomains?: string[] | undefined;
+    parentHostnames?: string[] | undefined;
 
     classes: string[] | undefined;
     hrefs: string[] | undefined;
