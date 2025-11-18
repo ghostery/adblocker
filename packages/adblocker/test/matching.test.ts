@@ -448,6 +448,10 @@ describe('#CosmeticFilter.match', () => {
     expect(f`foo.com,sub.test.com##.selector`).not.to.matchHostname('com');
   });
 
+  it('parent domains', () => {
+    expect(f`foo.com>>##+js(foo)`).to.matchHostname('foo.com');
+  });
+
   it('entity', () => {
     expect(f`foo.com,sub.test.*##.selector`).to.matchHostname('foo.com');
     expect(f`foo.com,sub.test.*##.selector`).to.matchHostname('bar.foo.com');
