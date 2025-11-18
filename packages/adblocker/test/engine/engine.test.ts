@@ -948,6 +948,42 @@ $csp=baz,domain=bar.com
           }).scripts,
         ).to.eql([]);
       });
+
+      context('subframe only script injections', () => {
+        for (const [filter, parentDomains, domain] of [
+          // inject into subframe
+          ['foo.com>>', ['foo.com'], 'bar.com'],
+          // inject into nested subframe
+          ['foo.com>>', ['foo.com', 'bar.com'], 'baz.com'],
+          // inject into nested subframe from intermediate frame
+          ['foo.com>>', ['bar.com', 'foo.com'], 'baz.com'],
+        ] as [string, string[], string][]) {
+          it(`injects script to ${domain} from ${parentDomains.join(',')} with ${filter}`, () => {
+            const engine = Engine.parse('foo.com>>##+js(script.js,arg1)');
+            engine.resources = new Resources({
+              scriptlets: [
+                {
+                  name: 'script.js',
+                  aliases: [],
+                  body: 'function script() {}',
+                  dependencies: [],
+                  executionWorld: 'MAIN',
+                  requiresTrust: false,
+                },
+              ],
+            });
+            expect(
+              engine.getCosmeticsFilters({
+                domain,
+                hostname: domain,
+                parentDomains: parentDomains,
+                parentHostnames: parentDomains,
+                url: `https://${domain}/`,
+              }).scripts[0],
+            ).not.to.be.undefined;
+          });
+        }
+      });
     });
 
     describe('elemhide', () => {
