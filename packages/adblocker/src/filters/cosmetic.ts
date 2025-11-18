@@ -1001,6 +1001,11 @@ export default class CosmeticFilter implements IFilter {
   //
   // For example: ~example.com##.ad  is a generic filter as well!
   public isGenericHide(): boolean {
-    return this?.domains?.hostnames === undefined && this?.domains?.entities === undefined;
+    return (
+      this?.domains?.hostnames === undefined &&
+      this?.domains?.entities === undefined &&
+      this?.parentDomains?.hostnames === undefined &&
+      this?.parentDomains?.entities === undefined
+    );
   }
 }
