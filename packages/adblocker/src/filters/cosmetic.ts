@@ -642,6 +642,20 @@ export default class CosmeticFilter implements IFilter {
       return false;
     }
 
+    if (
+      this.parentDomains !== undefined &&
+      this.parentDomains.match(
+        hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getHostnameHashesFromLabelsBackward(hostname, domain),
+        hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getEntityHashesFromLabelsBackward(hostname, domain),
+      )
+    ) {
+      return true;
+    }
+
     if (this.domains !== undefined) {
       // TODO - this hashing could be re-used between cosmetics by using an
       // abstraction like `Request` (similar to network filters matching).
