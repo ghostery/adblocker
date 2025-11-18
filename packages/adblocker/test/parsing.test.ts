@@ -1757,6 +1757,7 @@ function cosmetic(filter: string, expected: any) {
       isIdSelector: parsed.isIdSelector(),
       isRemove: parsed.isRemove(),
       isScriptInject: parsed.isScriptInject(),
+      hasSubFrameScriptInject: parsed.hasSubFrameScriptInject(),
       isUnhide: parsed.isUnhide(),
     };
     expect(verbose).to.deep.include(expected);
@@ -1987,6 +1988,7 @@ describe('Cosmetic filters', () => {
       ...DEFAULT_COSMETIC_FILTER,
       selector: 'scriptlet',
       isScriptInject: true,
+      hasSubFrameScriptInject: true,
       parentDomains: {
         entities: undefined,
         hostnames: h(['foo.com']),
@@ -1999,6 +2001,7 @@ describe('Cosmetic filters', () => {
       ...DEFAULT_COSMETIC_FILTER,
       selector: 'scriptlet',
       isScriptInject: true,
+      hasSubFrameScriptInject: true,
       domains: {
         entities: undefined,
         hostnames: h(['bar.com']),
