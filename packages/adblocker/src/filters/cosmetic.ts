@@ -924,7 +924,7 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public hasHostnameConstraint(): boolean {
-    return this.domains !== undefined;
+    return this.domains !== undefined || this.parentDomains !== undefined;
   }
 
   public getId(): number {
