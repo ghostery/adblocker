@@ -987,8 +987,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     url,
     hostname,
     domain,
-    parentDomains,
-    parentHostnames,
+    ancestors,
 
     // DOM information
     classes,
@@ -1008,8 +1007,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     url: string;
     hostname: string;
     domain: string | null | undefined;
-    parentDomains?: string[] | undefined;
-    parentHostnames?: string[] | undefined;
+    ancestors?: { domain: string; hostname: string }[] | undefined;
 
     classes?: string[] | undefined;
     hrefs?: string[] | undefined;
@@ -1037,8 +1035,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       url,
       hostname,
       domain,
-      parentDomains,
-      parentHostnames,
+      ancestors,
       classes,
       hrefs,
       ids,
@@ -1152,8 +1149,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     url,
     hostname,
     domain,
-    parentDomains,
-    parentHostnames,
+    ancestors,
 
     // DOM information
     classes,
@@ -1170,8 +1166,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     url: string;
     hostname: string;
     domain: string | null | undefined;
-    parentDomains?: string[] | undefined;
-    parentHostnames?: string[] | undefined;
+    ancestors?: { domain: string; hostname: string }[] | undefined;
 
     classes?: string[] | undefined;
     hrefs?: string[] | undefined;
@@ -1235,8 +1230,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     const { filters, unhides } = this.cosmetics.getCosmeticsFilters({
       domain,
       hostname,
-      parentDomains,
-      parentHostnames,
+      ancestors,
 
       classes,
       hrefs,

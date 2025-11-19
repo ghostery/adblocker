@@ -949,40 +949,68 @@ $csp=baz,domain=bar.com
         ).to.eql([]);
       });
 
-      context('subframe only script injections', () => {
-        for (const [filter, parentDomains, domain] of [
-          // inject into subframe
-          ['foo.com>>', ['foo.com'], 'bar.com'],
-          // inject into nested subframe
-          ['foo.com>>', ['foo.com', 'bar.com'], 'baz.com'],
-          // inject into nested subframe from intermediate frame
-          ['foo.com>>', ['bar.com', 'foo.com'], 'baz.com'],
-        ] as [string, string[], string][]) {
-          it(`injects script to ${domain} from ${parentDomains.join(',')} with ${filter}`, () => {
-            const engine = Engine.parse('foo.com>>##+js(script.js,arg1)');
-            engine.resources = new Resources({
-              scriptlets: [
-                {
-                  name: 'script.js',
-                  aliases: [],
-                  body: 'function script() {}',
-                  dependencies: [],
-                  executionWorld: 'MAIN',
-                  requiresTrust: false,
-                },
-              ],
+      describe('subframe only script injections', () => {
+        context('handles matching', () => {
+          for (const [filter, parentDomains, domain] of [
+            // inject into subframe
+            ['foo.com>>', ['foo.com'], 'bar.com'],
+            // inject into nested subframe
+            ['foo.com>>', ['foo.com', 'bar.com'], 'baz.com'],
+            // inject into nested subframe from intermediate frame
+            ['foo.com>>', ['bar.com', 'foo.com'], 'baz.com'],
+          ] as [string, string[], string][]) {
+            it(`injects script to ${domain} from ${parentDomains.join(',')} with ${filter}`, () => {
+              const engine = Engine.parse('foo.com>>##+js(script.js,arg1)');
+              engine.resources = new Resources({
+                scriptlets: [
+                  {
+                    name: 'script.js',
+                    aliases: [],
+                    body: 'function script() {}',
+                    dependencies: [],
+                    executionWorld: 'MAIN',
+                    requiresTrust: false,
+                  },
+                ],
+              });
+              expect(
+                engine.getCosmeticsFilters({
+                  domain,
+                  hostname: domain,
+                  ancestors: parentDomains.map((domain) => ({ domain, hostname: domain })),
+                  url: `https://${domain}/`,
+                }).scripts[0],
+              ).not.to.be.undefined;
             });
-            expect(
-              engine.getCosmeticsFilters({
-                domain,
-                hostname: domain,
-                parentDomains: parentDomains,
-                parentHostnames: parentDomains,
-                url: `https://${domain}/`,
-              }).scripts[0],
-            ).not.to.be.undefined;
+          }
+        });
+
+        it('handles exception', () => {
+          const engine = Engine.parse(`
+            foo.com>>##+js(script.js,arg1)
+            foo.com>>#@#+js(script.js,arg1)
+          `);
+          engine.resources = new Resources({
+            scriptlets: [
+              {
+                name: 'script.js',
+                aliases: [],
+                body: 'function script() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+            ],
           });
-        }
+          expect(
+            engine.getCosmeticsFilters({
+              domain: 'foo.com',
+              hostname: 'foo.com',
+              ancestors: [{ hostname: 'foo.com', domain: 'foo.com' }],
+              url: 'https://foo.com/',
+            }).scripts,
+          ).not.to.have.length;
+        });
       });
     });
 
