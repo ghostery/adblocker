@@ -584,7 +584,7 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // No `hostname` available but this filter has some constraints on hostname.
-    if (!hostname && this.hasHostnameConstraint()) {
+    if (!hostname) {
       return false;
     }
 
