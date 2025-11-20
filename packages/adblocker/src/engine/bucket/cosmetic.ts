@@ -395,10 +395,10 @@ export default class CosmeticFilterBucket {
 
       for (const ancestor of ancestorTokens) {
         this.hostnameIndex.iterMatchingFilters(ancestor.token, (filter: CosmeticFilter) => {
-          // The subframe matching cosmetic filters are only subject to scriptlets.
           if (
-            filter.hasSubFrameScriptInject() === true &&
-            filter.isScriptInject() === true &&
+            // `hasSubframeConstraint` is only `true` when the filter is scriptlet.
+            // Other cosmetic filters with subframe constraint will be rejected in the parse time.
+            filter.hasSubframeConstraint() === true &&
             filter.match(ancestor.hostname, ancestor.domain) &&
             !isFilterExcluded?.(filter)
           ) {
@@ -484,9 +484,10 @@ export default class CosmeticFilterBucket {
 
       for (const ancestor of ancestorTokens) {
         this.unhideIndex.iterMatchingFilters(ancestor.token, (filter: CosmeticFilter) => {
-          // The subframe matching cosmetic filters are only subject to scriptlets.
           if (
-            filter.hasSubFrameScriptInject() === true &&
+            // `hasSubframeConstraint` is only `true` when the filter is scriptlet.
+            // Other cosmetic filters with subframe constraint will be rejected in the parse time.
+            filter.hasSubframeConstraint() === true &&
             filter.match(ancestor.hostname, ancestor.domain) &&
             !isFilterExcluded?.(filter)
           ) {

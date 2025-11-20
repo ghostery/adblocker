@@ -261,16 +261,23 @@ export default class CosmeticFilter implements IFilter {
     //
     // - ~hostname##.selector
     // - hostname##.selector
+    // - hostname>>##.selector
     // - entity.*##.selector
     // - ~entity.*##.selector
+    // - entity>>##.selector
     //
     // Each kind will have its own Uint32Array containing hashes, sorted by
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
+    //
+    // `>>` suffix is responsible for targeting subframe of the given domain.
+    // It is the part of each domain entry and domains can have a mix of
+    // hostnames and subframe targeting hostnames (also entries).
     if (sharpIndex > 0) {
       const domainEntries = [];
       const parentDomainEntries = [];
       for (const entry of line.slice(0, sharpIndex).split(',')) {
+        // each domain entry can have `>>` suffix.
         if (entry.endsWith('>>')) {
           parentDomainEntries.push(entry.slice(0, -2));
         } else {
@@ -335,10 +342,10 @@ export default class CosmeticFilter implements IFilter {
     ) {
       // Generic scriptlets are invalid, unless they are un-hide
       if (
-        ((domains === undefined && parentDomains === undefined) ||
-          (domains !== undefined &&
-            domains.hostnames === undefined &&
-            domains.entities === undefined)) &&
+        (domains === undefined ||
+          (domains.hostnames === undefined && domains.entities === undefined)) &&
+        (parentDomains === undefined ||
+          (parentDomains.hostnames === undefined && parentDomains.entities === undefined)) &&
         getBit(mask, COSMETICS_MASK.unhide) === false
       ) {
         return null;
@@ -363,6 +370,11 @@ export default class CosmeticFilter implements IFilter {
         // TODO - maybe perform `isValidCss` from the other module.
         return null;
       }
+    }
+
+    // Subframe target is only available to scriptlets.
+    if (parentDomains !== undefined && getBit(mask, COSMETICS_MASK.scriptInject) === false) {
+      return null;
     }
 
     // Extended selectors should always be specific to some domain.
@@ -927,6 +939,12 @@ export default class CosmeticFilter implements IFilter {
     return this.domains !== undefined || this.parentDomains !== undefined;
   }
 
+  // `hasSubframeConstraint` is only `true` when the filter is scriptlet.
+  // Other cosmetic filters with subframe constraint will be rejected in the parse time.
+  public hasSubframeConstraint(): boolean {
+    return this.parentDomains !== undefined;
+  }
+
   public getId(): number {
     if (this.id === undefined) {
       this.id = computeFilterId(
@@ -942,10 +960,6 @@ export default class CosmeticFilter implements IFilter {
 
   public hasCustomStyle(): boolean {
     return this.style !== undefined;
-  }
-
-  public hasSubFrameScriptInject(): boolean {
-    return this.parentDomains !== undefined;
   }
 
   public getStyle(defaultStyle: string = DEFAULT_HIDING_STYLE): string {
