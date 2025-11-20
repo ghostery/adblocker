@@ -163,7 +163,7 @@ const OPTIMIZATIONS: IOptimization[] = [
             filters[0].rawLine !== undefined
               ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
               : undefined,
-          regex: new RegExp(patterns.join('|'), 'i'),
+          regex: new RegExp(patterns.join('|')),
         }),
       );
     },
