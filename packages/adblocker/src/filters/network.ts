@@ -157,7 +157,7 @@ export const enum NETWORK_FILTER_MASK {
   // network filter option is needed.
 }
 
-export const enum NETWORK_FILTER_ADDITIONAL_MASK {
+export const enum NETWORK_FILTER_OPTIONAL_PARTS_MASK {
   hasFilter = 1 << 0,
   hasHostname = 1 << 1,
   hasDomains = 1 << 2,
@@ -1263,24 +1263,24 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      filter: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasFilter)
+      filter: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasFilter)
         ? isUnicode
           ? buffer.getUTF8()
           : buffer.getNetworkFilter()
         : undefined,
-      hostname: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasHostname)
+      hostname: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasHostname)
         ? buffer.getNetworkHostname()
         : undefined,
-      domains: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasDomains)
+      domains: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDomains)
         ? Domains.deserialize(buffer)
         : undefined,
-      rawLine: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasRawLine)
+      rawLine: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasRawLine)
         ? buffer.getRawNetwork()
         : undefined,
-      denyallow: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasDenyallow)
+      denyallow: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDenyallow)
         ? Domains.deserialize(buffer)
         : undefined,
-      optionValue: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasOptionValue)
+      optionValue: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasOptionValue)
         ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
           ? buffer.getNetworkCSP()
           : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
@@ -1288,7 +1288,7 @@ export default class NetworkFilter implements IFilter {
             : buffer.getUTF8()
         : undefined,
       regex: undefined,
-      isCaseSensitive: getBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.isCaseSensitive),
+      isCaseSensitive: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.isCaseSensitive),
     });
   }
 
@@ -1424,7 +1424,7 @@ export default class NetworkFilter implements IFilter {
     let optionalParts = 0;
 
     if (this.filter !== undefined) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasFilter);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasFilter);
       if (this.isUnicode()) {
         buffer.pushUTF8(this.filter);
       } else {
@@ -1433,27 +1433,27 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.hostname !== undefined) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasHostname);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasHostname);
       buffer.pushNetworkHostname(this.hostname);
     }
 
     if (this.domains !== undefined) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasDomains);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDomains);
       this.domains.serialize(buffer);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasRawLine);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasRawLine);
       buffer.pushRawNetwork(this.rawLine);
     }
 
     if (this.denyallow !== undefined) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasDenyallow);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDenyallow);
       this.denyallow.serialize(buffer);
     }
 
     if (this.optionValue !== undefined) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.hasOptionValue);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasOptionValue);
       if (this.isCSP()) {
         buffer.pushNetworkCSP(this.optionValue);
       } else if (this.isRedirect()) {
@@ -1464,7 +1464,7 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.isCaseSensitive) {
-      optionalParts = setBit(optionalParts, NETWORK_FILTER_ADDITIONAL_MASK.isCaseSensitive);
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.isCaseSensitive);
     }
 
     buffer.setByte(index, optionalParts);
