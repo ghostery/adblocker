@@ -986,10 +986,12 @@ $csp=baz,domain=bar.com
         });
 
         it('handles exception', () => {
-          const engine = Engine.parse(`
-            foo.com>>##+js(script.js,arg1)
-            foo.com>>#@#+js(script.js,arg1)
-          `);
+          const filter = 'foo.com>>##+js(script.js,arg1)';
+          const exception = 'foo.com>>#@#+js(script.js,arg1)';
+          const engine = Engine.empty({ debug: true });
+          engine.updateFromDiff({
+            added: [filter, exception],
+          });
           engine.resources = new Resources({
             scriptlets: [
               {
@@ -1002,14 +1004,14 @@ $csp=baz,domain=bar.com
               },
             ],
           });
-          expect(
-            engine.getCosmeticsFilters({
-              domain: 'foo.com',
-              hostname: 'foo.com',
-              ancestors: [{ hostname: 'foo.com', domain: 'foo.com' }],
-              url: 'https://foo.com/',
-            }).scripts,
-          ).not.to.have.length;
+          const [match] = engine.matchCosmeticFilters({
+            domain: 'bar.com',
+            hostname: 'bar.com',
+            ancestors: [{ hostname: 'foo.com', domain: 'foo.com' }],
+            url: 'https://bar.com/',
+          }).matches;
+          expect(match.filter.rawLine).to.be.eql(filter);
+          expect(match.exception?.rawLine).to.be.eql(exception);
         });
       });
     });

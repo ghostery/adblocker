@@ -491,7 +491,7 @@ export default class CosmeticFilterBucket {
             filter.match(ancestor.hostname, ancestor.domain) &&
             !isFilterExcluded?.(filter)
           ) {
-            filters.push(filter);
+            unhides.push(filter);
           }
           return true;
         });
