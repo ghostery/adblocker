@@ -654,20 +654,6 @@ export default class CosmeticFilter implements IFilter {
       return false;
     }
 
-    if (
-      this.parentDomains !== undefined &&
-      this.parentDomains.match(
-        hostname.length === 0
-          ? EMPTY_UINT32_ARRAY
-          : getHostnameHashesFromLabelsBackward(hostname, domain),
-        hostname.length === 0
-          ? EMPTY_UINT32_ARRAY
-          : getEntityHashesFromLabelsBackward(hostname, domain),
-      )
-    ) {
-      return true;
-    }
-
     if (this.domains !== undefined) {
       // TODO - this hashing could be re-used between cosmetics by using an
       // abstraction like `Request` (similar to network filters matching).
@@ -682,7 +668,37 @@ export default class CosmeticFilter implements IFilter {
       );
     }
 
+    if (this.parentDomains !== undefined) {
+      // This prevents cosmetics being injected into the unwanted ancestor frames.
+      // If the hostname and domain is matched using `parentDomains`, it means
+      // this filter has an ancestor constraint targeting `hostname` and `domain`,
+      // which shouldn't be allowed.
+      // For an instance, if the hostname is `foo.com` when the filter is `foo.com>>`,
+      // it should be rejected.
+      return !this.parentDomains.match(
+        hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getHostnameHashesFromLabelsBackward(hostname, domain),
+        hostname.length === 0
+          ? EMPTY_UINT32_ARRAY
+          : getEntityHashesFromLabelsBackward(hostname, domain),
+      );
+    }
+
     return true;
+  }
+
+  public matchAncestor(hostname: string, domain: string): boolean {
+    // This is equivalent of `public hasSubframeContraint()`.
+    return (
+      this.parentDomains !== undefined &&
+      (hostname.length === 0
+        ? this.parentDomains.match(EMPTY_UINT32_ARRAY, EMPTY_UINT32_ARRAY)
+        : this.parentDomains.match(
+            getHostnameHashesFromLabelsBackward(hostname, domain),
+            getEntityHashesFromLabelsBackward(hostname, domain),
+          ))
+    );
   }
 
   /**

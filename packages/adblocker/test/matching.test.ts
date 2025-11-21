@@ -52,6 +52,20 @@ use((chai, utils) => {
       );
     },
   );
+
+  utils.addMethod(
+    chai.Assertion.prototype,
+    'matchAncestorHostname',
+    function (this: Chai.ChaiStatic & { _obj: CosmeticFilter }, hostname: string) {
+      const filter = this._obj;
+      new chai.Assertion(filter).not.to.be.null;
+
+      this.assert(
+        filter.matchAncestor(hostname, getDomain(hostname) || ''),
+        'expected #{this} to match ancestor #{exp}',
+      );
+    },
+  );
 });
 
 declare global {
@@ -60,6 +74,7 @@ declare global {
     interface Assertion {
       matchRequest(req: Partial<RequestInitialization>): Assertion;
       matchHostname(hostname: string): Assertion;
+      matchAncestorHostname(hostname: string): Assertion;
     }
   }
 }
@@ -449,7 +464,9 @@ describe('#CosmeticFilter.match', () => {
   });
 
   it('parent domains', () => {
-    expect(f`foo.com>>##+js(foo)`).to.matchHostname('foo.com');
+    expect(f`foo.com>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .but.not.to.matchHostname('foo.com');
   });
 
   it('entity', () => {

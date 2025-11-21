@@ -960,7 +960,8 @@ $csp=baz,domain=bar.com
             ['foo.com>>', ['bar.com', 'foo.com'], 'baz.com'],
           ] as [string, string[], string][]) {
             it(`injects script to ${domain} from ${parentDomains.join(',')} with ${filter}`, () => {
-              const engine = Engine.parse('foo.com>>##+js(script.js,arg1)');
+              const filter = 'foo.com>>##+js(script.js,arg1)';
+              const engine = Engine.parse(filter, { debug: true });
               engine.resources = new Resources({
                 scriptlets: [
                   {
@@ -973,14 +974,21 @@ $csp=baz,domain=bar.com
                   },
                 ],
               });
-              expect(
-                engine.getCosmeticsFilters({
-                  domain,
-                  hostname: domain,
-                  ancestors: parentDomains.map((domain) => ({ domain, hostname: domain })),
-                  url: `https://${domain}/`,
-                }).scripts[0],
-              ).not.to.be.undefined;
+              const mainFrameMatches = engine.matchCosmeticFilters({
+                domain: 'foo.com',
+                hostname: 'foo.com',
+                url: 'https://foo.com/',
+              }).matches;
+              expect(mainFrameMatches).to.have.lengthOf(0);
+              const subFrameMatches = engine.matchCosmeticFilters({
+                domain,
+                hostname: domain,
+                ancestors: parentDomains.map((domain) => ({ domain, hostname: domain })),
+                url: `https://${domain}/`,
+              }).matches;
+              expect(subFrameMatches).to.have.length;
+              expect(subFrameMatches[0].filter.rawLine).to.be.eql(filter);
+              expect(subFrameMatches[0].exception).to.be.undefined;
             });
           }
         });

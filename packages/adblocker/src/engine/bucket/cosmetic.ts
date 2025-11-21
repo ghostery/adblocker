@@ -396,10 +396,10 @@ export default class CosmeticFilterBucket {
       for (const ancestor of ancestorTokens) {
         this.hostnameIndex.iterMatchingFilters(ancestor.token, (filter: CosmeticFilter) => {
           if (
+            // `CosmeticFilter.prototype.matchAncestor` will check for `parentDomains` existence.
             // `hasSubframeConstraint` is only `true` when the filter is scriptlet.
             // Other cosmetic filters with subframe constraint will be rejected in the parse time.
-            filter.hasSubframeConstraint() === true &&
-            filter.match(ancestor.hostname, ancestor.domain) &&
+            filter.matchAncestor(ancestor.hostname, ancestor.domain) &&
             !isFilterExcluded?.(filter)
           ) {
             filters.push(filter);
@@ -485,10 +485,10 @@ export default class CosmeticFilterBucket {
       for (const ancestor of ancestorTokens) {
         this.unhideIndex.iterMatchingFilters(ancestor.token, (filter: CosmeticFilter) => {
           if (
+            // `CosmeticFilter.prototype.matchAncestor` will check for `parentDomains` existence.
             // `hasSubframeConstraint` is only `true` when the filter is scriptlet.
             // Other cosmetic filters with subframe constraint will be rejected in the parse time.
-            filter.hasSubframeConstraint() === true &&
-            filter.match(ancestor.hostname, ancestor.domain) &&
+            filter.matchAncestor(ancestor.hostname, ancestor.domain) &&
             !isFilterExcluded?.(filter)
           ) {
             unhides.push(filter);
