@@ -394,7 +394,7 @@ function compileRegex(
   isFullRegex: boolean,
 ): RegExp {
   if (isFullRegex === true) {
-    return new RegExp(filter.slice(1, filter.length - 1), 'i');
+    return new RegExp(filter.slice(1, filter.length - 1));
   }
 
   // Escape special regex characters: |.$+?{}()[]\

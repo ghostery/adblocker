@@ -31,6 +31,7 @@ function network(filter: string, expected: any) {
       // Attributes
       csp: parsed.csp,
       filter: parsed.getFilter(),
+      regex: parsed.getRegex(),
       hostname: parsed.getHostname(),
       denyallow: parsed.denyallow,
       domains: parsed.domains,
@@ -1027,18 +1028,21 @@ describe('Network filters', () => {
         network('||foo.com$match-case', null);
       });
 
-      it('parses match-case with regexp', () => {
-        // case-sensitivity should be preserved
-        network('/Foo/$match-case', {
-          filter: '/Foo/',
-          isRegex: true,
-          isCaseSensitive: true,
-        });
-      });
-
       it('parses ~match-case', () => {
         // ~match-case is not supported
         network('||foo.com$~match-case', null);
+      });
+
+      context('regex', () => {
+        it('parses match-case with regexp', () => {
+          // case-sensitivity should be preserved
+          network('/Foo/$match-case', {
+            filter: '/Foo/',
+            regex: /Foo/,
+            isRegex: true,
+            isCaseSensitive: true,
+          });
+        });
       });
     });
 
