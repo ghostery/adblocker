@@ -229,7 +229,8 @@ hintergrundbild.org#@#.ads1
 @@||ign.com/newsfeed-block$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/27666
 ! https://github.com/uBlockOrigin/uAssets/issues/27836
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=ign.com
+! https://github.com/uBlockOrigin/uAssets/issues/29816
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$domain=it.ign.com
 @@||cdn.ziffstatic.com/pg/ign.$script,domain=ign.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1747
 @@||cxense.com/cx.js$script,domain=letelegramme.fr
@@ -297,7 +298,15 @@ kotaku.com#@##dfp-ad-1
 ! https://www.reddit.com/r/uBlockOrigin/comments/1109rgn/
 ! https://github.com/easylist/easylist/commit/c22014abecb3c95212c72e8462d4fac3df2eb878
 ! https://www.cbsnews.com/video/president-biden-ends-candidacy-60-minutes-video-2024-07-21/
+! https://github.com/uBlockOrigin/uBOL-home/issues/177
+! https://github.com/uBlockOrigin/uAssets/issues/29695
+! https://github.com/uBlockOrigin/uAssets/issues/29878
+!#if !ext_ubol
 ||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$domain=cbsnews.com,redirect=google-ima.js,important
+!#else
+cbsnews.com>>##+js(no-fetch-if, v.fwmrm.net%2Fad%2Fg%2F, war%3Anoop-vmap1.xml)
+cbsnews.com>>##+js(no-xhr-if, v.fwmrm.net%2Fad%2Fg%2F, war%3Anoop-vmap1.xml)
+!#endif
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$domain=cbsnews.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai_debug.js$domain=cbsnews.com
 ! https://www.reddit.com/r/uBlockOrigin/comments/1mc47al/cbsnewscom_videos_dont_load_at_all_and_show/
@@ -606,7 +615,7 @@ nypost.com,pagesix.com#@#.recirc
 ! breakage caused by Yavli-filters in EasyList
 @@||youtube.com/yts/jsbin/*$script,domain=breathecast.com|classicalite.com|crossmap.com|hallels.com|newseveryday.com|returnofkings.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1720
-@@||fls-na.amazon.*/1/batch/1/OP/$image,domain=amazon.*
+@@||fls-na.amazon.*/1/batch/1/OP/$image
 ! https://www.reddit.com/r/uBlockOrigin/comments/b7dh6s/cant_change_stlyes_on_4chan_with_ubo_active/
 @@||4cdn.org^$script,domain=4chan.org
 ! https://forums.lanik.us/viewtopic.php?p=146870#p146870
@@ -1361,7 +1370,10 @@ order-order.com#@#.tag-sponsored
 ! https://www.thelallantop.com/sports/post/champions-trophy-hosted-by-pakistan-one-match-cost-millions-to-board - webpage error
 ||amazon-adsystem.com/*apstag.js^$redirect=amazon_apstag.js:5,domain=~republicbharat.com|~thelallantop.com
 ! https://www.ign.com/articles/microsoft-raises-the-price-of-all-xbox-series-consoles-xbox-games-confirmed-to-hit-80-this-holiday - video breakage
+! https://github.com/uBlockOrigin/uAssets/issues/29816
+!#if !env_safari
 ||aps.amazon-adsystem.com^$script,redirect=amazon_apstag.js:5
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/7397
 @@||reference.medscape.com/public/vptrack_iframe.html$frame,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/7399
@@ -2063,15 +2075,6 @@ coolmathgames.com##+js(set, network_user_id, )
 ||googletagmanager.com^$domain=9to5google.com|9to5mac.com,important
 ! https://www.reddit.com/r/uBlockOrigin/comments/pglvdm/
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=olympics.com
-! https://github.com/easylist/easylist/issues/8990
-! https://github.com/uBlockOrigin/uAssets/issues/27611
-://ads.$popup,domain=~smartnews.com,badfilter
-://ads.$popup,domain=~kakaku.com|~smartnews.com|~reddit.com
-! https://jbbs.shitaraba.net/bbs/read.cgi/internet/25463/1598352715/232
-!#if env_mobile
-@@||bwb101.goo.ne.jp/b.js$domain=news.goo.ne.jp
-@@||log000.goo.ne.jp/js/VLTraceDMD.js$domain=news.goo.ne.jp
-!#endif
 ! https://forums.lanik.us/viewtopic.php?f=64&t=42810
 ! [badfilter] ||azadify.com^$3p,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/9983
@@ -2886,9 +2889,10 @@ jacksonguitars.com##+js(set, analytics, %7B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/16850
 @@||manchestereveningnews.co.uk^$xhr,script,1p
 @@||mirror.co.uk^$script,xhr,1p
-@@/@trinitymirrordigital/withnail/*prebid$script,xhr,1p
-@@||bcp.crwdcntrl.net/*/data$xhr
-@@||tags.crwdcntrl.net^$script,domain=dailystar.co.uk|liverpoolecho.co.uk|football.london|devonlive.com|buzz.ie|inyourarea.co.uk|cornwalllive.com|coventrytelegraph.net|dublinlive.ie|glasgowlive.co.uk|kentlive.news|essexlive.news|lincolnshirelive.co.uk|insider.co.uk|bathchronicle.co.uk|birminghammail.co.uk|cheshire-live.co.uk|corkbeo.ie|crewechronicle.co.uk|croydonadvertiser.co.uk|dailypost.co.uk|dailyrecord.co.uk|derbytelegraph.co.uk|edinburghlive.co.uk|examinerlive.co.uk|gazettelive.co.uk|getreading.co.uk|getsurrey.co.uk|grimsbytelegraph.co.uk|hampshirelive.news|hulldailymail.co.uk|irishmirror.ie|liverpool.com|mylondon.news|nottinghampost.com|rossendalefreepress.co.uk|southportvisiter.co.uk|staffordshire-live.co.uk|stokesentinel.co.uk|walesonline.co.uk
+@@/@trinitymirrordigital/withnail/*prebid$script,xhr,1p,domain=~glasgowlive.co.uk
+@@||bcp.crwdcntrl.net/*/data$xhr,domain=~glasgowlive.co.uk
+@@||tags.crwdcntrl.net^$script,domain=dailystar.co.uk|liverpoolecho.co.uk|football.london|devonlive.com|buzz.ie|inyourarea.co.uk|cornwalllive.com|coventrytelegraph.net|dublinlive.ie|kentlive.news|essexlive.news|lincolnshirelive.co.uk|insider.co.uk|bathchronicle.co.uk|birminghammail.co.uk|cheshire-live.co.uk|corkbeo.ie|crewechronicle.co.uk|croydonadvertiser.co.uk|dailypost.co.uk|dailyrecord.co.uk|derbytelegraph.co.uk|edinburghlive.co.uk|examinerlive.co.uk|gazettelive.co.uk|getreading.co.uk|getsurrey.co.uk|grimsbytelegraph.co.uk|hampshirelive.news|hulldailymail.co.uk|irishmirror.ie|liverpool.com|mylondon.news|nottinghampost.com|rossendalefreepress.co.uk|southportvisiter.co.uk|staffordshire-live.co.uk|stokesentinel.co.uk|walesonline.co.uk
+||scorecardresearch.com^*/streamingtag_plugin_jwplayer.js$important,domain=glasgowlive.co.uk
 ! https://github.com/uBlockOrigin/uAssets/issues/25759
 @@||micro.rubiconproject.com/prebid/dynamic/$script,domain=dailypost.co.uk|dailystar.co.uk|mirror.co.uk
 dailypost.co.uk,dailystar.co.uk,mirror.co.uk##+js(nano-stb, native%20code, 15000, 0.001)
@@ -3827,9 +3831,6 @@ emailnator.com##[style^="width: 15px; height: 15px; overflow: scroll; visibility
 mediaite.com##+js(set-cookie, am-sub, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/24136
 @@||netshoes.com.br/webanalytics/*$xhr,1p
-! https://github.com/uBlockOrigin/uAssets/issues/24176
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=tabii.com,redirect=google-ima.js
-||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=tabii.com,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/24191
 ! https://github.com/uBlockOrigin/uAssets/issues/26795
 @@/smartechclient.js^$script,to=netcore.co.in|netcoresmartech.com,from=hdfcfund.com
@@ -4289,9 +4290,38 @@ livemint.com##+js(set, dapTracker.track, noopFunc)
 usmagazine.com#@#[class^="s2nPlayer"]
 usmagazine.com#@#.ami-video-placeholder
 ! https://github.com/uBlockOrigin/uAssets/issues/29665
-!#if ext_ubol
-||googletagmanager.com/gtm.js$domain=jumbo.cl,removeparam=id,important
-!#else
-@@||googletagmanager.com/gtm.js$domain=jumbo.cl
-||googletagmanager.com/gtm.js$domain=jumbo.cl,removeparam
+@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=jumbo.cl
+! https://github.com/uBlockOrigin/uAssets/issues/29712
+@@||d2r1yp2w7bby2u.cloudfront.net/js/a.js$script,domain=bmshosting.in
+@@||wzrkt.com^$script,domain=bmshosting.in
+! https://github.com/uBlockOrigin/uAssets/issues/29860
+login.asda.com##+js(set, newrelic, %7B%7D)
+login.asda.com##+js(set, newrelic.setCustomAttribute, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/29880
+@@||api-*.datadome.co^$frame,xhr,domain=venmo.com
+@@||ct.ddc.venmo.com.fpc.datadome.co^$script,domain=id.venmo.com
+! https://github.com/uBlockOrigin/uAssets/issues/29925
+tires.costco.ca##+js(set, adobePageView, noopFunc)
+! unbreak hindustantimes.com articles
+!#if !env_mobile
+hindustantimes.com#@#.rgtAdSection
+hindustantimes.com##.rgtWidget.ht-ad-holder-right
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/29972
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cnews.cz
+! https://github.com/uBlockOrigin/uAssets/issues/30065
+mandai.com##+js(set, adobeDataLayer, %7B%7D)
+mandai.com##+js(set, adobeDataLayer.push, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/30079
+@@||ads.adthrive.com/sites/*/ads.min.$script,css,domain=damndelicious.net
+@@||ads.adthrive.com/builds/core/*/js/adthrive.min.js$script,domain=damndelicious.net
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=damndelicious.net
+damndelicious.net##+js(set, Object.prototype._adsDisabled, true)
+damndelicious.net##+js(trusted-replace-argument, Object.defineProperty, 1, json%3A%22_adsEnabled%22, condition, _adsDisabled)
+damndelicious.net#@#.adthrive
+damndelicious.net#@#.adthrive-video-player
+! https://github.com/uBlockOrigin/uAssets/issues/30142
+/fingerprint2.min.js$redirect=fingerprint2.js,domain=support.halabtech.com
+! https://github.com/uBlockOrigin/uAssets/issues/30160
+brother-usa.com##+js(set, utag, %7B%7D)
+brother-usa.com##+js(set, utag.link, noopFunc)

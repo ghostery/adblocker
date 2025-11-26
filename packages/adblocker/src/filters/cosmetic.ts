@@ -46,6 +46,9 @@ export const DEFAULT_HIDING_STYLE: string = 'display: none !important;';
 const REGEXP_UNICODE_COMMA = new RegExp(/\\u002C/, 'g');
 const REGEXP_UNICODE_BACKSLASH = new RegExp(/\\u005C/, 'g');
 const REGEXP_ESCAPED_COMMA = new RegExp(/\\,/, 'g');
+const REGEXP_ESCAPED_SINGLE_QUOTE = new RegExp(/\\'/, 'g');
+const REGEXP_ESCAPED_DOUBLE_QUOTE = new RegExp(/\\"/, 'g');
+const REGEXP_ESCAPED_BACKTICK = new RegExp(/\\`/, 'g');
 
 /**
  * Given a `selector` starting with either '#' or '.' check if what follows is
@@ -650,7 +653,7 @@ export default class CosmeticFilter implements IFilter {
     }
 
     // No `hostname` available but this filter has some constraints on hostname.
-    if (!hostname && this.hasHostnameConstraint()) {
+    if (!hostname) {
       return false;
     }
 
@@ -842,6 +845,7 @@ export default class CosmeticFilter implements IFilter {
     let lastComaIndex = -1;
     let inDoubleQuotes = false;
     let inSingleQuotes = false;
+    let inBackticks = false;
     let inRegexp = false;
     let objectNesting = 0;
     let lastCharIsBackslash = false;
@@ -859,6 +863,10 @@ export default class CosmeticFilter implements IFilter {
           if (char === "'") {
             inSingleQuotes = false;
           }
+        } else if (inBackticks === true) {
+          if (char === '`') {
+            inBackticks = false;
+          }
         } else if (objectNesting !== 0) {
           if (char === '{') {
             objectNesting += 1;
@@ -868,6 +876,8 @@ export default class CosmeticFilter implements IFilter {
             inDoubleQuotes = true;
           } else if (char === "'") {
             inSingleQuotes = true;
+          } else if (char === '`') {
+            inBackticks = true;
           }
         } else if (inRegexp === true) {
           if (char === '/') {
@@ -881,6 +891,8 @@ export default class CosmeticFilter implements IFilter {
               inDoubleQuotes = true;
             } else if (char === "'" && selector.indexOf("'", index + 1) > 0) {
               inSingleQuotes = true;
+            } else if (char === '`' && selector.indexOf('`', index + 1) > 0) {
+              inBackticks = true;
             } else if (char === '{' && selector.indexOf('}', index + 1) > 0) {
               objectNesting += 1;
             } else if (char === '/' && selector.indexOf('/', index + 1) > 0) {
@@ -889,40 +901,71 @@ export default class CosmeticFilter implements IFilter {
               inArgument = true;
             }
           }
-          if (char === ',') {
-            parts.push(selector.slice(lastComaIndex + 1, index).trim());
-            lastComaIndex = index;
-            inArgument = false;
-          }
         }
       }
 
-      lastCharIsBackslash = char === '\\';
+      // Split on comma only if not inside quotes, regexp, and not escaped
+      if (
+        lastCharIsBackslash === false &&
+        char === ',' &&
+        inDoubleQuotes === false &&
+        inSingleQuotes === false &&
+        inBackticks === false &&
+        inRegexp === false
+      ) {
+        parts.push(selector.slice(lastComaIndex + 1, index).trim());
+        lastComaIndex = index;
+        inArgument = false;
+      }
+
+      lastCharIsBackslash = char === '\\' && !lastCharIsBackslash;
     }
 
     parts.push(selector.slice(lastComaIndex + 1).trim());
 
-    if (parts.length === 0) {
-      return undefined;
-    }
-
     const args = parts
       .slice(1)
       .map((part) => {
+        const openingCode = part.charCodeAt(0);
         if (
-          (part.startsWith(`'`) && part.endsWith(`'`)) ||
-          (part.startsWith(`"`) && part.endsWith(`"`))
+          !(openingCode === 39 /* `'` */ && part.endsWith(`'`)) &&
+          !(openingCode === 34 /* `"` */ && part.endsWith(`"`)) &&
+          !(openingCode === 96 /* '`' */ && part.endsWith('`'))
         ) {
-          return part.substring(1, part.length - 1);
+          return part;
         }
-        return part;
+        // Passthrough `part` if it ends with escaped quote
+        if (part.charCodeAt(part.length - 2) === 92 /* '\\' */) {
+          return part;
+        }
+        // Passthrough `part` if it contains unescaped quote
+        if (part.length > 2) {
+          for (let i = 1; i < part.length - 1; i++) {
+            if (part.charCodeAt(i) === openingCode && part.charCodeAt(i - 1) !== 92 /* '\\' */) {
+              return part;
+            }
+          }
+        }
+        const escaped = part.substring(1, part.length - 1);
+        if (openingCode === 39 /* `'` */) {
+          return escaped.replace(REGEXP_ESCAPED_SINGLE_QUOTE, "'");
+        } else if (openingCode === 34 /* '"' */) {
+          return escaped.replace(REGEXP_ESCAPED_DOUBLE_QUOTE, '"');
+        }
+        return escaped.replace(REGEXP_ESCAPED_BACKTICK, '`');
       })
-      .map((part) =>
-        part
+      .map((part) => {
+        const isObjectLiteral = part.startsWith('{');
+        let result = part
           .replace(REGEXP_UNICODE_COMMA, ',')
-          .replace(REGEXP_UNICODE_BACKSLASH, '\\')
-          .replace(REGEXP_ESCAPED_COMMA, ','),
-      );
+          .replace(REGEXP_UNICODE_BACKSLASH, '\\');
+
+        if (!isObjectLiteral) {
+          result = result.replace(REGEXP_ESCAPED_COMMA, ',');
+        }
+
+        return result;
+      });
 
     this.scriptletDetails = { name: parts[0], args };
 

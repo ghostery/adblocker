@@ -1725,6 +1725,7 @@ describe('Network filters', () => {
         [new Uint32Array([NORMALIZED_TYPE_TOKEN.document])],
       ],
       ['@@/wp-content/themes/$script', [hashStrings(['content'])]],
+      ['||some.primewire.c*/sw$script,1p', [hashStrings(['some', 'primewire'])]],
     ] as const) {
       it(`get tokens for ${filter}`, () => {
         const parsed = NetworkFilter.parse(filter, true);
@@ -2463,148 +2464,473 @@ describe('Filters list', () => {
   });
 });
 
-describe('scriptlets arguments parsing', () => {
-  it('parses empty argument list', () => {
-    const filter = CosmeticFilter.parse('foo.com#@#+js()');
-    expect(filter).to.not.be.null;
-    expect(filter?.isScriptInject()).to.be.true;
-    expect(filter?.parseScript()).to.be.undefined;
-  });
-
-  it('parses name without args', () => {
-    expect(CosmeticFilter.parse('foo.com##+js(script-name)')?.parseScript()).to.eql({
-      name: 'script-name',
-      args: [],
+describe('Scriptlet argument parsing', () => {
+  describe('basic argument splitting', () => {
+    it('parses empty argument list', () => {
+      const filter = CosmeticFilter.parse('foo.com#@#+js()')!;
+      expect(filter).to.not.be.null;
+      expect(filter.isScriptInject()).to.be.true;
+      expect(filter.parseScript()).to.be.undefined;
     });
-  });
 
-  it('parses name with simple args', () => {
-    for (const [scriptlet, expected] of [
-      ['acs, $, adb', { name: 'acs', args: ['$', 'adb'] }],
-      [
-        'abort-current-script, document.createElement, break;case $.',
-        { name: 'abort-current-script', args: ['document.createElement', 'break;case $.'] },
-      ],
-      ['acs, $, /.fadeIn|.show(.?)/', { name: 'acs', args: ['$', '/.fadeIn|.show(.?)/'] }],
-      [
-        'acis, document.createElement, /break;case $.|popunder/',
-        { name: 'acis', args: ['document.createElement', '/break;case $.|popunder/'] },
-      ],
-      ['acs, atob, -0x1', { name: 'acs', args: ['atob', '-0x1'] }],
-      ["acs, atob, 'shift'", { name: 'acs', args: ['atob', 'shift'] }],
-      ["acs, Date, ='\\x", { name: 'acs', args: ['Date', "='\\x"] }],
-      [
-        `acs, decodeURIComponent, "'shift'"`,
-        { name: 'acs', args: ['decodeURIComponent', `'shift'`] },
-      ],
-      [
-        `acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/`,
-        { name: 'acs', args: ['document.getElementById', `/\\$\\('body'\\)|\\$\\("body"\\)/`] },
-      ],
-      [
-        'acs, document.getElementById, showModal, /^data:text\\/javascript/',
-        {
-          name: 'acs',
-          args: ['document.getElementById', 'showModal', '/^data:text\\/javascript/'],
-        },
-      ],
-      ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
-    ] as const) {
-      expect(CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(), scriptlet).to.eql(
-        expected,
-      );
-    }
-  });
-
-  it('parses name with empty args', () => {
-    expect(
-      CosmeticFilter.parse('foo.com##+js(script-name,, , foo,   ,     bar)')?.parseScript(),
-    ).to.eql({
-      name: 'script-name',
-      args: ['', '', 'foo', '', 'bar'],
-    });
-  });
-
-  it('removes wrapping quotes', () => {
-    expect(CosmeticFilter.parse('foo.com##+js(script-name, "a")')?.parseScript()).to.eql({
-      name: 'script-name',
-      args: ['a'],
-    });
-    expect(CosmeticFilter.parse("foo.com##+js(script-name, 'a')")?.parseScript()).to.eql({
-      name: 'script-name',
-      args: ['a'],
-    });
-  });
-
-  it('handles escaping of comas', () => {
-    expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
-      name: 'script-name',
-      args: ['foo ,bar'],
-    });
-  });
-
-  describe('handles objects arguments', () => {
-    it('empty', () => {
-      expect(CosmeticFilter.parse('foo.com##+js(script-name, {})')?.parseScript()).to.eql({
+    it('parses name without args', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name)')?.parseScript()).to.eql({
         name: 'script-name',
-        args: ['{}'],
+        args: [],
       });
     });
 
-    it('single key', () => {
-      expect(CosmeticFilter.parse('foo.com##+js(script-name, {foo: 42})')?.parseScript()).to.eql({
-        name: 'script-name',
-        args: ['{foo: 42}'],
+    it('splits arguments at unescaped commas', () => {
+      for (const [scriptlet, expected] of [
+        ['acs, $, adb', { name: 'acs', args: ['$', 'adb'] }],
+        [
+          'abort-current-script, document.createElement, break;case $.',
+          { name: 'abort-current-script', args: ['document.createElement', 'break;case $.'] },
+        ],
+        ['acs, atob, -0x1', { name: 'acs', args: ['atob', '-0x1'] }],
+        ["acs, Date, ='\\x", { name: 'acs', args: ['Date', "='\\x"] }],
+        [
+          'acs, document.getElementById, showModal, /^data:text\\/javascript/',
+          {
+            name: 'acs',
+            args: ['document.getElementById', 'showModal', '/^data:text\\/javascript/'],
+          },
+        ],
+        ['aeld, mousedown, !!{});', { name: 'aeld', args: ['mousedown', '!!{});'] }],
+      ] as const) {
+        expect(
+          CosmeticFilter.parse(`foo.com##+js(${scriptlet})`)?.parseScript(),
+          scriptlet,
+        ).to.eql(expected);
+      }
+    });
+
+    it('preserves commas inside quotes', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(a, "value,another")')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['value,another'],
+      });
+      expect(CosmeticFilter.parse("foo.com##+js(a, 'value,another')")?.parseScript()).to.eql({
+        name: 'a',
+        args: ['value,another'],
+      });
+      expect(CosmeticFilter.parse('foo.com##+js(a, `value,another`)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['value,another'],
       });
     });
 
-    it('multiple keys', () => {
+    it('preserves commas inside regexps', () => {
       expect(
-        CosmeticFilter.parse('foo.com##+js(script-name, {foo: 1, bar: 2})')?.parseScript(),
+        CosmeticFilter.parse('foo.com##+js(acs, $, /.fadeIn|.show(.?)/)')?.parseScript(),
       ).to.eql({
-        name: 'script-name',
-        args: ['{foo: 1, bar: 2}'],
+        name: 'acs',
+        args: ['$', '/.fadeIn|.show(.?)/'],
       });
-
       expect(
         CosmeticFilter.parse(
-          'foo.com##+js(aeld, { "type": "click", "pattern": "popMagic", "runAt": "idle" })',
+          'foo.com##+js(acis, document.createElement, /break;case $.|popunder/)',
         )?.parseScript(),
       ).to.eql({
-        name: 'aeld',
-        args: ['{ "type": "click", "pattern": "popMagic", "runAt": "idle" }'],
+        name: 'acis',
+        args: ['document.createElement', '/break;case $.|popunder/'],
       });
-    });
-
-    it('nested', () => {
       expect(
         CosmeticFilter.parse(
-          'foo.com##+js(script-name, {foo: 1, bar: 2, baz: {a: 1, b: 2}}, arg2,)',
+          `foo.com##+js(acs, document.getElementById, /\\$\\('body'\\)|\\$\\("body"\\)/)`,
         )?.parseScript(),
       ).to.eql({
-        name: 'script-name',
-        args: ['{foo: 1, bar: 2, baz: {a: 1, b: 2}}', 'arg2', ''],
+        name: 'acs',
+        args: ['document.getElementById', `/\\$\\('body'\\)|\\$\\("body"\\)/`],
       });
     });
 
-    it('escaping', () => {
+    it('handles empty arguments', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(script-name,, , foo,   ,     bar)')?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['', '', 'foo', '', 'bar'],
+      });
+    });
+  });
+
+  describe('escaped comma handling', () => {
+    it('treats escaped commas as part of argument', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, foo \\,bar)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['foo ,bar'],
+      });
+    });
+
+    it('converts escaped commas to regular commas in output', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(a, arg1\\,arg2)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['arg1,arg2'],
+      });
+    });
+
+    it('handles multiple escaped commas in single argument', () => {
+      expect(
+        CosmeticFilter.parse('foo.com##+js(script-name, arg1\\,arg2\\,arg3, arg4)')?.parseScript(),
+      ).to.eql({
+        name: 'script-name',
+        args: ['arg1,arg2,arg3', 'arg4'],
+      });
+    });
+  });
+
+  describe('quote handling', () => {
+    it('removes wrapping quotes from arguments', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, "a")')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['a'],
+      });
+      expect(CosmeticFilter.parse("foo.com##+js(script-name, 'a')")?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['a'],
+      });
+      expect(CosmeticFilter.parse('foo.com##+js(script-name, `a`)')?.parseScript()).to.eql({
+        name: 'script-name',
+        args: ['a'],
+      });
+    });
+
+    it('removes nested quotes when properly wrapped', () => {
+      expect(
+        CosmeticFilter.parse(`foo.com##+js(acs, decodeURIComponent, "'shift'")`)?.parseScript(),
+      ).to.eql({
+        name: 'acs',
+        args: ['decodeURIComponent', `'shift'`],
+      });
+      expect(CosmeticFilter.parse(`foo.com##+js(a, "'value',")`)?.parseScript()).to.eql({
+        name: 'a',
+        args: [`'value',`],
+      });
+    });
+
+    it('handles mismatched quotes', () => {
+      expect(CosmeticFilter.parse('foo.com##+js(a, "value)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['"value'],
+      });
+      expect(CosmeticFilter.parse("foo.com##+js(a, 'value)")?.parseScript()).to.eql({
+        name: 'a',
+        args: ["'value"],
+      });
+    });
+
+    it('handles escaped quotes inside quoted strings', () => {
+      expect(CosmeticFilter.parse(`foo.com##+js(a, "va\\"lue")`)?.parseScript()).to.eql({
+        name: 'a',
+        args: ['va"lue'],
+      });
+      expect(CosmeticFilter.parse(`foo.com##+js(a, 'va\\'lue')`)?.parseScript()).to.eql({
+        name: 'a',
+        args: ["va'lue"],
+      });
+      expect(CosmeticFilter.parse('foo.com##+js(a, `va\\`lue`)')?.parseScript()).to.eql({
+        name: 'a',
+        args: ['va`lue'],
+      });
+    });
+  });
+
+  describe('object literal arguments', () => {
+    describe('quoted objects (correct syntax - commas preserved)', () => {
+      it('requires quotes for object literals with multiple keys', () => {
+        expect(
+          CosmeticFilter.parse('foo.com##+js(script-name, "{foo: 1, bar: 2}")')?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}'],
+        });
+      });
+
+      it('works with single quotes', () => {
+        expect(
+          CosmeticFilter.parse("foo.com##+js(script-name, '{foo: 1, bar: 2}')")?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}'],
+        });
+      });
+
+      it('works with backticks', () => {
+        expect(
+          CosmeticFilter.parse('foo.com##+js(script-name, `{foo: 1, bar: 2}`)')?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}'],
+        });
+      });
+
+      it('handles multiple arguments with quoted objects', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(script-name, "{foo: 1, bar: 2}", arg2, "{baz: 3}")',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1, bar: 2}', 'arg2', '{baz: 3}'],
+        });
+      });
+
+      it('handles nested objects in quoted string', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(script-name, "{foo: {a: 1, b: 2}, bar: 3}")',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: {a: 1, b: 2}, bar: 3}'],
+        });
+      });
+
+      it('handles complex real-world object with quoted syntax', () => {
+        expect(
+          CosmeticFilter.parse(
+            `foo.com##+js(aeld, '{ "type": "click", "pattern": "popMagic", "runAt": "idle" }')`,
+          )?.parseScript(),
+        ).to.eql({
+          name: 'aeld',
+          args: ['{ "type": "click", "pattern": "popMagic", "runAt": "idle" }'],
+        });
+      });
+
+      it('preserves escaped commas in object literals (even when quoted)', () => {
+        // Object literals preserve escaped commas (detected by starting with '{')
+        expect(
+          CosmeticFilter.parse(
+            String.raw`foo.com##+js(script-name, "{foo: 1\, bar: 2}")`,
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: [String.raw`{foo: 1\, bar: 2}`],
+        });
+      });
+    });
+
+    describe('unquoted objects (incorrect syntax - demonstrates splitting behavior)', () => {
+      it('empty object stays as one argument', () => {
+        expect(CosmeticFilter.parse('foo.com##+js(script-name, {})')?.parseScript()).to.eql({
+          name: 'script-name',
+          args: ['{}'],
+        });
+      });
+
+      it('single key object stays as one argument', () => {
+        expect(CosmeticFilter.parse('foo.com##+js(script-name, {foo: 42})')?.parseScript()).to.eql(
+          {
+            name: 'script-name',
+            args: ['{foo: 42}'],
+          },
+        );
+      });
+
+      it('splits at commas in unquoted object with multiple keys', () => {
+        expect(
+          CosmeticFilter.parse('foo.com##+js(script-name, {foo: 1, bar: 2})')?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1', 'bar: 2}'],
+        });
+      });
+
+      it('splits at commas in unquoted object with quoted values', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(aeld, { "type": "click", "pattern": "popMagic", "runAt": "idle" })',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'aeld',
+          args: ['{ "type": "click"', '"pattern": "popMagic"', '"runAt": "idle" }'],
+        });
+      });
+
+      it('splits at all commas in nested unquoted objects', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(script-name, {foo: 1, bar: 2, baz: {a: 1, b: 2}}, arg2,)',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['{foo: 1', 'bar: 2', 'baz: {a: 1', 'b: 2}}', 'arg2', ''],
+        });
+      });
+
+      it('splits at commas but preserves escaped braces', () => {
+        expect(
+          CosmeticFilter.parse(
+            'foo.com##+js(script-name, \\{foo: 1, bar: 2\\}, {baz: {a: 1, b: 2}})',
+          )?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: ['\\{foo: 1', 'bar: 2\\}', '{baz: {a: 1', 'b: 2}}'],
+        });
+      });
+
+      it('splits at commas with quotes inside unquoted objects', () => {
+        expect(
+          CosmeticFilter.parse(`foo.com##+js(script-name, {foo: "}", bar: '{'})`)?.parseScript(),
+        ).to.eql({
+          name: 'script-name',
+          args: [`{foo: "}"`, `bar: '{'}`],
+        });
+      });
+    });
+  });
+
+  describe('combined escaping scenarios', () => {
+    it('handles escaped commas with quoted strings', () => {
       expect(
         CosmeticFilter.parse(
-          'foo.com##+js(script-name, \\{foo: 1, bar: 2\\}, {baz: {a: 1, b: 2}})',
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
         )?.parseScript(),
       ).to.eql({
-        name: 'script-name',
-        args: ['\\{foo: 1', 'bar: 2\\}', '{baz: {a: 1, b: 2}}'],
+        name: 'trusted-replace-outbound-text',
+        args: [
+          'JSON.stringify',
+          '"params":"yAEB',
+          'condition',
+          '/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/',
+        ],
       });
     });
 
-    it('nested quotes', () => {
+    it('handles complex real-world examples', () => {
       expect(
-        CosmeticFilter.parse(`foo.com##+js(script-name, {foo: "}", bar: '{'})`)?.parseScript(),
+        CosmeticFilter.parse(
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext", condition, currentUrl":"/watch)`,
+        )?.parseScript(),
       ).to.eql({
-        name: 'script-name',
-        args: [`{foo: "}", bar: '{'}`],
+        name: 'trusted-replace-outbound-text',
+        args: [
+          'JSON.stringify',
+          '{"contentPlaybackContext"',
+          String.raw`{"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext"`,
+          'condition',
+          'currentUrl":"/watch',
+        ],
       });
+    });
+  });
+
+  describe('edge cases and comprehensive quote tests', () => {
+    context('quoting variations', () => {
+      for (const [filter, expected] of [
+        ['foo.com##+js(a, "value")', ['value']],
+        ['foo.com##+js(a, "value)', ['"value']],
+        [`foo.com##+js(a, 'value')`, ['value']],
+        [`foo.com##+js(a, 'value)`, ["'value"]],
+        ['foo.com##+js(a, `value`)', ['value']],
+        ['foo.com##+js(a, `value)', ['`value']],
+        ['foo.com##+js(a, "value,")', ['value,']],
+        [`foo.com##+js(a, 'value,')`, ['value,']],
+        ['foo.com##+js(a, `value,`)', ['value,']],
+        [`foo.com##+js(a, ",value")`, [',value']],
+        [`foo.com##+js(a, ',value')`, [',value']],
+        ['foo.com##+js(a, `,value`)', [',value']],
+        [`foo.com##+js(a, "value"")`, ['"value""']],
+        [`foo.com##+js(a, 'value'')`, [`'value''`]],
+        ['foo.com##+js(a, `value``)', ['`value``']],
+        [`foo.com##+js(a, "'value'")`, [`'value'`]],
+        [`foo.com##+js(a, '"value"')`, [`"value"`]],
+        ["foo.com##+js(a, '`value`')", ['`value`']],
+        ['foo.com##+js(a, "`value`")', ['`value`']],
+        [`foo.com##+js(a, "value",")`, [`value`, `"`]],
+        [`foo.com##+js(a, 'value',')`, [`value`, `'`]],
+        ['foo.com##+js(a, `value`,`)', [`value`, '`']],
+        [`foo.com##+js(a, ""value"")`, [`""value""`]],
+        [`foo.com##+js(a, ''value'')`, [`''value''`]],
+        ['foo.com##+js(a, ``value``)', ['``value``']],
+        [`foo.com##+js(a, \\"value")`, [`\\"value"`]],
+        [`foo.com##+js(a, \\'value')`, [`\\'value'`]],
+        ['foo.com##+js(a, \\`value`)', ['\\`value`']],
+        [`foo.com##+js(a, "value\\")`, [`"value\\"`]],
+        [`foo.com##+js(a, 'value\\')`, [`'value\\'`]],
+        ['foo.com##+js(a, `value\\`)', ['`value\\`']],
+        // TODO: backslash is not removed in case not required
+        // > example.com##+js(rpnt, #text, Example Domain, "'value'\,'another'", condition, Example, stay, 1)
+        // [`foo.com##+js(a, "va\\,lue")`, [`va\\,lue`]],
+        // [`foo.com##+js(a, 'va\\,lue')`, [`va\\,lue`]],
+        // ['foo.com##+js(a, `va\\,lue`)', ['va\\,lue']],
+        [`foo.com##+js(a, "va\\"lue")`, [`va"lue`]],
+        [`foo.com##+js(a, 'va\\'lue')`, [`va'lue`]],
+        ['foo.com##+js(a, `va\\`lue`)', ['va`lue']],
+        [`foo.com##+js(a, 'value'\\,')`, [`'value','`]],
+        [`foo.com##+js(a, 'value'\\,')`, [`'value','`]],
+        ['foo.com##+js(a, `value`\\,`)', ['`value`,`']],
+        [`foo.com##+js(a, "value,another")`, [`value,another`]],
+        [`foo.com##+js(a, 'value,another')`, [`value,another`]],
+        ['foo.com##+js(a, `value,another`)', [`value,another`]],
+        [`foo.com##+js(a, "value""another")`, [`"value""another"`]],
+        [`foo.com##+js(a, 'value''another')`, [`'value''another'`]],
+        ['foo.com##+js(a, `value``another`)', ['`value``another`']],
+        [`foo.com##+js(a, "value"another")`, [`"value"another"`]],
+        [`foo.com##+js(a, 'value'another')`, [`'value'another'`]],
+        ['foo.com##+js(a, `value`another`)', ['`value`another`']],
+        [`foo.com##+js(a, "'value','another'")`, [`'value','another'`]],
+        [`foo.com##+js(a, '"value","another"')`, [`"value","another"`]],
+        ['foo.com##+js(a, `"value","another"`)', [`"value","another"`]],
+        ["foo.com##+js(a, `'value','another'`)", [`'value','another'`]],
+        [`foo.com##+js(a, "value\\",another")`, [`value",another`]],
+        [`foo.com##+js(a, 'value\\',another')`, [`value',another`]],
+        ['foo.com##+js(a, `value\\`,another`)', ['value`,another']],
+        [
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":"yAEB, condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+          [
+            `JSON.stringify`,
+            `"params":"yAEB`,
+            `condition`,
+            `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+          ],
+        ],
+        [
+          `www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, "params":", condition, /("contentPlaybackContext":{".*\\,"params":"|"params":".*"contentPlaybackContext":{")/)`,
+          [
+            `JSON.stringify`,
+            `"params":"`,
+            `condition`,
+            `/("contentPlaybackContext":{".*,"params":"|"params":".*"contentPlaybackContext":{")/`,
+          ],
+        ],
+        [
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext", condition, currentUrl":"/watch)`,
+          [
+            `JSON.stringify`,
+            `{"contentPlaybackContext"`,
+            String.raw`{"adPlaybackContext":{"pyv":true}\,"contentPlaybackContext"`,
+            `condition`,
+            `currentUrl":"/watch`,
+          ],
+        ],
+        [
+          String.raw`www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, {"contentPlaybackContext", {"adPlaybackContext":{"pyv":true}\\,"contentPlaybackContext", condition, currentUrl":"/watch))`,
+          [
+            `JSON.stringify`,
+            `{"contentPlaybackContext"`,
+            String.raw`{"adPlaybackContext":{"pyv":true}\\`,
+            `contentPlaybackContext`,
+            `condition`,
+            `currentUrl":"/watch)`,
+          ],
+        ],
+        [
+          `www.youtube.com##+js(trusted-replace-node-text, script, (function serverContract(), \`(()=>{if("YOUTUBE_PREMIUM_LOGO"===ytInitialData?.topbar?.desktopTopbarRenderer?.logo?.topbarLogoRenderer?.iconImage?.iconType\\|\\|location.href.startsWith("https://www.youtube.com/tv#/")\\|\\|location.href.startsWith("https://www.youtube.com/embed/"))return;document.addEventListener("DOMContentLoaded",(function(){const t=()=>{const t=document.getElementById("movie_player");if(!t)return;if(!t.getStatsForNerds?.()?.debug_info?.startsWith?.("SSAP, AD"))return;const e=t.getProgressState?.();e&&e.duration>0&&(e.loaded<e.duration\\|\\|e.duration-e.current>1)&&t.seekTo?.(e.duration)};t(),new MutationObserver((()=>{t()})).observe(document,{childList:!0,subtree:!0})}));const t={apply:(t,e,o)=>{const n=o[0];return"function"==typeof n&&n.toString().includes("onAbnormalityDetected")&&(o[0]=function(){}),Reflect.apply(t,e,o)}};window.Promise.prototype.then=new Proxy(window.Promise.prototype.then,t);const e={construct:(t,e,o)=>{const n=e[0],r=e[1]?.body;return n?.includes("youtubei")&&r?.includes('"contentPlaybackContext":{')&&!r?.includes("youtube.com/shorts/")&&(r.includes('"params":"')?e[1].body=r.replace('"params":"','"params":"yAEB'):e[1].body=r.replace('"contentCheckOk":false','"contentCheckOk":false,"params":"yAEB"')),Reflect.construct(t,e,o)}};window.Request=new Proxy(window.Request,e)})();(function serverContract()\`, sedCount, 1)`,
+          [
+            'script',
+            '(function serverContract()',
+            `(()=>{if("YOUTUBE_PREMIUM_LOGO"===ytInitialData?.topbar?.desktopTopbarRenderer?.logo?.topbarLogoRenderer?.iconImage?.iconType\\|\\|location.href.startsWith("https://www.youtube.com/tv#/")\\|\\|location.href.startsWith("https://www.youtube.com/embed/"))return;document.addEventListener("DOMContentLoaded",(function(){const t=()=>{const t=document.getElementById("movie_player");if(!t)return;if(!t.getStatsForNerds?.()?.debug_info?.startsWith?.("SSAP, AD"))return;const e=t.getProgressState?.();e&&e.duration>0&&(e.loaded<e.duration\\|\\|e.duration-e.current>1)&&t.seekTo?.(e.duration)};t(),new MutationObserver((()=>{t()})).observe(document,{childList:!0,subtree:!0})}));const t={apply:(t,e,o)=>{const n=o[0];return"function"==typeof n&&n.toString().includes("onAbnormalityDetected")&&(o[0]=function(){}),Reflect.apply(t,e,o)}};window.Promise.prototype.then=new Proxy(window.Promise.prototype.then,t);const e={construct:(t,e,o)=>{const n=e[0],r=e[1]?.body;return n?.includes("youtubei")&&r?.includes('"contentPlaybackContext":{')&&!r?.includes("youtube.com/shorts/")&&(r.includes('"params":"')?e[1].body=r.replace('"params":"','"params":"yAEB'):e[1].body=r.replace('"contentCheckOk":false','"contentCheckOk":false,"params":"yAEB"')),Reflect.construct(t,e,o)}};window.Request=new Proxy(window.Request,e)})();(function serverContract()`,
+            'sedCount',
+            '1',
+          ],
+        ],
+      ] satisfies [string, string[]][]) {
+        it(filter, () => {
+          expect(CosmeticFilter.parse(filter)!.parseScript()!.args).to.eql(expected);
+        });
+      }
     });
   });
 

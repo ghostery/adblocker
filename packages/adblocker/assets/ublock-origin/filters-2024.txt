@@ -16,6 +16,14 @@
 ! https://forums.lanik.us/viewtopic.php?p=131942#p131942
 ! https://github.com/uBlockOrigin/uAssets/pull/12960
 imagefap.com##+js(acs, %24, popCookie)
+! https://www.reddit.com/r/uBlockOrigin/comments/1ntc3nt/why_was_strict_blocking_removed_from_ubo_lite/
+||imagefap.com/images/yes.gif$redirect=1x1.gif
+imagefap.com##+js(set-cookie, show_only_once_per_day, 1)
+imagefap.com##+js(set-cookie, show_only_once_per_day2, 1)
+/adraw?zone=$doc
+/pu/?psid=$doc
+/pu/exralifk/*$doc
+||crmacd.livejasmin.com^$all
 ! https://www.reddit.com/r/uBlockOrigin/comments/ehhmg4/cant_stop_the_anti_adblock_notification_or_access/
 alliptvlinks.com##+js(aeld, load, ads)
 alliptvlinks.com##+js(aopr, eazy_ad_unblocker)
@@ -55,17 +63,13 @@ vidsrc.*##+js(aopr, Adcash)
 vidsrc.*##+js(rmnt, script, adserverDomain)
 vidsrc.*##^script:has-text(/\{delete window\[/)
 vidsrc.*###pop_asdf
-||vidsrc.net/*.js?_=$script,1p
+||vidsrc.net/*.js?_=$script
 ||vidsrc.pro/uwu-js^$script
 ||annotationsincereexistence.com^
 ||reminderasking.com^$all
 embed.smashystream.com###addiv
 ! https://github.com/uBlockOrigin/uAssets/issues/23610
-streambucket.net##+js(acs, EventTarget.prototype.addEventListener, %2FrunPop%7Caclib%7Cwindow%5C.open%2F)
-streambucket.net##+js(acs, atob, %2FpopundersPerIP%5B%5Cs%5CS%5D*%3FDate%5B%5Cs%5CS%5D*%3FgetElementsByTagName%5B%5Cs%5CS%5D*%3FinsertBefore%2F)
-streambucket.net##+js(aopr, Adcash)
 kokostream.net##+js(nowoif)
-*$script,3p,denyallow=gstatic.com,domain=streambucket.net
 ! https://github.com/uBlockOrigin/uAssets/issues/22762#issuecomment-1977984428
 player.smashy.stream##.react-responsive-modal-root
 ! https://bingemaster.netlify.app/movie_details/movie_details.html?id=1034541 - SS server popups and anti-adb
@@ -161,7 +165,10 @@ work.ink##+js(ra, href, %5Bhref*%3D%22jump%22%5D, stay)
 workink.click##+js(nowoif, !direct)
 work.ink##+js(nosiif, a0b)
 work.ink##+js(no-fetch-if, %2Foutbrain%7Ccriteo%7Cthisiswaldo%7Cmedia%5C.net%7Cohbayersbur%7Cadligature%7Cquantserve%7Csrvtrck%7C%5C.css%7C%5C.js%2F)
-work.ink##+js(nostif, Ad, 5000)
+work.ink##+js(no-fetch-if, mode%3Ano-cors)
+work.ink##+js(nostif, , 2000-5000)
+work.ink##div[id^="bsa-zone_"]
+work.ink##ins.adsbygoogle
 work.ink##body > div:has(> a#link)
 work.ink##.opera-container:style(visibility: collapse !important;)
 work.ink##img[alt="Buff Banner"]:style(visibility: collapse !important;)
@@ -210,7 +217,6 @@ crackle.com##.vjs-ad-break-marker-adjustment
 ! https://www.reddit.com/r/uBlockOrigin/comments/137arti/
 ! https://github.com/uBlockOrigin/uAssets/issues/23390
 crackle.com##+js(json-prune-fetch-response, data.device.adsParams%20data.device.adSponsorshipTemplate, , propsToMatch, url%3A%2Fappconfig)
-||heartbeat.crackle.com/tp.png
 ! https://github.com/uBlockOrigin/uAssets/issues/6738
 ! https://github.com/uBlockOrigin/uAssets/issues/17145
 fmovies.*##+js(nowoif)
@@ -340,17 +346,12 @@ torrentdownload.*##.table2:has-text(Sponsored)
 ||torrentdownload.*/*.gif$image
 ! https://github.com/uBlockOrigin/uAssets/issues/1634
 ! https://github.com/uBlockOrigin/uAssets/issues/6749
-katfile.com##+js(acs, document.createElement, onerror)
-katfile.com##+js(nano-stb)
-katfile.com##+js(nowoif)
-katfile.com##+js(set, adblock, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/23909
-katfile.com##+js(rpnt, script, (adEnable), (true))
-katfile.com##+js(set, download_click, true)
-katfile.com##+js(aeld, click, , elements, a%23dlink)
-katfile.com##a[href][target="_blank"] img
-katfile.com###container > p > a[href*="?"]:has(> img)
-||katfile.com/images/dlli.png$image
+katfile.*##+js(nowoif)
+katfile.*##+js(nano-stb, tick)
+katfile.*##+js(nostif, %2Fadblock%2Fi)
+katfile.*##+js(rpnt, script, (adEnable), (true))
+katfile.*##+js(rpnt, script, (download_click%20%3D%3D%20false), (false))
 ! https://github.com/uBlockOrigin/uAssets/issues/1254
 homemoviestube.com##+js(aopr, decodeURI)
 homemoviestube.com##.film-aside-ads
@@ -363,7 +364,7 @@ homemoviestube.com##+js(aeld, click, clickCount)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/167090
 file-upload.*##+js(nowoif)
 file-upload.*##+js(acs, document.getElementById, undefined)
-3upload.com,file-up.org##+js(acs, getCookie, setCookie)
+file-up.org##+js(acs, getCookie, setCookie)
 file-upload.*##ins.adsbygoogle
 ! https://github.com/uBlockOrigin/uAssets/issues/13862
 ||file-upload.com^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
@@ -382,10 +383,13 @@ oploverz.*###overplay
 *.gif$domain=oploverz.*,image
 *$script,3p,denyallow=cloudflare.com|disqus.com|disquscdn.com|facebook.com|fastlylb.net|fbcdn.net|facebook.net|googleapis.com|jsdelivr.net|statically.io|githack.com|gitcdn.link|gitcdn.herokuapp.com|arc.io|fluidplayer.com,domain=oploverz.*
 ! https://github.com/AdguardTeam/AdguardFilters/issues/50179
-*$xhr,redirect-rule=noop.txt,domain=tunein.com
+*$xhr,redirect-rule=noop.txt,to=~pagead2.googlesyndication.com,from=tunein.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22351
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=tunein.com,important
 ||imasdk.googleapis.com/pal/sdkloader/pal.js$script,3p,redirect=noopjs,domain=tunein.com,important
+! https://www.reddit.com/r/uBlockOrigin/comments/1nrob3d/tunein_radio_wont_play_with_ubo/
+tunein.com##+js(set, Object.prototype.skipPreroll, true)
+tunein.com##div[class^="bottom-banner"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/7wpk97/cant_block_ad_at_the_bottom_of_readcomiconline/
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dkss3r/readcomiconline_detecting_adblock/
 ! https://forums.lanik.us/viewtopic.php?p=136688#p136688
@@ -442,6 +446,7 @@ channel4.com##.block--mpu
 ! https://github.com/uBlockOrigin/uAssets/issues/24873
 channel4.com##+js(json-prune, adverts.breaks)
 ! mail.yahoo.com stuff
+mail.yahoo.com##+js(json-prune, result.responses.%5B%5D.response.result.cards.%5B-%5D.data.offers)
 mail.yahoo.com##[data-test-id="right-rail-ad"]
 ! https://github.com/uBlockOrigin/uAssets/issues/13439
 mail.yahoo.com##[data-test-id="video-container"]
@@ -464,6 +469,8 @@ www.yahoo.com##.sticky[class*="top-"]:has(style)
 www.yahoo.com##div[id]:has(> div[id^="top_center-frontpage_"])
 ! https://sports.yahoo.com/mlb/gamechannel/
 sports.yahoo.com###defaultLDRB-sizer
+! https://github.com/uBlockOrigin/uAssets/issues/17012
+mail.yahoo.com##+js(nostif, ADB)
 ! https://github.com/uBlockOrigin/uAssets/issues/1802
 jpopsingles.eu##+js(nano-sib, downloadTimer)
 jpopsingles.eu##+js(noeval-if, adsBlocked)
@@ -474,11 +481,16 @@ jpopsingles.eu##+js(noeval-if, adsBlocked)
 ||jpopsingles.eu/generate-link/aHR0c$doc,urlskip=/\/generate-link\/(aHR0c[^?#]+)/ -base64
 ||adslink.pw/webroot/link/api?url=http$doc,urlskip=?url
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dyvn5w/ubo_getting_detected_on_jpopsingleseu/
-jpopsingles.eu##+js(acs, document.createElement, break%3Bcase)
 jpopsingles.eu##+js(aeld, DOMContentLoaded, document.documentElement.lang.toLowerCase)
 jpopsingles.eu##+js(rmnt, script, adsSrc)
 jpopsingles.eu##+js(no-fetch-if, %2Fads%7Cgoogle%2F, length%3A10, %7B%22type%22%3A%20%22cors%22%7D)
 jpopsingles.eu##+js(aost, atob, injectedScript)
+jpopsingles.eu##+js(no-xhr-if, googlesyndication)
+! https://github.com/uBlockOrigin/uAssets/issues/29244#issuecomment-3232411228
+adslink.pw##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+adslink.pw##+js(rmnt, script, %2FpopMagic%7Cpop1stp%2F)
+adslink.pw##+js(no-fetch-if, %2Fgooglesyndication%7Cgoogletagservices%2F)
+adslink.pw##+js(set, DisableDevtool, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/1932
 megawarez.org##+js(aopw, smrtSB)
 megawarez.org##[class^="ads"]
@@ -486,19 +498,17 @@ megawarez.org##[id^="text-"] > .textwidget > p > [href][target="_blank"] > .size
 ! https://github.com/uBlockOrigin/uAssets/issues/1932#issuecomment-457093955
 megawarez.org##.onp-sl-content:style(display: block !important;)
 megawarez.org##.onp-sl-social-locker
-mwpaste.com##+js(nowoif, %2F%5E%2F, 15)
-*$frame,3p,domain=mwpaste.com
 ! https://github.com/uBlockOrigin/uAssets/issues/1932#issuecomment-465748184
-acortalo.*,acortar.*,megadescarga.net##+js(nofab)
-acortalo.*,acortar.*,megadescarga.net,megadescargas.net##+js(nano-sib, , , 0)
-acortalo.*,acortar.*,megadescarga.net,megadescargas.net##+js(set, clicked, true)
-acortalo.*,acortar.*,megadescarga.net,megadescargas.net##+js(set, eClicked, true)
-acortalo.*,acortar.*,megadescarga.net,megadescargas.net##+js(set, number, 0)
-acortalo.*,acortar.*,megadescarga.net,megadescargas.net##+js(set, sync, true)
+acortalo.*,acortar.*##+js(nofab)
+acortalo.*,acortar.*##+js(nano-sib, , , 0)
+acortalo.*,acortar.*##+js(set, clicked, true)
+acortalo.*,acortar.*##+js(set, eClicked, true)
+acortalo.*,acortar.*##+js(set, number, 0)
+acortalo.*,acortar.*##+js(set, sync, true)
 ||acortalo.*^$3p
-@@*$css,1p,domain=acortalo.*|acortar.*|megadescarga.net
-@@*$ghide,domain=acortalo.*|acortar.*|megadescarga.net
-*$popunder,domain=acortalo.*|acortar.*|megadescarga.net|megadescargas.net
+@@*$css,1p,domain=acortalo.*|acortar.*
+@@*$ghide,domain=acortalo.*|acortar.*
+*$popunder,domain=acortalo.*|acortar.*
 ! https://github.com/uBlockOrigin/uAssets/issues/16645#issuecomment-2224260943
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=acortalink.*
 ! https://www.reddit.com/r/uBlockOrigin/comments/pebw5s/not_able_to_watch_videos/
@@ -517,7 +527,6 @@ hentaihaven.xxx##.popecrazy
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=hentaihaven.xxx
 ! hentaihaven .com/icu ads, popup
 ||hentaihaven.icu/wp-content/plugins/sscript-manager/
-||mult-imgs.cyou/images/*.gif$image,domain=hentaihaven.xxx
 ! interstitial page
 hentaihaven.xxx##+js(aopw, Script_Manager)
 ! https://github.com/uBlockOrigin/uAssets/issues/5411
@@ -563,9 +572,9 @@ jacquieetmicheltv.net,jacquieetmicheltv2.net##.contents-list--zeder-detail-middl
 jacquieetmicheltv.net,jacquieetmicheltv2.net##.contents-list--zeder-detail-bottom
 ! https://forums.lanik.us/viewtopic.php?f=62&t=40741
 ! https://github.com/uBlockOrigin/uAssets/issues/25005
-mangaku.*,~mangaku.win##+js(nowebrtc)
-mangaku.*,~mangaku.win##+js(acs, %24, onclick)
-.gif^$image,domain=mangaku.*|~mangaku.win
+mangaku.*##+js(nowebrtc)
+mangaku.*##+js(acs, %24, onclick)
+.gif^$image,domain=mangaku.*
 ! https://github.com/uBlockOrigin/uAssets/issues/2484
 ! https://mkvcinemas.cat/
 /\/data\/cache\/min\/1\/[a-f0-9]+\.js\b/$script,1p,domain=mkvcinemas.*|mkvcinemas.cat|mkvcinemas.kim|mkvcinemas.pet
@@ -597,6 +606,7 @@ a2zapk.*##+js(acs, %24, alertmsg)
 @@||dl.a2zapk.*/getred.php$xhr,domain=a2zapk.*
 @@||tmp.a2zapk.*/js/advertisement/$frame,domain=a2zapk.*
 ||googlesyndication.com^$image,redirect=1x1.gif,domain=a2zapk.*
+||googlesyndication.com^$image,redirect=1x1.gif,domain=a2zapk.io
 ! https://github.com/uBlockOrigin/uAssets/issues/5141
 @@||virginmediatelevision.ie/player/$xhr,1p
 @@||virginmediatelevision.ie/includes/js/cookienotice.js.pagespeed.$script,1p
@@ -628,34 +638,6 @@ bombuj.*##+js(nobab)
 fcportables.com##+js(set, adsClasses, undefined)
 fcportables.com##+js(set, gsecs, 0)
 fcportables.com##+js(rmnt, script, ai_adb)
-! https://github.com/uBlockOrigin/uAssets/issues/7343
-! https://github.com/uBlockOrigin/uAssets/issues/28096
-! https://www.reddit.com/r/uBlockOrigin/comments/1glppet/how_to_block_invisible_ads_over_videos/
-dood.*,doods.*,dooodster.com,dooood.*,ds2play.com##+js(aopw, DoodPop)
-all3do.com,d-s.io,d0o0d.com,do0od.com,do7go.com,dood.*,dooodster.com,doply.net,ds2video.com,vidply.com,vide0.net,vvide0.com##+js(acs, decodeURI, decodeURIComponent)
-dood.*##+js(aopr, __aaZoneid)
-all3do.com,d-s.io,d0000d.com,d000d.com,d0o0d.com,do0od.com,do7go.com,dood.*,doods.*,dooodster.com,dooood.*,doply.net,ds2play.com,ds2video.com,vidply.com,vide0.net,vvide0.com##+js(nowoif)
-!#if cap_html_filtering
-all3do.com,d-s.io,d0000d.com,d000d.com,d0o0d.com,do0od.com,do7go.com,dood.*,doods.*,doodstream.*,dooodster.com,dooood.*,doply.net,ds2play.com,ds2video.com,vidply.com,vide0.net,vvide0.com##^script:has-text(/adblock|popunder|openedPop|WebAssembly|wpadmngr/)
-!#else
-all3do.com,d-s.io,d0000d.com,d000d.com,d0o0d.com,do0od.com,do7go.com,dood.*,doods.*,doodstream.*,dooodster.com,dooood.*,doply.net,ds2play.com,ds2video.com,vidply.com,vide0.net,vvide0.com##+js(rmnt, script, %2Fadblock%7Cpopunder%7CopenedPop%7CWebAssembly%7Cwpadmngr%2F)
-!#endif
-/sw.js$script,domain=all3do.com|d-s.io|d0000d.com|d000d.com|d0o0d.com|do0od.com|do7go.com|dood.*|doods.*|dooodster.com|dooood.*|doply.net|ds2play.com|ds2video.com|vidply.com|vide0.net|vvide0.com
-*$script,3p,denyallow=cdnjs.cloudflare.com|doodcdn.io|gstatic.com,domain=dooodster.com
-*$script,3p,denyallow=cloudflare.com|crisp.chat|doodcdn.io|google.com|gstatic.com,domain=all3do.com|d-s.io|do7go.com|doply.net|vidply.com|vide0.net|vvide0.com
-$popup,3p,domain=ds2play.com,badfilter
-||slorpeyes.top^
-||vizierspavan.com^
-! https://github.com/uBlockOrigin/uAssets/issues/23268
-! https://github.com/uBlockOrigin/uAssets/issues/25511
-! https://github.com/uBlockOrigin/uAssets/issues/25516
-! https://megacloud.tube/embed-1/e-1/jBK66v0MXBoa?z= / megacloud.tv
-! https://www.reddit.com/r/Piracy/comments/1fwlxsq/anyone_knows_how_to_remove_this_pop_up_ad_on/
-hianime.to##[href="https://1flix.to/"]
-###vidcloud-player > #overlay-container
-/embed-1/ajax/e-1/banners|$xhr,1p
-/embed-1/e-1/banners|$xhr,1p
-||iili.io/JvfIu1a.gif$image
 ! https://forums.lanik.us/viewtopic.php?f=90&t=40441
 ! https://github.com/uBlockOrigin/uAssets/issues/5223
 winfuture.de##+js(json-prune, adtagparameter, enabled)
@@ -730,6 +712,8 @@ im9.eu##+js(ra, onerror%7Conload, img%5Bonerror%5D%5Bonload%5D, asap%20stay)
 /wp-content/ads/*$image,3p,redirect=32x32.png,domain=im9.eu
 ||sprzedaz2.oczarjk.pl/img/ads/banner.gif$image,redirect=1x1.gif,domain=im9.eu
 g9g.eu##+js(aopr, adBlockDetected)
+im9.eu##+js(rmnt, script, %2Fadblock%2Fi)
+im9.eu##+js(acs, eval, replace)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43843
 elamigosedition.com##+js(aost, document.addEventListener, blocker)
 elamigosedition.com##+js(nowoif)
@@ -843,14 +827,13 @@ aniwave.*##.text-center:has(script + a[target="_blank"])
 ||delivery.r2b2.cz^$3p
 ! https://github.com/uBlockOrigin/uAssets/issues/22865
 ! filemoon ads
-3ixcf45.cfd,76078rb.sbs,defienietlynotme.com,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,sbnmp.bar,sulleiman.com,vpcxz19p.xyz,z12z0vla.*##+js(acs, JSON.parse, showTrkURL)
-3ixcf45.cfd,76078rb.sbs,1azayf9w.xyz,c4qhk0je.xyz,defienietlynotme.com,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmhd.bar,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,sbnmp.bar,sulleiman.com,vidsrc.click,vpcxz19p.xyz,z12z0vla.*##+js(acs, Math, %2Fwindow%5C%5B'(%3F%3A%5C%5Cx%5B0-9a-f%5D%7B2%7D)%7B2%7D%2F)
-3ixcf45.cfd,76078rb.sbs,1azayf9w.xyz,c4qhk0je.xyz,defienietlynotme.com,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmhd.bar,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,sbnmp.bar,sulleiman.com,vpcxz19p.xyz,z12z0vla.*##+js(nowoif)
-3ixcf45.cfd,76078rb.sbs,defienietlynotme.com,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmhd.bar,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,sbnmp.bar,sulleiman.com,vpcxz19p.xyz,z12z0vla.*##+js(noeval-if, %2Fpopunder%2Fi)
+3ixcf45.cfd,76078rb.sbs,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,z12z0vla.*##+js(acs, JSON.parse, showTrkURL)
+3ixcf45.cfd,76078rb.sbs,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,vidsrc.click,z12z0vla.*##+js(acs, Math, %2Fwindow%5C%5B'(%3F%3A%5C%5Cx%5B0-9a-f%5D%7B2%7D)%7B2%7D%2F)
+3ixcf45.cfd,76078rb.sbs,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,z12z0vla.*##+js(nowoif)
+3ixcf45.cfd,76078rb.sbs,embedme.*,filemooon.top,finfang.*,fmembed.cc,fmoonembed.pro,hellnaw.*,moonembed.*,rgeyyddl.skin,z12z0vla.*##+js(noeval-if, %2Fpopunder%2Fi)
 rgeyyddl.skin##+js(acs, document.createElement, adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/22901
-*$script,3p,redirect-rule=noopjs,domain=3ixcf45.cfd|76078rb.sbs|defienietlynotme.com|embedme.*|filemoon.*|filemooon.top|fmembed.cc|fmoonembed.pro|finfang.*|hellnaw.*|moonembed.*|rgeyyddl.skin|sbnmp.bar|sulleiman.com|vpcxz19p.xyz|z12z0vla.*
-||coinblocktyrusmiram.com/player8/JWui.js$script,redirect=noopjs
+*$script,3p,redirect-rule=noopjs,domain=3ixcf45.cfd|76078rb.sbs|embedme.*|filemoon.*|filemooon.top|fmembed.cc|fmoonembed.pro|finfang.*|hellnaw.*|moonembed.*|rgeyyddl.skin|z12z0vla.*
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190044
 ! https://github.com/AdguardTeam/AdguardFilters/issues/198554
 ! https://github.com/realodix/AdBlockID/issues/1904
@@ -868,13 +851,11 @@ rgeyyddl.skin##+js(acs, document.createElement, adblock)
 ||pzcwk-sfend.top^$popup,doc
 ||qjvksieybn.vip^$popup,doc
 ||slavicprophetyontherm.com^$popup,doc
-||tronkwintun.com^$popup
 ||urxox-iqx.online^$popup,doc
 ||vjkyw.vip^$popup,doc
 ||wbhwwnzptf.club^$popup,doc
 ||x-ozwpiqlb.rocks^$popup,doc
 ||xdgeslibgbim.icu^$popup,doc
-||zoroalteedrich.net^
 ! https://github.com/uBlockOrigin/uAssets/issues/21770
 pmvhaven.com##+js(aopr, exoJsPop101)
 *$image,domain=pmvhaven.com,redirect-rule=1x1.gif
@@ -913,8 +894,9 @@ postermockup.com##+js(aost, setTimeout, adsBlocked)
 ||check-host.net/images/aezrlogo.svg$image,1p
 ||check-host.net/images/naez-$image,1p
 ||check-host.net/images/*wcm.png$image,1p
-check-host.net###hostabq, .hostabq, #antpeayvraeaprivatealps, .specho, #antkeatvhaeaaeza-permnnt, #antpeayvraeaalexhost, #antpeayvraeapp-juiaryt, #antpeayvraeapp-juiaryt2, .relan, a.cursor-pointer, a[onclick^="window.location"], [id^="antkeayvhaeap"], [class*="-elative"], [href*="?utm_"], a[href*="privatealps.net"], [onclick*="https://privatealps.net/"], [onclick*="https://aeza.net/"], [onclick*="https://alexhost.com"], [onclick*="https://justhost.asia"], a[href^="https://aeza.net/"], a[href^="https://alexhost.com/"]
-check-host.net##.my-4:has(> .border-cyan-600 > p[onclick])
+||check-host.net/images/u1host.png$image,1p
+check-host.net###hostabq, .hostabq, [id^="amtpeayvraea"], .specjo, #antkeatvhaeaaeza-permnnt, #antpeayvraeaalexhost, #amtpeayvraeapp-liaryt, #amtpeayvraeapp-liaryt2, .relan, .ri-btive, a.cursor-pointer, a[onclick^="window.location"], [id^="antkeayvhaeap"], [class*="-elative"], [href*="?utm_"], a[href*="privatealps.net"], [onclick*="https://privatealps.net/"], [onclick*="https://aeza.net/"], [onclick*="https://alexhost.com"], [onclick*="https://justhost.asia"], [onclick*="https://u1host.com"], a[href^="https://aeza.net/"], a[href^="https://alexhost.com/"]
+check-host.net##[class$="-4"]:has(> .border-cyan-600 > p[onclick])
 ! conceptartworld. com antiadb
 @@||conceptartworld.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/21859
@@ -1087,7 +1069,7 @@ qwant.com##div[data-testid="pam.container"]:style(max-height: 1px !important; op
 @@||spite.cz^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/22203
 civitai.com,civitai.green##+js(no-fetch-if, googlesyndication)
-civitai.com,civitai.green##div:is(.shadow, .flex.w-full.justify-center[style=""]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
+civitai.com,civitai.green##div:is(.shadow, .flex.w-full.justify-center[style=""], .flex.flex-col.items-center.justify-center.gap-2[style^="min-height:"]):has(a[href="/pricing"] img[alt="Please support civitai and creators by disabling adblock"]):remove()
 civitai.com,civitai.green##div[id][class^="mantine-"].flex.relative.box-content:style(min-height: 0px !important; visibility: collapse !important; padding: 0px !important;)
 ||ads.civitai.$script,1p,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/22220
@@ -1097,8 +1079,6 @@ puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle
 puzzle-loop.com,puzzle-words.com,puzzle-chess.com,puzzle-thermometers.com,puzzle-norinori.com,puzzle-minesweeper.com,puzzle-slant.com,puzzle-lits.com,puzzle-galaxies.com,puzzle-tents.com,puzzle-battleships.com,puzzle-pipes.com,puzzle-hitori.com,puzzle-heyawake.com,puzzle-shingoki.com,puzzle-masyu.com,puzzle-stitches.com,puzzle-aquarium.com,puzzle-tapa.com,puzzle-star-battle.com,puzzle-kakurasu.com,puzzle-skyscrapers.com,puzzle-futoshiki.com,puzzle-shakashaka.com,puzzle-kakuro.com,puzzle-jigsaw-sudoku.com,puzzle-killer-sudoku.com,puzzle-binairo.com,puzzle-nonograms.com,puzzle-sudoku.com,puzzle-light-up.com,puzzle-bridges.com,puzzle-shikaku.com,puzzle-nurikabe.com,puzzle-dominosa.com,puzzle-yin-yang.com###MainContainer > [id]:has(> [id^="btIn"] > #bannerTop)
 ! https://github.com/uBlockOrigin/uAssets/issues/22221
 ||delivery.twentythree.com/*/video_medium?revision$media,redirect=noopmp3-0.1s
-! https://github.com/AdguardTeam/AdguardFilters/issues/171597
-streamer4u.site##+js(no-fetch-if, googlesyndication)
 ! radio .zone anti-adb
 radio.zone##+js(nosiif, daadb)
 ! https://github.com/uBlockOrigin/uAssets/issues/22994
@@ -1107,7 +1087,6 @@ radio.zone##+js(nosiif, daadb)
 ! https://github.com/uBlockOrigin/uAssets/issues/19725
 mhdsports.*,mhdsportstv.*,mhdtvsports.*,mhdtvworld.*,mhdtvmax.*,mhdstream.*,mhdtvmax.*##+js(rmnt, script, deblocker)
 mhdsports.*,mhdtvmax.*##+js(aost, fetch, HTMLDocument)
-*/|$xhr,domain=fakestream.co.in
 /wp-content/uploads/adb$script,domain=mhdsports.*|mhdsportstv.*|mhdtvsports.*|mhdtvworld.*|mhdtvmax.*|mhdstream.*|mhdtvmax.*
 mhdtvsports.*##+js(rmnt, script, %2Fadbl%2Fi)
 ! durhamopenhouses .com anti-adb
@@ -1123,10 +1102,6 @@ vanillatweaks.net##+js(nano-sib, downloadTimer)
 linkos.*,phois.pro,trrs.pro,sharedrive.*##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/171677
 pictoa.com##+js(aopw, tiPopAction)
-! https://www.reddit.com/r/uBlockOrigin/comments/1adtufm/ublock_detected/
-! https://www.reddit.com/r/uBlockOrigin/comments/1b37uid/upfiles_adblock_detected/
-sunci.net##+js(aopr, app_vars.please_disable_adblock)
-sunci.net##+js(acs, navigator, FingerprintJS)
 ! trigonevo .com anti-adb
 trigonevo.com##+js(acs, eval, replace)
 trigonevo.com##+js(rmnt, script, deblocker)
@@ -1186,8 +1161,6 @@ leagueofgraphs.com##+js(nostif, adblock)
 leagueofgraphs.com##.adbox
 ! https://github.com/uBlockOrigin/uAssets/issues/22424
 gameszap.com##+js(no-xhr-if, ads)
-! https://www.reddit.com/r/uBlockOrigin/comments/1ani1dw/unblock_website/
-||lib.csscloud.live/lib.js?$script,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/22446
 @@||challenge.place^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/22451
@@ -1226,8 +1199,6 @@ fdownloader.net##+js(rmnt, script, showAd)
 ||fussballtransfers.com^$script,1p,redirect-rule=noopjs
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-8510501
 anime7.download##+js(aopw, app_advert)
-! https://github.com/AdguardTeam/AdguardFilters/issues/142720
-misskey.io,misskey.oga.ninja,mk.yopo.work,sushi.ski,trpger.us,warpday.net,zadankai.club##+js(json-prune-fetch-response, ads.%5B%5D.imageUrl, , propsToMatch, url%3Aapi%2Fmeta)
 ! https://github.com/uBlockOrigin/uAssets/issues/22560
 hivelr.com##+js(aeld, load, detect-modal)
 ! zeroupload.com anti-adb
@@ -1282,8 +1253,6 @@ boredbat.com##+js(aopr, b2a)
 tekken8combo.kagewebsite.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/173455
 zoro.*##+js(nowoif)
-! https://github.com/uBlockOrigin/uAssets/issues/22643
-24game.stream##.ad-modal
 ! tvlive.fctvhd.com antiadb
 *$image,redirect-rule=2x2.png,domain=tvlive.fctvhd.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22668
@@ -1361,8 +1330,6 @@ treasl.com##+js(rmnt, script, antiAdBlock)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/22800
 mrbenne.com##+js(rmnt, script, %2FfairAdblock%7CpopMagic%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/22809
-tecnologiati.online###player:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/22806
 ebaticalfel.com,fansmega.com,iedprivatedqu.com,stownrusis.com##+js(nowoif)
 @@||cloudfront.net^$script,domain=ebaticalfel.com|fansmega.com|iedprivatedqu.com|stownrusis.com
@@ -1411,8 +1378,6 @@ filmcdn.top,sex-empire.org##+js(nowoif)
 ||toughvariation.com^$doc
 ! https://github.com/uBlockOrigin/uAssets/issues/22922
 poki.com##div[class]:has(> div > div[style*="height"][style*="width"][style$="px; overflow: hidden;"] > [id*="_gp_"])
-! https://github.com/uBlockOrigin/uAssets/issues/22916
-web.businessuniqueidea.com##+js(aopr, b2a)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bhb1yw/tmailorcom_detecting_ublock/
 ! https://github.com/uBlockOrigin/uAssets/issues/24100
 tmailor.com##.email-open-read.email-open:style(display:flex !important)
@@ -1447,7 +1412,6 @@ pink-sluts.net##.modSQ-add
 ! https://github.com/uBlockOrigin/uAssets/issues/23052
 doomovie-hd.*##+js(set, adSettings, %5B%5D)
 .gif$image,3p,domain=doomovie-hd.*
-||via.placeholder.com^$image,domain=doomovie-hd.*
 /UltimateBanana/*$xhr,domain=doomovie-hd.*
 doomovie-hd.*##div[class*="banana-container"]
 doomovie-hd.*##.header-banana_container
@@ -1478,12 +1442,6 @@ fplstatistics.com##+js(nostif, adStatus)
 gurusiana.id##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/23092
 pesmodding.com#@#.button-ad
-! https://github.com/uBlockOrigin/uAssets/issues/23115
-!#if cap_html_filtering
-cnpics.org,ovabee.com,porn4f.com,cnxx.me,ai18.pics##^script:has-text(/pop1stp|detectAdBlock/)
-!#else
-cnpics.org,ovabee.com,porn4f.com,cnxx.me,ai18.pics##+js(rmnt, script, %2Fpop1stp%7CdetectAdBlock%2F)
-!#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/175978
 pupupul.site##+js(aopr, popUrl)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1bse0c8/popup_not_being_blocked/
@@ -1505,16 +1463,15 @@ dazn.com##+js(json-prune, PlaybackDetails.%5B%5D.DaiVod)
 benzinpreis.de##+js(nostif, adblock)
 benzinpreis.de##+js(set, consentGiven, true)
 ! https://community.brave.app/t/pop-out-ads-redirect-links-after-recent-update/541321
-aliezstream.pro,daddy-stream.xyz,daddylive1.*,esportivos.*,instream.pro,mylivestream.pro,poscitechs.*,powerover.online,sportea.link,sportsurge.stream,ufckhabib.com,ustream.pro##+js(rmnt, script, popundersPerIP)
-1qwebplay.xyz,flstv.online,mmastreams.me,mylivestream.pro,streambtw.com,tennisonline.me,voodc.com##+js(aopw, Adcash)
+aliezstream.pro,daddylive1.*,esportivos.*,instream.pro,mylivestream.pro,poscitechs.*,powerover.online,sportea.link,ustream.pro##+js(rmnt, script, popundersPerIP)
+flstv.online,mmastreams.me,mylivestream.pro,streambtw.com,tennisonline.me,voodc.com##+js(aopw, Adcash)
 tennisonline.me##+js(acs, navigator, FingerprintJS)
-antenasports.ru,cdn.xsportbox.com,claplivehdplay.ru,cuervotv.me,embedstream.me##+js(acs, JSON.parse, atob)
-apl341.me,apl323.me,apl332.me,apl340.me,apl374.me##+js(nowoif)
-aliezstream.pro,apl341.me,apl332.me,apl323.me,apl348.me,apl152.me###ads
+antenasports.ru,embedstream.me##+js(acs, JSON.parse, atob)
+apl374.me##+js(nowoif)
+aliezstream.pro,apl348.me,apl152.me###ads
 apl374.me###adbtm
 aliezstream.pro,mylivestream.pro###openLinks:remove()
 ||crypto-ads.net/delivr^$3p
-||thqgxvs.com^$3p
 ||androidpctv.com^$image,domain=sportshub.stream|sportsbuff.stream
 ! https://github.com/uBlockOrigin/uAssets/issues/23187
 dichvureviewmap.com##+js(no-fetch-if, googlesyndication)
@@ -1526,7 +1483,7 @@ gunauc.net##+js(no-fetch-if, googlesyndication, , %7B%22type%22%3A%22cors%22%7D)
 gunauc.net#@#+js(prevent-fetch, pagead2.googlesyndication.com)
 ! https://sportsonline.si/channels/bra/br4.php
 ! https://sportsonline.si/channels/hd/hd10.php
-absentescape.net,forgepattern.net##+js(aopr, aclib)
+forgepattern.net##+js(aopr, aclib)
 sportsonline.si##+js(rmnt, script, aclib.runPop)
 ! https://github.com/easylist/easylist/issues/18904
 m4u.*,xprime4u.*##+js(nowoif)
@@ -1537,6 +1494,8 @@ m4u.*,xprime4u.*##.onclick-input
 @@||v.fwmrm.net/ad/g/$xhr,domain=rtlplay.be
 ||v.fwmrm.net/ad/g/$xhr,3p,removeparam=caid,domain=rtlplay.be
 ! https://github.com/uBlockOrigin/uAssets/issues/23182
+! https://cmod-na.live.streamtheworld.com/
+! https://yield-op-idsync.live.streamtheworld.com/
 ||live.streamtheworld.com/ondemand/ars?$xhr,3p
 ||vader.amperwave.net/*/instream/$xhr,3p
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-9038266
@@ -1568,8 +1527,6 @@ ettvi.com##div[class*="ads"]:has-text(/Advertisement/i)
 perchance.org##+js(rpnt, script, scri12pts%20%26%26%20ifra2mes%20%26%26%20coo1kies, true)
 perchance.org##+js(rpnt, script, (scri12pts%20%26%26%20ifra2mes), (true))
 perchance.org##div[style*="var"][style*="min-height"]:has([data-freestar-ad])
-! https://github.com/uBlockOrigin/uAssets/issues/23270
-differenceprimitive85p.shop##+js(no-xhr-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/22877
 nextdoor.com##+js(json-prune, data.searchClassifiedFeed.searchResultView.0.searchResultItemsV2.edges.%5B-%5D.node.item.content.creative.clickThroughEvent.adsTrackingMetadata.metadata.adRequestId)
 nextdoor.com##.feed-container:not(.wide-layout-feed-container) > div:not([class]) > div[class^="blocks-"] > div[class^="blocks-"] > div[class^="blocks-"] > div:not([class]) > div[class^="blocks-"] > div[class]:has(> .fsf-gam-ad)
@@ -1602,8 +1559,6 @@ salidzini.lv##+js(nostif, media_place_list)
 salidzini.lv##div[id][style^="width"]:has([id^="media_place_"])
 ! https://github.com/uBlockOrigin/uAssets/issues/23355
 @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,domain=mrnussbaum.com
-! https://www.reddit.com/r/uBlockOrigin/comments/1c8833r/matrixserver_detecting_ublock/
-matrixserver.in##+js(acs, %24, samNotice)
 ! https://github.com/uBlockOrigin/uAssets/issues/23378
 @@||vinstartheme.com^$ghide
 vinstartheme.com##ins.adsbygoogle
@@ -1622,8 +1577,6 @@ anime4i.vip##.a--d-wrapper
 anime4i.vip##div[class^="container-ads-"]
 ! cricket sites popups
 crictime.is,freehit.eu,mobilecric.com##[href*="?key"][target="_blank"]:remove-attr(href)
-! https://github.com/uBlockOrigin/uAssets/issues/23473
-@@||thorstin.ddns.net^$frame,domain=thorstin.nl
 ! https://github.com/uBlockOrigin/uAssets/discussions/17361#discussioncomment-9248537
 ssstik.io##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/23478
@@ -1631,7 +1584,7 @@ animeunity.to##+js(rmnt, script, Popup)
 ! https://github.com/uBlockOrigin/uAssets/issues/22840
 ! https://github.com/uBlockOrigin/uAssets/issues/27337
 !#if env_chromium
-decrypt.day##[id="aswift_0_host"], [id="aswift_1_host"], [id="aswift_2_host"], [id="aswift_3_host"], [id="aswift_4_host"], [id="aswift_5_host"]:style(opacity: 0 !important; pointer-events: none !important;)
+decrypt.day##[style*="border"]:not(.checker):is([id="aswift_0_host"], [id="aswift_1_host"], [id="aswift_2_host"], [id="aswift_3_host"], [id="aswift_4_host"], [id="aswift_5_host"]):style(opacity: 0 !important; pointer-events: none !important;)
 !#else
 decrypt.day##ins.adsbygoogle > *:style(position: relative !important; left: -10000px !important;)
 !#endif
@@ -1670,11 +1623,6 @@ skidrowcodex.net##.widget_text:has(script[src$="/invoke.js"])
 skidrowcodex.net##links > .overlay
 ! https://github.com/uBlockOrigin/uAssets/issues/23514
 erothots.co##+js(nowoif)
-! https://www.reddit.com/r/uBlockOrigin/comments/1chfg20/cant_skip_the_ad_warning/
-18kalebettv.xyz,19kalebettv.xyz##+js(ra, oncontextmenu, body)
-18kalebettv.xyz,19kalebettv.xyz##+js(set-attr, .video-skip%5Bdata-time%5D, data-time, 0)
-18kalebettv.xyz,19kalebettv.xyz##body > a[target="_blank"][rel="noopener"]
-18kalebettv.xyz,19kalebettv.xyz##a[target="_blank"]:has(> img:only-child[src^="/assets/"])
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ci3hqg/adblocker_detection_on_takimag_need_filter_for/
 takimag.com##+js(aeld, DOMContentLoaded, adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/23510
@@ -1750,13 +1698,12 @@ thejakartapost.com##.tjp-single__content-ads:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/25417#issuecomment-3017980757
 !#if !ext_ubol
 !#if env_firefox
-$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streambucket.net|~streamingnow.*|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.nl|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=1jour1film.*|456movie.com|animefever.cc|animeunity.to|anitaku.bz|antennasports.ru|bingemaster.netlify.app|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|euro2024direct.ru|flickystream.com|freek.to|freeshot.live|hydrahd.cc|javx.*|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|lk21official.pics|moflix-stream.day|movie3k.net|netplayz.ru|novafork.com|osteusfilmestuga.online|phimmoifhd.com|popcornmovies.to|primeflix-web.vercel.app|putlockers.*|rivestream.*|roselife.site|roshy.tv|seriescultes.store|smashystream.com|soccerinhd.com|uira.live|visualnewshub.com|watchf1full.com|xsportbox.com
+$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streamingnow.*|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.nl|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=1jour1film.*|456movie.com|animefever.cc|animeunity.to|anitaku.bz|antennasports.ru|bingemaster.netlify.app|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|euro2024direct.ru|flickystream.com|freek.to|freeshot.live|hydrahd.cc|javx.*|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|moflix-stream.day|movie3k.net|netplayz.ru|novafork.com|osteusfilmestuga.online|phimmoifhd.com|popcornmovies.to|primeflix-web.vercel.app|putlockers.*|roselife.site|roshy.tv|seriescultes.store|smashystream.com|soccerinhd.com|uira.live|visualnewshub.com|watchf1full.com|xsportbox.com
 !#else
-$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~embed.su|~emturbovid.com|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~ply4.com|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streambucket.net|~streamingnow.*|~topembed.pw|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.*|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=456movie.com|animefever.cc|animeunity.to|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|flickystream.com|freeshot.live|hydrahd.cc|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|netplayz.ru|novafork.com|phimmoifhd.com|primeflix-web.vercel.app|seriescultes.store|soccerinhd.com|visualnewshub.com|xsportbox.com
+$frame,csp=sandbox allow-downloads allow-forms allow-modals allow-same-origin allow-scripts,to=~buymeacoffee.com|~cbox.ws|~chatango.com|~cloudflare.com|~d21.team|~dailymotion.com|~discord.com|~disqus.com|~dood.*|~edgecastcdn.net|~embed.su|~emturbovid.com|~facebook.com|~filemoon.*|~frembed.*|~google.*|~hcaptcha.com|~kamehaus.net|~ko-fi.com|~mixdrop.*|~moviesapi.*|~nontongo.win|~ok.ru|~ply4.com|~primewire.*|~recaptcha.net|~sport-tv-guide.live|~strcdn.org|~streamingnow.*|~topembed.pw|~twitter.com|~vidbinge.*|~vidlink.*|~vidmoly.*|~vidsrc.*|~vixcloud.co|~youtu.be|~youtube.com|~youtube-nocookie.com,from=456movie.com|animefever.cc|animeunity.to|bluphim.*|broflix.cc|cinemadeck.com|dailypudding.com|detodopeliculas.nu|flickystream.com|freeshot.live|hydrahd.cc|kaas.ro|kickassanime.*|kipflix.vercel.app|kissanime.*|netplayz.ru|novafork.com|phimmoifhd.com|primeflix-web.vercel.app|seriescultes.store|soccerinhd.com|visualnewshub.com|xsportbox.com
 !#endif
 !#endif
 euro2024direct.ru##+js(acs, document.createElement, break%3Bcase)
-||rg-3tn.pages.dev/*.js|$script,domain=flickystream.com
 ! https://github.com/uBlockOrigin/uAssets/issues/23689
 ###video_player ~ div[id] div[style^="position:fixed;inset:0px;z-index:"]
 ! https://freek.to/watch/tv/94605
@@ -1767,8 +1714,6 @@ xn-----0b4asja7ccgu2b4b0gd0edbjm2jpa1b1e9zva7a0347s4da2797e8qri.xn--1ck2e1b##+js
 xn-----0b4asja7ccgu2b4b0gd0edbjm2jpa1b1e9zva7a0347s4da2797e8qri.xn--1ck2e1b##[style="position: fixed; inset: 0px; z-index: 2147483647; pointer-events: auto;"]
 ! Popping Tool sites
 asianlbfm.net,schoolgirls-asia.org##+js(aopr, loadTool)
-! https://github.com/uBlockOrigin/uAssets/issues/23626
-||happymod.com/*/appx.php$frame,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/23634
 @@||paktech2.com^$ghide
 paktech2.com##+js(set, openPopunder, noopFunc)
@@ -1802,16 +1747,20 @@ remixsearch.net,remixsearch.es,onlineweb.tools,sharing.wtf##+js(rmnt, script, ad
 sharing.wtf##+js(set, amiblock, 0)
 sharing.wtf##+js(nobab)
 sharing.wtf##.metaRedirectWrapperTopAds
-! https://kimetsujbn.blogspot.com/ popup
-kimetsujbn.blogspot.com##+js(nowoif, !blogspot)
 ! https://github.com/uBlockOrigin/uAssets/issues/23724
 ||gviet.vn/public/js/player/ads/ima3.js^$script,redirect=google-ima.js,domain=vtvcab.vn
 ! https://github.com/uBlockOrigin/uAssets/issues/23734
 ! https://github.com/uBlockOrigin/uAssets/issues/23804
 ! https://github.com/uBlockOrigin/uAssets/issues/23980
 ! https://github.com/uBlockOrigin/uAssets/issues/29385
-th.gl##+js(set-session-storage-item, ad-blocker-dismissed, true)
+! https://github.com/uBlockOrigin/uAssets/issues/30039
+th.gl##+js(trusted-replace-outbound-text, String.prototype.concat, %2F.%2B%2F, adBlockerDismissed, condition, adBlockerDismissed_)
+th.gl##+js(set-session-storage-item, adBlockerDismissed, true)
 th.gl##.pointer-events-auto:has([href="https://www.th.gl/support-me"])
+duneawakening.th.gl##div[id^="dune-awakening:"]
+duneawakening.th.gl##div[id^="dune-awakening-wide-skyscraper-"]
+duneawakening.th.gl##div#dune-awakening-large-mobile-banner
+duneawakening.th.gl##div#dune-awakening-mobile-banner
 ! https://github.com/uBlockOrigin/uAssets/issues/23928
 ||s.nitropay.com/ads-*.js^$script,3p,redirect=noopjs
 ! https://young-machine.com/
@@ -1823,8 +1772,6 @@ wetter3.de##+js(set, karte3, 18)
 emailregex.com##.adsbygoogle
 ! arahdrive.com anti adblock
 arahdrive.com##+js(set, protection, noopFunc)
-! https://github.com/uBlockOrigin/uAssets/issues/23766
-starleaks.org##+js(nostif, show)
 ! https://github.com/uBlockOrigin/uAssets/issues/23774
 watchserie.online##.row:has(> [style="text-align: center;"] > a[rel="external nofollow ugc"])
 ! https://github.com/uBlockOrigin/uAssets/issues/23786
@@ -1836,11 +1783,11 @@ downev.com##+js(no-fetch-if, googlesyndication)
 uiiumovie.*##+js(acs, document.readyState, callbackAdsBlocked)
 ! https://github.com/uBlockOrigin/uAssets/issues/23784
 ! https://github.com/uBlockOrigin/uAssets/issues/25710
-dizikral.com,dizikral1.pro,dizikral2.pro,dizikral3.pro,dizikral4.pro,dizikral5.pro##+js(trusted-rpnt, script, %2F(function%20playVideo%5C(%5C)%20%5C%7B%5B%5Cs%5CS%5D*%3F%5C.remove%5C(%5C)%3B%5B%5Cs%5CS%5D*%3F%5C%7D)%2F, %241%20playVideo()%3B)
+dizikral.com,dizikral1.pro,dizikral2.pro##+js(trusted-rpnt, script, %2F(function%20playVideo%5C(%5C)%20%5C%7B%5B%5Cs%5CS%5D*%3F%5C.remove%5C(%5C)%3B%5B%5Cs%5CS%5D*%3F%5C%7D)%2F, %241%20playVideo()%3B)
 dizikral.com##+js(trusted-rpnt, script, video_urls.length%20!%3D%20activeItem, !1)
 ! https://github.com/uBlockOrigin/uAssets/issues/24182
 ! https://github.com/uBlockOrigin/uAssets/issues/24183
-4kwebplay.xyz,qqwebplay.xyz##+js(nostif, stackTrace)
+qqwebplay.xyz##+js(nostif, stackTrace)
 esportivos.fun##+js(set, sandDetect, noopFunc)
 ||trackad.cz/adtrack.php^$script,3p,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/23800
@@ -1866,12 +1813,6 @@ digipuzzle.net###maindiv > tbody > tr > td[style="display:inline-block;width:180
 digipuzzle.net##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/23829
 knowt.com##div[class^="breakpoints_mdDownDisplayNone"]:has(#knowt_sticky_rightrail)
-! https://github.com/AdguardTeam/AdguardFilters/issues/179821
-twi-fans.com##body[data-scroll-locked]:remove-attr(data-scroll-locked)
-! temp
-twi-fans.com##+js(aeld, %2Ftouchmove%7Cwheel%2F, preventDefault())
-twi-fans.com##.fixed.data-\[state\=open\]\:animate-in
-twi-fans.com##body[style="pointer-events: none;"]:style(pointer-events: auto !important;)
 ! https://github.com/easylist/easylistgermany/issues/361
 mediaevent.de##.topadds
 mediaevent.de##.bottomadds
@@ -1895,17 +1836,6 @@ porno-baguette.com##+js(set-cookie, dscl, 1)
 porno-baguette.com##+js(set-cookie, ppndr, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/23880
 ! https://github.com/uBlockOrigin/uAssets/issues/24137
-||soccerinhd.com/live1/$script,1p
-soccerinhd.com##+js(set, checkAdsStatus, noopFunc)
-soccerinhd.com##+js(no-fetch-if, %2Fdoubleclick%7Cgooglesyndication%2F)
-soccerinhd.com##+js(acs, document.documentElement, break%3Bcase%20%24.)
-soccerinhd.com,streamcaster.live##+js(rpnt, script, adblockDetected%20%3D%20true, adblockDetected%20%3D%20false)
-soccerinhd.com##.popup-background
-soccerinhd.com##.popup-content
-@@||soccerinhd.com^$ghide
-@@||soccerinhd.com^$xhr,1p
-soccerinhd.com##div[style="position: fixed; top: 0px; left: 0px; width: 100%; height: 100%; background-color: rgba(255, 255, 255, 0.9); display: flex; justify-content: center; align-items: center; z-index: 9999;"]
-||soccerinhd.com/z12.js?$script,1p
 !#if cap_html_filtering
 2024tv.ru##^script:has-text(break;case )
 !#else
@@ -1914,7 +1844,7 @@ soccerinhd.com##div[style="position: fixed; top: 0px; left: 0px; width: 100%; he
 ! https://github.com/uBlockOrigin/uAssets/issues/23905
 molbiotools.com##+js(nostif, inner-ad)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/180454
-7mm003.cc,7mmtv.sx,mm9845.com##+js(nowoif)
+7mm003.cc,7mmtv.sx##+js(nowoif)
 7mmtv.sx##+js(rpnt, script, var%20_Hasync, jfun_show_TV()%3Bvar%20_Hasync)
 7mmtv.sx##.mvspan_2_s_k_i_p_row
 7mmtv.sx##.player_tv_pop
@@ -1950,7 +1880,6 @@ asia.5ivttv.vip##+js(acs, document.readyState, mdpDeblocker)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/180692
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=sbt.com.br
 ! https://github.com/uBlockOrigin/uAssets/issues/23988
-stylisheleg4nt.com##+js(acs, document.documentElement, break%3Bcase%20%24.)
 ||khantv.live/ad2.php^
 ! https://github.com/uBlockOrigin/uAssets/issues/23998
 mp3y.info##+js(nowoif)
@@ -1966,10 +1895,11 @@ raidrush.net##.funbox:style(position: absolute !important; left: -10000px !impor
 raidrush.net###top_ga:style(position: absolute !important; left: -10000px !important;)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/24013
-! https://rivestream.live/watch?type=movie&id=1180634
 netu.frembed.lol##+js(nowoif)
 netu.frembed.lol##+js(set, adblockcheck, false)
 frembed.*##+js(acs, atob, %2FpopundersPerIP%5B%5Cs%5CS%5D*%3FDate%5B%5Cs%5CS%5D*%3FgetElementsByTagName%5B%5Cs%5CS%5D*%3FinsertBefore%2F)
+godriveplayer.com##+js(nowoif)
+godriveplayer.com##.pppx
 ! https://github.com/uBlockOrigin/uAssets/issues/24024
 flixlatam.com##+js(noeval-if, ads)
 ! https://github.com/uBlockOrigin/uAssets/issues/24027
@@ -1986,8 +1916,7 @@ limiteddollqjc.shop##+js(aost, document.getElementById, %2F(%3F%3D%5E(%3F!.*(orc
 ! https://github.com/AdguardTeam/AdguardFilters/issues/181311
 ! https://github.com/AdguardTeam/AdguardFilters/issues/181308
 ! https://github.com/AdguardTeam/AdguardFilters/issues/181306
-closedjelly.net,sportsonline.so,onloop.pro##+js(aopw, Adcash)
-/aclib.js$script
+sportsonline.so,onloop.pro##+js(aopw, Adcash)
 ! https://github.com/uBlockOrigin/uAssets/issues/24079
 eloshapes.com##header.v-toolbar--flat:has([id^="promo-slider-"])
 eloshapes.com##header.elevation-3:style(top: 0px !important;)
@@ -2046,20 +1975,27 @@ trancehost.com##+js(aost, document.getElementById, adsBlocked)
 crazygames.com##+js(no-fetch-if, %2Fadinplay%7Cgooglesyndication%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/24156
 @@||blockingtv.xyz/adbdetect/$script
-pererecadoida.life,newcdn.lol,bullrun2024.online###floatLayer1
-pererecadoida.life,newcdn.lol,bullrun2024.online###overover
-pererecadoida.life,newcdn.lol,bullrun2024.online###obrazek
-pererecadoida.life,newcdn.lol,bullrun2024.online###bannerInCenter
+pererecadoida.life,bullrun2024.online###floatLayer1
+pererecadoida.life,bullrun2024.online###overover
+pererecadoida.life,bullrun2024.online###obrazek
+pererecadoida.life,bullrun2024.online###bannerInCenter
 myp2p.*###reklama_sidebar
-myp2p.*##a[rel="sponsored"]
+! https://github.com/uBlockOrigin/uAssets/issues/29938
+mip2p.*,myp2p.*##[href^="https://lightbrights.xyz/"]
+mip2p.*,myp2p.*##[href^="https://bestgugo.xyz/"]
+mip2p.*,myp2p.*##a[rel="sponsored"][href*="cldbt.cloud"]:style(pointer-events: none !important;)
+mip2p.*,myp2p.*##a[rel="sponsored"][href*="cldbt.cloud"] table.links a:style(pointer-events: auto !important;)
+mip2p.*,myp2p.*##a[rel="sponsored"][href*="cldbt.cloud"] iframe:style(pointer-events: auto !important;)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/181628
 game8.co##.js-side-ads-movie-container:remove()
 ! https://github.com/uBlockOrigin/uAssets/discussions/24177#discussioncomment-9821526
-modrinth.com##section.normal-page__content a[href*="/redirect/"] img
+modrinth.com##.markdown-body a[href*="/redirect/"] img
 ! https://github.com/uBlockOrigin/uAssets/issues/24130
-modrinth.com##section.normal-page__content [href^="https://bisecthosting.com/"] img
-modrinth.com##section.normal-page__content :is([href^="https://ModdersAgainstBlockers.github.io"],[href*="/kinetic/"],[href*="/creeperhost"],[href^="https://fxco.ca/assets/"],[href^="https://rb.gy/"]) > img
-modrinth.com##section.normal-page__content p > img[alt^="Use code"]
+! https://github.com/uBlockOrigin/uAssets/pull/29714
+modrinth.com##.markdown-body a[href^="https://billing.ember.host/aff.php?aff="]
+modrinth.com##.markdown-body a[href*="bisecthosting.com"]:not([href$="/"]):not([href$=".com"])
+modrinth.com##.markdown-body a:is([href*="bisecthosting.com"],[href^="https://dediamondpro.dev/bisecthosting?"],[href="https://www.euphoriapatches.com/ember-referral"],[href^="https://ModdersAgainstBlockers.github.io"],[href*="/kinetic/"],[href*="/creeperhost"],[href^="https://fxco.ca/assets/"],[href^="https://rb.gy/"]) img
+modrinth.com##.markdown-body p > img[alt^="Use code"]
 curseforge.com##:is(.project-description,div.project-detail__content) [href^="/linkout?remoteUrl=http"]:is([href*="fxco.ca"]) > img
 ||i.imgur.com/h4556XW.gif$image,3p
 ||i.imgur.com/GgSxkKv.png$image,3p
@@ -2082,6 +2018,8 @@ hidan.co,hidan.sh##+js(rpnt, script, !seen, false)
 ||players.radioonlinehd.net^$frame,3p,domain=mgeko.cc
 ||rnp.gt/radioplayer/$frame,3p,domain=rizzfables.com
 rizzfables.com,mgeko.cc,flamecomics.me###radio_content.abierto
+! https://www.reddit.com/r/uBlockOrigin/comments/1nl5p1z/little_radio_player_on_flamecomicsxyz/
+||flamecomics.xyz/api/*/fetch?
 ! https://github.com/uBlockOrigin/uAssets/issues/24185
 !#if cap_html_filtering
 xnxxcom.xyz##^script:has-text(/interceptClickEvent|onbeforeunload|popMagic|location\.replace/)
@@ -2111,8 +2049,6 @@ videzz.net##+js(set, pData.adblockOverlayEnabled, 0)
 ! https://github.com/uBlockOrigin/uAssets/issues/24149
 spambox.xyz##+js(nostif, ad_block_detector)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dl3r6g/httpswiflixdate_popup_each_time_you_click_on_the/
-filegram.to##+js(nowoif)
-filegram.to##+js(acs, document.documentElement, break%3Bcase%20%24.)
 wiflix.*##center[style="padding: 20px;"]
 ! https://github.com/uBlockOrigin/uAssets/issues/24204
 crn.com##+js(no-xhr-if, googlesyndication)
@@ -2142,10 +2078,6 @@ ign.com##.zad.billboard:style(min-height: 1px !important;)
 moviehaxx.pro##+js(aopr, open)
 *$script,3p,domain=moviehaxx.pro
 ||moviehaxx.pro^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
-||asjjlh.cfd^$all
-moviehaxx.pro##a[href^="https://asjjlh.cfd/"]
-! https://github.com/uBlockOrigin/uAssets/issues/24270
-resetscan.com##+js(aost, document.getElementById, adsBlocked)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/182338
 ytmp3s.nu##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/24275
@@ -2194,8 +2126,6 @@ onlybabes.site##+js(acs, %24, btoa)
 ! https://github.com/uBlockOrigin/uAssets/issues/24381
 audiobookbay.lu##:matches-path(/^\/($|abss\/)/) .postContent a[href^="/"]:not([href*="/forum/"]):matches-attr(href=/^\/[-a-z]+\?[a-z]{2,}=/)
 audiobookbay.lu##:matches-path(/^\/($|abss\/)/) a:is([href^="/"],[href*="audiobookbay.lu/"]):matches-attr(href=/(^|audiobookbay\.lu)\/[-a-z0-9]+$/) img
-! https://github.com/uBlockOrigin/uAssets/issues/24386
-bong.ink##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/24353#issuecomment-2211638625
 skyblock.bz##.card[style]
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dwreje/mathdf_detects_ubo_on_certain_functions/
@@ -2208,10 +2138,12 @@ actionviewphotography.com,exporntoons.net,tyler-brown.com,ukdevilz.com##+js(acs,
 realcanadiansuperstore.ca##+js(json-prune-fetch-response, layout.sections.mainContentCollection.components.%5B%5D.data.productTiles.%5B-%5D.sponsoredCreative.adGroupId, , propsToMatch, %2Fsearch)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dyipwv/site_redirects_when_i_click_on_play/
 pornwex.tv##+js(aeld, click, fp-screen)
+! https://github.com/uBlockOrigin/uAssets/issues/29835
+pornwex.tv##+js(acs, document.getElementById, puURL)
 ! pirate sites asg
 ! https://github.com/uBlockOrigin/uAssets/issues/25065
-*$script,xhr,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|fastly.net|fontawesome.com|googleapis.com|htstreaming.com|jquery.com|jsdelivr.net|jwpcdn.com|rawgit.com|unpkg.com,domain=bentomanga.top|bigcomics.bid|brmangas.top|cmoa1.top|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|komiku.win|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
-*$script,1p,strict3p,domain=bentomanga.top|bigcomics.bid|brmangas.top|cmoa1.top|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|komiku.win|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
+*$script,xhr,3p,denyallow=bootstrapcdn.com|cloudflare.com|cloudflare.net|fastly.net|fontawesome.com|googleapis.com|htstreaming.com|jquery.com|jsdelivr.net|jwpcdn.com|rawgit.com|unpkg.com,domain=bentomanga.top|brmangas.top|cmoa1.top|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
+*$script,1p,strict3p,domain=bentomanga.top|brmangas.top|cmoa1.top|janime.top|jpraw.xyz|kakuyomu.in|kkraw.com|lectormanga.top|lermanga.top|manga1000.top|manga1001.win|manga1001.xyz|mangajp.top|mangakl.su|mangaraw.bid|mangavy.com|mangaz.win|scanita.top|shinigami-id.top|sushiscan.top|syosetu.gs
 ! https://tubator.com/ (NSFW) ads
 ||tubator.com/lookout/wantfood.js
 tubator.com##+js(aeld, getexoloader)
@@ -2282,7 +2214,6 @@ usersdrive.com##+js(nowoif, _blank)
 usersdrive.com##+js(aeld, click, _blank)
 ||holputy.shop^$popup,doc
 ||pol.azureedge.net^$domain=usersdrive.com
-||smartpc.click^$all
 usersdrive.com##center > a[href][target="_blank"] > img
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183985
 ||snigelweb.com^$script,3p,domain=editpad.org,redirect=noopjs
@@ -2296,7 +2227,7 @@ weirdwolf.net##+js(nowoif)
 desiflix.*,girlmms.com,ottxmaza.com,sexmazahd.com,webxmaza.com##+js(nowoif)
 !#if env_chromium
 $script,3p,denyallow=facebook.net|unpkg.com|vk.com|zencdn.net,domain=desiflix.*|girlmms.com|ottxmaza.com|sexmazahd.com|webxmaza.com
-$script,3p,denyallow=fastlylb.net|googleapis.com|disqus.com|wp.com,domain=9xmovie.*
+*$script,3p,denyallow=blogger.com|facebook.net|fastlylb.net|fbcdn.net|google.com|googleapis.com|disqus.com|wp.com,domain=9xmovie.*
 $script,3p,denyallow=google.com|googleapis.com|gstatic.com,domain=9xlinks.*
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/24596
@@ -2310,8 +2241,6 @@ governing.com##+js(trusted-set-cookie, adTakeOver, seen)
 governing.com##.Page-body[data-header-hat="true"] .Page-header-hat
 governing.com##.Page-body[data-header-hat="true"] .Page-header:style(top: 0px !important;)
 governing.com##.Page-body[data-header-hat="true"]:style(padding-top: var(--headerHeight) !important;)
-! samurai.ragnarokscanlation. org detection
-samurai.ragnarokscanlation.org##+js(noeval-if, ads)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1eajum3/block_link_ads_on_forums/
 thumpertalk.com##a[data-autolink]::after
 thumpertalk.com##a[data-autolink]:style(text-decoration: none !important; color: inherit !important; pointer-events: none;)
@@ -2336,7 +2265,7 @@ watchdirty.to##+js(set, flashvars.video_click_url, )
 watchdirty.to##+js(set, flashvars.adv_pre_vast, )
 watchdirty.to##.block-video > .table
 ! https://github.com/uBlockOrigin/uAssets/issues/24632
-cinemitas.org,cinelatino.net,cineplus123.org,paraveronline.org,pobreflix.vc,verpelis.gratis##+js(trusted-set, dtGonza.playeradstime, %22-1%22)
+cinemitas.org,cinelatino.net,cineplus123.org,paraveronline.org,verpelis.gratis##+js(trusted-set, dtGonza.playeradstime, %22-1%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/24682
 manoramaonline.com##+js(aopr, EV.Dab)
 ! https://github.com/uBlockOrigin/uAssets/issues/24688
@@ -2374,12 +2303,12 @@ filmizlehdizle.com,fullfilmizlesene.net##+js(rpnt, script, this.ads.length%20%3E
 ! https://github.com/uBlockOrigin/uAssets/issues/24778
 sportsurge.net##+js(acs, document.documentElement, break%3Bcase%20%24.)
 !#if cap_html_filtering
-sportsurge.net,volokit2.com,joyousplay.xyz,quest4play.xyz,generalpill.net,thedaddy.*,daddylive.*,dlhd.*##^script:has-text(/adserverDomain|\);break;case /)
+sportsurge.net,volokit2.com,joyousplay.xyz,quest4play.xyz,thedaddy.*,daddylive.*,daddylivestream.com,dlhd.*##^script:has-text(/adserverDomain|\);break;case /)
 !#else
-sportsurge.net,volokit2.com,joyousplay.xyz,quest4play.xyz,generalpill.net,thedaddy.*,daddylive.*,dlhd.*##+js(rmnt, script, %2FadserverDomain%7C%5C)%3Bbreak%3Bcase%20%2F)
+sportsurge.net,volokit2.com,joyousplay.xyz,quest4play.xyz,thedaddy.*,daddylive.*,daddylivestream.com,dlhd.*##+js(rmnt, script, %2FadserverDomain%7C%5C)%3Bbreak%3Bcase%20%2F)
 !#endif
-antenasport.online,apkship.shop,browncrossing.net,dudestream.com,elgolestv.pro,embedstreams.me,engstreams.shop,eyespeeled.click,flostreams.xyz,ilovetoplay.xyz,joyousplay.xyz,nativesurge.info,pawastreams.org,ripplestream4u.shop,rojadirectaenvivo.pl,sansat.link,smartermuver.com,sportsnest.co,sportsurge.net,streameast.*,tarjetarojaenvivo.lat,techcabal.net,volokit2.com##+js(aopr, Adcash)
-animeshqip.site,apkship.shop,buzter.pro,enjoysports.bond,filedot.to,foreverquote.xyz,hdstream.one,kingstreamz.site,live.fastsports.store,livesnow.me,livesports4u.pw,masterpro.click,nuxhallas.click,papahd.info,rgshows.me,sportmargin.live,sportmargin.online,sportsloverz.xyz,supertipzz.online,totalfhdsport.xyz,ultrastreamlinks.xyz,usgate.xyz,webmaal.cfd,wizistreamz.xyz##+js(rmnt, script, popundersPerIP)
+antenasport.online,apkship.shop,browncrossing.net,embedstreams.me,engstreams.shop,flostreams.xyz,ilovetoplay.xyz,joyousplay.xyz,nativesurge.info,pawastreams.org,ripplestream4u.shop,rojadirectaenvivo.pl,sansat.link,smartermuver.com,sportsnest.co,sportsurge.net,streameast.*,tarjetarojaenvivo.lat,volokit2.com##+js(aopr, Adcash)
+animeshqip.site,apkship.shop,filedot.to,hdstream.one,kingstreamz.site,live.fastsports.store,livesnow.me,livesports4u.pw,nuxhallas.click,papahd.info,rgshows.me,sportmargin.live,sportmargin.online,sportsloverz.xyz,supertipzz.online,ultrastreamlinks.xyz,webmaal.cfd,wizistreamz.xyz##+js(rmnt, script, popundersPerIP)
 /adc-ads-lib|$script
 ||highperformanceformat.com^$popup
 rgshows.me##+js(aost, localStorage, tag.min.js)
@@ -2392,10 +2321,6 @@ wuxia.click##.mantine-Container-root + .mantine-Container-root + br + br + div[c
 ! moneycontrol. com interstitial ad
 moneycontrol.com##+js(rmnt, script, initializeInterstitial)
 moneycontrol.com##+js(set-session-storage-item, adViewed, true)
-! https://github.com/uBlockOrigin/uAssets/issues/24790
-olympicstreams.ru##+js(aost, Object, Pop)
-! https://github.com/uBlockOrigin/uAssets/issues/24793
-@@||ieltsolve.com/wp-content/plugins/wordpress-popup/assets/js/ad.min.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/24807
 @@||filespace.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/24344
@@ -2414,10 +2339,9 @@ hesgoal-tv.io,hesgoal-vip.io##+js(rmnt, script, %2Fadbl%2Fi)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gkmdcp/usatvgolive_adblocker_detected_overlay/
 homesports.net##+js(aeld, DOMContentLoaded, fetch)
 anarchy-stream.com,olalivehdplay.ru,pawastreams.info##+js(aopw, Adcash)
-fastreams.com,sky-sports.store,streamsoccer.site,tntsports.store,wowstreams.co##+js(rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%2F)
-claplivehdplay.ru,cookiewebplay.xyz,ilovetoplay.xyz,lewblivehdplay.ru,qqwebplay.xyz,quest4play.xyz,streamcaster.live,topembed.pw,weblivehdplay.ru##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-claplivehdplay.ru,cookiewebplay.xyz,ilovetoplay.xyz,lewblivehdplay.ru,qqwebplay.xyz,quest4play.xyz,streamcaster.live,topembed.pw,weblivehdplay.ru##+js(rmnt, script, popupBackground)
-usgate.xyz##+js(nowoif)
+fastreams.com,streamsoccer.site,tntsports.store,wowstreams.co##+js(rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%2F)
+cookiewebplay.xyz,ilovetoplay.xyz,lewblivehdplay.ru,qqwebplay.xyz,quest4play.xyz,streamcaster.live,topembed.pw,weblivehdplay.ru##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+cookiewebplay.xyz,ilovetoplay.xyz,lewblivehdplay.ru,qqwebplay.xyz,quest4play.xyz,streamcaster.live,topembed.pw,weblivehdplay.ru##+js(rmnt, script, popupBackground)
 ! https://thedaddy.to/cast/stream-327.php - anti-adb
 @@*$xhr,1p,domain=cookiewebplay.xyz|ilovetoplay.xyz|quest4play.xyz|streamcaster.live|topembed.pw
 ! https://community.brave.app/t/video-streamer-doesnt-work-only-on-brave/562140 - ads
@@ -2428,7 +2352,6 @@ nontongo.win##+js(rmnt, script, %2Fh%3DdecodeURIComponent%7CpopundersPerIP%7Cads
 oaaxpgp3.xyz##+js(acs, Math, localStorage%5B'%5Cx)
 ythd.org##+js(aopr, Adcash)
 ||s0-greate.net^$3p
-||track.torarymor.world^$doc
 ! https://github.com/uBlockOrigin/uAssets/issues/27679
 *$script,3p,denyallow=ajax.googleapis.com,domain=autoembed.cc
 ! https://github.com/uBlockOrigin/uAssets/issues/24851
@@ -2509,7 +2432,6 @@ btv.bg,btvsport.bg,btvnovinite.bg##+js(no-fetch-if, googlesyndication)
 javsek.net##+js(nosiif, pop)
 $script,3p,denyallow=facebook.net|fbcdn.net,domain=javsek.net
 ! https://github.com/uBlockOrigin/uAssets/issues/25042
-player.jeansaispasplus.homes##+js(nostif, sandbox)
 1jour1film.*##a[href]#clickfakeplayer:remove-attr(href)
 ! https://github.com/uBlockOrigin/uAssets/issues/25054
 ! https://github.com/uBlockOrigin/uAssets/issues/25143
@@ -2545,6 +2467,11 @@ androidpolice.com,babygaga.com,backyardboss.net,carbuzz.com,cbr.com,collider.com
 ||adsninja.ca^$media,3p,redirect=noopmp3-0.1s
 ! https://github.com/uBlockOrigin/uAssets/issues/26472
 @@||video.adsninja.ca/*.mp4^$3p,media
+! https://github.com/uBlockOrigin/uAssets/issues/29717
+! https://github.com/uBlockOrigin/uAssets/issues/30008
+androidpolice.com,babygaga.com,backyardboss.net,carbuzz.com,cbr.com,collider.com,dualshockers.com,footballfancast.com,footballleagueworld.co.uk,gamerant.com,givemesport.com,hardcoregamer.com,hotcars.com,howtogeek.com,makeuseof.com,moms.com,movieweb.com,pocket-lint.com,pocketnow.com,polygon.com,screenrant.com,simpleflying.com,thegamer.com,therichest.com,thesportster.com,thethings.com,thetravel.com,topspeed.com,xda-developers.com##+js(no-fetch-if, googlesyndication)
+/promo/next/adb/*
+/promo/next/mural/*
 ! Miscellaneous
 ||adsninja.ca^$removeparam=url
 ! https://github.com/uBlockOrigin/uAssets/issues/25071
@@ -2555,11 +2482,6 @@ vidco.pro##+js(rmnt, script, adserverDomain)
 mlbbox.me##.position-absolute
 mlbbox.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 mlbbox.me##+js(acs, document.documentElement, break%3Bcase%20%24.)
-!#if cap_html_filtering
-mlbbox.me##^script:has-text(FingerprintJS)
-!#else
-mlbbox.me##+js(rmnt, script, FingerprintJS)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/25073
 ||heraldnet.com/wp-content/plugins/incognito_dectector/
 ! https://github.com/AdguardTeam/AdguardFilters/issues/187059
@@ -2614,17 +2536,12 @@ boundingintocomics.com,themix.net##.banner-spacer-top
 boundingintocomics.com,themix.net##.header:style(top: 0px !important;)
 boundingintocomics.com,themix.net##h1:style(margin-top:20px !important;)
 boundingintocomics.com,themix.net##main[role="main"]:style(margin-top:30px !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/25215
-zeemoontv-24.blogspot.com##+js(rmnt, script, antiAdBlockerHandler)
 ! https://github.com/uBlockOrigin/uAssets/issues/25216
 zeeplayer.pages.dev##+js(aopr, antiAdBlockerHandler)
 ! https://github.com/uBlockOrigin/uAssets/issues/24360
 ! https://github.com/uBlockOrigin/uAssets/issues/25218
 drakecomic.*##+js(set, checkAdBlocker, noopFunc)
 ||drakecomic.*/wp-content/themes/mangareader/script.js
-! https://github.com/uBlockOrigin/uAssets/issues/25229
-freedrivemovie.com##+js(no-fetch-if, googlesyndication)
-||freedrivemovie.com/wp-content/themes/dooplay/js/anti-adblock.js
 ! https://hentaitube.icu popup
 lovetofu.cyou##+js(nowoif)
 ! https://udw88666.com popup
@@ -2700,10 +2617,6 @@ metoffice.gov.uk##.map:style(top: 52px !important;)
 ||ticketmaster.sg/js/adblock.js$script,1p
 ||ticketmaster.sg/js/ads.js$script,1p
 ticketmaster.sg##+js(nosiif, detector)
-! https://ovflixx.fun anti-adb, popup
-ovflixx.fun##+js(acs, document.addEventListener, google_ad_client)
-||ovflixx.fun/ancient-frog-abc7/
-||ovflixx.fun/rdLink
 ! https://www.reddit.com/r/uBlockOrigin/comments/1flnq7h/realmoasiscom_opens_up_an_popup_window_when_i/
 realmoasis.com##+js(aeld, click, openPopupForChapter)
 realmoasis.com##.rev-src
@@ -2717,7 +2630,6 @@ boardgameoracle.com##main div.MuiBox-root > span.MuiTypography-subtitle2:has-tex
 ||inmanga.com/ads/$xhr,1p,redirect=nooptext
 ! https://github.com/uBlockOrigin/uAssets/issues/25400
 x-video.tube##+js(acs, Math.floor, src_pop)
-x-video.tube##+js(rmnt, script, wpadmngr.com)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/189357
 roselife.site##a[href][onclick="this.remove()"]
 ! https://github.com/uBlockOrigin/uAssets/issues/25414
@@ -2745,6 +2657,9 @@ koramaup.com##[href^="http://u87yuo9ojh.world/"]
 koramaup.com##div.text-center.col-md-12:has([href*="//gjxmcla.pro/"])
 ! https://github.com/uBlockOrigin/uAssets/issues/25464
 callofwar.com##+js(rmnt, script, Anzeige)
+! https://github.com/uBlockOrigin/uAssets/issues/29914
+callofwar.com###inGameAdsContainer:remove()
+||callofwar.com/clients/ww2-uber/ww2-uber_live/$image
 ! https://github.com/uBlockOrigin/uAssets/issues/25469
 4edtcixl.xyz##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/25483
@@ -2800,6 +2715,7 @@ vidlink.pro##+js(aopr, aclib)
 vidlink.pro##+js(acs, clearTimeout, popundersPerIP)
 vidlink.pro##+js(nosiif, aclib)
 vidlink.pro##+js(nowoif, _blank)
+vidlink.pro##+js(aost, document.createElement, createInvisibleTrigger)
 ||eyewondermedia.com^$all
 ! https://www.walmart.com/ip/Apple-Watch-SE-2nd-Gen-GPS-40mm-Starlight-Aluminum-Case-Sport-Band-S-M-Fitness-Sleep-Tracker-Crash-Detection-Heart-Rate-Monitor/5033741510?classType=VARIANT&clickid=SkzWZTVCbxyPT7YTPl3ahWrPUkC1I02xuzdpWU0&irgwc=1&sourceid=imp_SkzWZTVCbxyPT7YTPl3ahWrPUkC1I02xuzdpWU0&veh=aff&wmlspartner=imp_159047&affiliates_ad_id=565706&campaign_id=9383&sharedid=cnet
 ! ^clickid=*&sourceid=$doc
@@ -2859,25 +2775,22 @@ lover937.net##+js(acs, setTimeout, document.getElementById)
 ! Prefer specific to generic (benefits Optimal in uBOL)
 arstechnica.com##.ad-wrapper
 ! tamilprint etc antiadb
-/(\d{0,1})?tamilprint(\d{1,2})?\.(?:pro|art)/##+js(no-fetch-if, googlesyndication)
-/(\d{0,1})?tamilprint(\d{1,2})?\.(?:pro|art)/##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-/(\d{0,1})?tamilprint(\d{1,2})?\.(?:pro|art)/##^script:has-text('{delete window[')
+/(\d{0,1})?tamilprint(\d{1,2})?\.[a-z]{3,7}/##+js(no-fetch-if, googlesyndication)
+/(\d{0,1})?tamilprint(\d{1,2})?\.[a-z]{3,7}/##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+/(\d{0,1})?tamilprint(\d{1,2})?\.[a-z]{3,7}/##^script:has-text('{delete window[')
+/(\d{0,1})?tamilprint(\d{1,2})?\.[a-z]{3,7}/##+js(nano-stb, countdown)
 ! address popups
-rajtamil.org,vik1ngfile.uk.to,vikingf1le.us.to##+js(nowoif, _blank)
+rajtamil.org,vikingf1le.us.to##+js(nowoif, _blank)
 luxmovies.*,nohost.one,southfreak.*##+js(nowoif)
 nohost.one##+js(rmnt, script, HTMLAllCollection)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/198930
 vikingf1le.us.to##+js(nowoif, zigi_tag_id)
-vikingf1le.us.to##+js(rmnt, script, FingerprintJS)
 vikingf1le.us.to##+js(aopr, atob)
-vikingf1le.us.to##+js(aeld, DOMContentLoaded, history.go)
 ||gxh1yqz2v.xyz^
 ! https://github.com/uBlockOrigin/uAssets/issues/19143
 ddwloclawek.pl,ki24.info##+js(aeld, load, adb)
 ! https://deporte-libre.top/en-vivo-online/espn/
 ! https://zzcointv.xyz/canales/espn/op5.php - popups
-tutlehd5.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-tutlehd5.com###overlay
 ||swarm.video/tutelehd.js
 ! https://github.com/uBlockOrigin/uAssets/issues/25723
 animedb.in##+js(nosiif, ads)
@@ -2909,13 +2822,10 @@ thotcity.su##+js(set, flashvars.adv_pre_src, )
 hiddenleaf.to##+js(aeld, click, openDirectLinkAd)
 ! https://github.com/uBlockOrigin/uAssets/issues/25773
 ! https://github.com/uBlockOrigin/uBOL-home/issues/250
-||donasi.lk21.de^
 ###adyes
 ###donate > a[href][style][onclick="thank_you()"][target="_blank"][rel="nofollow"]
 nikaplayer.com##+js(nowoif, !nikaplayer.com)
 lk21official.my##[id^="btop-"] > [href^="https://kredit-mobil-dp-murah.pages.dev/"]
-! https://github.com/uBlockOrigin/uAssets/issues/25724
-play1.kirastream.my.id##[href="https://t.me/Crypto_Journey_WITH_DOGS"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gblu58/adblock_detection_on_ronorpnet/
 ronorp.net##+js(aeld, load, detect)
 ! https://github.com/uBlockOrigin/uAssets/issues/10046
@@ -2969,6 +2879,9 @@ fastdokan.top,moviedokan.*##.resps
 ||jayabaji3.com/bn-bd?aff=$doc
 ! https://github.com/uBlockOrigin/uAssets/issues/25826
 videovak.com##+js(aeld, click, PopUnder)
+videovak.com##+js(acs, document.addEventListener, location.href)
+||adaptunemployed.com^
+||rectangularfoundation.com^
 ! linkupload. pro ads
 ||linkupload.pro^$csp=script-src 'self' *.googleapis.com google.com gstatic.com
 ! govtportal. org antiadb(file hosting)
@@ -3035,9 +2948,6 @@ helicomicro.com##+js(noeval-if, adsbygoogle)
 helicomicro.com##^script:has-text(/eval\(.+?decodeURIComponent/)
 ! https://github.com/uBlockOrigin/uAssets/issues/25945
 moviesmod.*,topmovies.*##+js(nowoif)
-! https://community.brave.app/t/ads-on-toonstream/579083
-toonstream.*##+js(nowoif, _blank)
-toonstream.*##.SH-Ads
 ! https://github.com/uBlockOrigin/uAssets/issues/25953
 ! https://github.com/uBlockOrigin/uAssets/issues/25981
 gameshop4u.com,regenzi.site##+js(rmnt, script, %2F_0x%7Cbrave%7Conerror%2F)
@@ -3053,8 +2963,6 @@ infinityscans.xyz,infinityscans.net,infinityscans.org##+js(trusted-replace-outbo
 infinityscans.xyz,infinityscans.net,infinityscans.org##div[class="alert alert-info m-0 p-0"]:has-text(/uBlock|AdGuard|advertisments/i)
 @@||infinityscans.net^$script,xhr,domain=infinityscans.xyz|infinityscans.net|infinityscans.org
 .infinityscans.net/|$popup,domain=infinityscans.org
-||tbd.infinityscans.net^$all
-||fhhgc.infinityscans.net^$xhr,important
 ||enigmaswhereas.com^$all
 ||highmanapts.com^$all
 ! https://github.com/uBlockOrigin/uAssets/issues/25957
@@ -3108,9 +3016,6 @@ tactics.tools##.afm-wrap
 boundhub.com##+js(set, NativeAd, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/26019
 ||coincodex.com/*/position/ccx_pos-min2.php^$script
-! https://github.com/AdguardTeam/AdguardFilters/issues/192842
-rivestream.live##+js(aopr, Adcash)
-superflixapi.dev##.sflix_space
 ! goflix. sbs popups
 ||goflix.sbs^$csp=sandbox allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation allow-popups
 goflix.sbs##div.col-md-4:has(> .panel > .panel-footer > a[href^="/download-fast/"])
@@ -3119,8 +3024,6 @@ goflix.sbs##.text-center.bg-info
 ||google.com/adsense/domains/caf.js^$script,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/26130
 ##html[lang][style^="--main-bg-color"] > body:not([class]):not([id]) > div#container[style="visibility: visible;"] > div#banner[style="opacity:0"] ~ main:not([class]):not([id]) > div#message
-! filmeserialetv.org => player alocdnnetu.xyz => popups
-alocdnnetu.xyz##+js(set, Blob, noopFunc)
 ! flix-wave.lol antiadb
 flix-wave.lol##+js(nostif, offsetHeight)
 flix-wave.lol##+js(aopr, Adcash)
@@ -3143,8 +3046,9 @@ live-sport.duktek.pro##[href*="?key"][target="_blank"]:remove-attr(href)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193698
 *$doc,ipaddress=199.59.243.227,to=~parked.domain|animeseries.so|audiobookbay.li|hhdstreams.club|janitor.ai|kahoo.it|pix4link.com|sshagan.net
 ! https://github.com/uBlockOrigin/uAssets/issues/26078
-akirabox.com##+js(aeld, click, Ads)
-akirabox.com##+js(nowoif, _blank)
+akirabox.com,akirabox.to##+js(aeld, DOMContentLoaded, open)
+akirabox.com,akirabox.to##+js(nowoif, _blank)
+*$popup,3p,domain=akirabox.com|akirabox.to
 ||shareease.link^$all
 ||fastfilehost.link^$all
 ||rapidsend.cfd^$all
@@ -3164,11 +3068,15 @@ upns.ink,upns.one,upns.xyz##div[style^="position: fixed; inset: 0px; z-index: 21
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=upns.live|upns.one|upns.xyz
 !#endif
 ! movielinkbd ads
-1movielinkbd.com,filecloud.*,gdfile.org,movieliinkbd.com,movielinkbd4u.com##+js(nowoif)
-movielinkbd.*##+js(nowoif, _blank)
+1movielinkbd.com,filecloud.*,gdfile.org,movielinkbd4u.com##+js(nowoif)
+movielinkbd.*,movielinkbd4u.com##+js(trusted-override-element-method, HTMLAnchorElement.prototype.click, a%5Btarget%3D%22_blank%22%5D%5Bstyle%5D)
+movielinkbd.*,movielinkbd4u.com##+js(aeld, click, %2FadsActive%7CPOPUNDER%2Fi)
+movielinkbd.*,mcloud.guru##+js(nowoif, _blank)
 neodrive.xyz##+js(rmnt, script, FingerprintJS)
 ||jaya9.app/?af=$doc,popup
 ||jaya9.best/?af=$doc,popup
+||hypollsteceful.com^
+||staletraffic.com^$popup,doc
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gucwsp/adblock_detection_on_historicaerialscom/
 !#if cap_html_filtering
 historicaerials.com##^script:has-text(window.googletag.pubads)
@@ -3207,8 +3115,6 @@ fileplanet.com##a[href^="https://url.totaladblock.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/26145
 handirect.fr##body::before:style(background-image: unset !important;)
 handirect.fr##+js(rmnt, script, kmtAdsData)
-! https://github.com/uBlockOrigin/uAssets/issues/26152
-animefenix.tv##+js(rmnt, script, wpadmngr)
 ! https://github.com/uBlockOrigin/uAssets/issues/26158
 tempinbox.xyz##+js(rmnt, script, insertAdjacentHTML)
 ! https://github.com/uBlockOrigin/uAssets/issues/26160
@@ -3226,8 +3132,6 @@ giphy.com##.cNDPHQ, .fKCJyZ:style(top: 0px !important; transform: unset !importa
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/26169
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=cricbuzz.com
-! https://github.com/uBlockOrigin/uAssets/issues/26171
-updatewallah.in##+js(rmnt, script, adbl)
 ! https://drivers.plus/de/
 drivers.plus##+js(aost, document.getElementsByTagName, adsBlocked)
 ! sssinstagram.com - popups
@@ -3247,13 +3151,10 @@ weatherzone.com.au##section[class^="sc-"]:has(> .publift-ad-wrapper)
 voz.vn##.p-pageWrapper:style(margin-bottom: 0px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/26191
 ||cdn.atf-tagmanager.de/config/$script,domain=yacht.de,redirect=noopjs
-! https://github.com/uBlockOrigin/uAssets/issues/26206
-lk21official.pics##+js(set-cookie, lk21-player-dona, 1)
 ! https://github.com/ABPindo/indonesianadblockrules/issues/639#issuecomment-2683815150
 playeriframe.lol>>,0ochi8hp.com##+js(nowoif)
 playeriframe.lol>>,0ochi8hp.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ||lk21static.buzz/assets/stopjudi/$media
-lk21official.pics###top-b
 iqksisgw.xyz##+js(nostif, document%5B'%5Cx)
 stream.hownetwork.xyz##+js(disable-newtab-links)
 /assets/jquery/p2anime.js?v=
@@ -3303,6 +3204,11 @@ abs-cbn.com##:is(.css-168qn5i, .css-1slfery, .css-xcd31q, .css-4dbdht, .css-1d3b
 abs-cbn.com##.css-15j76c0:has(> div[style*="z-index: 99999"])
 abs-cbn.com##.MuiGrid-root.MuiGrid-item:not([data-testid="test-grid-item"]):has(> div.MuiBox-root > div[style] > div > div[style] > div[class^="imp-adSlot"])
 abs-cbn.com##+js(rpnt, style, %7Bheight%3A370px%3B%7D, %7Bheight%3A70px%3B%7D)
+abs-cbn.com##p[style]:has-text(ADVERTISEMENT):upward(.MuiBox-root)
+! https://github.com/uBlockOrigin/uAssets/issues/30152
+metro.style##p[style]:has-text(ADVERTISEMENT):upward(.MuiBox-root)
+metro.style###adBlock-bottom-fix
+metro.style##[class*="css-"].MuiBox-root:style(height: auto !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/26248
 gmanetwork.com###leaderboard
 gmanetwork.com###mrect
@@ -3346,8 +3252,6 @@ getfiles.co.uk##+js(rmnt, script, checkAdBlock)
 !#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1h5lvjw/tptv_brightcove_adverts/
 tptvencore.co.uk##+js(no-xhr-if, springserve.com)
-! https://github.com/uBlockOrigin/uAssets/issues/26287
-poophd.cc##+js(rmnt, script, wpadmngr.com)
 ! https://community.brave.app/t/redirects-on-animelatinohd-com/584414
 animelatinohd.com##+js(aeld, load, popMagic)
 ! https://github.com/uBlockOrigin/uAssets/issues/11152
@@ -3359,14 +3263,14 @@ moappmovies.blogspot.com##.sy-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/26313
 ||googlesyndication.com^$image,redirect=1x1.gif,domain=minenode.fr
 ! https://github.com/uBlockOrigin/uAssets/issues/24575
-animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, outbrain.com, outbrain)
-animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Ffront%2Fcss%2Fstyle.min.css, slider--features)
-animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Fvite-bundle%2Fmain.css, data-v-d23a26c8)
-animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, cdn.taboola.com%2Flibtrc%2Fsan1go-network%2Floader.js, feOffset)
-animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,drstonebr.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-@@||widgets.outbrain.com/outbrain.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
-@@||s4.cdnpc.net/*.css$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
-@@||cdn.taboola.com/libtrc/san1go-network/loader.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|drstonebr.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, outbrain.com, outbrain)
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Ffront%2Fcss%2Fstyle.min.css, slider--features)
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, s4.cdnpc.net%2Fvite-bundle%2Fmain.css, data-v-d23a26c8)
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(trusted-prevent-xhr, cdn.taboola.com%2Flibtrc%2Fsan1go-network%2Floader.js, feOffset)
+animefire.info,animesonlinecc.us,animesonliner4.com,animesup.info,animeyabu.net,animeyabu.org,anitube.us,anitube.vip,caroloportunidades.com.br,dattebayo-br.com,file4go.com,flyanimes.cloud,goanimes.vip,goyabu.us,hinatasoul.com,isekaibrasil.com,meuanime.info,otakuanimess.net,superanimes.in##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+@@||widgets.outbrain.com/outbrain.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
+@@||s4.cdnpc.net/*.css$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
+@@||cdn.taboola.com/libtrc/san1go-network/loader.js$xhr,domain=animefire.info|animesonlinecc.us|animesonliner4.com|animesup.info|animeyabu.net|animeyabu.org|anitube.us|anitube.vip|caroloportunidades.com.br|dattebayo-br.com|file4go.com|flyanimes.cloud|goanimes.vip|goyabu.us|hinatasoul.com|isekaibrasil.com|meuanime.info|otakuanimess.net|superanimes.in
 caroloportunidades.com.br,coempregos.com.br,foodiesgallery.com##+js(nostif, hasAdblock)
 anitube.vip##+js(no-xhr-if, taboola)
 ! prmovies. im antiadb
@@ -3416,8 +3320,6 @@ dhtpre.com##^script:has-text(setADBFlag)
 !#else
 dhtpre.com##+js(rmnt, script, setADBFlag)
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/26454
-anroll.net##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 ! https://github.com/uBlockOrigin/uAssets/issues/26460
 dynamicminister.net##+js(aeld, click, window.open)
 ||redditsoccerstreams.watch/wp-content/uploads/2024/10/watch-live-stream.gif$image
@@ -3502,6 +3404,8 @@ tab-maker.com##+js(no-fetch-if, googletagmanager, length%3A10)
 ||arabs.alarbda.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/24914
 netflix.com##+js(json-prune, result.adverts)
+! https://github.com/uBlockOrigin/uAssets/issues/29689
+netflix.com##+js(json-prune, data.pinotPausedPlaybackPage)
 ! https://github.com/uBlockOrigin/uAssets/issues/26594
 worldpopulationreview.com###top_ad_container + div:style(padding-top: 4rem !important;)
 ! https://gofirmware.com/ - popup
@@ -3513,8 +3417,8 @@ wvt.free.nf##+js(nowoif)
 wvt.free.nf##+js(acs, document.getElementById, window.open)
 wvt.free.nf##.tracking-btn
 ! https://github.com/uBlockOrigin/uAssets/issues/26573
-||cdn.jwplayer.com/libraries/QSNV25sR.js^$script,domain=www.ratemyprofessors.com
-ratemyprofessors.com##[class^="Ad"]
+! https://github.com/uBlockOrigin/uAssets/issues/29740
+||cdn.jwplayer.com/libraries/*.js$script,3p,domain=www.ratemyprofessors.com
 ! https://github.com/uBlockOrigin/uAssets/issues/26599
 faceittracker.net##+js(no-fetch-if, fundingchoicesmessages)
 @@||faceittracker.net^$script,1p
@@ -3546,9 +3450,3 @@ fmovies0.cc##+js(nostif, offsetHeight)
 fmovies0.cc##+js(no-fetch-if, %2Fgooglesyndication%7Cgoogletagservices%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/26669
 flatai.org##+js(rmnt, script, adblock)
-! https://github.com/uBlockOrigin/uAssets/issues/26671
-!#if cap_html_filtering
-windowsreport.com##^script:has-text(wpadmngr.com)
-!#else
-windowsreport.com##+js(rmnt, script, wpadmngr.com)
-!#endif
