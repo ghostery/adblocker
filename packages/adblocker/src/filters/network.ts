@@ -1011,6 +1011,10 @@ export default class NetworkFilter implements IFilter {
         }
       }
 
+      if (isCaseSensitive === false) {
+        line = line.toLowerCase();
+      }
+
       if (domainsList !== undefined && domainsList.size !== 0) {
         domains = Domains.parse(domainsList, {
           delimiter: '|',
@@ -1060,9 +1064,6 @@ export default class NetworkFilter implements IFilter {
       // * remove extra `isFullRegex` flag since `isRegex` might be enough
       // * apply some optimizations on the fly: /^https?:\\/\\/rest => isHttp + isHttps + rest
       filter = line.slice(filterIndexStart, filterIndexEnd);
-      if (isCaseSensitive === false) {
-        filter = filter.toLowerCase();
-      }
 
       // Validate RegExp to make sure this rule is fine
       try {
@@ -1079,7 +1080,7 @@ export default class NetworkFilter implements IFilter {
       mask = setBit(mask, NETWORK_FILTER_MASK.isFullRegex);
     } else {
       // `$match-case` is not supported on URL pattern filters
-      if (isCaseSensitive) {
+      if (isCaseSensitive === true) {
         return null;
       }
 
@@ -1213,10 +1214,6 @@ export default class NetworkFilter implements IFilter {
           checkIsRegex(filter, 0, filter.length)
         ) {
           mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, true);
-        }
-        if (isCaseSensitive === false) {
-          // URL filters are not case-sensitive at all per spec unlike regexp filters
-          filter = filter.toLowerCase();
         }
       }
 
