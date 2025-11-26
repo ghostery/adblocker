@@ -60,8 +60,15 @@ use((chai, utils) => {
       const filter = this._obj;
       new chai.Assertion(filter).not.to.be.null;
 
+      const anotherHostname = 'another' + hostname;
+
       this.assert(
-        filter.matchAncestor(hostname, getDomain(hostname) || ''),
+        filter.match(anotherHostname, getDomain(anotherHostname) || '', [
+          {
+            hostname,
+            domain: getDomain(hostname) || '',
+          },
+        ]),
         'expected #{this} to match ancestor #{exp}',
       );
     },

@@ -953,7 +953,7 @@ $csp=baz,domain=bar.com
 
       describe('subframe only script injections', () => {
         context('handles matching', () => {
-          for (const [filter, parentDomains, domain] of [
+          for (const [domains, parentDomains, domain] of [
             // inject into subframe
             ['foo.com>>', ['foo.com'], 'bar.com'],
             // inject into nested subframe
@@ -961,8 +961,8 @@ $csp=baz,domain=bar.com
             // inject into nested subframe from intermediate frame
             ['foo.com>>', ['bar.com', 'foo.com'], 'baz.com'],
           ] as [string, string[], string][]) {
-            it(`injects script to ${domain} from ${parentDomains.join(',')} with ${filter}`, () => {
-              const filter = 'foo.com>>##+js(script.js,arg1)';
+            it(`injects script to ${domain} from ${parentDomains.join(',')} with ${domains}`, () => {
+              const filter = domains + '##+js(script.js,arg1)';
               const engine = Engine.parse(filter, { debug: true });
               engine.resources = new Resources({
                 scriptlets: [
@@ -989,7 +989,7 @@ $csp=baz,domain=bar.com
                 url: `https://${domain}/`,
               }).matches;
               expect(subFrameMatches).to.have.length;
-              expect(subFrameMatches[0].filter.rawLine).to.be.eql(filter);
+              expect(subFrameMatches[0]?.filter?.rawLine).to.be.eql(filter);
               expect(subFrameMatches[0].exception).to.be.undefined;
             });
           }
@@ -1020,7 +1020,7 @@ $csp=baz,domain=bar.com
             ancestors: [{ hostname: 'foo.com', domain: 'foo.com' }],
             url: 'https://bar.com/',
           }).matches;
-          expect(match.filter.rawLine).to.be.eql(filter);
+          expect(match.filter?.rawLine).to.be.eql(filter);
           expect(match.exception?.rawLine).to.be.eql(exception);
         });
       });
