@@ -702,6 +702,8 @@ const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
   public static parse(line: string, debug: boolean = false): NetworkFilter | null {
+    const rawLine = debug === true ? line : undefined;
+
     // Represent options as a bitmask
     let mask: number =
       NETWORK_FILTER_MASK.thirdParty |
@@ -1011,10 +1013,6 @@ export default class NetworkFilter implements IFilter {
         }
       }
 
-      if (isCaseSensitive === false) {
-        line = line.toLowerCase();
-      }
-
       if (domainsList !== undefined && domainsList.size !== 0) {
         domains = Domains.parse(domainsList, {
           delimiter: '|',
@@ -1040,6 +1038,10 @@ export default class NetworkFilter implements IFilter {
 
       // End of option parsing
       // --------------------------------------------------------------------- //
+    }
+
+    if (isCaseSensitive === false) {
+      line = line.toLowerCase();
     }
 
     if (cptMaskPositive === 0) {
@@ -1236,7 +1238,7 @@ export default class NetworkFilter implements IFilter {
       domains,
       denyallow,
       optionValue,
-      rawLine: debug === true ? line : undefined,
+      rawLine,
       regex: undefined,
       isCaseSensitive,
     });
