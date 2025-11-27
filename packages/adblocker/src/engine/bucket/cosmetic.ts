@@ -368,13 +368,11 @@ export default class CosmeticFilterBucket {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
     const hostnameTokens = createLookupTokens(hostname, domain);
-    const ancestorHostnameTokens: number[] = [];
-    for (const ancestor of ancestors) {
-      ancestorHostnameTokens.push(...createLookupTokens(ancestor.hostname, ancestor.domain));
-    }
     const combinedHostnameTokens: Uint32Array = Uint32Array.from([
       ...hostnameTokens,
-      ...ancestorHostnameTokens,
+      ...ancestors.flatMap((ancestor) =>
+        Array.from(createLookupTokens(ancestor.hostname, ancestor.domain)),
+      ),
     ]);
     const filters: CosmeticFilter[] = [];
 
