@@ -150,6 +150,9 @@ const enum COSMETICS_MASK {
   extended = 1 << 7,
 }
 
+const HASH_DOMAINS_MARKER_LOW = 1;
+const HASH_DOMAINS_MARKER_HIGH = 253;
+
 function computeFilterId(
   mask: number,
   selector: string | undefined,
@@ -166,12 +169,12 @@ function computeFilterId(
   }
 
   if (domains !== undefined) {
-    hash = (hash * HASH_INTERNAL_MULT) ^ 1;
+    hash = (hash * HASH_INTERNAL_MULT) ^ HASH_DOMAINS_MARKER_LOW;
     hash = domains.updateId(hash);
   }
 
   if (parentDomains !== undefined) {
-    hash = (hash * HASH_INTERNAL_MULT) ^ 253;
+    hash = (hash * HASH_INTERNAL_MULT) ^ HASH_DOMAINS_MARKER_HIGH;
     hash = parentDomains.updateId(hash);
   }
 
