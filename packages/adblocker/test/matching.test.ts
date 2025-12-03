@@ -413,6 +413,11 @@ describe('#NetworkFilter.match', () => {
       url: 'https://safe.com/foo',
       type: 'sub_frame',
     });
+
+    // match-case
+    expect(f`/ad/$match-case`)
+      .to.matchRequest({ url: 'https://foo.com/ad' })
+      .not.to.matchRequest({ url: 'https://foo.com/Ad' });
   });
 });
 
