@@ -474,6 +474,22 @@ describe('#CosmeticFilter.match', () => {
     expect(f`foo.com>>##+js(foo)`)
       .to.matchAncestorHostname('foo.com')
       .but.not.to.matchHostname('foo.com');
+    expect(f`foo.com>>,bar.com>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .to.matchAncestorHostname('bar.com')
+      .not.to.matchAncestorHostname('baz.com')
+      .but.not.to.matchHostname('foo.com')
+      .but.not.to.matchHostname('bar.com');
+    expect(f`foo.com,bar.com>>##+js(foo)`)
+      .to.matchHostname('foo.com')
+      .to.matchAncestorHostname('bar.com')
+      .not.to.matchHostname('bar.com')
+      .not.to.matchAncestorHostname('foo.com');
+    expect(f`foo.*>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .to.matchAncestorHostname('foo.net')
+      .but.not.to.matchHostname('foo.com')
+      .but.not.to.matchHostname('foo.net');
   });
 
   it('entity', () => {
