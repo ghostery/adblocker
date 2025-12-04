@@ -1,3 +1,15 @@
+# v2.13.0 (Thu Dec 04 2025)
+
+#### :nut_and_bolt: Dependencies
+
+- chore(internal): update dependencies [#5323](https://github.com/ghostery/adblocker/pull/5323) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.12.3 (Mon Oct 06 2025)
 
 #### :bug: Bug Fix
