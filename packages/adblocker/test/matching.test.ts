@@ -415,9 +415,12 @@ describe('#NetworkFilter.match', () => {
     });
 
     // match-case
-    expect(f`/ad/$match-case`)
+    expect(f`/Ad/`)
       .to.matchRequest({ url: 'https://foo.com/ad' })
-      .not.to.matchRequest({ url: 'https://foo.com/Ad' });
+      .to.matchRequest({ url: 'https://foo.com/Ad' });
+    expect(f`/ad/$match-case`)
+      .not.to.matchRequest({ url: 'https://foo.com/Ad' })
+      .but.to.matchRequest({ url: 'https://foo.com/ad' });
   });
 });
 
