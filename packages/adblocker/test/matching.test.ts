@@ -52,6 +52,27 @@ use((chai, utils) => {
       );
     },
   );
+
+  utils.addMethod(
+    chai.Assertion.prototype,
+    'matchAncestorHostname',
+    function (this: Chai.ChaiStatic & { _obj: CosmeticFilter }, hostname: string) {
+      const filter = this._obj;
+      new chai.Assertion(filter).not.to.be.null;
+
+      const anotherHostname = 'another' + hostname;
+
+      this.assert(
+        filter.match(anotherHostname, getDomain(anotherHostname) || '', [
+          {
+            hostname,
+            domain: getDomain(hostname) || '',
+          },
+        ]),
+        'expected #{this} to match ancestor #{exp}',
+      );
+    },
+  );
 });
 
 declare global {
@@ -60,6 +81,7 @@ declare global {
     interface Assertion {
       matchRequest(req: Partial<RequestInitialization>): Assertion;
       matchHostname(hostname: string): Assertion;
+      matchAncestorHostname(hostname: string): Assertion;
     }
   }
 }
@@ -446,6 +468,28 @@ describe('#CosmeticFilter.match', () => {
     expect(f`foo.com,sub.test.com##.selector`).to.matchHostname('sub.test.com');
     expect(f`foo.com,sub.test.com##.selector`).not.to.matchHostname('test.com');
     expect(f`foo.com,sub.test.com##.selector`).not.to.matchHostname('com');
+  });
+
+  it('parent domains', () => {
+    expect(f`foo.com>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .but.not.to.matchHostname('foo.com');
+    expect(f`foo.com>>,bar.com>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .to.matchAncestorHostname('bar.com')
+      .not.to.matchAncestorHostname('baz.com')
+      .but.not.to.matchHostname('foo.com')
+      .but.not.to.matchHostname('bar.com');
+    expect(f`foo.com,bar.com>>##+js(foo)`)
+      .to.matchHostname('foo.com')
+      .to.matchAncestorHostname('bar.com')
+      .not.to.matchHostname('bar.com')
+      .not.to.matchAncestorHostname('foo.com');
+    expect(f`foo.*>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .to.matchAncestorHostname('foo.net')
+      .but.not.to.matchHostname('foo.com')
+      .but.not.to.matchHostname('foo.net');
   });
 
   it('entity', () => {

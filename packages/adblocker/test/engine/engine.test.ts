@@ -950,6 +950,80 @@ $csp=baz,domain=bar.com
           }).scripts,
         ).to.eql([]);
       });
+
+      describe('subframe only script injections', () => {
+        context('handles matching', () => {
+          for (const [domains, parentDomains, domain] of [
+            // inject into subframe
+            ['foo.com>>', ['foo.com'], 'bar.com'],
+            // inject into nested subframe
+            ['foo.com>>', ['foo.com', 'bar.com'], 'baz.com'],
+            // inject into nested subframe from intermediate frame
+            ['foo.com>>', ['bar.com', 'foo.com'], 'baz.com'],
+          ] as [string, string[], string][]) {
+            it(`injects script to ${domain} from ${parentDomains.join(',')} with ${domains}`, () => {
+              const filter = domains + '##+js(script.js,arg1)';
+              const engine = Engine.parse(filter, { debug: true });
+              engine.resources = new Resources({
+                scriptlets: [
+                  {
+                    name: 'script.js',
+                    aliases: [],
+                    body: 'function script() {}',
+                    dependencies: [],
+                    executionWorld: 'MAIN',
+                    requiresTrust: false,
+                  },
+                ],
+              });
+              const mainFrameMatches = engine.matchCosmeticFilters({
+                domain: 'foo.com',
+                hostname: 'foo.com',
+                url: 'https://foo.com/',
+              }).matches;
+              expect(mainFrameMatches).to.have.lengthOf(0);
+              const subFrameMatches = engine.matchCosmeticFilters({
+                domain,
+                hostname: domain,
+                ancestors: parentDomains.map((domain) => ({ domain, hostname: domain })),
+                url: `https://${domain}/`,
+              }).matches;
+              expect(subFrameMatches).to.have.length;
+              expect(subFrameMatches[0]?.filter?.rawLine).to.be.eql(filter);
+              expect(subFrameMatches[0].exception).to.be.undefined;
+            });
+          }
+        });
+
+        it('handles exception', () => {
+          const filter = 'foo.com>>##+js(script.js,arg1)';
+          const exception = 'foo.com>>#@#+js(script.js,arg1)';
+          const engine = Engine.empty({ debug: true });
+          engine.updateFromDiff({
+            added: [filter, exception],
+          });
+          engine.resources = new Resources({
+            scriptlets: [
+              {
+                name: 'script.js',
+                aliases: [],
+                body: 'function script() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+            ],
+          });
+          const [match] = engine.matchCosmeticFilters({
+            domain: 'bar.com',
+            hostname: 'bar.com',
+            ancestors: [{ hostname: 'foo.com', domain: 'foo.com' }],
+            url: 'https://bar.com/',
+          }).matches;
+          expect(match.filter?.rawLine).to.be.eql(filter);
+          expect(match.exception?.rawLine).to.be.eql(exception);
+        });
+      });
     });
 
     describe('elemhide', () => {
