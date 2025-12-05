@@ -392,9 +392,10 @@ function compileRegex(
   isLeftAnchor: boolean,
   isRightAnchor: boolean,
   isFullRegex: boolean,
+  isCaseSensitive: boolean,
 ): RegExp {
   if (isFullRegex === true) {
-    return new RegExp(filter.slice(1, filter.length - 1));
+    return new RegExp(filter.slice(1, filter.length - 1), isCaseSensitive ? '' : 'i');
   }
 
   // Escape special regex characters: |.$+?{}()[]\
@@ -415,7 +416,7 @@ function compileRegex(
     filter = `^${filter}`;
   }
 
-  return new RegExp(filter);
+  return new RegExp(filter, isCaseSensitive ? '' : 'i');
 }
 
 /**
@@ -702,8 +703,6 @@ const MATCH_ALL = new RegExp('');
 
 export default class NetworkFilter implements IFilter {
   public static parse(line: string, debug: boolean = false): NetworkFilter | null {
-    const rawLine = debug === true ? line : undefined;
-
     // Represent options as a bitmask
     let mask: number =
       NETWORK_FILTER_MASK.thirdParty |
@@ -1040,10 +1039,6 @@ export default class NetworkFilter implements IFilter {
       // --------------------------------------------------------------------- //
     }
 
-    if (isCaseSensitive === false) {
-      line = line.toLowerCase();
-    }
-
     if (cptMaskPositive === 0) {
       mask = setBit(mask, cptMaskNegative);
     } else if (cptMaskNegative === FROM_ANY) {
@@ -1074,6 +1069,7 @@ export default class NetworkFilter implements IFilter {
           false /* isLeftAnchor */,
           false /* isRightAnchor */,
           true /* isFullRegex */,
+          isCaseSensitive,
         );
       } catch (ex) {
         return null; // invalid RegExp
@@ -1216,6 +1212,8 @@ export default class NetworkFilter implements IFilter {
           checkIsRegex(filter, 0, filter.length)
         ) {
           mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, true);
+        } else {
+          filter = filter.toLowerCase();
         }
       }
 
@@ -1238,7 +1236,7 @@ export default class NetworkFilter implements IFilter {
       domains,
       denyallow,
       optionValue,
-      rawLine,
+      rawLine: debug === true ? line : undefined,
       regex: undefined,
       isCaseSensitive,
     });
@@ -1782,6 +1780,7 @@ export default class NetworkFilter implements IFilter {
               this.isLeftAnchor(),
               this.isRightAnchor(),
               this.isFullRegex(),
+              this.isCaseSensitive === true,
             )
           : MATCH_ALL;
     }
@@ -1810,7 +1809,12 @@ export default class NetworkFilter implements IFilter {
       if (this.filter !== undefined) {
         const skipLastToken = !this.isRightAnchor();
         const skipFirstToken = !this.isLeftAnchor();
-        tokenizeWithWildcardsInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+        tokenizeWithWildcardsInPlace(
+          this.isRegex() ? this.filter.toLowerCase() : this.filter,
+          skipFirstToken,
+          skipLastToken,
+          TOKENS_BUFFER,
+        );
       }
 
       // Append tokens from hostname, if any
@@ -1823,7 +1827,8 @@ export default class NetworkFilter implements IFilter {
         );
       }
     } else if (this.filter !== undefined) {
-      tokenizeRegexInPlace(this.filter, TOKENS_BUFFER);
+      // Implies `isFullRegex() === true`, meaning the filter is not lowercased.
+      tokenizeRegexInPlace(this.filter.toLowerCase(), TOKENS_BUFFER);
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch

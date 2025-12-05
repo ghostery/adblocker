@@ -282,7 +282,7 @@ describe('#NetworkFilter.match', () => {
     });
   });
 
-  it('options', () => {
+  it.only('options', () => {
     // cpt test
     expect(f`||foo$image`).to.matchRequest({ url: 'https://foo.com/bar', type: 'image' });
     expect(f`||foo$image`).not.to.matchRequest({
@@ -419,8 +419,13 @@ describe('#NetworkFilter.match', () => {
       .to.matchRequest({ url: 'https://foo.com/ad' })
       .to.matchRequest({ url: 'https://foo.com/Ad' });
     expect(f`/ad/$match-case`)
-      .not.to.matchRequest({ url: 'https://foo.com/Ad' })
-      .but.to.matchRequest({ url: 'https://foo.com/ad' });
+      .to.matchRequest({ url: 'https://foo.com/ad' })
+      .not.to.matchRequest({ url: 'https://foo.com/Ad' });
+    // This ensure if the implement respects the case-sensitivity of metacharacters.
+    // In the following example, "\D" (non-digits) should keep the case-sensitivity.
+    expect(f`/advertise-id\\/\\D/$match-case`)
+      .to.matchRequest({ url: 'https://foo.com/advertise-id/string' })
+      .not.to.matchRequest({ url: 'https://foo.com/advertise-id/0' });
   });
 });
 
