@@ -282,7 +282,7 @@ describe('#NetworkFilter.match', () => {
     });
   });
 
-  it.only('options', () => {
+  it('options', () => {
     // cpt test
     expect(f`||foo$image`).to.matchRequest({ url: 'https://foo.com/bar', type: 'image' });
     expect(f`||foo$image`).not.to.matchRequest({
