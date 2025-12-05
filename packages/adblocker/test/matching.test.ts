@@ -435,6 +435,19 @@ describe('#NetworkFilter.match', () => {
       url: 'https://safe.com/foo',
       type: 'sub_frame',
     });
+
+    // match-case
+    expect(f`/Ad/`)
+      .to.matchRequest({ url: 'https://foo.com/ad' })
+      .to.matchRequest({ url: 'https://foo.com/Ad' });
+    expect(f`/ad/$match-case`)
+      .to.matchRequest({ url: 'https://foo.com/ad' })
+      .not.to.matchRequest({ url: 'https://foo.com/Ad' });
+    // This ensure if the implement respects the case-sensitivity of metacharacters.
+    // In the following example, "\D" (non-digits) should keep the case-sensitivity.
+    expect(f`/advertise-id\\/\\D/$match-case`)
+      .to.matchRequest({ url: 'https://foo.com/advertise-id/string' })
+      .not.to.matchRequest({ url: 'https://foo.com/advertise-id/0' });
   });
 });
 

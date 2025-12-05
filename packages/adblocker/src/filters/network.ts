@@ -157,6 +157,16 @@ export const enum NETWORK_FILTER_MASK {
   // network filter option is needed.
 }
 
+export const enum NETWORK_FILTER_OPTIONAL_PARTS_MASK {
+  hasFilter = 1 << 0,
+  hasHostname = 1 << 1,
+  hasDomains = 1 << 2,
+  hasRawLine = 1 << 3,
+  hasDenyallow = 1 << 4,
+  hasOptionValue = 1 << 5,
+  isCaseSensitive = 1 << 6,
+}
+
 /**
  * Mask used when a network filter can be applied on any content type.
  */
@@ -382,9 +392,10 @@ function compileRegex(
   isLeftAnchor: boolean,
   isRightAnchor: boolean,
   isFullRegex: boolean,
+  isCaseSensitive: boolean,
 ): RegExp {
   if (isFullRegex === true) {
-    return new RegExp(filter.slice(1, filter.length - 1), 'i');
+    return new RegExp(filter.slice(1, filter.length - 1), isCaseSensitive ? '' : 'i');
   }
 
   // Escape special regex characters: |.$+?{}()[]\
@@ -405,7 +416,7 @@ function compileRegex(
     filter = `^${filter}`;
   }
 
-  return new RegExp(filter);
+  return new RegExp(filter, isCaseSensitive ? '' : 'i');
 }
 
 /**
@@ -708,6 +719,7 @@ export default class NetworkFilter implements IFilter {
     let domains: Domains | undefined;
     let denyallow: Domains | undefined;
     let optionValue: string | undefined;
+    let isCaseSensitive: boolean = false;
 
     // Start parsing
     let filterIndexStart: number = 0;
@@ -785,7 +797,7 @@ export default class NetworkFilter implements IFilter {
               return null;
             }
 
-            // We currently consider all filters to be case-insensitive.
+            isCaseSensitive = true;
             break;
           case '3p':
           case 'third-party':
@@ -1057,6 +1069,7 @@ export default class NetworkFilter implements IFilter {
           false /* isLeftAnchor */,
           false /* isRightAnchor */,
           true /* isFullRegex */,
+          isCaseSensitive,
         );
       } catch (ex) {
         return null; // invalid RegExp
@@ -1064,6 +1077,11 @@ export default class NetworkFilter implements IFilter {
 
       mask = setBit(mask, NETWORK_FILTER_MASK.isFullRegex);
     } else {
+      // `$match-case` is not supported on URL pattern filters
+      if (isCaseSensitive === true) {
+        return null;
+      }
+
       // Deal with hostname pattern
       if (filterIndexEnd > 0 && line.charCodeAt(filterIndexEnd - 1) === 124 /* '|' */) {
         mask = setBit(mask, NETWORK_FILTER_MASK.isRightAnchor);
@@ -1187,15 +1205,15 @@ export default class NetworkFilter implements IFilter {
       }
 
       if (filterIndexEnd - filterIndexStart > 0) {
-        filter = line.slice(filterIndexStart, filterIndexEnd).toLowerCase();
-
+        filter = line.slice(filterIndexStart, filterIndexEnd);
         mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isUnicode, hasUnicode(filter));
-        if (getBit(mask, NETWORK_FILTER_MASK.isRegex) === false) {
-          mask = setNetworkMask(
-            mask,
-            NETWORK_FILTER_MASK.isRegex,
-            checkIsRegex(filter, 0, filter.length),
-          );
+        if (
+          getBit(mask, NETWORK_FILTER_MASK.isRegex) === false &&
+          checkIsRegex(filter, 0, filter.length)
+        ) {
+          mask = setNetworkMask(mask, NETWORK_FILTER_MASK.isRegex, true);
+        } else {
+          filter = filter.toLowerCase();
         }
       }
 
@@ -1220,6 +1238,7 @@ export default class NetworkFilter implements IFilter {
       optionValue,
       rawLine: debug === true ? line : undefined,
       regex: undefined,
+      isCaseSensitive,
     });
   }
 
@@ -1241,25 +1260,32 @@ export default class NetworkFilter implements IFilter {
       mask,
 
       // Optional parts
-      filter:
-        (optionalParts & 1) === 1
-          ? isUnicode
-            ? buffer.getUTF8()
-            : buffer.getNetworkFilter()
-          : undefined,
-      hostname: (optionalParts & 2) === 2 ? buffer.getNetworkHostname() : undefined,
-      domains: (optionalParts & 4) === 4 ? Domains.deserialize(buffer) : undefined,
-      rawLine: (optionalParts & 8) === 8 ? buffer.getRawNetwork() : undefined,
-      denyallow: (optionalParts & 16) === 16 ? Domains.deserialize(buffer) : undefined,
-      optionValue:
-        (optionalParts & 32) === 32
-          ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
-            ? buffer.getNetworkCSP()
-            : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
-              ? buffer.getNetworkRedirect()
-              : buffer.getUTF8()
-          : undefined,
+      filter: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasFilter)
+        ? isUnicode
+          ? buffer.getUTF8()
+          : buffer.getNetworkFilter()
+        : undefined,
+      hostname: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasHostname)
+        ? buffer.getNetworkHostname()
+        : undefined,
+      domains: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDomains)
+        ? Domains.deserialize(buffer)
+        : undefined,
+      rawLine: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasRawLine)
+        ? buffer.getRawNetwork()
+        : undefined,
+      denyallow: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDenyallow)
+        ? Domains.deserialize(buffer)
+        : undefined,
+      optionValue: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasOptionValue)
+        ? getBit(mask, NETWORK_FILTER_MASK.isCSP)
+          ? buffer.getNetworkCSP()
+          : getBit(mask, NETWORK_FILTER_MASK.isRedirect)
+            ? buffer.getNetworkRedirect()
+            : buffer.getUTF8()
+        : undefined,
       regex: undefined,
+      isCaseSensitive: getBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.isCaseSensitive),
     });
   }
 
@@ -1269,6 +1295,7 @@ export default class NetworkFilter implements IFilter {
   public readonly domains: Domains | undefined;
   public readonly denyallow: Domains | undefined;
   public readonly optionValue: string | undefined;
+  public readonly isCaseSensitive: boolean | undefined;
 
   // Set only in debug mode
   public readonly rawLine: string | undefined;
@@ -1286,6 +1313,7 @@ export default class NetworkFilter implements IFilter {
     optionValue,
     rawLine,
     regex,
+    isCaseSensitive = false,
   }: {
     filter: string | undefined;
     hostname: string | undefined;
@@ -1295,6 +1323,7 @@ export default class NetworkFilter implements IFilter {
     optionValue: string | undefined;
     rawLine: string | undefined;
     regex: RegExp | undefined;
+    isCaseSensitive: boolean | undefined;
   }) {
     this.filter = filter;
     this.hostname = hostname;
@@ -1302,6 +1331,7 @@ export default class NetworkFilter implements IFilter {
     this.domains = domains;
     this.denyallow = denyallow;
     this.optionValue = optionValue;
+    this.isCaseSensitive = isCaseSensitive;
 
     this.rawLine = rawLine;
 
@@ -1391,7 +1421,7 @@ export default class NetworkFilter implements IFilter {
     let optionalParts = 0;
 
     if (this.filter !== undefined) {
-      optionalParts |= 1;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasFilter);
       if (this.isUnicode()) {
         buffer.pushUTF8(this.filter);
       } else {
@@ -1400,28 +1430,27 @@ export default class NetworkFilter implements IFilter {
     }
 
     if (this.hostname !== undefined) {
-      optionalParts |= 2;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasHostname);
       buffer.pushNetworkHostname(this.hostname);
     }
 
     if (this.domains !== undefined) {
-      optionalParts |= 4;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDomains);
       this.domains.serialize(buffer);
     }
 
     if (this.rawLine !== undefined) {
-      optionalParts |= 8;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasRawLine);
       buffer.pushRawNetwork(this.rawLine);
     }
 
     if (this.denyallow !== undefined) {
-      optionalParts |= 16;
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasDenyallow);
       this.denyallow.serialize(buffer);
     }
 
     if (this.optionValue !== undefined) {
-      optionalParts |= 32;
-
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.hasOptionValue);
       if (this.isCSP()) {
         buffer.pushNetworkCSP(this.optionValue);
       } else if (this.isRedirect()) {
@@ -1429,6 +1458,10 @@ export default class NetworkFilter implements IFilter {
       } else {
         buffer.pushUTF8(this.optionValue);
       }
+    }
+
+    if (this.isCaseSensitive) {
+      optionalParts = setBit(optionalParts, NETWORK_FILTER_OPTIONAL_PARTS_MASK.isCaseSensitive);
     }
 
     buffer.setByte(index, optionalParts);
@@ -1612,6 +1645,10 @@ export default class NetworkFilter implements IFilter {
       }
     }
 
+    if (this.isCaseSensitive) {
+      options.push('match-case');
+    }
+
     if (options.length > 0) {
       if (typeof modifierReplacer === 'function') {
         filter += `$${options.map(modifierReplacer).join(',')}`;
@@ -1743,6 +1780,7 @@ export default class NetworkFilter implements IFilter {
               this.isLeftAnchor(),
               this.isRightAnchor(),
               this.isFullRegex(),
+              this.isCaseSensitive === true,
             )
           : MATCH_ALL;
     }
@@ -1771,7 +1809,12 @@ export default class NetworkFilter implements IFilter {
       if (this.filter !== undefined) {
         const skipLastToken = !this.isRightAnchor();
         const skipFirstToken = !this.isLeftAnchor();
-        tokenizeWithWildcardsInPlace(this.filter, skipFirstToken, skipLastToken, TOKENS_BUFFER);
+        tokenizeWithWildcardsInPlace(
+          this.isRegex() ? this.filter.toLowerCase() : this.filter,
+          skipFirstToken,
+          skipLastToken,
+          TOKENS_BUFFER,
+        );
       }
 
       // Append tokens from hostname, if any
@@ -1784,7 +1827,8 @@ export default class NetworkFilter implements IFilter {
         );
       }
     } else if (this.filter !== undefined) {
-      tokenizeRegexInPlace(this.filter, TOKENS_BUFFER);
+      // Implies `isFullRegex() === true`, meaning the filter is not lowercased.
+      tokenizeRegexInPlace(this.filter.toLowerCase(), TOKENS_BUFFER);
     }
 
     // If we got no tokens for the filter/hostname part, then we will dispatch
@@ -2072,7 +2116,7 @@ export function isAnchoredByHostname(
  */
 function checkPattern(filter: NetworkFilter, request: Request): boolean {
   const pattern = filter.getFilter();
-  const url = request.normalizedUrl;
+  const url = filter.isCaseSensitive ? request.url : request.normalizedUrl;
 
   if (filter.isHostnameAnchor() === true) {
     // Make sure request is anchored by hostname before proceeding to matching

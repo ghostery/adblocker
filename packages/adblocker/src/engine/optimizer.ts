@@ -163,7 +163,7 @@ const OPTIMIZATIONS: IOptimization[] = [
             filters[0].rawLine !== undefined
               ? filters.map(({ rawLine }) => rawLine).join(' <+> ')
               : undefined,
-          regex: new RegExp(patterns.join('|')),
+          regex: new RegExp(patterns.join('|'), 'i'),
         }),
       );
     },
@@ -174,7 +174,8 @@ const OPTIMIZATIONS: IOptimization[] = [
       filter.denyallow === undefined &&
       !filter.isHostnameAnchor() &&
       !filter.isRedirect() &&
-      !filter.isCSP(),
+      !filter.isCSP() &&
+      !filter.isCaseSensitive,
   },
 ];
 
