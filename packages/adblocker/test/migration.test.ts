@@ -118,8 +118,9 @@ async function createBuilder(version: string = 'latest') {
   worker.on('message', ({ id, payload }: { id: number; payload: number }) => {
     for (let i = 0; i < tasks.length; i++) {
       if (tasks[i][0] === id) {
-        tasks[i][1](payload);
+        const callback = tasks[i][1];
         tasks.splice(i, 1);
+        callback(payload);
         break;
       }
     }
