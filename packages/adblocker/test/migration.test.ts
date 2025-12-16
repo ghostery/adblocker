@@ -46,10 +46,10 @@ function hashFile(filePath: string, algorithm: string = 'sha256') {
     const stream = createReadStream(filePath);
 
     stream.once('error', reject);
-    stream.pipe(hash);
     stream.once('end', () => {
       resolve(hash.digest('hex'));
     });
+    stream.pipe(hash);
   });
 }
 
