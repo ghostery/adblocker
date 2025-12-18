@@ -77,7 +77,7 @@ async function builder() {
 
     await fs.writeFile(data.outpath, buf);
 
-    process.send!({ id, data: adblocker.ENGINE_VERSION });
+    process.send!({ id, payload: adblocker.ENGINE_VERSION });
   });
 }
 
