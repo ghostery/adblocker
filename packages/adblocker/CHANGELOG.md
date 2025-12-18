@@ -1,3 +1,15 @@
+# v2.13.1 (Thu Dec 18 2025)
+
+#### :bug: Bug Fix
+
+- Bump engine version to 812 [#5361](https://github.com/ghostery/adblocker/pull/5361) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.0 (Thu Dec 04 2025)
 
 #### :rocket: New Feature
