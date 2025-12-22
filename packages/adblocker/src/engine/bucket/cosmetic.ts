@@ -331,6 +331,7 @@ export default class CosmeticFilterBucket {
   public getCosmeticsFilters({
     domain,
     hostname,
+    ancestors = [],
 
     classes = [],
     hrefs = [],
@@ -347,6 +348,7 @@ export default class CosmeticFilterBucket {
   }: {
     domain: string;
     hostname: string;
+    ancestors?: { domain: string; hostname: string }[] | undefined;
 
     classes: string[] | undefined;
     hrefs: string[] | undefined;
@@ -366,6 +368,12 @@ export default class CosmeticFilterBucket {
     // Tokens from `hostname` and `domain` which will be used to lookup filters
     // from the reverse index. The same tokens are re-used for multiple indices.
     const hostnameTokens = createLookupTokens(hostname, domain);
+    const combinedHostnameTokens: Uint32Array = Uint32Array.from([
+      ...hostnameTokens,
+      ...ancestors.flatMap((ancestor) =>
+        Array.from(createLookupTokens(ancestor.hostname, ancestor.domain)),
+      ),
+    ]);
     const filters: CosmeticFilter[] = [];
 
     // =======================================================================
@@ -373,13 +381,13 @@ export default class CosmeticFilterBucket {
     // =======================================================================
     // Collect matching rules which specify a hostname constraint.
     if (getRulesFromHostname === true) {
-      this.hostnameIndex.iterMatchingFilters(hostnameTokens, (filter: CosmeticFilter) => {
+      this.hostnameIndex.iterMatchingFilters(combinedHostnameTokens, (filter: CosmeticFilter) => {
         // A hostname-specific filter is considered if it's a scriptlet (not
         // impacted by disabling of specific filters) or specific hides are
         // allowed.
         if (
           (allowSpecificHides === true || filter.isScriptInject() === true) &&
-          filter.match(hostname, domain) &&
+          filter.match(hostname, domain, ancestors) &&
           !isFilterExcluded?.(filter)
         ) {
           filters.push(filter);
@@ -453,8 +461,8 @@ export default class CosmeticFilterBucket {
       // =======================================================================
       // Collect unhidden selectors. They will be used to filter-out canceled
       // rules from other indices.
-      this.unhideIndex.iterMatchingFilters(hostnameTokens, (filter: CosmeticFilter) => {
-        if (filter.match(hostname, domain) && !isFilterExcluded?.(filter)) {
+      this.unhideIndex.iterMatchingFilters(combinedHostnameTokens, (filter: CosmeticFilter) => {
+        if (filter.match(hostname, domain, ancestors) && !isFilterExcluded?.(filter)) {
           unhides.push(filter);
         }
 

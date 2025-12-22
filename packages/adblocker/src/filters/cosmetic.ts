@@ -150,10 +150,14 @@ const enum COSMETICS_MASK {
   extended = 1 << 7,
 }
 
+const HASH_DOMAINS_MARKER_LOW = 1;
+const HASH_DOMAINS_MARKER_HIGH = 253;
+
 function computeFilterId(
   mask: number,
   selector: string | undefined,
   domains: Domains | undefined,
+  parentDomains: Domains | undefined,
   style: string | undefined,
 ): number {
   let hash = (HASH_SEED * HASH_INTERNAL_MULT) ^ mask;
@@ -165,7 +169,13 @@ function computeFilterId(
   }
 
   if (domains !== undefined) {
+    hash = (hash * HASH_INTERNAL_MULT) ^ HASH_DOMAINS_MARKER_LOW;
     hash = domains.updateId(hash);
+  }
+
+  if (parentDomains !== undefined) {
+    hash = (hash * HASH_INTERNAL_MULT) ^ HASH_DOMAINS_MARKER_HIGH;
+    hash = parentDomains.updateId(hash);
   }
 
   if (style !== undefined) {
@@ -223,6 +233,7 @@ export default class CosmeticFilter implements IFilter {
     let mask = 0;
     let selector: string | undefined;
     let domains: Domains | undefined;
+    let parentDomains: Domains | undefined;
     let style: string | undefined;
     const sharpIndex = line.indexOf('#');
 
@@ -256,14 +267,39 @@ export default class CosmeticFilter implements IFilter {
     //
     // - ~hostname##.selector
     // - hostname##.selector
+    // - hostname>>##.selector
     // - entity.*##.selector
     // - ~entity.*##.selector
+    // - entity>>##.selector
     //
     // Each kind will have its own Uint32Array containing hashes, sorted by
     // number of labels considered. This allows a compact representation of
     // hostnames and fast matching without any string copy.
+    //
+    // `>>` suffix is responsible for targeting subframe of the given domain.
+    // It is the part of each domain entry and domains can have a mix of
+    // hostnames and subframe targeting hostnames (also entries).
     if (sharpIndex > 0) {
-      domains = Domains.parse(line.slice(0, sharpIndex), { debug });
+      const domainEntries = [];
+      const parentDomainEntries = [];
+      for (const entry of line.slice(0, sharpIndex).split(',')) {
+        // each domain entry can have `>>` suffix.
+        if (entry.endsWith('>>')) {
+          parentDomainEntries.push(entry.slice(0, -2));
+        } else {
+          domainEntries.push(entry);
+        }
+      }
+      if (domainEntries.length !== 0) {
+        domains = Domains.parse(domainEntries.join(','), {
+          debug,
+        });
+      }
+      if (parentDomainEntries.length !== 0) {
+        parentDomains = Domains.parse(parentDomainEntries.join(','), {
+          debug,
+        });
+      }
     }
 
     if (line.endsWith(':remove()')) {
@@ -314,6 +350,8 @@ export default class CosmeticFilter implements IFilter {
       if (
         (domains === undefined ||
           (domains.hostnames === undefined && domains.entities === undefined)) &&
+        (parentDomains === undefined ||
+          (parentDomains.hostnames === undefined && parentDomains.entities === undefined)) &&
         getBit(mask, COSMETICS_MASK.unhide) === false
       ) {
         return null;
@@ -338,6 +376,11 @@ export default class CosmeticFilter implements IFilter {
         // TODO - maybe perform `isValidCss` from the other module.
         return null;
       }
+    }
+
+    // Subframe target is only available to scriptlets.
+    if (parentDomains !== undefined && getBit(mask, COSMETICS_MASK.scriptInject) === false) {
+      return null;
     }
 
     // Extended selectors should always be specific to some domain.
@@ -394,6 +437,7 @@ export default class CosmeticFilter implements IFilter {
       selector,
       style,
       domains,
+      parentDomains,
     });
   }
 
@@ -417,6 +461,7 @@ export default class CosmeticFilter implements IFilter {
       domains: (optionalParts & 1) === 1 ? Domains.deserialize(buffer) : undefined,
       rawLine: (optionalParts & 2) === 2 ? buffer.getRawCosmetic() : undefined,
       style: (optionalParts & 4) === 4 ? buffer.getASCII() : undefined,
+      parentDomains: (optionalParts & 8) === 8 ? Domains.deserialize(buffer) : undefined,
     });
   }
 
@@ -425,6 +470,7 @@ export default class CosmeticFilter implements IFilter {
   public readonly selector: string;
 
   public readonly domains: Domains | undefined;
+  public readonly parentDomains: Domains | undefined;
 
   public readonly style: string | undefined;
   public readonly rawLine: string | undefined;
@@ -438,9 +484,11 @@ export default class CosmeticFilter implements IFilter {
     domains,
     rawLine,
     style,
+    parentDomains,
   }: {
     mask: number;
     domains: Domains | undefined;
+    parentDomains: Domains | undefined;
     rawLine: string | undefined;
     selector: string;
     style: string | undefined;
@@ -448,6 +496,7 @@ export default class CosmeticFilter implements IFilter {
     this.mask = mask;
     this.selector = selector;
     this.domains = domains;
+    this.parentDomains = parentDomains;
     this.style = style;
 
     this.id = undefined;
@@ -505,6 +554,11 @@ export default class CosmeticFilter implements IFilter {
       buffer.pushASCII(this.style);
     }
 
+    if (this.parentDomains !== undefined) {
+      optionalParts |= 8;
+      this.parentDomains.serialize(buffer);
+    }
+
     buffer.setByte(index, optionalParts);
   }
 
@@ -524,6 +578,10 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.domains !== undefined) {
       estimate += this.domains.getSerializedSize();
+    }
+
+    if (this.parentDomains !== undefined) {
+      estimate += this.parentDomains.getSerializedSize();
     }
 
     if (this.rawLine !== undefined) {
@@ -556,6 +614,20 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
+    if (this.parentDomains !== undefined) {
+      if (this.domains !== undefined) {
+        filter += ',';
+      }
+      if (this.parentDomains.parts !== undefined) {
+        filter += this.parentDomains.parts
+          .split(',')
+          .map((part) => part + '>>')
+          .join(',');
+      } else {
+        filter += '<hostnames>>>';
+      }
+    }
+
     if (this.isUnhide()) {
       filter += '#@#';
     } else {
@@ -577,32 +649,52 @@ export default class CosmeticFilter implements IFilter {
     return filter;
   }
 
-  public match(hostname: string, domain: string): boolean {
+  public match(
+    hostname: string,
+    domain: string,
+    ancestors?: { hostname: string; domain: string }[],
+  ): boolean {
     // Not constraint on hostname, match is true
     if (this.hasHostnameConstraint() === false) {
       return true;
     }
 
     // No `hostname` available but this filter has some constraints on hostname.
-    if (!hostname && this.hasHostnameConstraint()) {
+    if (!hostname) {
       return false;
     }
 
-    if (this.domains !== undefined) {
+    if (
+      this.domains !== undefined &&
       // TODO - this hashing could be re-used between cosmetics by using an
       // abstraction like `Request` (similar to network filters matching).
       // Maybe could we reuse `Request` directly without any change?
-      return this.domains.match(
-        hostname.length === 0
-          ? EMPTY_UINT32_ARRAY
-          : getHostnameHashesFromLabelsBackward(hostname, domain),
-        hostname.length === 0
-          ? EMPTY_UINT32_ARRAY
-          : getEntityHashesFromLabelsBackward(hostname, domain),
-      );
+      this.domains.match(
+        getHostnameHashesFromLabelsBackward(hostname, domain),
+        getEntityHashesFromLabelsBackward(hostname, domain),
+      )
+    ) {
+      return true;
     }
 
-    return true;
+    if (ancestors !== undefined && this.parentDomains !== undefined) {
+      for (const { hostname, domain } of ancestors) {
+        if (
+          this.parentDomains.match(
+            hostname.length === 0
+              ? EMPTY_UINT32_ARRAY
+              : getHostnameHashesFromLabelsBackward(hostname, domain),
+            hostname.length === 0
+              ? EMPTY_UINT32_ARRAY
+              : getEntityHashesFromLabelsBackward(hostname, domain),
+          )
+        ) {
+          return true;
+        }
+      }
+    }
+
+    return false;
   }
 
   /**
@@ -619,6 +711,22 @@ export default class CosmeticFilter implements IFilter {
 
     if (this.domains !== undefined) {
       const { hostnames, entities } = this.domains;
+
+      if (hostnames !== undefined) {
+        for (const hostname of hostnames) {
+          tokens.push(new Uint32Array([hostname]));
+        }
+      }
+
+      if (entities !== undefined) {
+        for (const entity of entities) {
+          tokens.push(new Uint32Array([entity]));
+        }
+      }
+    }
+
+    if (this.parentDomains !== undefined) {
+      const { hostnames, entities } = this.parentDomains;
 
       if (hostnames !== undefined) {
         for (const hostname of hostnames) {
@@ -880,12 +988,24 @@ export default class CosmeticFilter implements IFilter {
   }
 
   public hasHostnameConstraint(): boolean {
-    return this.domains !== undefined;
+    return this.domains !== undefined || this.parentDomains !== undefined;
+  }
+
+  // `hasSubframeConstraint` is only `true` when the filter is scriptlet.
+  // Other cosmetic filters with subframe constraint will be rejected in the parse time.
+  public hasSubframeConstraint(): boolean {
+    return this.parentDomains !== undefined;
   }
 
   public getId(): number {
     if (this.id === undefined) {
-      this.id = computeFilterId(this.mask, this.selector, this.domains, this.style);
+      this.id = computeFilterId(
+        this.mask,
+        this.selector,
+        this.domains,
+        this.parentDomains,
+        this.style,
+      );
     }
     return this.id;
   }
@@ -961,6 +1081,11 @@ export default class CosmeticFilter implements IFilter {
   //
   // For example: ~example.com##.ad  is a generic filter as well!
   public isGenericHide(): boolean {
-    return this?.domains?.hostnames === undefined && this?.domains?.entities === undefined;
+    return (
+      this?.domains?.hostnames === undefined &&
+      this?.domains?.entities === undefined &&
+      this?.parentDomains?.hostnames === undefined &&
+      this?.parentDomains?.entities === undefined
+    );
   }
 }

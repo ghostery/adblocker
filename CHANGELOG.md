@@ -1,3 +1,41 @@
+# v2.13.1 (Thu Dec 18 2025)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - Bump engine version to 812 [#5361](https://github.com/ghostery/adblocker/pull/5361) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.13.0 (Thu Dec 04 2025)
+
+#### :rocket: New Feature
+
+- `@ghostery/adblocker`
+  - feat: subframe only scripting [#5104](https://github.com/ghostery/adblocker/pull/5104) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - fix: `this.hasHostnameConstraint()` is always `true` [#5325](https://github.com/ghostery/adblocker/pull/5325) ([@seia-soto](https://github.com/seia-soto))
+  - test(adblocker): add network filter token test for wildcard patterns [#5312](https://github.com/ghostery/adblocker/pull/5312) ([@chrmod](https://github.com/chrmod))
+
+#### :nut_and_bolt: Dependencies
+
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - chore(internal): update dependencies [#5323](https://github.com/ghostery/adblocker/pull/5323) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.12.5 (Wed Oct 29 2025)
 
 #### :bug: Bug Fix
