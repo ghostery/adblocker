@@ -1,3 +1,20 @@
+# v2.13.2 (Mon Dec 22 2025)
+
+#### :bug: Bug Fix
+
+- feat: enable case-sensitivity for regex filters with $match-case [#5296](https://github.com/ghostery/adblocker/pull/5296) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- fix(adblocker): limit maxNgram for network-hostname codebook [#5368](https://github.com/ghostery/adblocker/pull/5368) ([@chrmod](https://github.com/chrmod))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.13.1 (Thu Dec 18 2025)
 
 #### :bug: Bug Fix
