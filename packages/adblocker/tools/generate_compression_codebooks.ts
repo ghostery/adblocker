@@ -129,6 +129,8 @@ async function generateCodebook(kind: string): Promise<string[]> {
     options.maxNgram = 12;
   } else if (kind === 'raw-network') {
     options.maxNgram = 11;
+  } else if (kind === 'network-hostname') {
+    options.maxNgram = 15;
   } else if (kind === 'cosmetic-selector') {
     options.maxNgram = 26;
   }
