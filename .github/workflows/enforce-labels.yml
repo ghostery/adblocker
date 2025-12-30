@@ -20,8 +20,9 @@ jobs:
       runs: |
         if \
         git diff master...HEAD -- packages/adblocker/src/engine/engine.ts | \
-        grep -E "^[-+]export const ENGINE_VERSION = [0-9]+;$"; \
-        then echo "IS_CHANGED=TRUE" >> "$GITHUB_OUTPUT"
+        grep -E "^[-+]export const ENGINE_VERSION = [0-9]+;$" \
+        ; then echo "IS_CHANGED=TRUE" >> "$GITHUB_OUTPUT" \
+        ; fi
 
     - uses: yogevbd/enforce-label-action@2.1.0
       if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == 'TRUE'
