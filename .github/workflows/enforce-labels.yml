@@ -27,8 +27,8 @@ jobs:
     - uses: yogevbd/enforce-label-action@2.1.0
       if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == 'TRUE'
       with:
-        REQUIRED_LABELS_ANY: "PR: Breaking Change :boom:,PR: New Feature :rocket:,PR: Performance :running_woman:"
-        REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label: PR: Breaking Change :boom:, PR: New Feature :rocket:, PR: Performance :running_woman:"
+        REQUIRED_LABELS_ANY: "PR: Breaking Change :boom:,PR: New Feature :rocket:,PR: Performance :running_woman:,PR: Internal :house:"
+        REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label: PR: Breaking Change :boom:, PR: New Feature :rocket:, PR: Performance :running_woman:, PR: Internal :house:"
 
     - uses: yogevbd/enforce-label-action@2.1.0
       if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == ''
