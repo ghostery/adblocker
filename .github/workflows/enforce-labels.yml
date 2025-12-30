@@ -3,11 +3,34 @@ name: Enforce PR labels
 on:
   pull_request:
     types: [labeled, unlabeled, opened, edited, synchronize]
+
 jobs:
   enforce-label:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v4
+      with:
+        sparse-checkout: |
+          packages/adblocker/src/engine/engine.ts
+        sparse-checkout-cone-mode: false
+        fetch-depth: 0
+
+    - name: Find ENGINE_VERSION changes
+      id: DIFF_ENGINE_VERSION
+      runs: |
+        if \
+        git diff master...HEAD -- packages/adblocker/src/engine/engine.ts | \
+        grep -E "^[-+]export const ENGINE_VERSION = [0-9]+;$"; \
+        then echo "IS_CHANGED=TRUE" >> "$GITHUB_OUTPUT"
+
     - uses: yogevbd/enforce-label-action@2.1.0
+      if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == 'TRUE'
+      with:
+        REQUIRED_LABELS_ANY: "PR: Breaking Change :boom:,PR: New Feature :rocket:,PR: Performance :running_woman:"
+        REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label: PR: Breaking Change :boom:, PR: New Feature :rocket:, PR: Performance :running_woman:"
+
+    - uses: yogevbd/enforce-label-action@2.1.0
+      if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == ''
       with:
         REQUIRED_LABELS_ANY: "PR: Breaking Change :boom:,PR: Bug Fix :bug:,PR: Dependencies :nut_and_bolt:,PR: Docs :memo:,PR: Internal :house:,PR: New Feature :rocket:,PR: Performance :running_woman:,PR: Polish :nail_care:"
         REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label: PR: Breaking Change :boom:, PR: Bug Fix :bug:, PR: Dependencies :nut_and_bolt:, PR: Docs :memo:, PR: Internal :house:, PR: New Feature :rocket:, PR: Performance :running_woman:, PR: Polish :nail_care:"
