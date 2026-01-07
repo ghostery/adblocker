@@ -7,6 +7,20 @@
  */
 
 import type { AST, Complex } from './types.js';
+const createXpathExpression = (function () {
+  const expressions: [string, XPathExpression][] = [];
+
+  return function compile(query: string) {
+    for (const [literal, expression] of expressions) {
+      if (query === literal) {
+        return expression;
+      }
+    }
+    const expression = document.createExpression(query);
+    expressions.push([query, expression]);
+    return expression;
+  };
+})();
 
 /**
  * Evaluates an XPath expression and returns matching Element nodes.
@@ -20,12 +34,9 @@ function handleXPathSelector(element: Element, xpathExpression: string): Element
       return []; // unsupported (not running in the browser)
     }
 
-    const result = element.ownerDocument.evaluate(
-      xpathExpression,
+    const result = createXpathExpression(xpathExpression).evaluate(
       element,
-      null,
       XPathResult.ORDERED_NODE_SNAPSHOT_TYPE,
-      null,
     );
 
     if (result.resultType !== XPathResult.ORDERED_NODE_SNAPSHOT_TYPE) {
