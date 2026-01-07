@@ -6,7 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-import type { AST, Complex } from './types.js';
+import type { AST, Complex, PseudoClass } from './types.js';
+
 const createXpathExpression = (function () {
   const expressions: [string, XPathExpression][] = [];
 
@@ -423,6 +424,18 @@ function traverse(root: Element, selectors: AST[]): Element[] {
   return results;
 }
 
+/**
+ * Check if the selector is delegating the traversal process to the external method.
+ * @param selector The pseudo class selector
+ */
+export function isDelegatedPseudoClass(selector: PseudoClass): boolean {
+  if (selector.name === 'xpath') {
+    return true;
+  }
+
+  return false;
+}
+
 export function querySelectorAll(element: Element, selector: AST): Element[] {
   // Type of `attribute`, `class`, `id`, and `type` are to express simple selectors.
   // e.g. `[attr]` is `attribute` type, `.cls` is `class` type, `#lure` is `id` type, and `div` is `type` type.
@@ -476,7 +489,9 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
     // This code is intended to be matched with `document.documentElement.querySelectorAll`.
     // Since `document` is at the higher position rather `document.documentElement`,
     // it can't select `html` for an instance.
-    for (const subjective of element.querySelectorAll('*')) {
+    for (const subjective of isDelegatedPseudoClass(selector)
+      ? [element]
+      : element.querySelectorAll('*')) {
       for (const result of traverse(subjective, [selector])) {
         if (!results.includes(result)) {
           results.push(result);
