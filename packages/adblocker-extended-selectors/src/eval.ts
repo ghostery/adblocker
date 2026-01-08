@@ -428,7 +428,7 @@ function traverse(root: Element, selectors: AST[]): Element[] {
  * Check if the selector is delegating the traversal process to the external method.
  * @param selector The pseudo class selector
  */
-export function isDelegatedPseudoClass(selector: PseudoClass): boolean {
+function isDelegatedPseudoClass(selector: PseudoClass): boolean {
   if (selector.name === 'xpath') {
     return true;
   }
