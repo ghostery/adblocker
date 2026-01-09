@@ -1,3 +1,18 @@
+# v2.13.3 (Fri Jan 09 2026)
+
+#### :bug: Bug Fix
+
+- Publish with OIDC [#5383](https://github.com/ghostery/adblocker/pull/5383) ([@chrmod](https://github.com/chrmod))
+- `@ghostery/adblocker-extended-selectors`
+  - perf: delegation check for pseudo selector and reusible xpath expressions [#5382](https://github.com/ghostery/adblocker/pull/5382) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Krzysztof Modras ([@chrmod](https://github.com/chrmod))
+
+---
+
 # v2.13.2 (Mon Dec 22 2025)
 
 #### :bug: Bug Fix

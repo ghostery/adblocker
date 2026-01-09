@@ -1,3 +1,15 @@
+# v2.13.3 (Fri Jan 09 2026)
+
+#### :bug: Bug Fix
+
+- perf: delegation check for pseudo selector and reusible xpath expressions [#5382](https://github.com/ghostery/adblocker/pull/5382) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.0 (Thu Dec 04 2025)
 
 #### :nut_and_bolt: Dependencies
