@@ -409,7 +409,11 @@ export class PuppeteerBlocker extends FiltersEngine {
         }),
       );
 
-      if (!frame.detached && match) {
+      if (match) {
+        if (frame.detached) {
+          break;
+        }
+
         promises.push(
           frame
             .evaluate((url) => {
