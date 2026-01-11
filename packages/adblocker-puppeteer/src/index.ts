@@ -267,7 +267,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
       try {
         const foundNewFeatures = observer.handleNewFeatures(
-          await frame.$$eval(':root', extractFeaturesFromDOM),
+          await frame.evaluate(extractFeaturesFromDOM),
         );
         numberOfIterations += 1;
 

@@ -103,7 +103,7 @@ function getElementsFromMutations(mutations: MutationRecord[]): Element[] {
  * potentially be injected in content-script (e.g.: see PuppeteerBlocker for
  * more details).
  */
-export function extractFeaturesFromDOM(roots: Element[]): {
+export function extractFeaturesFromDOM(roots: Element[] = [document.documentElement]): {
   classes: string[];
   hrefs: string[];
   ids: string[];
