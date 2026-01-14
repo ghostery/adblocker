@@ -1,3 +1,26 @@
+# v2.13.4 (Wed Jan 14 2026)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-puppeteer`
+  - fix(puppeteer): avoid the use of `$$eval` [#5384](https://github.com/ghostery/adblocker/pull/5384) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- ci: check engine version and enforce different pull request labels [#5377](https://github.com/ghostery/adblocker/pull/5377) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump typescript-eslint from 8.47.0 to 8.52.0 [#5380](https://github.com/ghostery/adblocker/pull/5380) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump rollup from 4.53.2 to 4.55.1 [#5379](https://github.com/ghostery/adblocker/pull/5379) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.3 (Fri Jan 09 2026)
 
 #### :bug: Bug Fix

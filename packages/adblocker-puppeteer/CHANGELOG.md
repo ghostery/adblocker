@@ -1,3 +1,15 @@
+# v2.13.4 (Wed Jan 14 2026)
+
+#### :bug: Bug Fix
+
+- fix(puppeteer): avoid the use of `$$eval` [#5384](https://github.com/ghostery/adblocker/pull/5384) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.0 (Thu Dec 04 2025)
 
 #### :nut_and_bolt: Dependencies
