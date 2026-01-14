@@ -267,7 +267,7 @@ export class PuppeteerBlocker extends FiltersEngine {
 
       try {
         const foundNewFeatures = observer.handleNewFeatures(
-          await frame.$$eval(':root', extractFeaturesFromDOM),
+          await frame.evaluate(extractFeaturesFromDOM),
         );
         numberOfIterations += 1;
 
@@ -385,9 +385,22 @@ export class PuppeteerBlocker extends FiltersEngine {
     const promises: Promise<void>[] = [];
     const sourceUrl = getTopLevelUrl(frame);
 
-    for (const url of await frame.$$eval('iframe[src],iframe[href]', (elements) =>
-      elements.map(({ src, href }: any) => src || href),
-    )) {
+    if (frame.detached) {
+      return;
+    }
+
+    for (const url of await frame.evaluate(() => {
+      const urls = [];
+      for (const element of document.querySelectorAll<HTMLIFrameElement>(
+        'iframe[src],iframe[href]',
+      )) {
+        const url = element.getAttribute('src') || element.getAttribute('href');
+        if (url) {
+          urls.push(url);
+        }
+      }
+      return urls;
+    })) {
       const { match } = this.match(
         Request.fromRawDetails({
           url,
@@ -397,13 +410,19 @@ export class PuppeteerBlocker extends FiltersEngine {
       );
 
       if (match) {
+        if (frame.detached) {
+          break;
+        }
+
         promises.push(
           frame
-            .$$eval(`iframe[src="${url}"],iframe[href="${url}"]`, (iframes) => {
-              for (const iframe of iframes) {
-                iframe?.parentNode?.removeChild(iframe);
+            .evaluate((url) => {
+              for (const element of document.querySelectorAll(
+                `iframe[src="${url}"],iframe[href="${url}"]`,
+              )) {
+                element?.parentNode?.removeChild(element);
               }
-            })
+            }, url)
             .catch(() => {
               /* ignore */
             }),
