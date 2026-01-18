@@ -1078,12 +1078,80 @@ describe('eval', () => {
               for (const element of document.querySelectorAll('a')) {
                 if (element.textContent?.includes('link')) {
                   expect(element.getAttribute('href')).to.be.null;
+                } else {
+                  expect(element.getAttribute('href')).to.be.eq('https://example.com/');
                 }
               }
             },
           );
         });
       }
+
+      it('supports regex', () => {
+        testHandlePseudoDirective(
+          `a:remove-attr(/oncontextmenu|onselectstart|ondragstart/)`,
+          `<html><body><a oncontextmenu="false" onselectstart="false" ondragstart="false"></a></body></html>`,
+          (document) => {
+            const element = document.querySelector('a')!;
+            expect(element.getAttribute('oncontextmenu')).to.be.null;
+            expect(element.getAttribute('onselectstart')).to.be.null;
+            expect(element.getAttribute('ondragstart')).to.be.null;
+          },
+        );
+      });
+    });
+
+    describe(':remove-class', () => {
+      for (const [description, quote] of [
+        ['non-quote', ''],
+        ['single-quote', "'"],
+        ['double-quote', '"'],
+      ]) {
+        it(description, () => {
+          testHandlePseudoDirective(
+            `h1:remove-class(${quote}header${quote})`,
+            `<html><body><h1 class="header"></h1></body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('h1')) {
+                expect(element.classList.contains('header')).to.be.false;
+              }
+            },
+          );
+        });
+
+        it(`${description} with extended-selector`, () => {
+          testHandlePseudoDirective(
+            `h1:has-text(Heading):remove-attr(${quote}header${quote})`,
+            `<html><body>
+              <h1 class="header">Website</h1>
+              <h1 class="header">Heading</h1>
+            </body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('a')) {
+                if (element.textContent?.includes('Heading')) {
+                  expect(element.classList.contains('header')).to.be.false;
+                } else {
+                  expect(element.classList.contains('header')).to.be.true;
+                }
+              }
+            },
+          );
+        });
+      }
+
+      it('supports regex', () => {
+        testHandlePseudoDirective(
+          `div:remove-class(/header|footer|container/)`,
+          `<html><body><div class="header container"></div><div class="footer container"></div></body></html>`,
+          (document) => {
+            for (const element of document.querySelectorAll('div')) {
+              expect(element.classList.contains('header')).to.be.false;
+              expect(element.classList.contains('footer')).to.be.false;
+              expect(element.classList.contains('container')).to.be.false;
+            }
+          },
+        );
+      });
     });
   });
 });

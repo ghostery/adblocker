@@ -518,13 +518,34 @@ export function handlePseudoDirective(element: Element, selector: AST): void {
         return;
       } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
         const regex = parseRegex(selector.argument);
-        for (const attribute of element.attributes) {
-          if (regex.test(attribute.name)) {
+        let i = element.attributes.length;
+        let attribute = null;
+        while (i--) {
+          attribute = element.attributes.item(i);
+          if (attribute !== null && regex.test(attribute.name)) {
+            console.log(element.attributes.length, attribute.name);
             element.removeAttribute(attribute.name);
+            console.log(element.attributes.length, attribute.name);
           }
         }
       } else {
         return element.removeAttribute(stripsWrappingQuotes(selector.argument));
+      }
+    } else if (selector.name === 'remove-class') {
+      if (selector.argument === undefined) {
+        return;
+      } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
+        const regex = parseRegex(selector.argument);
+        let i = element.classList.length;
+        let className = null;
+        while (i--) {
+          className = element.classList.item(i);
+          if (className !== null && regex.test(className)) {
+            element.classList.remove(className);
+          }
+        }
+      } else {
+        return element.classList.remove(stripsWrappingQuotes(selector.argument));
       }
     }
   }

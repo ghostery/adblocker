@@ -95,7 +95,7 @@ export const PSEUDO_ELEMENTS = new Set(['after', 'before', 'first-letter', 'firs
 
 // Pseudo directives are pseudo-classes containing actions. It is
 // still not a standard CSS spec but defines custom action.
-export const PSEUDO_DIRECTIVES = new Set(['remove', 'remove-attr']);
+export const PSEUDO_DIRECTIVES = new Set(['remove', 'remove-attr', 'remove-class']);
 
 export enum SelectorType {
   Normal,
