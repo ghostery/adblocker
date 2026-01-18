@@ -7,6 +7,7 @@
  */
 
 import { tokenize, RECURSIVE_PSEUDO_CLASSES } from './parse.js';
+import { AST } from './types.js';
 
 export const EXTENDED_PSEUDO_CLASSES = new Set([
   // '-abp-contains',
@@ -92,6 +93,10 @@ export const PSEUDO_CLASSES = new Set([
 // this reason.
 export const PSEUDO_ELEMENTS = new Set(['after', 'before', 'first-letter', 'first-line']);
 
+// Pseudo directives are pseudo-classes containing actions. It is
+// still not a standard CSS spec but defines custom action.
+export const PSEUDO_DIRECTIVES = new Set(['remove-attr']);
+
 export enum SelectorType {
   Normal,
   Extended,
@@ -113,7 +118,11 @@ export function classifySelector(selector: string): SelectorType {
       const { name } = token;
       if (EXTENDED_PSEUDO_CLASSES.has(name) === true) {
         foundSupportedExtendedSelector = true;
-      } else if (PSEUDO_CLASSES.has(name) === false && PSEUDO_ELEMENTS.has(name) === false) {
+      } else if (
+        PSEUDO_CLASSES.has(name) === false &&
+        PSEUDO_ELEMENTS.has(name) === false &&
+        PSEUDO_DIRECTIVES.has(name) === false
+      ) {
         return SelectorType.Invalid;
       }
 
@@ -147,4 +156,102 @@ export function classifySelector(selector: string): SelectorType {
   }
 
   return SelectorType.Normal;
+}
+
+/**
+ * Projects whole AST into multiple ASTs per purpose. "element"
+ * AST can be used to query the target element using the method:
+ * `querySelectorAll`.
+ * @returns "element" AST and "directive" AST; no "element" AST
+ * means there's no selector, no "directive" AST means there's no
+ * pseudo-directive.
+ */
+export function project(ast: AST): Record<'element' | 'directive', AST | null> {
+  // If the root AST type is 'pseudo-class', it means the
+  // selector starts like `:pseudo-class()` without any other
+  // types of selectors. We need to check if the AST is pseudo-
+  // directive.
+  if (ast.type === 'pseudo-class' && PSEUDO_DIRECTIVES.has(ast.name)) {
+    return {
+      element: null,
+      directive: ast,
+    };
+    // If the root AST type is 'compound', it means there's
+    // multiple AST nodes before the pseudo-directive. A compound
+    // cannot hold another compound as its children thanks to the
+    // parser characteristic. Also, the parser will group every
+    // other selectors such as 'complex', simplyfying the AST.
+    // It will look like 'some-selectors...:pseudo-class()`.
+  } else if (ast.type === 'compound') {
+    // We pick-up the last node and check if that's a pseudo-
+    // directive.
+    const last = ast.compound[ast.compound.length - 1];
+    if (last.type === 'pseudo-class' && PSEUDO_DIRECTIVES.has(last.name)) {
+      return {
+        element: {
+          type: 'compound',
+          compound: ast.compound.slice(0, -1),
+        },
+        directive: last,
+      };
+    }
+  }
+  // If there's no pseudo-directive, everything else would be
+  // the element selector.
+  return {
+    element: ast,
+    directive: null,
+  };
+}
+
+/**
+ * Finds a position of a pseudo directive from the complete CSS
+ * selector. You can split the selector into normal or extended
+ * selector and pseudo directive using this function.
+ * @returns The position of a pseudo directive, or -1
+ */
+export function indexOfPseudoDirective(selector: string): number {
+  // Directives are not chainable. We manually parse from the
+  // backwards and break the process down into multiple loops for
+  // optimised code path.
+  let i = selector.lastIndexOf(')');
+  let c = -1; // Character code.
+
+  // Look for the potential quoting.
+  for (; --i > -1; ) {
+    c = selector.charCodeAt(i);
+
+    if (c < 33) continue;
+
+    if (c === 39 /* `'` */ || c === 34 /* '"' */ || c === 96 /* '`' */) {
+      // Run the first loop with the quoting expection.
+      for (; --i > -1; ) {
+        if (selector.charCodeAt(i) === c) {
+          break;
+        }
+      }
+
+      break;
+    }
+  }
+
+  // If it was not a quoting, we try to find the parenthesis.
+  if (i < 0) i = selector.length;
+
+  for (; --i > -1; ) {
+    if (selector.charCodeAt(i) === 40 /* '(' */) {
+      break;
+    }
+  }
+
+  // Look for the last definition character ':'.
+  c = selector.lastIndexOf(':', i);
+
+  // We stored the position of `:` in `c` and the position of `(`
+  // in `i`, so we can check the name of the pseudo directive.
+  if (PSEUDO_DIRECTIVES.has(selector.slice(c + 1, i))) {
+    return c;
+  }
+
+  return -1;
 }

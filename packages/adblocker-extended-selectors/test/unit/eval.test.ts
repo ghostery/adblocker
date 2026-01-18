@@ -11,8 +11,14 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../../src/eval.js';
+import { querySelectorAll, matchPattern, matches, handlePseudoDirective } from '../../src/eval.js';
 import { parse } from '../../src/parse.js';
+import {
+  classifySelector,
+  indexOfPseudoDirective,
+  project,
+  SelectorType,
+} from '../../src/extended.js';
 
 // TODO - check if style:has-text() works (can select style?)
 
@@ -52,6 +58,44 @@ function testQuerySelectorAll(selector: string, html: string, expectedSelectors:
   const actual = querySelectorAll(document.documentElement, ast);
   const expected = expectedSelectors.flatMap((s) => Array.from(document.querySelectorAll(s)));
   expect(actual).to.have.members(expected);
+}
+
+function testHandlePseudoDirective(
+  selector: string,
+  html: string,
+  callback: (document: Document) => void,
+): void {
+  const pseudoDirectiveIndex = indexOfPseudoDirective(selector);
+
+  // Make sure there's a pseudo directive.
+  expect(pseudoDirectiveIndex).to.be.greaterThan(-1);
+
+  const asts = project(parse(selector)!);
+  const {
+    window: { document },
+  } = new JSDOM(html, {
+    url: 'https://example.com',
+  });
+
+  // Make sure ASTs are projected.
+  expect(asts.element).not.to.be.null;
+  expect(asts.directive).not.to.be.null;
+
+  // Call `document.querySelectorAll` if the element
+  // selector does not require extended specs.
+  const elementSelector = selector.slice(0, pseudoDirectiveIndex);
+  const elements =
+    classifySelector(elementSelector) === SelectorType.Extended
+      ? querySelectorAll(document.documentElement, asts.element!)
+      : document.querySelectorAll(elementSelector);
+
+  expect(elements).to.have.length.greaterThan(0);
+
+  for (const element of elements) {
+    handlePseudoDirective(element, asts.directive!);
+  }
+
+  callback(document);
 }
 
 describe('eval', () => {
@@ -989,6 +1033,46 @@ describe('eval', () => {
           ['#n1'],
         );
       });
+    });
+  });
+
+  describe('#handlePseudoDirective', () => {
+    describe(':remove-attr', () => {
+      for (const [description, quote] of [
+        ['non-quote', ''],
+        ['single-quote', "'"],
+        ['double-quote', '"'],
+      ]) {
+        it(description, () => {
+          testHandlePseudoDirective(
+            `a:remove-attr(${quote}href${quote})`,
+            `<html><body><a href="https://example.com/"></a></body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('a')) {
+                expect(element.getAttribute('href')).to.be.null;
+              }
+            },
+          );
+        });
+
+        it(`${description} with extended-selector`, () => {
+          testHandlePseudoDirective(
+            `a:has-text(link):remove-attr(${quote}href${quote})`,
+            `<html><body>
+              <a href="https://example.com/">not this</a>
+              <a href="https://example.com/">first link</a>
+              <a href="https://example.com/">second link</a>
+            </body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('a')) {
+                if (element.textContent?.includes('link')) {
+                  expect(element.getAttribute('href')).to.be.null;
+                }
+              }
+            },
+          );
+        });
+      }
     });
   });
 });

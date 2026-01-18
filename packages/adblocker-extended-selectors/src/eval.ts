@@ -503,3 +503,27 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
 
   return [];
 }
+
+/**
+ * Executes pseudo-directive on the element.
+ * @param element The target from normal or extended selector.
+ * @param selector The AST only containing pseudo directive.
+ */
+export function handlePseudoDirective(element: Element, selector: AST): void {
+  if (selector.type === 'pseudo-class') {
+    if (selector.name === 'remove-attr') {
+      if (selector.argument === undefined) {
+        return;
+      } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
+        const regex = parseRegex(selector.argument);
+        for (const attribute of element.attributes) {
+          if (regex.test(attribute.name)) {
+            element.removeAttribute(attribute.name);
+          }
+        }
+      } else {
+        return element.removeAttribute(stripsWrappingQuotes(selector.argument));
+      }
+    }
+  }
+}
