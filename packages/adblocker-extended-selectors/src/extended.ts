@@ -116,7 +116,7 @@ export function classifySelector(selector: string): SelectorType {
   for (const token of tokens) {
     if (token.type === 'pseudo-class') {
       const { name } = token;
-      if (EXTENDED_PSEUDO_CLASSES.has(name) === true) {
+      if (EXTENDED_PSEUDO_CLASSES.has(name) === true || PSEUDO_DIRECTIVES.has(name) === true) {
         foundSupportedExtendedSelector = true;
       } else if (
         PSEUDO_CLASSES.has(name) === false &&

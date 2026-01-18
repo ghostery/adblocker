@@ -39,6 +39,11 @@ describe('extended', () => {
       expect(classifySelector('div:not(:has(span:has(a)))')).to.equal(SelectorType.Extended);
     });
 
+    it('pseudo-directives', () => {
+      expect(classifySelector(':remove()')).to.equal(SelectorType.Extended);
+      expect(classifySelector(':remove-attr()')).to.equal(SelectorType.Extended);
+    });
+
     for (const pseudo of Array.from(PSEUDO_CLASSES)) {
       it(`pseudo-class: ${pseudo}`, () => {
         expect(classifySelector(`div:${pseudo}(2)`)).to.equal(SelectorType.Normal);
