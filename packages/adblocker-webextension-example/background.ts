@@ -41,7 +41,7 @@ function incrementBlockedCounter(request: Request, blockingResponse: BlockingRes
 }
 
 // Whenever the active tab changes, then we update the count of blocked request
-chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.TabActiveInfo) =>
+chrome.tabs.onActivated.addListener(({ tabId }: chrome.tabs.OnActivatedInfo) =>
   updateBlockedCounter(tabId),
 );
 

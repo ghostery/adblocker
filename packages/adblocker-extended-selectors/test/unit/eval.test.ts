@@ -78,7 +78,6 @@ function testHandlePseudoDirective(
   });
 
   // Make sure ASTs are projected.
-  expect(asts.element).not.to.be.null;
   expect(asts.directive).not.to.be.null;
 
   // Call `document.querySelectorAll` if the element
@@ -86,7 +85,7 @@ function testHandlePseudoDirective(
   const elementSelector = selector.slice(0, pseudoDirectiveIndex);
   const elements =
     classifySelector(elementSelector) === SelectorType.Extended
-      ? querySelectorAll(document.documentElement, asts.element!)
+      ? querySelectorAll(document.documentElement, asts.element)
       : document.querySelectorAll(elementSelector);
 
   expect(elements).to.have.length.greaterThan(0);
@@ -1037,6 +1036,18 @@ describe('eval', () => {
   });
 
   describe('#handlePseudoDirective', () => {
+    describe(':remove', () => {
+      it('removes the node', () => {
+        testHandlePseudoDirective(
+          `a:remove()`,
+          `<html><body><a href="https://example.com/"></a></body></html>`,
+          (document) => {
+            expect(document.querySelectorAll('a').length).to.be.eq(0);
+          },
+        );
+      });
+    });
+
     describe(':remove-attr', () => {
       for (const [description, quote] of [
         ['non-quote', ''],

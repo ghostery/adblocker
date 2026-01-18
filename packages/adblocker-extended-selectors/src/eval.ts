@@ -511,7 +511,9 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
  */
 export function handlePseudoDirective(element: Element, selector: AST): void {
   if (selector.type === 'pseudo-class') {
-    if (selector.name === 'remove-attr') {
+    if (selector.name === 'remove') {
+      element.remove();
+    } else if (selector.name === 'remove-attr') {
       if (selector.argument === undefined) {
         return;
       } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {

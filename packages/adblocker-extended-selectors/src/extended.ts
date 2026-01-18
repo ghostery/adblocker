@@ -95,7 +95,7 @@ export const PSEUDO_ELEMENTS = new Set(['after', 'before', 'first-letter', 'firs
 
 // Pseudo directives are pseudo-classes containing actions. It is
 // still not a standard CSS spec but defines custom action.
-export const PSEUDO_DIRECTIVES = new Set(['remove-attr']);
+export const PSEUDO_DIRECTIVES = new Set(['remove', 'remove-attr']);
 
 export enum SelectorType {
   Normal,
@@ -166,23 +166,26 @@ export function classifySelector(selector: string): SelectorType {
  * means there's no selector, no "directive" AST means there's no
  * pseudo-directive.
  */
-export function project(ast: AST): Record<'element' | 'directive', AST | null> {
+export function project(ast: AST): { element: AST; directive: AST | null } {
   // If the root AST type is 'pseudo-class', it means the
   // selector starts like `:pseudo-class()` without any other
   // types of selectors. We need to check if the AST is pseudo-
-  // directive.
-  if (ast.type === 'pseudo-class' && PSEUDO_DIRECTIVES.has(ast.name)) {
-    return {
-      element: null,
-      directive: ast,
-    };
-    // If the root AST type is 'compound', it means there's
-    // multiple AST nodes before the pseudo-directive. A compound
-    // cannot hold another compound as its children thanks to the
-    // parser characteristic. Also, the parser will group every
-    // other selectors such as 'complex', simplyfying the AST.
-    // It will look like 'some-selectors...:pseudo-class()`.
-  } else if (ast.type === 'compound') {
+  // directive. Currently, this is not possible as we drop these
+  // filters from the parsing phase.
+  // if (ast.type === 'pseudo-class' && PSEUDO_DIRECTIVES.has(ast.name)) {
+  //   return {
+  //     element: null,
+  //     directive: ast,
+  //   };
+  // }
+
+  // If the root AST type is 'compound', it means there's
+  // multiple AST nodes before the pseudo-directive. A compound
+  // cannot hold another compound as its children thanks to the
+  // parser characteristic. Also, the parser will group every
+  // other selectors such as 'complex', simplyfying the AST. It
+  // will look like 'some-selectors...:pseudo-class()`.
+  if (ast.type === 'compound') {
     // We pick-up the last node and check if that's a pseudo-
     // directive.
     const last = ast.compound[ast.compound.length - 1];
@@ -196,6 +199,7 @@ export function project(ast: AST): Record<'element' | 'directive', AST | null> {
       };
     }
   }
+
   // If there's no pseudo-directive, everything else would be
   // the element selector.
   return {

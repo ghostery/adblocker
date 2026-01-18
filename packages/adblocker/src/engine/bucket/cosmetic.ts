@@ -20,6 +20,7 @@ import { hashStrings, tokenizeNoSkip } from '../../utils.js';
 import { noopOptimizeCosmetic } from '../optimizer.js';
 import ReverseIndex from '../reverse-index.js';
 import FiltersContainer from './filters.js';
+import { project } from '@ghostery/adblocker-extended-selectors';
 
 /**
  * Given a list of CSS selectors, create a valid stylesheet ready to be
@@ -518,7 +519,9 @@ export default class CosmeticFilterBucket {
       for (const filter of extendedFilters) {
         const ast = filter.getSelectorAST();
         if (ast !== undefined) {
-          const attribute = filter.isRemove() ? undefined : filter.getStyleAttributeHash();
+          const projection = project(ast);
+          const attribute =
+            projection.directive === null ? filter.getStyleAttributeHash() : undefined;
 
           if (attribute !== undefined) {
             extendedStyles.set(filter.getStyle(hidingStyle), attribute);
@@ -526,9 +529,9 @@ export default class CosmeticFilterBucket {
 
           extended.push({
             id: filter.getId(),
-            ast,
-            remove: filter.isRemove(),
+            ast: projection.element,
             attribute,
+            directive: projection.directive || undefined,
           });
         }
       }
