@@ -523,9 +523,7 @@ export function handlePseudoDirective(element: Element, selector: AST): void {
         while (i--) {
           attribute = element.attributes.item(i);
           if (attribute !== null && regex.test(attribute.name)) {
-            console.log(element.attributes.length, attribute.name);
             element.removeAttribute(attribute.name);
-            console.log(element.attributes.length, attribute.name);
           }
         }
       } else {
