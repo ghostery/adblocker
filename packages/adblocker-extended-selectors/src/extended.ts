@@ -222,14 +222,14 @@ export function indexOfPseudoDirective(selector: string): number {
   let c = -1; // Character code.
 
   // Look for the potential quoting.
-  for (; --i > -1; ) {
+  while (i--) {
     c = selector.charCodeAt(i);
 
     if (c < 33) continue;
 
     if (c === 39 /* `'` */ || c === 34 /* '"' */ || c === 96 /* '`' */) {
       // Run the first loop with the quoting expection.
-      for (; --i > -1; ) {
+      while (i--) {
         if (selector.charCodeAt(i) === c) {
           break;
         }
@@ -242,7 +242,7 @@ export function indexOfPseudoDirective(selector: string): number {
   // If it was not a quoting, we try to find the parenthesis.
   if (i < 0) i = selector.length;
 
-  for (; --i > -1; ) {
+  while (i--) {
     if (selector.charCodeAt(i) === 40 /* '(' */) {
       break;
     }
