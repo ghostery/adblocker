@@ -518,9 +518,7 @@ export function handlePseudoDirective(element: Element, selector: AST): void {
         return;
       } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
         const regex = parseRegex(selector.argument);
-        let i = element.attributes.length;
-        let attribute = null;
-        while (i--) {
+        for (let i = element.attributes.length - 1, attribute = null; i >= 0; i--) {
           attribute = element.attributes.item(i);
           if (attribute !== null && regex.test(attribute.name)) {
             element.removeAttribute(attribute.name);
@@ -534,9 +532,7 @@ export function handlePseudoDirective(element: Element, selector: AST): void {
         return;
       } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
         const regex = parseRegex(selector.argument);
-        let i = element.classList.length;
-        let className = null;
-        while (i--) {
+        for (let i = element.classList.length - 1, className = null; i >= 0; i--) {
           className = element.classList.item(i);
           if (className !== null && regex.test(className)) {
             element.classList.remove(className);
