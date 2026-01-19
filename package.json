@@ -67,21 +67,21 @@
     "format-fix": "prettier './packages/**/*.ts' --write"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.1",
+    "@eslint/js": "^9.39.2",
     "@types/benchmark": "^2.1.5",
-    "@types/node": "^24.10.1",
+    "@types/node": "24.10.3",
     "auto": "^11.3.6",
     "benchmark": "^2.1.4",
     "chalk": "^5.6.2",
-    "eslint": "^9.39.1",
+    "eslint": "^9.39.2",
     "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
-    "lerna": "^9.0.1",
+    "eslint-plugin-prettier": "^5.5.5",
+    "lerna": "^9.0.3",
     "patch-package": "^8.0.1",
-    "prettier": "^3.6.2",
-    "tsx": "^4.20.6",
+    "prettier": "^3.8.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "8.52.0"
+    "typescript-eslint": "8.53.0"
   },
   "auto": {
     "name": "Ghostery Adblocker Bot",
@@ -163,5 +163,8 @@
       }
     ]
   },
-  "packageManager": "yarn@4.3.1"
+  "packageManager": "yarn@4.3.1",
+  "resolutions": {
+    "electron@npm:*": "patch:electron@npm%3A40.0.0#~/.yarn/patches/electron-npm-40.0.0-9473760246.patch"
+  }
 }
