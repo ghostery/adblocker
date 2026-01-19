@@ -8,6 +8,7 @@
 
 import type { IMessageFromBackground } from '@ghostery/adblocker-content';
 
+import { project } from '@ghostery/adblocker-extended-selectors';
 import { compactTokens, concatTypedArrays } from '../../compact-set.js';
 import Config from '../../config.js';
 import { StaticDataView } from '../../data-view.js';
@@ -20,7 +21,6 @@ import { hashStrings, tokenizeNoSkip } from '../../utils.js';
 import { noopOptimizeCosmetic } from '../optimizer.js';
 import ReverseIndex from '../reverse-index.js';
 import FiltersContainer from './filters.js';
-import { project } from '@ghostery/adblocker-extended-selectors';
 
 /**
  * Given a list of CSS selectors, create a valid stylesheet ready to be

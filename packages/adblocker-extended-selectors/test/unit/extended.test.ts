@@ -103,20 +103,18 @@ describe('extended', () => {
     });
   });
 
-  describe('#indexOfPseudoDirective', () => {
-    it('remove-attr', () => {
-      expect(indexOfPseudoDirective('a:remove-attr(class)')).to.eq(1);
-      expect(indexOfPseudoDirective('a:has(span:has-text(b)):remove-attr(attr-name)')).to.eq(23);
+  it('#indexOfPseudoDirective', () => {
+    expect(indexOfPseudoDirective('a:remove-attr(class)')).to.eq(1);
+    expect(indexOfPseudoDirective('a:has(span:has-text(b)):remove-attr(attr-name)')).to.eq(23);
 
-      // with quotes
-      expect(indexOfPseudoDirective("div:remove-attr('class')")).to.eq(3);
-      expect(indexOfPseudoDirective('div:remove-attr("class")')).to.eq(3);
-      expect(indexOfPseudoDirective('a:remove-attr(`href`)')).to.eq(1);
+    // with quotes
+    expect(indexOfPseudoDirective("div:remove-attr('class')")).to.eq(3);
+    expect(indexOfPseudoDirective('div:remove-attr("class")')).to.eq(3);
+    expect(indexOfPseudoDirective('a:remove-attr(`href`)')).to.eq(1);
 
-      // with incomplete quote
-      expect(indexOfPseudoDirective("div:remove-attr(class')")).to.eq(3);
-      expect(indexOfPseudoDirective('div:remove-attr(class")')).to.eq(3);
-      expect(indexOfPseudoDirective('a:remove-attr(href`)')).to.eq(1);
-    });
+    // with incomplete quote
+    expect(indexOfPseudoDirective("div:remove-attr(class')")).to.eq(3);
+    expect(indexOfPseudoDirective('div:remove-attr(class")')).to.eq(3);
+    expect(indexOfPseudoDirective('a:remove-attr(href`)')).to.eq(1);
   });
 });

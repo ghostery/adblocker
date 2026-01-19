@@ -7,7 +7,8 @@
  */
 
 import { tokenize, RECURSIVE_PSEUDO_CLASSES } from './parse.js';
-import { AST } from './types.js';
+
+import type { AST } from './types.js';
 
 export const EXTENDED_PSEUDO_CLASSES = new Set([
   // '-abp-contains',
@@ -159,9 +160,8 @@ export function classifySelector(selector: string): SelectorType {
 }
 
 /**
- * Projects whole AST into multiple ASTs per purpose. "element"
- * AST can be used to query the target element using the method:
- * `querySelectorAll`.
+ * Exposes ASTs per purpose. For an instance, it distinguishes
+ * a directive selector from element selectors.
  * @returns "element" AST and "directive" AST; no "element" AST
  * means there's no selector, no "directive" AST means there's no
  * pseudo-directive.
