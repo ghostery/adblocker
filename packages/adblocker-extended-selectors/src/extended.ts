@@ -190,6 +190,15 @@ export function deriveAST(ast: AST): { element: AST; directive: AST | null } {
     // directive.
     const last = ast.compound[ast.compound.length - 1];
     if (last.type === 'pseudo-class' && PSEUDO_DIRECTIVES.has(last.name)) {
+      // If the underlying nodes in this compound selector is
+      // less than 3 (or eq 2; compound is to chain multiple
+      // nodes), it means the underlying node can be extracted.
+      if (ast.compound.length < 3) {
+        return {
+          element: ast.compound[0],
+          directive: last,
+        };
+      }
       return {
         element: {
           type: 'compound',
