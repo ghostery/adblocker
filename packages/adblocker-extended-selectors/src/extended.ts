@@ -121,8 +121,8 @@ export function classifySelector(selector: string): SelectorType {
         foundSupportedExtendedSelector = true;
       } else if (
         PSEUDO_CLASSES.has(name) === false &&
-        PSEUDO_ELEMENTS.has(name) === false &&
-        PSEUDO_DIRECTIVES.has(name) === false
+        PSEUDO_ELEMENTS.has(name) === false
+        // `PSEUDO_DIRECTIVES.has(name)` is always `false` here.
       ) {
         return SelectorType.Invalid;
       }
