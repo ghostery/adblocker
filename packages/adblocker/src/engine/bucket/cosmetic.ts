@@ -8,7 +8,7 @@
 
 import type { IMessageFromBackground } from '@ghostery/adblocker-content';
 
-import { project } from '@ghostery/adblocker-extended-selectors';
+import { deriveAST } from '@ghostery/adblocker-extended-selectors';
 import { compactTokens, concatTypedArrays } from '../../compact-set.js';
 import Config from '../../config.js';
 import { StaticDataView } from '../../data-view.js';
@@ -519,9 +519,8 @@ export default class CosmeticFilterBucket {
       for (const filter of extendedFilters) {
         const ast = filter.getSelectorAST();
         if (ast !== undefined) {
-          const projection = project(ast);
-          const attribute =
-            projection.directive === null ? filter.getStyleAttributeHash() : undefined;
+          const asts = deriveAST(ast);
+          const attribute = asts.directive === null ? filter.getStyleAttributeHash() : undefined;
 
           if (attribute !== undefined) {
             extendedStyles.set(filter.getStyle(hidingStyle), attribute);
@@ -529,9 +528,9 @@ export default class CosmeticFilterBucket {
 
           extended.push({
             id: filter.getId(),
-            ast: projection.element,
+            ast: asts.element,
             attribute,
-            directive: projection.directive || undefined,
+            directive: asts.directive || undefined,
           });
         }
       }

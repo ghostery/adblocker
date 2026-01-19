@@ -166,7 +166,7 @@ export function classifySelector(selector: string): SelectorType {
  * means there's no selector, no "directive" AST means there's no
  * pseudo-directive.
  */
-export function project(ast: AST): { element: AST; directive: AST | null } {
+export function deriveAST(ast: AST): { element: AST; directive: AST | null } {
   // If the root AST type is 'pseudo-class', it means the
   // selector starts like `:pseudo-class()` without any other
   // types of selectors. We need to check if the AST is pseudo-
@@ -221,10 +221,15 @@ export function indexOfPseudoDirective(selector: string): number {
   let i = selector.lastIndexOf(')');
   let c = -1; // Character code.
 
+  if (i === -1) {
+    return -1;
+  }
+
   // Look for the potential quoting.
   while (i--) {
     c = selector.charCodeAt(i);
 
+    // Skip control and whitespace characters.
     if (c < 33) continue;
 
     if (c === 39 /* `'` */ || c === 34 /* '"' */ || c === 96 /* '`' */) {
