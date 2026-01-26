@@ -13,18 +13,172 @@ import {
   FiltersEngine,
   HTMLSelector,
   isUTF8,
+  NetworkFilter,
   Request,
   RequestType,
   StreamingHtmlFilter,
 } from '@ghostery/adblocker';
 import { IBackgroundCallback, IMessageFromBackground } from '@ghostery/adblocker-content';
 
+// ============================================================================
+// MV3 Support - declarativeNetRequest types and utilities
+// ============================================================================
+
+/**
+ * Chrome declarativeNetRequest rule type
+ */
+interface DNRRule {
+  id: number;
+  priority?: number;
+  action: {
+    type: 'block' | 'redirect' | 'allow' | 'upgradeScheme' | 'modifyHeaders';
+    redirect?: { url?: string; extensionPath?: string; transform?: object; regexSubstitution?: string };
+    requestHeaders?: Array<{ header: string; operation: 'append' | 'set' | 'remove'; value?: string }>;
+    responseHeaders?: Array<{ header: string; operation: 'append' | 'set' | 'remove'; value?: string }>;
+  };
+  condition: {
+    urlFilter?: string;
+    regexFilter?: string;
+    resourceTypes?: string[];
+    domains?: string[];
+    excludedDomains?: string[];
+    initiatorDomains?: string[];
+    excludedInitiatorDomains?: string[];
+    isUrlFilterCaseSensitive?: boolean;
+  };
+}
+
+/**
+ * Detect if we're running in a Manifest V3 context
+ */
+export function isManifestV3(): boolean {
+  try {
+    const manifest = chrome.runtime.getManifest();
+    return manifest.manifest_version === 3;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Check if declarativeNetRequest API is available
+ */
+export function hasDeclarativeNetRequest(): boolean {
+  return typeof chrome !== 'undefined' &&
+         typeof chrome.declarativeNetRequest !== 'undefined' &&
+         typeof chrome.declarativeNetRequest.updateDynamicRules === 'function';
+}
+
+/**
+ * Check if MV2 blocking webRequest is available
+ */
+function hasBlockingWebRequest(): boolean {
+  try {
+    return typeof browser.webRequest !== 'undefined' &&
+           typeof browser.webRequest.onBeforeRequest !== 'undefined';
+  } catch {
+    return false;
+  }
+}
+
+/** Cached result of manifest version check */
+export const IS_MV3 = isManifestV3();
+
+/** Cached result of DNR availability check */
+export const HAS_DNR = hasDeclarativeNetRequest();
+
+/**
+ * Convert a NetworkFilter to a declarativeNetRequest rule
+ */
+function filterToDNRRule(filter: NetworkFilter, id: number): DNRRule | null {
+  try {
+    const pattern = filter.getFilter();
+    if (!pattern) return null;
+
+    // Determine action type
+    let actionType: 'block' | 'redirect' | 'allow' = 'block';
+    if (filter.isException()) {
+      actionType = 'allow';
+    }
+
+    // Build the condition
+    const condition: DNRRule['condition'] = {};
+
+    // Convert filter pattern to urlFilter
+    if (filter.isRegex()) {
+      condition.regexFilter = pattern;
+    } else {
+      let urlFilter = pattern;
+
+      // Handle anchors
+      if (filter.isHostnameAnchor()) {
+        urlFilter = `||${urlFilter}`;
+      } else if (filter.isLeftAnchor()) {
+        urlFilter = `|${urlFilter}`;
+      }
+
+      if (filter.isRightAnchor()) {
+        urlFilter = `${urlFilter}|`;
+      }
+
+      condition.urlFilter = urlFilter;
+    }
+
+    // Set case sensitivity
+    condition.isUrlFilterCaseSensitive = (filter as unknown as { isCaseSensitive: boolean }).isCaseSensitive ?? false;
+
+    // Convert resource types
+    const resourceTypes = getResourceTypesFromFilter(filter);
+    if (resourceTypes.length > 0) {
+      condition.resourceTypes = resourceTypes;
+    }
+
+    return {
+      id,
+      priority: filter.isException() ? 2 : 1,
+      action: { type: actionType },
+      condition,
+    };
+  } catch (err) {
+    console.warn('[Adblocker MV3] Failed to convert filter to DNR rule:', err);
+    return null;
+  }
+}
+
+/**
+ * Map filter type flags to DNR resource types
+ */
+function getResourceTypesFromFilter(filter: NetworkFilter): string[] {
+  const types: string[] = [];
+
+  if (filter.fromDocument()) types.push('main_frame');
+  if (filter.fromSubdocument()) types.push('sub_frame');
+  if (filter.fromStylesheet()) types.push('stylesheet');
+  if (filter.fromScript()) types.push('script');
+  if (filter.fromImage()) types.push('image');
+  if (filter.fromFont()) types.push('font');
+  if (filter.fromXmlHttpRequest()) types.push('xmlhttprequest');
+  if (filter.fromMedia()) types.push('media');
+  if (filter.fromWebsocket()) types.push('websocket');
+  if (filter.fromPing()) types.push('ping');
+  if (filter.fromOther()) types.push('other');
+
+  // If no specific types, allow all
+  if (types.length === 0) {
+    return ['main_frame', 'sub_frame', 'stylesheet', 'script', 'image', 'font', 'xmlhttprequest', 'media', 'websocket', 'ping', 'other'];
+  }
+
+  return types;
+}
+
+// ============================================================================
+// Original type exports
+// ============================================================================
+
 export type OnBeforeRequestDetailsType = Pick<
   WebRequest.OnBeforeRequestDetailsType,
   'url' | 'type' | 'requestId' | 'tabId' | 'originUrl' | 'documentUrl'
-> & {
-  initiator?: string; // Chromium only
-};
+> & { initiator?: string };
 
 export type OnHeadersReceivedDetailsType = Pick<
   WebRequest.OnHeadersReceivedDetailsType,
@@ -36,9 +190,7 @@ export type OnHeadersReceivedDetailsType = Pick<
   | 'originUrl'
   | 'documentUrl'
   | 'statusCode'
-> & {
-  initiator?: string; // Chromium only
-};
+> & { initiator?: string };
 
 type StreamFilter = WebRequest.StreamFilter & {
   onstart: (event: any) => void;
@@ -57,32 +209,10 @@ function isFirefox() {
   }
 }
 
-/**
- * There are different ways to inject scriptlets ("push" vs "pull").
- * This function should decide based on the environment what to use:
- *
- * 1) "Pushing" means the adblocker will listen on "onCommitted" events
- *    and then execute scripts by running the tabs.executeScript API.
- * 2) "Pulling" means the adblocker will inject a content script, which
- *    runs before the page loads (and on the DOM changes), fetches
- *    scriplets from the background and runs them.
- *
- * Note:
- * - the "push" model requires permission to the webNavigation API.
- *   If that is not available, the implementation will fall back to the
- *   "pull" model, which does not have this requirement.
- */
 function usePushScriptsInjection() {
-  // There is no fundamental reason why it should not work on Firefox,
-  // but given that there are no known issues with Firefox, let's keep
-  // the old, proven technique until there is evidence that changes
-  // are needed.
-  //
-  // Take YouTube as an example: on Chrome (or forks like Edge), the adblocker
-  // will sometimes fail to block ads if you reload the page multiple times;
-  // on Firefox, the same steps do not seem to trigger any ads.
   return !isFirefox();
 }
+
 const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 
 /**
@@ -90,9 +220,9 @@ const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
  */
 export function fromWebRequestDetails<
   T extends OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType,
->(details: T): Request<T> {
+>(details: T): Request {
   const sourceUrl = details.initiator || details.originUrl || details.documentUrl;
-  return Request.fromRawDetails<T>(
+  return Request.fromRawDetails(
     sourceUrl
       ? {
           _originalRequestDetails: details,
@@ -126,23 +256,19 @@ export function updateResponseHeadersWithCSP(
   let responseHeaders = details.responseHeaders || [];
   const CSP_HEADER_NAME = 'content-security-policy';
 
-  // Collect existing CSP headers from response
   responseHeaders.forEach(({ name, value }) => {
     if (name.toLowerCase() === CSP_HEADER_NAME) {
       policies += `; ${value}`;
     }
   });
 
-  // Remove all CSP headers from response
   responseHeaders = responseHeaders.filter(({ name }) => name.toLowerCase() !== CSP_HEADER_NAME);
-
-  // Add updated CSP header
   responseHeaders.push({ name: CSP_HEADER_NAME, value: policies });
 
   return { responseHeaders };
 }
 
-const HTML_FILTERABLE_REQUEST_TYPES = new Set<RequestType>([
+const HTML_FILTERABLE_REQUEST_TYPES = new Set([
   'main_frame',
   'mainFrame',
   'sub_frame',
@@ -157,7 +283,6 @@ const HTML_FILTERABLE_REQUEST_TYPES = new Set<RequestType>([
   'xmlhttprequest',
 ]);
 
-// html filters are applied to text/* and those additional mime types
 const HTML_FILTERABLE_NON_TEXT_MIME_TYPES = new Set([
   'application/javascript',
   'application/json',
@@ -172,6 +297,7 @@ const HTML_FILTERABLE_NON_TEXT_MIME_TYPES = new Set([
   'audio/mpegurl',
   'audio/x-mpegurl',
 ]);
+
 export const MAXIMUM_RESPONSE_BUFFER_SIZE = 10 * 1024 * 1024;
 
 function getHeaderFromDetails(
@@ -181,14 +307,9 @@ function getHeaderFromDetails(
   return details.responseHeaders?.find((header) => header.name === headerName)?.value;
 }
 
-// $replace filters are applied to complete response bodies
-// To avoid performance problem we should ignore large request or binary data
-export function shouldApplyReplaceSelectors(
-  request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
-): boolean {
+export function shouldApplyReplaceSelectors(request: Request): boolean {
   const details = request._originalRequestDetails as OnHeadersReceivedDetailsType;
 
-  // In case of undefined error of xhr/fetch and any kind of network activities
   if (details.statusCode === 0) {
     return false;
   }
@@ -197,7 +318,6 @@ export function shouldApplyReplaceSelectors(
     return false;
   }
 
-  // ignore file downloads
   const contentDisposition = (
     getHeaderFromDetails(details, 'content-disposition') || ''
   ).toLowerCase();
@@ -230,17 +350,17 @@ export function shouldApplyReplaceSelectors(
  */
 export function filterRequestHTML(
   filterResponseData: Browser['webRequest']['filterResponseData'],
-  request: Request<OnBeforeRequestDetailsType | OnHeadersReceivedDetailsType>,
+  request: Request,
   rules: HTMLSelector[],
 ): void {
   if (shouldApplyReplaceSelectors(request) === false) {
     rules = rules.filter(([type]) => type !== 'replace');
   }
+
   if (rules.length === 0) {
     return;
   }
 
-  // Create filter to observe loading of resource
   const filter = filterResponseData(request.id) as StreamFilter;
   const decoder = new TextDecoder();
   const encoder = new TextEncoder();
@@ -248,11 +368,6 @@ export function filterRequestHTML(
   let accumulatedBufferSize = 0;
 
   const teardown = (event: { data?: ArrayBuffer }) => {
-    // Before disconnecting our streaming filter, we need to be extra careful
-    // and make sure that no data remains in either our streaming `TextDecoder`
-    // instance or the HTML filterer.
-    //
-    // In case any data remains, we write it to filter.
     try {
       const remaining =
         htmlFilter.write(decoder.decode()) +
@@ -261,25 +376,17 @@ export function filterRequestHTML(
         filter.write(encoder.encode(remaining));
       }
     } catch (ex) {
-      // If we reach this point, there is probably no way we can recover...
       console.error('Failed to flush HTML filterer', ex);
     }
 
-    // If latest event had some data attached (i.e. 'ondata' event), we make
-    // sure to flush it through the filterer before disconnecting.
     if (event.data !== undefined) {
       filter.write(event.data);
     }
 
-    // Disconnect streaming filter.
     filter.disconnect();
   };
 
   filter.ondata = (event) => {
-    // On any chunk of data we implementa very fast UTF-8 validity check to make
-    // sure that we will be able to decode it. Note that in theory it should be
-    // possible that a chunk ends on the boundary of a multi-byte UTF-8 code and
-    // this check would fail?
     if (isUTF8(new Uint8Array(event.data)) === false) {
       return teardown(event);
     }
@@ -292,9 +399,6 @@ export function filterRequestHTML(
     try {
       filter.write(encoder.encode(htmlFilter.write(decoder.decode(event.data, { stream: true }))));
     } catch (ex) {
-      // If we fail to decode a chunk, we need to be extra conservative and stop
-      // listening to streaming response. Teardown takes care of flushing any
-      // data remaining in the pipeline and disconnecting the listener.
       return teardown(event);
     }
   };
@@ -305,27 +409,27 @@ export function filterRequestHTML(
 }
 
 /**
- * This abstraction takes care of blocking in one instance of `browser` (in
- * practice this would be `chrome` or `browser` global in the WebExtension
- * context).
+ * This abstraction takes care of blocking in one instance of `browser`.
+ * Supports both MV2 (webRequest) and MV3 (declarativeNetRequest).
  */
 export class BlockingContext {
   private readonly onBeforeRequest: (
     details: OnBeforeRequestDetailsType,
   ) => WebRequest.BlockingResponse;
-
   private readonly onHeadersReceived: (
     details: OnHeadersReceivedDetailsType,
   ) => WebRequest.BlockingResponse;
-
   private readonly onRuntimeMessage: (
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ) => Promise<IMessageFromBackground | object>;
-
+  ) => Promise<void>;
   private readonly onCommittedHandler:
     | ((details: WebNavigation.OnCommittedDetailsType) => void)
     | undefined;
+
+  // MV3 state
+  private ruleIds: Set<number> = new Set();
+  private nextRuleId = 1;
 
   constructor(
     private readonly browser: Browser,
@@ -350,19 +454,17 @@ export class BlockingContext {
     }
   }
 
-  public enable() {
-    if (this.blocker.config.loadNetworkFilters === true && this.browser.webRequest !== undefined) {
-      this.browser.webRequest.onBeforeRequest.addListener(
-        this.onBeforeRequest,
-        { urls: ['http://*/*', 'https://*/*'] },
-        ['blocking'],
-      );
-
-      this.browser.webRequest.onHeadersReceived.addListener(
-        this.onHeadersReceived,
-        { urls: ['http://*/*', 'https://*/*'] },
-        ['blocking', 'responseHeaders'],
-      );
+  /**
+   * Enable blocking. Async to support MV3 declarativeNetRequest.
+   */
+  public async enable(): Promise<void> {
+    // MV3: Use declarativeNetRequest
+    if (IS_MV3 && HAS_DNR) {
+      await this.enableMV3();
+    }
+    // MV2: Use webRequest with blocking
+    else if (hasBlockingWebRequest() && this.blocker.config.loadNetworkFilters === true) {
+      this.enableMV2();
     }
 
     // Start listening to messages coming from the content-script
@@ -375,7 +477,7 @@ export class BlockingContext {
         this.onRuntimeMessage as (
           message: unknown,
           sender: Runtime.MessageSender,
-        ) => Promise<unknown>,
+        ) => Promise<void>,
       );
     }
 
@@ -384,8 +486,110 @@ export class BlockingContext {
     }
   }
 
-  public disable(): void {
-    if (this.browser.webRequest !== undefined) {
+  /**
+   * Enable network blocking using MV3 declarativeNetRequest API
+   */
+  private async enableMV3(): Promise<void> {
+    console.log('[Adblocker MV3] Enabling with declarativeNetRequest');
+
+    const rules = this.convertFiltersToDNR();
+
+    if (rules.length === 0) {
+      console.log('[Adblocker MV3] No rules to register');
+      return;
+    }
+
+    // Chrome limits dynamic rules to 30,000
+    const MAX_RULES = 30000;
+    const rulesToAdd = rules.slice(0, MAX_RULES);
+
+    if (rules.length > MAX_RULES) {
+      console.warn(`[Adblocker MV3] Truncated rules from ${rules.length} to ${MAX_RULES}`);
+    }
+
+    try {
+      // Remove any existing rules first
+      const existingRules = await chrome.declarativeNetRequest.getDynamicRules();
+      const existingIds = existingRules.map((r) => r.id);
+
+      await chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: existingIds,
+        addRules: rulesToAdd as chrome.declarativeNetRequest.Rule[],
+      });
+
+      rulesToAdd.forEach((r) => this.ruleIds.add(r.id));
+
+      console.log(`[Adblocker MV3] Registered ${rulesToAdd.length} blocking rules`);
+    } catch (err) {
+      console.error('[Adblocker MV3] Failed to register rules:', err);
+    }
+  }
+
+  /**
+   * Enable network blocking using MV2 webRequest API
+   */
+  private enableMV2(): void {
+    if (this.browser.webRequest === undefined) {
+      return;
+    }
+
+    this.browser.webRequest.onBeforeRequest.addListener(
+      this.onBeforeRequest,
+      { urls: ['http://*/*', 'https://*/*'] },
+      ['blocking'],
+    );
+
+    this.browser.webRequest.onHeadersReceived.addListener(
+      this.onHeadersReceived,
+      { urls: ['http://*/*', 'https://*/*'] },
+      ['blocking', 'responseHeaders'],
+    );
+  }
+
+  /**
+   * Convert NetworkFilters to declarativeNetRequest rules
+   */
+  private convertFiltersToDNR(): DNRRule[] {
+    const rules: DNRRule[] = [];
+
+    // Access internal FiltersEngine structure to get network filters
+    const engine = this.blocker as unknown as {
+      filters?: { networkFilters?: NetworkFilter[] };
+      lists?: Map<string, { networkFilters?: NetworkFilter[] }>;
+    };
+
+    let filters: NetworkFilter[] = [];
+
+    if (engine.filters?.networkFilters) {
+      filters = engine.filters.networkFilters;
+    } else if (engine.lists) {
+      engine.lists.forEach((list) => {
+        if (list.networkFilters) {
+          filters = filters.concat(list.networkFilters);
+        }
+      });
+    }
+
+    for (const filter of filters) {
+      const rule = filterToDNRRule(filter, this.nextRuleId++);
+      if (rule) {
+        rules.push(rule);
+      }
+    }
+
+    return rules;
+  }
+
+  /**
+   * Disable blocking. Async to support MV3 declarativeNetRequest.
+   */
+  public async disable(): Promise<void> {
+    // MV3: Remove DNR rules
+    if (IS_MV3 && HAS_DNR) {
+      await this.disableMV3();
+    }
+    // MV2: Remove webRequest listeners
+    else if (this.browser.webRequest !== undefined) {
       this.browser.webRequest.onBeforeRequest.removeListener(this.onBeforeRequest);
       this.browser.webRequest.onHeadersReceived.removeListener(this.onHeadersReceived);
     }
@@ -395,12 +599,29 @@ export class BlockingContext {
         this.onRuntimeMessage as (
           message: unknown,
           sender: Runtime.MessageSender,
-        ) => Promise<unknown>,
+        ) => Promise<void>,
       );
     }
 
     if (this.onCommittedHandler) {
       this.browser.webNavigation.onCommitted.removeListener(this.onCommittedHandler);
+    }
+  }
+
+  /**
+   * Disable MV3 blocking by removing all DNR rules
+   */
+  private async disableMV3(): Promise<void> {
+    if (this.ruleIds.size === 0) return;
+
+    try {
+      await chrome.declarativeNetRequest.updateDynamicRules({
+        removeRuleIds: Array.from(this.ruleIds),
+      });
+      this.ruleIds.clear();
+      console.log('[Adblocker MV3] Disabled - removed all rules');
+    } catch (err) {
+      console.error('[Adblocker MV3] Failed to remove rules:', err);
     }
   }
 
@@ -416,32 +637,41 @@ export class BlockingContext {
 export class WebExtensionBlocker extends FiltersEngine {
   private readonly contexts: WeakMap<Browser, BlockingContext> = new WeakMap();
 
-  // ----------------------------------------------------------------------- //
+  // -----------------------------------------------------------------------
+  //
   // Helpers to enable and disable blocking for 'browser'
-  // ----------------------------------------------------------------------- //
+  //
+  // -----------------------------------------------------------------------
 
-  public enableBlockingInBrowser(browser: Browser): BlockingContext {
+  /**
+   * Enable blocking in the given browser instance.
+   * Now async to support MV3 declarativeNetRequest API.
+   */
+  public async enableBlockingInBrowser(browser: Browser): Promise<BlockingContext> {
     let context: undefined | BlockingContext = this.contexts.get(browser);
     if (context !== undefined) {
       return context;
     }
 
-    // Create new blocking context for `browser`
     context = new BlockingContext(browser, this);
     this.contexts.set(browser, context);
-    context.enable();
+    await context.enable();
 
     return context;
   }
 
-  public disableBlockingInBrowser(browser: Browser): void {
+  /**
+   * Disable blocking in the given browser instance.
+   * Now async to support MV3 declarativeNetRequest API.
+   */
+  public async disableBlockingInBrowser(browser: Browser): Promise<void> {
     const context: undefined | BlockingContext = this.contexts.get(browser);
     if (context === undefined) {
       throw new Error('Trying to disable blocking which was not enabled');
     }
 
     this.contexts.delete(browser);
-    context.disable();
+    await context.disable();
   }
 
   public onCommittedHandler(
@@ -453,31 +683,25 @@ export class WebExtensionBlocker extends FiltersEngine {
       return;
     }
 
-    // Find the scriptlets to run and execute them as soon as possible.
-    //
-    // If possible, everything in this path should be kept synchronously,
-    // since the scriptlets will attempt to patch the website while it is
-    // already loading. Every additional asynchronous step increases the risk
-    // of losing the race (i.e. that the patching is too late to have an effect)
     const { active, scripts } = this.getCosmeticsFilters({
       url: details.url,
       hostname,
       domain: domain || '',
-
       getBaseRules: false,
       getInjectionRules: true,
       getExtendedRules: false,
       getRulesFromDOM: false,
       getRulesFromHostname: true,
-
       callerContext: {
         tabId: details.tabId,
         frameId: details.frameId,
       },
     });
+
     if (active === false) {
       return;
     }
+
     if (scripts.length > 0) {
       this.executeScriptlets(browser, details, scripts);
     }
@@ -490,34 +714,17 @@ export class WebExtensionBlocker extends FiltersEngine {
   private pushInjectionsActive(browser: Browser): boolean {
     const context = this.contexts.get(browser);
     if (!context) {
-      // This means the browser instance is not controlled by the library directly.
-      // For instance, if there is another wrapping layer on top (e.g. Ghostery).
       return false;
     }
     return context.pushInjectionsActive;
   }
 
-  // ----------------------------------------------------------------------- //
+  // -----------------------------------------------------------------------
+  //
   // WebExtensionBlocker-specific additions to FiltersEngine
   //
-  // Note: some of these methods internally require access to the 'browser'
-  // global in order to perform their function. Because WebExtensionBlocker can
-  // be registered in multiple ones (in theory), we do not want to depend either
-  // on the global object, or a single instance of 'browser' stored internally
-  // (except as part of a BlockingContext which binds one 'browser' object with
-  // a WebExtensionBlocker object to perform blocking in this context), so an
-  // extra 'browser' argument is often needed.
-  // ----------------------------------------------------------------------- //
+  // -----------------------------------------------------------------------
 
-  /**
-   * This methods takes care of optionally performing HTML filtering.
-   *
-   * This can only be done if:
-   * 1. Request is 'main_frame'
-   * 2. `enableHtmlFiltering` is set to `true`.
-   * 3. `browser.webRequest.filterResponseData` (Firefox only!).
-   * 4. `TextEncoder` and `TextDecoder` are available.
-   */
   public performHTMLFiltering(browser: Browser, request: Request): void {
     if (
       this.config.enableHtmlFiltering === true &&
@@ -541,8 +748,6 @@ export class WebExtensionBlocker extends FiltersEngine {
   ): Promise<void> => {
     const promises: Promise<void>[] = [];
 
-    // Make sure we only listen to messages coming from our content-script
-    // based on the value of `action`.
     if (msg.action !== 'getCosmeticsFilters') {
       return;
     }
@@ -559,34 +764,24 @@ export class WebExtensionBlocker extends FiltersEngine {
       throw new Error('required "sender.frameId" information is not available');
     }
 
-    // Extract hostname from sender's URL
     const { url = '', frameId } = sender;
     const parsed = parse(url);
     const hostname = parsed.hostname || '';
     const domain = parsed.domain || '';
 
-    // Once per tab/page load we inject base stylesheets. These are always
-    // the same for all frames of a given page because they do not depend on
-    // a particular domain and cannot be cancelled using unhide rules.
-    // Because of this, we specify `allFrames: true` when injecting them so
-    // that we do not need to perform this operation for sub-frames.
     if (frameId === 0 && msg.lifecycle === 'start') {
       const { active, styles } = this.getCosmeticsFilters({
         domain,
         hostname,
         url,
-
         classes: msg.classes,
         hrefs: msg.hrefs,
         ids: msg.ids,
-
-        // This needs to be done only once per tab
         getBaseRules: true,
         getInjectionRules: false,
         getExtendedRules: false,
         getRulesFromDOM: false,
         getRulesFromHostname: false,
-
         callerContext: {
           tabId: sender.tab?.id,
           frameId: sender.frameId,
@@ -605,30 +800,19 @@ export class WebExtensionBlocker extends FiltersEngine {
       );
     }
 
-    // Separately, requests cosmetics which depend on the page it self
-    // (either because of the hostname or content of the DOM). Content script
-    // logic is responsible for returning information about lists of classes,
-    // ids and hrefs observed in the DOM. MutationObserver is also used to
-    // make sure we can react to changes.
     {
       const { active, styles, scripts, extended } = this.getCosmeticsFilters({
         domain,
         hostname,
         url,
-
         classes: msg.classes,
         hrefs: msg.hrefs,
         ids: msg.ids,
-
-        // This needs to be done only once per frame
         getBaseRules: false,
         getInjectionRules: msg.lifecycle === 'start',
         getExtendedRules: msg.lifecycle === 'start',
         getRulesFromHostname: msg.lifecycle === 'start',
-
-        // This will be done every time we get information about DOM mutation
         getRulesFromDOM: msg.lifecycle === 'dom-update',
-
         callerContext: {
           tabId: sender.tab?.id,
           frameId: sender.frameId,
@@ -643,7 +827,6 @@ export class WebExtensionBlocker extends FiltersEngine {
         this.injectStylesWebExtension(browser, styles, { tabId: sender.tab.id, frameId }),
       );
 
-      // Inject scripts from content script
       if (scripts.length !== 0 && !this.pushInjectionsActive(browser)) {
         sendResponse({
           active,
@@ -657,14 +840,12 @@ export class WebExtensionBlocker extends FiltersEngine {
     await Promise.all(promises);
   };
 
-  /**
-   * Deal with request cancellation (`{ cancel: true }`) and redirection (`{ redirectUrl: '...' }`).
-   */
   public onBeforeRequest = (
     _: Browser,
     details: OnBeforeRequestDetailsType,
   ): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
+
     if (this.config.guessRequestTypeFromUrl === true && request.type === 'other') {
       request.guessTypeOfRequest();
     }
@@ -685,7 +866,9 @@ export class WebExtensionBlocker extends FiltersEngine {
     details: OnHeadersReceivedDetailsType,
   ): WebRequest.BlockingResponse => {
     const request = fromWebRequestDetails(details);
+
     this.performHTMLFiltering(browser, request);
+
     return updateResponseHeadersWithCSP(details, this.getCSPDirectives(request));
   };
 
@@ -693,11 +876,11 @@ export class WebExtensionBlocker extends FiltersEngine {
     browser: Browser,
     msg: IBackgroundCallback & { action?: string },
     sender: Runtime.MessageSender,
-  ): Promise<IMessageFromBackground | object> => {
+  ): Promise<void> => {
     return new Promise((resolve, reject) => {
-      this.handleRuntimeMessage(browser, msg, sender, resolve)
+      this.handleRuntimeMessage(browser, msg, sender, resolve as (response: IMessageFromBackground) => void)
         .catch(reject)
-        .finally(() => resolve({}));
+        .finally(() => resolve());
     });
   };
 
@@ -714,22 +897,18 @@ export class WebExtensionBlocker extends FiltersEngine {
       allFrames?: boolean;
     },
   ): Promise<void> {
-    // Abort if stylesheet is empty.
     if (styles.length === 0) {
       return;
     }
 
-    // Abort if `this.browser.tabs` is not available.
     if (browser.tabs === undefined) {
       throw new Error('required "tabs" API is not defined');
     }
 
-    // Abort if `this.browser.tabs.insertCSS` is not available.
     if (browser.tabs.insertCSS === undefined) {
       throw new Error('required "tabs.insertCSS" API is not defined');
     }
 
-    // Proceed with stylesheet injection.
     return browser.tabs.insertCSS(
       tabId,
       frameId
@@ -756,41 +935,35 @@ export class WebExtensionBlocker extends FiltersEngine {
     details: WebNavigation.OnCommittedDetailsType,
     scripts: string[],
   ): void {
-    // Dynamically injected scripts scripts can be difficult to find later in
-    // the debugger. Console logs simplifies setting up breakpoints if needed.
     let debugMarker;
     if (this.config.debug) {
-      debugMarker = (text: string) =>
-        `console.log('[ADBLOCKER-DEBUG]:', ${JSON.stringify(text)});`;
+      debugMarker = (text: string) => `console.log('[ADBLOCKER-DEBUG]:', ${JSON.stringify(text)});`;
     } else {
       debugMarker = () => '';
     }
 
-    // the scriptlet code that contains patches for the website
     const codeRunningInPage = `(function(){
 ${debugMarker('run scriptlets (executing in "page world")')}
 ${scripts.join('\n\n')}}
 )()`;
 
-    // wrapper to break the "isolated world" so that the patching operates
-    // on the website, not on the content script's isolated environment.
     const codeRunningInContentScript = `
 (function(code) {
-    ${debugMarker('run injection wrapper (executing in "content script world")')}
-    var script;
-    try {
-      script = document.createElement('script');
-      script.appendChild(document.createTextNode(decodeURIComponent(code)));
-      (document.head || document.documentElement).appendChild(script);
-    } catch (ex) {
-      console.error('Failed to run script', ex);
-    }
-    if (script) {
-        if (script.parentNode) {
-          script.parentNode.removeChild(script);
-        }
-        script.textContent = '';
-    }
+${debugMarker('run injection wrapper (executing in "content script world")')}
+var script;
+try {
+  script = document.createElement('script');
+  script.appendChild(document.createTextNode(decodeURIComponent(code)));
+  (document.head || document.documentElement).appendChild(script);
+} catch (ex) {
+  console.error('Failed to run script', ex);
+}
+if (script) {
+  if (script.parentNode) {
+    script.parentNode.removeChild(script);
+  }
+  script.textContent = '';
+}
 })(\`${encodeURIComponent(codeRunningInPage)}\`);`;
 
     browser.tabs
