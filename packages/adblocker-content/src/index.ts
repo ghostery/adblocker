@@ -8,7 +8,7 @@
 
 import type { AST } from '@ghostery/adblocker-extended-selectors';
 
-const SCRIPT_ID = 'cliqz-adblocker-script';
+const SCRIPT_ID = 'ghostery-adblocker-script';
 const IGNORED_TAGS = new Set(['br', 'head', 'link', 'meta', 'script', 'style', 's']);
 
 export type Lifecycle = 'start' | 'dom-update';
@@ -27,8 +27,8 @@ export interface IMessageFromBackground {
   extended: {
     ast: AST;
     id: number;
-    remove: boolean;
     attribute?: string | undefined;
+    directive?: AST | undefined;
   }[];
 }
 
