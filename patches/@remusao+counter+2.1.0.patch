@@ -1,0 +1,211 @@
+diff --git a/node_modules/@remusao/counter/dist/commonjs/index.js b/node_modules/@remusao/counter/dist/commonjs/index.js
+index 48cb504..756bfcd 100644
+--- a/node_modules/@remusao/counter/dist/commonjs/index.js
++++ b/node_modules/@remusao/counter/dist/commonjs/index.js
+@@ -1,29 +1,56 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.Counter = void 0;
++function getShardKey(key) {
++    if (key.length === 0) return '';
++    if (key.length === 1) return key;
++    return key.slice(0, 2);
++}
+ class Counter {
+     constructor(init) {
+-        this.map = new Map();
++        this.shards = new Map();
+         if (init !== undefined) {
+             for (const [key, count] of init) {
+                 this.incr(key, count);
+             }
+         }
+     }
++    getShard(key) {
++        const shardKey = getShardKey(key);
++        let shard = this.shards.get(shardKey);
++        if (shard === undefined) {
++            shard = new Map();
++            this.shards.set(shardKey, shard);
++        }
++        return shard;
++    }
+     get size() {
+-        return this.map.size;
++        let total = 0;
++        for (const shard of this.shards.values()) {
++            total += shard.size;
++        }
++        return total;
+     }
+     clear() {
+-        this.map.clear();
++        this.shards.clear();
+     }
+     delete(key) {
+-        return this.map.delete(key);
++        const shardKey = getShardKey(key);
++        const shard = this.shards.get(shardKey);
++        if (shard === undefined) return false;
++        return shard.delete(key);
+     }
+     has(key) {
+-        return this.map.has(key);
++        const shardKey = getShardKey(key);
++        const shard = this.shards.get(shardKey);
++        if (shard === undefined) return false;
++        return shard.has(key);
+     }
+     get(key) {
+-        const count = this.map.get(key);
++        const shardKey = getShardKey(key);
++        const shard = this.shards.get(shardKey);
++        if (shard === undefined) return 0;
++        const count = shard.get(key);
+         if (count === undefined) {
+             return 0;
+         }
+@@ -33,7 +60,7 @@ class Counter {
+         if (n < 0) {
+             throw new Error(`Counter#incr only accepts positive values: ${n}`);
+         }
+-        this.map.set(key, this.get(key) + n);
++        this.getShard(key).set(key, this.get(key) + n);
+         return this;
+     }
+     decr(key, n = 1) {
+@@ -42,19 +69,22 @@ class Counter {
+         }
+         const count = this.get(key);
+         if (count <= n) {
+-            this.map.delete(key);
++            this.delete(key);
+         }
+         else {
+-            this.map.set(key, count - n);
++            this.getShard(key).set(key, count - n);
+         }
+         return this;
+     }
+-    entries() {
+-        return this.map.entries();
++    *entries() {
++        for (const shard of this.shards.values()) {
++            yield* shard.entries();
++        }
+     }
+-    keys() {
+-        return this.map.keys();
++    *keys() {
++        for (const shard of this.shards.values()) {
++            yield* shard.keys();
++        }
+     }
+ }
+ exports.Counter = Counter;
+-//# sourceMappingURL=index.js.map
+\ No newline at end of file
+diff --git a/node_modules/@remusao/counter/dist/esm/index.js b/node_modules/@remusao/counter/dist/esm/index.js
+index bbcd9bb..7e6be77 100644
+--- a/node_modules/@remusao/counter/dist/esm/index.js
++++ b/node_modules/@remusao/counter/dist/esm/index.js
+@@ -1,26 +1,54 @@
++function getShardKey(key) {
++    if (key.length === 0) return '';
++    if (key.length === 1) return key;
++    return key.slice(0, 2);
++}
++
+ export class Counter {
+     constructor(init) {
+-        this.map = new Map();
++        this.shards = new Map();
+         if (init !== undefined) {
+             for (const [key, count] of init) {
+                 this.incr(key, count);
+             }
+         }
+     }
++    getShard(key) {
++        const shardKey = getShardKey(key);
++        let shard = this.shards.get(shardKey);
++        if (shard === undefined) {
++            shard = new Map();
++            this.shards.set(shardKey, shard);
++        }
++        return shard;
++    }
+     get size() {
+-        return this.map.size;
++        let total = 0;
++        for (const shard of this.shards.values()) {
++            total += shard.size;
++        }
++        return total;
+     }
+     clear() {
+-        this.map.clear();
++        this.shards.clear();
+     }
+     delete(key) {
+-        return this.map.delete(key);
++        const shardKey = getShardKey(key);
++        const shard = this.shards.get(shardKey);
++        if (shard === undefined) return false;
++        return shard.delete(key);
+     }
+     has(key) {
+-        return this.map.has(key);
++        const shardKey = getShardKey(key);
++        const shard = this.shards.get(shardKey);
++        if (shard === undefined) return false;
++        return shard.has(key);
+     }
+     get(key) {
+-        const count = this.map.get(key);
++        const shardKey = getShardKey(key);
++        const shard = this.shards.get(shardKey);
++        if (shard === undefined) return 0;
++        const count = shard.get(key);
+         if (count === undefined) {
+             return 0;
+         }
+@@ -30,7 +58,7 @@ export class Counter {
+         if (n < 0) {
+             throw new Error(`Counter#incr only accepts positive values: ${n}`);
+         }
+-        this.map.set(key, this.get(key) + n);
++        this.getShard(key).set(key, this.get(key) + n);
+         return this;
+     }
+     decr(key, n = 1) {
+@@ -39,18 +67,21 @@ export class Counter {
+         }
+         const count = this.get(key);
+         if (count <= n) {
+-            this.map.delete(key);
++            this.delete(key);
+         }
+         else {
+-            this.map.set(key, count - n);
++            this.getShard(key).set(key, count - n);
+         }
+         return this;
+     }
+-    entries() {
+-        return this.map.entries();
++    *entries() {
++        for (const shard of this.shards.values()) {
++            yield* shard.entries();
++        }
+     }
+-    keys() {
+-        return this.map.keys();
++    *keys() {
++        for (const shard of this.shards.values()) {
++            yield* shard.keys();
++        }
+     }
+ }
+-//# sourceMappingURL=index.js.map
+\ No newline at end of file
