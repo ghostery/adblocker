@@ -17,7 +17,7 @@ jobs:
 
     - name: Find ENGINE_VERSION changes
       id: DIFF_ENGINE_VERSION
-      runs: |
+      run: |
         if \
         git diff master...HEAD -- packages/adblocker/src/engine/engine.ts | \
         grep -E "^[-+]export const ENGINE_VERSION = [0-9]+;$" \
