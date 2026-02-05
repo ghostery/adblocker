@@ -1121,13 +1121,13 @@ describe('eval', () => {
 
         it(`${description} with extended-selector`, () => {
           testHandlePseudoDirective(
-            `h1:has-text(Heading):remove-attr(${quote}header${quote})`,
+            `h1:has-text(Heading):remove-class(${quote}header${quote})`,
             `<html><body>
               <h1 class="header">Website</h1>
               <h1 class="header">Heading</h1>
             </body></html>`,
             (document) => {
-              for (const element of document.querySelectorAll('a')) {
+              for (const element of document.querySelectorAll('h1')) {
                 if (element.textContent?.includes('Heading')) {
                   expect(element.classList.contains('header')).to.be.false;
                 } else {
