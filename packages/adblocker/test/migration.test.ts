@@ -243,7 +243,7 @@ describe('migration', () => {
     });
 
     context('preprocessors', () => {
-      it('preprocessors use `computeFilterId` to store filters mapping', async () => {
+      it('preprocessors correctly serialize filter ID mappings', async () => {
         await compareHash(
           `
 !#if env_ghostery
