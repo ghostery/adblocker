@@ -33,7 +33,8 @@ async function run(cwd: string, cmd: string, args: string[]) {
         return;
       }
       if (code !== 0) {
-        reject(new Error('Child process terminated with non-zero exit code: ' + code));
+        reject(new Error(`Child process terminated with non-zero exit code: ${code}`));
+        return;
       }
       resolve(chunks.join('\n'));
     });
