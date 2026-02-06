@@ -1081,9 +1081,7 @@ shineads.*##[href="https://app.toolsmeen.com/signup/semrush"]
 ! https://github.com/uBlockOrigin/uAssets/issues/23937
 ! https://github.com/uBlockOrigin/uBOL-home/issues/202
 globlenews.in##+js(no-fetch-if, googlesyndication)
-#@#.ad-zone
 #@#.ad-space
-##.ad-zone:not(.adsbox, .textads, .adsbygoogle)
 ~instapundit.com,~nieru.net##.ad-space:not(.adbox, .adsbox, .textads)
 ! https://github.com/uBlockOrigin/uAssets/issues/20438
 luciferdonghua.in###overplay
@@ -3236,6 +3234,7 @@ av-cdn.xyz##+js(nowoif)
 av-cdn.xyz##body > div ~ script + div[class]:last-child
 ! https://github.com/uBlockOrigin/uAssets/issues/9764#issuecomment-1779676540
 pluto.tv##+js(json-prune-fetch-response, adBreaks.%5B%5D.startingOffset%20adBreaks.%5B%5D.adBreakDuration%20adBreaks.%5B%5D.ads%20adBreaks.%5B%5D.startTime%20adBreak%20adBreakLocations, , propsToMatch, %2Fsession.json)
+pluto.tv##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(contains(%40id%2C%22subclip%22))%5D%20%7C%20%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), , %2F%5C%2Fepisode%5C%2F.%2B%3F%5C.mpd%5C%3F%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/9764#issuecomment-2398597866
 @@||a-fds.youborafds01.com/data?$xhr,domain=pluto.tv
 ! https://github.com/uBlockOrigin/uAssets/issues/18592
