@@ -153,11 +153,7 @@ async function createBuilder(version: string = 'latest') {
     const id = counter++;
 
     return new Promise((resolve) => {
-      function callback(payload: number) {
-        resolve(payload);
-      }
-
-      tasks.push([id, callback]);
+      tasks.push([id, resolve]);
       worker.send({
         id,
         data,
