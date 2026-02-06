@@ -29,7 +29,7 @@ async function run(cwd: string, cmd: string, args: string[]) {
     });
     process.once('close', (code) => {
       if (code === null) {
-        reject(new Error(`Child process terminated!`));
+        reject(new Error('Child process terminated!'));
         return;
       }
       if (code !== 0) {
