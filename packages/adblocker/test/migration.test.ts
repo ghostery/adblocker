@@ -170,9 +170,7 @@ async function createBuilder(version: string = 'latest') {
   async function cleanup() {
     // Kill the worker
     await new Promise<void>((resolve) => {
-      worker.once('close', () => {
-        resolve();
-      });
+      worker.once('close', resolve);
       worker.kill('SIGINT');
     });
 
