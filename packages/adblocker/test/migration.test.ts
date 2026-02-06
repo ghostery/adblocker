@@ -24,9 +24,7 @@ async function run(cwd: string, cmd: string, args: string[]) {
     });
     const chunks: string[] = [];
     process.stdout.on('data', (chunk) => chunks.push(chunk));
-    process.once('error', (error) => {
-      reject(error);
-    });
+    process.once('error', (error) => reject(error));
     process.once('close', (code) => {
       if (code === null) {
         reject(new Error('Child process terminated!'));
