@@ -1768,7 +1768,6 @@ function cosmetic(filter: string, expected: any) {
       isHrefSelector: parsed.isHrefSelector(),
       isHtmlFiltering: parsed.isHtmlFiltering(),
       isIdSelector: parsed.isIdSelector(),
-      isRemove: parsed.isRemove(),
       isScriptInject: parsed.isScriptInject(),
       hasSubFrameScriptInject: parsed.hasSubframeConstraint(),
       isUnhide: parsed.isUnhide(),
@@ -1790,7 +1789,6 @@ const DEFAULT_COSMETIC_FILTER = {
   isHrefSelector: false,
   isHtmlFiltering: false,
   isIdSelector: false,
-  isRemove: false,
   isScriptInject: false,
   isUnhide: false,
 };
@@ -2110,26 +2108,6 @@ describe('Cosmetic filters', () => {
     });
   });
 
-  describe('parses remove filters', () => {
-    it('simple', () => {
-      cosmetic('example.com##.cls:remove()', {
-        ...DEFAULT_COSMETIC_FILTER,
-        selector: '.cls',
-        isRemove: true,
-        isExtended: true,
-      });
-    });
-
-    it('extended', () => {
-      cosmetic('example.com##.cls:has-text(/Foo/i):remove()', {
-        ...DEFAULT_COSMETIC_FILTER,
-        selector: '.cls:has-text(/Foo/i)',
-        isRemove: true,
-        isExtended: true,
-      });
-    });
-  });
-
   describe('parses extended filters', () => {
     for (const pseudo of [
       '-abp-contains',
@@ -2163,6 +2141,11 @@ describe('Cosmetic filters', () => {
         });
       });
     }
+
+    it('rejects pseudo-directive only selectors', () => {
+      cosmetic('foo.com##:remove()', null);
+      cosmetic('foo.com##:remove-attr(href)', null);
+    });
   });
 
   describe('parses html filtering', () => {
