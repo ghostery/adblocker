@@ -883,6 +883,9 @@ arstechnica.com,dermnetnz.org##.gsc-webResult a[data-cturl]:remove-attr(/^data-c
 /shopifycloud/media-analytics/v*/analytics.js
 ! Test on uBO first
 !#if !ext_ubol
+! Block Attribution reporting
+www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26rt%3D%5Cd%2B%5C.%5Cd%2B.%2B%3F%26volume%3D%5Cd%2B%26cbr%3D.%2B%3F%26fexp%3Dv1%25%5B-%250-9C%5D%7B300%2C%7D%26.%2B%3F%26muted%3D%5Cd(%26vis%3D3)%3F%26docid%3D%2F%20method%3APOST)
+!#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213240
 ||bdvmetricas.banvenez.com.ve^
 ! https://www.bilet.com/ido
@@ -903,11 +906,8 @@ arstechnica.com,dermnetnz.org##.gsc-webResult a[data-cturl]:remove-attr(/^data-c
 intellischool.id##+js(no-xhr-if, fingerprintjs-pro-react)
 ! https://nypost.com/
 ||pbc.nypost.com^
-! Block Attribution reporting
-www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26rt%3D%5Cd%2B%5C.%5Cd%2B.%2B%3F%26volume%3D%5Cd%2B%26cbr%3D.%2B%3F%26fexp%3Dv1%25%5B-%250-9C%5D%7B300%2C%7D%26.%2B%3F%26muted%3D%5Cd(%26vis%3D3)%3F%26docid%3D%2F%20method%3APOST)
 ! https://github.com/uBlockOrigin/uAssets/issues/30415
 ||browser.events.data.microsoft.com^$domain=apps.microsoft.com
-!#endif
 ! Tracking cookies
 ! fastly click-through
 beaumontenterprise.com,chron.com,ctinsider.com,ctpost.com,expressnews.com,houstonchronicle.com,lmtonline.com,middletownpress.com,mrt.com,newstimes.com,nhregister.com,registercitizen.com,sfchronicle.com,stamfordadvocate.com,thehour.com,timesunion.com##+js(cookie-remover, realm.cookiesAndJavascript)
@@ -1096,12 +1096,9 @@ hopper.com##+js(set-local-storage-item, ld%3A%24anonUserId, %24remove%24)
 ! https://www.mumuplayer.com/
 mumuplayer.com##+js(set-local-storage-item, %2F_user_id%24%2F, %24remove%24)
 ! https://www.theverge.com/
-! test on uBO first
-!#if !ext_ubol
 ||cdn.concert.io/fins/segment
 ||cdn.concert.io/pins/segment
 ||theverge.com/SendEventData
-!#endif
 theverge.com##+js(remove-cookie, vmidv1)
 theverge.com##+js(set-local-storage-item, csg_uid, %24remove%24)
 ! https://goodcar.com/
@@ -1114,11 +1111,8 @@ soundcloud.com##+js(set-local-storage-item, %2Fsc_tracking_anonymous_id%7Cstatsi
 ! https://www.mykitsch.com/
 mykitsch.com##+js(remove-cookie, _shopify_y, when, scroll%20keydown)
 mykitsch.com##+js(set-local-storage-item, %2Flc_anon_user_id%7C_constructorio_search_client_id%2F, %24remove%24)
-! test on uBO first
-!#if !ext_ubol
 ||lumhdco.mykitsch.com/*/js|$script
 ||rakutenadvertising.io^$3p
-!#endif
 ! https://www.huntress.com/blog
 huntress.com##+js(remove-cookie, %2F%5E_sp_id%2F, when, scroll%20keydown)
 huntress.com##+js(set-local-storage-item, %2FbuilderVisitorId%7CsnowplowOutQueue_cf%2F, %24remove%24)
@@ -1653,9 +1647,6 @@ click.transactional.agoda.com$image
 ! wattpad
 .wattpad.com/et?$image
 .wattpad.com%2Fet%3F$image
-! pawns.app
-links1.pawns.app/q/$image
-links1.pawns.app%2Fq%2F$image
 ! meetup.com
 email-analytics.meetup.com/$image
 email-analytics.meetup.com%2F$image
@@ -1778,12 +1769,21 @@ r.mail.wowvegas.com%2Ftr%2Fop%2F$image
 *%2Fmessaging-callback-api.msg.traveloka.com%2Fo%3F$image
 ! washingtonpost.com
 .washingtonpost.com/q/$image
-.washingtonpost.com/s/$image
 .washingtonpost.com%2Fq%2F$image
-.washingtonpost.com%2Fs%2F$image
 ! heroku.com
 /hello.heroku.com/r/*/open/*$image
 *%2Fhello.heroku.com%2Fr%2F*%2Fopen%2F$image
+! github.com
+/github.com/notifications/beacon/*$image
+*%2Fgithub.com%2Fnotifications%2Fbeacon%2F$image
+! vistaprint.com
+*%2Flinks.mail.vistaprint.com%2Fs%2F$image
+! controld.com
+/api.controld.com/pixel/*$image
+*%2Fapi.controld.com%2Fpixel%2F$image
+! sbs.com.au
+.ondemandmsg.sbs.com.au/r/$image
+.ondemandmsg.sbs.com.au%2Fr%2F$image
 ! others
 static.adsugar.ch/img?ord=$image
 static.adsugar.ch%2Fimg%3Ford%3D$image
@@ -1795,6 +1795,16 @@ newsletter.adnz.co%2F$image
 *%2Fcampaign%2F*%2Fpx.png$image
 /endeavor.omeclk.com/portal/wts/*.gif$image
 *%2Fendeavor.omeclk.com%2Fportal%2Fwts%2F%2A.gif$image
+/post.spmailtechnolo.com/q/*$image
+*%2Fpost.spmailtechnolo.com%2Fq%2F$image
+/e3t/Cto/*$image
+*%2Fe3t%2FCto%2F$image
+/s/eo/*$image
+*%2Fs%2Feo%2F$image
+/links1.*/q/*$image
+*%2Flinks1*%2Fq%2F$image
+.sendpul.se:*/image/ui/$image
+.sendpul.se%3A*%2Fimage%2Fui%2F$image
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/929
 ||googleusercontent.com/*/wf/open?upn=$image
 ! https://github.com/uBlockOrigin/uAssets/issues/29466
@@ -1911,11 +1921,8 @@ grok.com##+js(no-fetch-if, url%3A%2Fapi%2Fstatsig%2Flog_event%20method%3APOST)
 ||script.wikia.nocookie.net/fandom-ae-assets/identity-service/$domain=fandom.com|tvguide.com
 ! https://www.mercari.com/
 ||gateway.us.zip.co/analytics^
-! test on uBO first
-!#if !ext_ubol
 ||mercari.com/ko40/
 mercari.com##+js(json-edit-fetch-request, .*%5B%3F.operationName%3D%3D%22TrackEvent%22%5D, propsToMatch, %2Fv1%2Fapi)
-!#endif
 ! https://www.reddit.com/r/uBlockOrigin/comments/1kkytyz/how_to_filter_javascript_url_by_id_attribute/
 /^https:\/\/www\.vogue\.com\/[-\w]{120,}$/$script,1p,strict1p,domain=vogue.com
 vogue.com##+js(set-local-storage-item, %2F%5Eavoinspector%2F, %24remove%24)
@@ -1959,13 +1966,7 @@ mediamarkt.de##+js(aopw, ftr__startScriptLoad)
 ! https://massagechairs.com/
 ! ||ob.*.com/i/*.js|$script,3p,domain=apothekenaratgeber.com|apothekenaratgeber.de|massagechairs.com
 ! /^https:\/\/ob\.[a-z]{8,}\.com\/i\/[a-f0-9]{32}\.js$/$script,3p,match-case,to=com
-! test on uBO first
-!#if !ext_ubol
 ||ob.*.com/i/*.js|$script,3p
-!#endif
-!#if env_safari
-/^https:\/\/ob\.[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]+\.com\/i\/[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]\.js$/$script,3p,match-case,to=com
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/29029#issuecomment-3046461585
 ||paypal.com.first-party-js.datadome.co^$ping,important
 ! https://github.com/AdguardTeam/AdguardFilters/issues/209020
@@ -2014,19 +2015,14 @@ linklog.tiagorangel.com##+js(set, data, true)
 ||monitor.*/test?rnd=$xhr,3p
 /measurements/*.ts?rnd=$xhr,3p
 ! https://www.netflix.com/
-!#if !ext_ubol
 ||netflix.com/log/
-!#endif
 ! https://www.serienjunkies.de/
 ! https://www.servustv.com/
 /iomm/latest/bootstrap/*
 ! https://app.tophat.com/catalog/
 ||publictelemetry.tophat.com^
 ! https://www.wolverine.com/
-! test on uBO first
-!#if !ext_ubol
 ||wolverine.com/on/demandware.static/*/internal/jscript/dwac-*.js
-!#endif
 ! amazon prime video
 !#if env_safari
 /gp/video/acquisition/utilities/monitoring|
@@ -2037,46 +2033,28 @@ linklog.tiagorangel.com##+js(set, data, true)
 ||amazon.com/1/action-impressions/
 !#endif
 ! https://apothekenaratgeber.com/
-! test on uBO first
-!#if !ext_ubol
 /wp-content/plugins/pixelyoursite-pro/*
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/29764
 ||api-widget.soundcloud.com/me?client_id=
 ! https://app.labelbox.com/
 ||editor.labelbox.com/metrics
 ! https://www.abebooks.com/
-! test on uBO first
-!#if !ext_ubol
 ||assets.prod.abebookscdn.com/*/scripts/digitaldata/analytics-
 ||assets.prod.abebookscdn.com/*/scripts/utilities/PixelRenderer-
-!#endif
 ! https://lovo.ai/
-! test on uBO first
-!#if !ext_ubol
 ||tolt.io^$3p
-!#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/212827
 ! https://github.com/AdguardTeam/AdguardFilters/issues/212830
-! test on uBO first
-!#if !ext_ubol
 /dfxaf3-*.js|$script
 ||terabox.app/wfm/jnqp
-!#endif
 ! Tealium
-! test on uBO first
-!#if !ext_ubol
 ||tags.tiqcdn.com/utag/*/prod/utag.js$domain=1und1.de|adidas.co.uk|adidas.nl|adidas.pl|anantara.com|brother-usa.com|calvinklein.ca|cnet.com|grubhub.com|help.dropbox.com|hulu.com|iflscience.com|krymr.com|lineadirecta.com|louisvuitton.com|mcafee.com|mitsubishi-motors.co.jp|modernatx.com|monroeandmain.com|mtv.co.uk|mtv.de|mtv.it|mtvema.com|nickjr.com|post.ch|qvc.jp|radissonhotels.com|sibreal.org|simplybusiness.co.uk|talksport.com|taylor.com|thesun.co.uk|totaljobs.com|truecar.com|uber.com|ubereats.com|usnews.com
 ||tags.tiqcdn.com/utag/*/utag.sync.js$domain=calvinklein.ca|hosteurope.de|sibreal.org|yousee.dk
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213050
 ||ast.techbook.de^
-!#endif
 ! Shopify
-! test on uBO first
-!#if !ext_ubol
 /shopifycloud/shopify/assets/shop_events_listener-*.js
 /cdn/shopifycloud/consent-tracking-api/*
-!#endif
 ! https://tinxe.vn/
 ||log.tinxe.vn^
 ||log.oto.com.vn^
