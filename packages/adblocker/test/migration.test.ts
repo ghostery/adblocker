@@ -8,10 +8,10 @@
 
 import { expect } from 'chai';
 import 'mocha';
-import { createReadStream, mkdtemp } from 'node:fs';
-import { join } from 'node:path';
-import { tmpdir } from 'node:os';
-import { rm, writeFile } from 'node:fs/promises';
+import { createReadStream, existsSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { fork, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { ENGINE_VERSION, FiltersEngine, Config } from '../src/index.js';
@@ -79,16 +79,11 @@ async function builder() {
 }
 
 async function createBuilder(version: string = 'latest') {
-  // Create tempdir
-  const dir = await new Promise<string>((resolve, reject) => {
-    mkdtemp(join(tmpdir(), 'ghostery-adblocker-'), (error, directory) => {
-      if (error) {
-        reject(error);
-      }
-
-      resolve(directory);
-    });
-  });
+  // Create working dir
+  const dir = join(dirname(fileURLToPath(import.meta.url)), '.migration-test');
+  if (!existsSync(dir)) {
+    await mkdir(dir);
+  }
 
   // Setup application
   await writeFile(
@@ -168,11 +163,11 @@ async function createBuilder(version: string = 'latest') {
       worker.kill('SIGINT');
     });
 
-    // Remove tempdir
-    await rm(dir, { recursive: true }).catch((error) => {
-      console.error('Failed to create a tempdir on the path of', dir);
-      throw error;
-    });
+    // Clean up binary files
+    const files = await readdir(dir);
+    await Promise.all(
+      files.filter((file) => file.endsWith('.bin')).map((file) => rm(join(dir, file))),
+    );
   }
 
   return {
