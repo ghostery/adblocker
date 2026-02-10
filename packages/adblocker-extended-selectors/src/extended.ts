@@ -166,7 +166,7 @@ export function classifySelector(selector: string): SelectorType {
  * means there's no selector, no "directive" AST means there's no
  * pseudo-directive.
  */
-export function deriveAST(ast: AST): { element: AST; directive: AST | null } {
+export function destructureAST(ast: AST): { element: AST; directive: AST | null } {
   // If the root AST type is 'pseudo-class', it means the
   // selector starts like `:pseudo-class()` without any other
   // types of selectors. We need to check if the AST is pseudo-
@@ -190,9 +190,10 @@ export function deriveAST(ast: AST): { element: AST; directive: AST | null } {
     // directive.
     const last = ast.compound[ast.compound.length - 1];
     if (last.type === 'pseudo-class' && PSEUDO_DIRECTIVES.has(last.name)) {
-      // If the underlying nodes in this compound selector is
-      // less than 3 (or eq 2; compound is to chain multiple
-      // nodes), it means the underlying node can be extracted.
+      // Compound selectors have >=2 elements. When the length is
+      // 2: e.g. ['a', ':directive'], return 'a'. When the length
+      // is 3 or bigger: e.g. ['a', 'b', ':directive'], return
+      // ['a', 'b'] as a compound selector.
       if (ast.compound.length < 3) {
         return {
           element: ast.compound[0],

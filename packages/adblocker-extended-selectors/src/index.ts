@@ -15,6 +15,6 @@ export {
   PSEUDO_ELEMENTS,
   SelectorType,
   classifySelector,
-  deriveAST,
+  destructureAST,
   indexOfPseudoDirective,
 } from './extended.js';

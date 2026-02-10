@@ -16,7 +16,7 @@ import { parse } from '../../src/parse.js';
 import {
   classifySelector,
   indexOfPseudoDirective,
-  deriveAST,
+  destructureAST,
   SelectorType,
 } from '../../src/extended.js';
 
@@ -70,7 +70,7 @@ function testHandlePseudoDirective(
   // Make sure there's a pseudo directive.
   expect(pseudoDirectiveIndex).to.be.greaterThan(-1);
 
-  const asts = deriveAST(parse(selector)!);
+  const asts = destructureAST(parse(selector)!);
   const {
     window: { document },
   } = new JSDOM(html, {
