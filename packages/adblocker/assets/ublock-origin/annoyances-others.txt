@@ -1095,6 +1095,7 @@ m.youtube.com,music.youtube.com,tv.youtube.com,www.youtube.com,youtubekids.com##
 ! youtube.com##+js(no-xhr-if, %2F%5C%2Fyoutubei%5C%2Fv1%5C%2Flog_event%5C%3F%7Cplay%5C.google%5C.com%5C%2Flog%7C%5C%2Fapi%5C%2Fstats%5C%2Fqoe%5C%3F%2F)
 ! https://m.youtube.com/ - background playback prevention
 m.youtube.com##+js(aeld, visibilitychange, %2Fbgmobile%7C%5C%7B%5Cw%5C.%5Cw%2B%5C(%5C)%5C%7D%7C%5C.getVisibilityState%5C(%5C)%2F)
+m.youtube.com##+js(trusted-set, document.visibilityState, json%3A%22visible%22)
 ! https://github.com/NanoMeow/QuickReports/issues/1338
 buienradar.nl##+js(set, hideBannerBlockedMessage, true)
 buienradar.nl###adholderContainerHeader
@@ -5888,3 +5889,5 @@ hetek.hu###nyeremenyModal
 otpportalok.hu###pop_1:has(> .suti)
 unideb.hu##.sendi-banner-block-container
 ! imported from HU filter list - END
+! https://github.com/uBlockOrigin/uAssets/issues/30157#issuecomment-3868044652
+music.youtube.com##ytmusic-description-shelf-renderer[is-track-lyrics-page]:style(user-select: initial !important)
