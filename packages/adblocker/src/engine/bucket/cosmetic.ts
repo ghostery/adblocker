@@ -516,9 +516,9 @@ export default class CosmeticFilterBucket {
     if (extendedFilters.length !== 0) {
       const extendedStyles: Map<string, string> = new Map();
       for (const filter of extendedFilters) {
-        const ast = filter.getSelectorAST();
-        if (ast !== undefined) {
-          const attribute = filter.isRemove() ? undefined : filter.getStyleAttributeHash();
+        const asts = filter.getASTComponents();
+        if (asts !== undefined) {
+          const attribute = asts.directive === null ? filter.getStyleAttributeHash() : undefined;
 
           if (attribute !== undefined) {
             extendedStyles.set(filter.getStyle(hidingStyle), attribute);
@@ -526,9 +526,9 @@ export default class CosmeticFilterBucket {
 
           extended.push({
             id: filter.getId(),
-            ast,
-            remove: filter.isRemove(),
+            ast: asts.element,
             attribute,
+            directive: asts.directive || undefined,
           });
         }
       }

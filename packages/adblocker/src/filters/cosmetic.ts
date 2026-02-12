@@ -11,6 +11,9 @@ import {
   classifySelector,
   SelectorType,
   parse as parseCssSelector,
+  indexOfPseudoDirective,
+  destructAST,
+  PseudoClass,
 } from '@ghostery/adblocker-extended-selectors';
 
 import { Domains } from '../engine/domains.js';
@@ -146,8 +149,7 @@ const enum COSMETICS_MASK {
   isClassSelector = 1 << 3,
   isIdSelector = 1 << 4,
   isHrefSelector = 1 << 5,
-  remove = 1 << 6,
-  extended = 1 << 7,
+  extended = 1 << 6,
 }
 
 const HASH_DOMAINS_MARKER_LOW = 1;
@@ -302,12 +304,7 @@ export default class CosmeticFilter implements IFilter {
       }
     }
 
-    if (line.endsWith(':remove()')) {
-      // ##selector:remove()
-      mask = setBit(mask, COSMETICS_MASK.remove);
-      mask = setBit(mask, COSMETICS_MASK.extended);
-      line = line.slice(0, -9);
-    } else if (
+    if (
       line.length - suffixStartIndex >= 8 &&
       line.endsWith(')') &&
       line.indexOf(':style(', suffixStartIndex) !== -1
@@ -370,6 +367,14 @@ export default class CosmeticFilter implements IFilter {
       selector = line.slice(suffixStartIndex);
       const selectorType = classifySelector(selector);
       if (selectorType === SelectorType.Extended) {
+        if (
+          // Selectors not having an element selector are invalid.
+          // `:remove()` or `:remove-attr(attr-name)` without an
+          // element selector doesn't make sense.
+          selector.slice(0, indexOfPseudoDirective(selector)).trim().length === 0
+        ) {
+          return null;
+        }
         mask = setBit(mask, COSMETICS_MASK.extended);
       } else if (selectorType === SelectorType.Invalid || !isValidCss(selector)) {
         // console.error('Invalid', line);
@@ -397,7 +402,6 @@ export default class CosmeticFilter implements IFilter {
       // Classify selector
       if (
         getBit(mask, COSMETICS_MASK.scriptInject) === false &&
-        getBit(mask, COSMETICS_MASK.remove) === false &&
         getBit(mask, COSMETICS_MASK.extended) === false &&
         selector.startsWith('^') === false
       ) {
@@ -1030,6 +1034,14 @@ export default class CosmeticFilter implements IFilter {
     return parseCssSelector(this.getSelector());
   }
 
+  public getASTComponents(): { element: AST; directive: PseudoClass | null } | undefined {
+    const ast = this.getSelectorAST();
+    if (ast === undefined) {
+      return undefined;
+    }
+    return destructAST(ast);
+  }
+
   public getExtendedSelector(): HTMLSelector | undefined {
     return extractHTMLSelectorFromRule(this.selector);
   }
@@ -1038,8 +1050,15 @@ export default class CosmeticFilter implements IFilter {
     return getBit(this.mask, COSMETICS_MASK.extended);
   }
 
+  /**
+   * @deprecated `...:remove` is migrated to extended selectors' implementation. Use `getASTComponents` instead to get the "directive" specifically.
+   */
   public isRemove(): boolean {
-    return getBit(this.mask, COSMETICS_MASK.remove);
+    const asts = this.getASTComponents();
+    if (asts === undefined || asts.directive === null) {
+      return false;
+    }
+    return asts.directive.name === 'remove';
   }
 
   public isUnhide(): boolean {

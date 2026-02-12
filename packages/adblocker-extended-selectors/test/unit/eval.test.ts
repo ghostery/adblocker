@@ -11,8 +11,14 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches } from '../../src/eval.js';
+import { querySelectorAll, matchPattern, matches, handlePseudoDirective } from '../../src/eval.js';
 import { parse } from '../../src/parse.js';
+import {
+  classifySelector,
+  indexOfPseudoDirective,
+  SelectorType,
+  destructAST,
+} from '../../src/extended.js';
 
 // TODO - check if style:has-text() works (can select style?)
 
@@ -52,6 +58,43 @@ function testQuerySelectorAll(selector: string, html: string, expectedSelectors:
   const actual = querySelectorAll(document.documentElement, ast);
   const expected = expectedSelectors.flatMap((s) => Array.from(document.querySelectorAll(s)));
   expect(actual).to.have.members(expected);
+}
+
+function testHandlePseudoDirective(
+  selector: string,
+  html: string,
+  callback: (document: Document) => void,
+): void {
+  const pseudoDirectiveIndex = indexOfPseudoDirective(selector);
+
+  // Make sure there's a pseudo directive.
+  expect(pseudoDirectiveIndex).to.be.greaterThan(-1);
+
+  const asts = destructAST(parse(selector)!);
+  const {
+    window: { document },
+  } = new JSDOM(html, {
+    url: 'https://example.com',
+  });
+
+  // Make sure ASTs are projected.
+  expect(asts.directive).not.to.be.null;
+
+  // Call `document.querySelectorAll` if the element
+  // selector does not require extended specs.
+  const elementSelector = selector.slice(0, pseudoDirectiveIndex);
+  const elements =
+    classifySelector(elementSelector) === SelectorType.Extended
+      ? querySelectorAll(document.documentElement, asts.element)
+      : document.querySelectorAll(elementSelector);
+
+  expect(elements).to.have.length.greaterThan(0);
+
+  for (const element of elements) {
+    handlePseudoDirective(element, asts.directive!);
+  }
+
+  callback(document);
 }
 
 describe('eval', () => {
@@ -987,6 +1030,126 @@ describe('eval', () => {
             '</body>',
           ].join('\n'),
           ['#n1'],
+        );
+      });
+    });
+  });
+
+  describe('#handlePseudoDirective', () => {
+    describe(':remove', () => {
+      it('removes the node', () => {
+        testHandlePseudoDirective(
+          `a:remove()`,
+          `<html><body><a href="https://example.com/"></a></body></html>`,
+          (document) => {
+            expect(document.querySelectorAll('a').length).to.be.eq(0);
+          },
+        );
+      });
+    });
+
+    describe(':remove-attr', () => {
+      for (const [description, quote] of [
+        ['non-quote', ''],
+        ['single-quote', "'"],
+        ['double-quote', '"'],
+      ]) {
+        it(description, () => {
+          testHandlePseudoDirective(
+            `a:remove-attr(${quote}href${quote})`,
+            `<html><body><a href="https://example.com/"></a></body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('a')) {
+                expect(element.getAttribute('href')).to.be.null;
+              }
+            },
+          );
+        });
+
+        it(`${description} with extended-selector`, () => {
+          testHandlePseudoDirective(
+            `a:has-text(link):remove-attr(${quote}href${quote})`,
+            `<html><body>
+              <a href="https://example.com/">not this</a>
+              <a href="https://example.com/">first link</a>
+              <a href="https://example.com/">second link</a>
+            </body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('a')) {
+                if (element.textContent?.includes('link')) {
+                  expect(element.getAttribute('href')).to.be.null;
+                } else {
+                  expect(element.getAttribute('href')).to.be.eq('https://example.com/');
+                }
+              }
+            },
+          );
+        });
+      }
+
+      it('supports regex', () => {
+        testHandlePseudoDirective(
+          `a:remove-attr(/oncontextmenu|onselectstart|ondragstart/)`,
+          `<html><body><a oncontextmenu="false" onselectstart="false" ondragstart="false"></a></body></html>`,
+          (document) => {
+            const element = document.querySelector('a')!;
+            expect(element.getAttribute('oncontextmenu')).to.be.null;
+            expect(element.getAttribute('onselectstart')).to.be.null;
+            expect(element.getAttribute('ondragstart')).to.be.null;
+          },
+        );
+      });
+    });
+
+    describe(':remove-class', () => {
+      for (const [description, quote] of [
+        ['non-quote', ''],
+        ['single-quote', "'"],
+        ['double-quote', '"'],
+      ]) {
+        it(description, () => {
+          testHandlePseudoDirective(
+            `h1:remove-class(${quote}header${quote})`,
+            `<html><body><h1 class="header"></h1></body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('h1')) {
+                expect(element.classList.contains('header')).to.be.false;
+              }
+            },
+          );
+        });
+
+        it(`${description} with extended-selector`, () => {
+          testHandlePseudoDirective(
+            `h1:has-text(Heading):remove-class(${quote}header${quote})`,
+            `<html><body>
+              <h1 class="header">Website</h1>
+              <h1 class="header">Heading</h1>
+            </body></html>`,
+            (document) => {
+              for (const element of document.querySelectorAll('h1')) {
+                if (element.textContent?.includes('Heading')) {
+                  expect(element.classList.contains('header')).to.be.false;
+                } else {
+                  expect(element.classList.contains('header')).to.be.true;
+                }
+              }
+            },
+          );
+        });
+      }
+
+      it('supports regex', () => {
+        testHandlePseudoDirective(
+          `div:remove-class(/header|footer|container/)`,
+          `<html><body><div class="header container"></div><div class="footer container"></div></body></html>`,
+          (document) => {
+            for (const element of document.querySelectorAll('div')) {
+              expect(element.classList.contains('header')).to.be.false;
+              expect(element.classList.contains('footer')).to.be.false;
+              expect(element.classList.contains('container')).to.be.false;
+            }
+          },
         );
       });
     });

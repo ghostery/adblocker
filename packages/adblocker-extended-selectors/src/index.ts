@@ -7,7 +7,7 @@
  */
 
 export { parse, tokenize } from './parse.js';
-export { querySelectorAll, matches } from './eval.js';
+export { querySelectorAll, matches, handlePseudoDirective } from './eval.js';
 export * from './types.js';
 export {
   EXTENDED_PSEUDO_CLASSES,
@@ -15,4 +15,6 @@ export {
   PSEUDO_ELEMENTS,
   SelectorType,
   classifySelector,
+  destructAST,
+  indexOfPseudoDirective,
 } from './extended.js';
