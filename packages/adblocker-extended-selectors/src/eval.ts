@@ -510,37 +510,39 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
  * @param selector The AST only containing pseudo directive.
  */
 export function handlePseudoDirective(element: Element, selector: AST): void {
-  if (selector.type === 'pseudo-class') {
-    if (selector.name === 'remove') {
-      element.remove();
-    } else if (selector.name === 'remove-attr') {
-      if (selector.argument === undefined) {
-        return;
-      } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
-        const regex = parseRegex(selector.argument);
-        for (let i = element.attributes.length - 1; i >= 0; i--) {
-          const attribute = element.attributes.item(i);
-          if (attribute !== null && regex.test(attribute.name)) {
-            element.removeAttribute(attribute.name);
-          }
+  if (selector.type !== 'pseudo-class') {
+    return;
+  }
+
+  if (selector.name === 'remove') {
+    element.remove();
+  } else if (selector.name === 'remove-attr') {
+    if (selector.argument === undefined) {
+      return;
+    } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
+      const regex = parseRegex(selector.argument);
+      for (let i = element.attributes.length - 1; i >= 0; i--) {
+        const attribute = element.attributes.item(i);
+        if (attribute !== null && regex.test(attribute.name)) {
+          element.removeAttribute(attribute.name);
         }
-      } else {
-        return element.removeAttribute(stripsWrappingQuotes(selector.argument));
       }
-    } else if (selector.name === 'remove-class') {
-      if (selector.argument === undefined) {
-        return;
-      } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
-        const regex = parseRegex(selector.argument);
-        for (let i = element.classList.length - 1; i >= 0; i--) {
-          const className = element.classList.item(i);
-          if (className !== null && regex.test(className)) {
-            element.classList.remove(className);
-          }
+    } else {
+      return element.removeAttribute(stripsWrappingQuotes(selector.argument));
+    }
+  } else if (selector.name === 'remove-class') {
+    if (selector.argument === undefined) {
+      return;
+    } else if (selector.argument.startsWith('/') && selector.argument.endsWith('/')) {
+      const regex = parseRegex(selector.argument);
+      for (let i = element.classList.length - 1; i >= 0; i--) {
+        const className = element.classList.item(i);
+        if (className !== null && regex.test(className)) {
+          element.classList.remove(className);
         }
-      } else {
-        return element.classList.remove(stripsWrappingQuotes(selector.argument));
       }
+    } else {
+      return element.classList.remove(stripsWrappingQuotes(selector.argument));
     }
   }
 }
