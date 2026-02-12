@@ -1,3 +1,24 @@
+# v2.14.0 (Thu Feb 12 2026)
+
+#### :rocket: New Feature
+
+- feat: pseudo directives with `:remove` [#5397](https://github.com/ghostery/adblocker/pull/5397) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- chore: update dependencies [#5455](https://github.com/ghostery/adblocker/pull/5455) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps-dev): Bump eslint from 9.39.2 to 10.0.0 [#5448](https://github.com/ghostery/adblocker/pull/5448) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/node from 25.1.0 to 25.2.1 [#5437](https://github.com/ghostery/adblocker/pull/5437) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update dependencies [#5422](https://github.com/ghostery/adblocker/pull/5422) ([@seia-soto](https://github.com/seia-soto))
+- Update dependencies [#5399](https://github.com/ghostery/adblocker/pull/5399) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.3 (Fri Jan 09 2026)
 
 #### :bug: Bug Fix

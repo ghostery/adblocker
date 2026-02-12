@@ -1,3 +1,37 @@
+# v2.14.0 (Thu Feb 12 2026)
+
+#### :rocket: New Feature
+
+- feat: pseudo directives with `:remove` [#5397](https://github.com/ghostery/adblocker/pull/5397) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5456](https://github.com/ghostery/adblocker/pull/5456) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- test: migration [#5364](https://github.com/ghostery/adblocker/pull/5364) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#5452](https://github.com/ghostery/adblocker/pull/5452) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5450](https://github.com/ghostery/adblocker/pull/5450) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5440](https://github.com/ghostery/adblocker/pull/5440) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5435](https://github.com/ghostery/adblocker/pull/5435) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5434](https://github.com/ghostery/adblocker/pull/5434) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5432](https://github.com/ghostery/adblocker/pull/5432) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- chore: update dependencies [#5455](https://github.com/ghostery/adblocker/pull/5455) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps-dev): Bump eslint from 9.39.2 to 10.0.0 [#5448](https://github.com/ghostery/adblocker/pull/5448) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/node from 25.1.0 to 25.2.1 [#5437](https://github.com/ghostery/adblocker/pull/5437) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update dependencies [#5422](https://github.com/ghostery/adblocker/pull/5422) ([@seia-soto](https://github.com/seia-soto))
+- Update dependencies [#5399](https://github.com/ghostery/adblocker/pull/5399) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.2 (Mon Dec 22 2025)
 
 #### :bug: Bug Fix

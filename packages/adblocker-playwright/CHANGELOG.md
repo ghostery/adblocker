@@ -1,3 +1,19 @@
+# v2.14.0 (Thu Feb 12 2026)
+
+#### :nut_and_bolt: Dependencies
+
+- chore: update dependencies [#5455](https://github.com/ghostery/adblocker/pull/5455) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps-dev): Bump eslint from 9.39.2 to 10.0.0 [#5448](https://github.com/ghostery/adblocker/pull/5448) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update dependencies [#5422](https://github.com/ghostery/adblocker/pull/5422) ([@seia-soto](https://github.com/seia-soto))
+- Update dependencies [#5399](https://github.com/ghostery/adblocker/pull/5399) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.13.0 (Thu Dec 04 2025)
 
 #### :nut_and_bolt: Dependencies
