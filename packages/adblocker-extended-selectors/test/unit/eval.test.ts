@@ -16,8 +16,8 @@ import { parse } from '../../src/parse.js';
 import {
   classifySelector,
   indexOfPseudoDirective,
-  destructureAST,
   SelectorType,
+  destructAST,
 } from '../../src/extended.js';
 
 // TODO - check if style:has-text() works (can select style?)
@@ -70,7 +70,7 @@ function testHandlePseudoDirective(
   // Make sure there's a pseudo directive.
   expect(pseudoDirectiveIndex).to.be.greaterThan(-1);
 
-  const asts = destructureAST(parse(selector)!);
+  const asts = destructAST(parse(selector)!);
   const {
     window: { document },
   } = new JSDOM(html, {
