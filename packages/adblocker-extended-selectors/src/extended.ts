@@ -8,7 +8,7 @@
 
 import { tokenize, RECURSIVE_PSEUDO_CLASSES } from './parse.js';
 
-import type { AST } from './types.js';
+import type { AST, PseudoClass } from './types.js';
 
 export const EXTENDED_PSEUDO_CLASSES = new Set([
   // '-abp-contains',
@@ -166,7 +166,7 @@ export function classifySelector(selector: string): SelectorType {
  * means there's no selector, no "directive" AST means there's no
  * pseudo-directive.
  */
-export function destructureAST(ast: AST): { element: AST; directive: AST | null } {
+export function destructAST(ast: AST): { element: AST; directive: PseudoClass | null } {
   // If the root AST type is 'pseudo-class', it means the
   // selector starts like `:pseudo-class()` without any other
   // types of selectors. We need to check if the AST is pseudo-

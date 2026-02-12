@@ -12,6 +12,8 @@ import {
   SelectorType,
   parse as parseCssSelector,
   indexOfPseudoDirective,
+  destructAST,
+  PseudoClass,
 } from '@ghostery/adblocker-extended-selectors';
 
 import { Domains } from '../engine/domains.js';
@@ -1032,12 +1034,31 @@ export default class CosmeticFilter implements IFilter {
     return parseCssSelector(this.getSelector());
   }
 
+  public getASTComponents(): { element: AST; directive: PseudoClass | null } | undefined {
+    const ast = this.getSelectorAST();
+    if (ast === undefined) {
+      return undefined;
+    }
+    return destructAST(ast);
+  }
+
   public getExtendedSelector(): HTMLSelector | undefined {
     return extractHTMLSelectorFromRule(this.selector);
   }
 
   public isExtended(): boolean {
     return getBit(this.mask, COSMETICS_MASK.extended);
+  }
+
+  /**
+   * @deprecated `...:remove` is migrated to extended selectors' implementation. Use `getASTComponents` instead to get the "directive" specifically.
+   */
+  public isRemove(): boolean {
+    const asts = this.getASTComponents();
+    if (asts === undefined || asts.directive === null) {
+      return false;
+    }
+    return asts.directive.name === 'remove';
   }
 
   public isUnhide(): boolean {
