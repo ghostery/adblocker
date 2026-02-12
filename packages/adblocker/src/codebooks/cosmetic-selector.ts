@@ -7,7 +7,6 @@
  */
 /* eslint-disable prettier/prettier */
 export default [
-  ", document.addEventListene",
   ", document.createElement, ",
   ", document.getElementById,",
   "%5Bhref%5E%3D%22https%3A%2",
@@ -84,7 +83,6 @@ export default [
   "Cookie",
   "COOKIE",
   "google",
-  "iframe",
   "necess",
   "nostif",
   "notice",
@@ -101,6 +99,7 @@ export default [
   "click",
   "false",
   "fixed",
+  "frame",
   "modal",
   "popup",
   "style",
@@ -154,12 +153,13 @@ export default [
   "an",
   "ar",
   "at",
-  "ce",
   "de",
   "e-",
   "ed",
+  "el",
   "en",
   "er",
+  "es",
   "et",
   "he",
   "id",
