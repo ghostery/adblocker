@@ -23,7 +23,7 @@ export type {
 } from './request.js';
 export { default as CosmeticFilter } from './filters/cosmetic.js';
 export { default as NetworkFilter } from './filters/network.js';
-export { default as Preprocessor } from './preprocessor.js';
+export { default as Preprocessor, evaluate as evaluatePreprocessor } from './preprocessor.js';
 export {
   FilterType,
   detectFilterType,
