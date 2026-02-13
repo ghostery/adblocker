@@ -1,3 +1,21 @@
+# v2.14.1 (Fri Feb 13 2026)
+
+#### :nail_care: Polish
+
+- feat: expose `evaluate` from preprocessor [#5461](https://github.com/ghostery/adblocker/pull/5461) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5459](https://github.com/ghostery/adblocker/pull/5459) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.14.0 (Thu Feb 12 2026)
 
 #### :rocket: New Feature
