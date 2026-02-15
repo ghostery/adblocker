@@ -590,9 +590,6 @@ sxyprn.*##.cbd
 ||sxyprn.*/js/epo.js
 ! END: Rules from filters.txt
 ! START: Regional lists
-! <<<<< ABPVN >>>>>
-! https://github.com/uBlockOrigin/uAssets/issues/26860
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=vtvgo.vn
 ! <<<<< AG Chinese >>>>>
 ! https://github.com/uBlockOrigin/uAssets/issues/26938
 m.shuhaige.net##+js(rmnt, script, return%20a.split)
@@ -2376,6 +2373,8 @@ geo.dailymotion.com##+js(set, DMP_ENABLE_ADS, false)
 www.dailymotion.com>>,~google.com##+js(xml-prune, %5BbreakId%5D, , _VMAP_)
 !#endif
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/31838
+||dmxleo.dailymotion.com/cdn/manifest/video/*?af=*monetization$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/30056
 www.parkers.co.uk##.async-hide:style(opacity: 1.0 !important)
 ! https://streamflash.sx/watch.php?v=EnkIGcI1Li anti-adb, popup
@@ -2642,6 +2641,10 @@ myhentaigallery.com##li.image-block.item:has-text(Ad)
 zkillboard.com##.pbcen,#adsensebottom:style(position:absolute !important;left:-3000px !important;visibility:visible !important)
 ! @@||cdn.fuseplatform.net^$script,domain=zkillboard.com
 zkillboard.com##+js(trusted-create-html, body, %3Cimg%20src%3D'%2Fn5dev.png'%20onerror%3D%22setTimeout(function()%7Bif(typeof%20startWebSocket%3D%3D%3D'function')%7BstartWebSocket()%3Bdocument.querySelectorAll('.liveupdates').forEach(el%3D%3Eel.classList.remove('hidden'))%3Bconst%20nl%3Ddocument.getElementById('noliveupdates')%3Bif(nl)nl.classList.add('hidden')%3B%7Dwindow.showAdblockedMessage%3D()%3D%3E%7B%7D%3B%7D%2C%202000)%3B%22%3E)
+zkillboard.com##center > div[style="background-color: #223800; color: white; border-radius: 1em; width: 100%; max-width: 100%"]
+zkillboard.com##a[href^="http://store.markeedragon.com/affiliate.php"]
+zkillboard.com##a[href^="https://jitarun.com/?r="]
+zkillboard.com##div.alert-info:has([href^="https://www.eveonline.com/signup?"])
 ! https://github.com/uBlockOrigin/uAssets/issues/30723
 thessdreview.com##.e3lan
 thessdreview.com##body:style(background-image: none !important)
