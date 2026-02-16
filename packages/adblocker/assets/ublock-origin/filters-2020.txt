@@ -676,7 +676,12 @@ xxxmax.net##^script:has-text('shift')
 xxxmax.net##^script:has-text(\'shift\')
 xxxmax.net##+js(acs, String.fromCharCode, shift)
 ! https://github.com/uBlockOrigin/uAssets/issues/5674
-get.getpczone.com,rahim-soft.com,uploadrar.*###commonId > a[target="_blank"]
+uploadrar.*###commonId > a[target="_blank"]
+uploadrar.*##main > center > a.btn-primary
+uploadrar.*##.footer, span > .text-muted, .card, .m-2.submit-btn.btn-primary.btn
+uploadrar.*##.fs-5, p, ul, li, #how-to-open, .p-0.block, .download-controls, .ad-box + center
+uploadrar.*##+js(acs, document.documentElement, break%3Bcase%20%24.)
+uploadrar.*##+js(nano-stb, %2F.%3F%2F, *)
 ||pixeltrey.com^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/57027
 rahim-soft.com##+js(nosiif, visibility, 1000)
@@ -1274,19 +1279,6 @@ pimylifeup.com##+js(aopr, adthrive.config)
 ! https://github.com/uBlockOrigin/uAssets/issues/14883
 @@||chronicle.com/dg/default/rest/$xhr,1p
 chronicle.com##.GoogleDfpAd-container
-! https://github.com/NanoMeow/QuickReports/issues/4510
-@@||vix.com^$ghide
-! https://www.reddit.com/r/uBlockOrigin/comments/16309vm/doesnt_work_for_vixcom/
-! https://github.com/uBlockOrigin/uAssets/issues/21920
-vix.com##+js(json-prune, breaks%20interstitials%20info, interstitials)
-vix.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22AdaptationSet%22%5D%5B%40contentType%3D%22video%22%5D%5Bnot(%40bitstreamSwitching%3D%22true%22)%5D%5D), , .mpd)
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=vix.com
-@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,3p,domain=vix.com
-! https://www.reddit.com/r/uBlockOrigin/comments/1fr0qa5/ublock_nukes_all_subtitles_on_vixcom/
-vix.com##+js(json-prune, ad_slots)
-vix.com##+js(json-prune, plugins.dfp)
-vix.com##+js(m3u-prune, lura.live%2Fprod%2F, %2Fprog.m3u8)
-vix.com###video-player-track[style*="display: block"]:style(visibility: visible !important;)
 ! https://github.com/NanoMeow/QuickReports/issues/4512
 animepahe.*##+js(aopw, __C)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/62210
