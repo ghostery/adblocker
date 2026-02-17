@@ -229,7 +229,6 @@ export function indexOfPseudoDirective(selector: string): number {
   // backwards and break the process down into multiple loops for
   // optimised code path.
   let i = selector.lastIndexOf(')');
-  let c = -1; // Character code.
 
   if (i === -1) {
     return -1;
@@ -237,7 +236,7 @@ export function indexOfPseudoDirective(selector: string): number {
 
   // Look for the potential quoting.
   while (i--) {
-    c = selector.charCodeAt(i);
+    const c = selector.charCodeAt(i);
 
     // Skip control and whitespace characters.
     if (c < 33) continue;
@@ -264,12 +263,12 @@ export function indexOfPseudoDirective(selector: string): number {
   }
 
   // Look for the last definition character ':'.
-  c = selector.lastIndexOf(':', i);
+  const lastIndexOfColon = selector.lastIndexOf(':', i);
 
   // We stored the position of `:` in `c` and the position of `(`
   // in `i`, so we can check the name of the pseudo directive.
-  if (PSEUDO_DIRECTIVES.has(selector.slice(c + 1, i))) {
-    return c;
+  if (PSEUDO_DIRECTIVES.has(selector.slice(lastIndexOfColon + 1, i))) {
+    return lastIndexOfColon;
   }
 
   return -1;
