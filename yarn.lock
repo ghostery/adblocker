@@ -3129,6 +3129,87 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-darwin-arm64@npm:7.0.0-dev.20260218.1"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-darwin-x64@npm:7.0.0-dev.20260218.1"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-linux-arm64@npm:7.0.0-dev.20260218.1"
+  conditions: os=linux & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-linux-arm@npm:7.0.0-dev.20260218.1"
+  conditions: os=linux & cpu=arm
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-linux-x64@npm:7.0.0-dev.20260218.1"
+  conditions: os=linux & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-win32-arm64@npm:7.0.0-dev.20260218.1"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview-win32-x64@npm:7.0.0-dev.20260218.1"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@typescript/native-preview@npm:^7.0.0-dev.20260218.1":
+  version: 7.0.0-dev.20260218.1
+  resolution: "@typescript/native-preview@npm:7.0.0-dev.20260218.1"
+  dependencies:
+    "@typescript/native-preview-darwin-arm64": "npm:7.0.0-dev.20260218.1"
+    "@typescript/native-preview-darwin-x64": "npm:7.0.0-dev.20260218.1"
+    "@typescript/native-preview-linux-arm": "npm:7.0.0-dev.20260218.1"
+    "@typescript/native-preview-linux-arm64": "npm:7.0.0-dev.20260218.1"
+    "@typescript/native-preview-linux-x64": "npm:7.0.0-dev.20260218.1"
+    "@typescript/native-preview-win32-arm64": "npm:7.0.0-dev.20260218.1"
+    "@typescript/native-preview-win32-x64": "npm:7.0.0-dev.20260218.1"
+  dependenciesMeta:
+    "@typescript/native-preview-darwin-arm64":
+      optional: true
+    "@typescript/native-preview-darwin-x64":
+      optional: true
+    "@typescript/native-preview-linux-arm":
+      optional: true
+    "@typescript/native-preview-linux-arm64":
+      optional: true
+    "@typescript/native-preview-linux-x64":
+      optional: true
+    "@typescript/native-preview-win32-arm64":
+      optional: true
+    "@typescript/native-preview-win32-x64":
+      optional: true
+  bin:
+    tsgo: bin/tsgo.js
+  checksum: 10/a300a7a8b34ceeb0361997d2c22ca7f0d5afa1a5c18cff6462e96302e807def6abe9ad3f05b8a2cf813226843ec7359fbb6de364ccb9358fc18144cad4f83e83
+  languageName: node
+  linkType: hard
+
 "@yarnpkg/lockfile@npm:^1.1.0":
   version: 1.1.0
   resolution: "@yarnpkg/lockfile@npm:1.1.0"
@@ -9453,13 +9534,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"resolve-import@npm:^2.1.1":
-  version: 2.1.1
-  resolution: "resolve-import@npm:2.1.1"
+"resolve-import@npm:^2.4.0":
+  version: 2.4.0
+  resolution: "resolve-import@npm:2.4.0"
   dependencies:
     glob: "npm:^13.0.0"
     walk-up-path: "npm:^4.0.0"
-  checksum: 10/2983ad295237160bafb0856acca0287b989d3d68c96c775689566561e27302c9fc3efd5963505c467f73a8cf3364a21814762a070498a45d08a83bca5772189b
+  checksum: 10/c59517ce53ed19477d98d20734ec2b8e9a9b9ea9a0286b3e839ab27cf7a30ed6a9f2f1b504cc677a774a7643ab8297c862a022465a4cd52c1524ef3c710485ef
   languageName: node
   linkType: hard
 
@@ -10622,9 +10703,10 @@ __metadata:
   linkType: hard
 
 "tshy@npm:^3.2.0":
-  version: 3.2.1
-  resolution: "tshy@npm:3.2.1"
+  version: 3.3.2
+  resolution: "tshy@npm:3.3.2"
   dependencies:
+    "@typescript/native-preview": "npm:^7.0.0-dev.20260218.1"
     chalk: "npm:^5.6.2"
     chokidar: "npm:^4.0.3"
     foreground-child: "npm:^4.0.0"
@@ -10632,14 +10714,14 @@ __metadata:
     minimatch: "npm:^10.0.3"
     mkdirp: "npm:^3.0.1"
     polite-json: "npm:^5.0.0"
-    resolve-import: "npm:^2.1.1"
+    resolve-import: "npm:^2.4.0"
     rimraf: "npm:^6.1.2"
     sync-content: "npm:^2.0.3"
     typescript: "npm:^5.9.3"
     walk-up-path: "npm:^4.0.0"
   bin:
     tshy: dist/esm/bin-min.mjs
-  checksum: 10/6dcac4b5b337485c21ce0cbe0d286859e2611e64478573488cf30af31339669956919a98a9a4bfd3ca43dcc795d93e8cdfdd93d7a77e3824d6e6bd0d92b326a0
+  checksum: 10/2905e7246fb97ff4c1bcc4069f7010ec49542fbf48903cb9185a540f5980e5c59a8f6f5ad0d8e32d77a0343085327b51afb5b037341446c1669c75385e391e79
   languageName: node
   linkType: hard
 
