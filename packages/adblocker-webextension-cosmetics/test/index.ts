@@ -9,7 +9,7 @@
 import { expect } from 'chai';
 import * as sinon from 'sinon';
 import 'mocha';
-import { JSDOM, ResourceLoader } from 'jsdom';
+import { JSDOM } from 'jsdom';
 import { injectCosmetics } from '../src/index.js';
 
 async function tick(timeout = 0) {
@@ -176,9 +176,6 @@ describe('#injectCosmetics', () => {
   });
 
   it('injects scriptlet in Firefox', async () => {
-    const loader = new ResourceLoader({
-      userAgent: 'Firefox',
-    });
     const dom = new JSDOM(
       `
 <!DOCTYPE html>
@@ -187,7 +184,9 @@ describe('#injectCosmetics', () => {
 </body>
 `,
       {
-        resources: loader,
+        resources: {
+          userAgent: 'Firefox'
+        },
         runScripts: 'dangerously',
       },
     );
