@@ -185,7 +185,7 @@ describe('#injectCosmetics', () => {
 `,
       {
         resources: {
-          userAgent: 'Firefox'
+          userAgent: 'Firefox',
         },
         runScripts: 'dangerously',
       },
