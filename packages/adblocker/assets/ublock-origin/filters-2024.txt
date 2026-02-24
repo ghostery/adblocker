@@ -385,6 +385,10 @@ file-upload.net##+js(set, advertisement3, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/15914
 file-upload.*##+js(aopr, start)
 ||remaininghopefully.com^
+! https://github.com/uBlockOrigin/uAssets/issues/31945
+file-upload.org##+js(acs, JSON.parse, document.head.appendChild)
+||cfd/tags/*.js$script,3p
+||ping.fb-cdn.net^
 ! https://github.com/uBlockOrigin/uAssets/issues/10319
 oploverz.*##+js(acs, %24, popup)
 oploverz.*##+js(nostif, popup)
@@ -714,12 +718,14 @@ nekopoi.*##.leftarea
 nekopoi.*###btm_banner
 nekopoi.*>>##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/35
+! https://www.reddit.com/r/uBlockOrigin/comments/1r9wisy/im9eu_detects_ubo_using_adpreserve/
 *$image,redirect-rule=32x32.png,domain=im9.eu
 /advert.$image,3p,redirect=32x32.png,domain=im9.eu
 /wp-content/ads/*$image,3p,redirect=32x32.png,domain=im9.eu
 ||sprzedaz2.oczarjk.pl/img/ads/banner.gif$image,redirect=1x1.gif,domain=im9.eu
 @@||im9.eu^$image,ghide,1p
 @@||poweredby.jads.co/js/jads.js$script,domain=im9.eu
+im9.eu##+js(rmnt, script, %2Fadpreserve%7C%5C%2F0x%2Fi)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=43843
 elamigosedition.com##+js(aost, document.addEventListener, blocker)
 elamigosedition.com##+js(nowoif)
@@ -2407,7 +2413,8 @@ playmod24.com##a[download-button]:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/24877
 euronews.com###o-site-hr__leaderboard-wallpaper.u-show-for-xlarge:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/24884
-roblox.com##+js(json-prune, sorts.%5B-%5D.recommendationList.%5B%5D.contentMetadata.EncryptedAdTrackingData)
+! https://github.com/uBlockOrigin/uAssets/issues/31928
+roblox.com##+js(json-prune, sorts.%5B%5D.recommendationList.%5B-%5D.contentMetadata.EncryptedAdTrackingData)
 ! https://github.com/uBlockOrigin/uAssets/issues/24883
 hartico.tv##+js(nostif, getComputedStyle, 250)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1es12m6/modescanlator_is_detecting_ubo/
