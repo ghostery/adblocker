@@ -125,6 +125,9 @@ kashinavi.com##+js(ra, oncopy%7ConSelectStart%7Concontextmenu%7Cstyle, %5Boncopy
 open.spotify.com##.contentSpacing .paywall[data-testid="lyrics-container"] p[data-encore-id="text"]:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/31939
 police.gov.sg##.slick-slider:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/31973
+nny360.com##+js(aeld, contextmenu, preventDefault)
+nny360.com##+js(rpnt, script, rcoverride%20%3C%201, false)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -206,6 +209,8 @@ jailbreakchangelogs.xyz##+js(set-session-storage-item, adblock_modal_dismissed, 
 @@||jigsawplanet.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/31947
 lofi-nopixel.com##+js(trusted-set-local-storage-item, adBlockerAlert_lastShown, %24now%24)
+! https://github.com/uBlockOrigin/uAssets/issues/31993
+temperatur.nu##+js(nostif, holidAds)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -5905,3 +5910,8 @@ mail.yahoo.com##+js(trusted-replace-argument, navigator.registerProtocolHandler,
 thestudentroom.co.uk##+js(set-cookie, _tsr_pc, 0)
 ! https://github.com/uBlockOrigin/uAssets/issues/31841
 ft.com##+js(aeld, copy, clipboardData)
+! bintv anti right click, ctrl-u, dev tools
+bintv.fun,bintvs.fun##+js(rpnt, script, keydown, ooo)
+bintv.fun,bintvs.fun##+js(rpnt, script, onkeydown, ooo)
+bintv.fun,bintvs.fun##+js(rpnt, script, contextmenu, ccc)
+||cdn.jsdelivr.net/npm/disable-devtool@latest$script,domain=bintvs.fun
