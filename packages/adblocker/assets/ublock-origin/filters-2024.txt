@@ -485,6 +485,8 @@ sports.yahoo.com###defaultLDRB-sizer
 ! https://github.com/uBlockOrigin/uAssets/issues/17012
 mail.yahoo.com##+js(nostif, ADB)
 ! https://github.com/uBlockOrigin/uAssets/issues/1802
+adslink.pw,jpopsingles.eu##+js(rmnt, script, %2FdetectedAdblock%7CDevTools%2F)
+||files-cdn.jpopsingles.eu/devtools-detect.js$script
 jpopsingles.eu##+js(nano-sib, downloadTimer)
 jpopsingles.eu##+js(noeval-if, adsBlocked)
 @@||jpopsingles.eu^$ghide
@@ -492,7 +494,7 @@ jpopsingles.eu##+js(noeval-if, adsBlocked)
 /ap-plugin-scripteo/frontend/img/728x90.png$image,redirect=1x1.gif
 ||jpopsingles.eu/to/aHR0c$doc,urlskip=/\/to\/(aHR0c[^?#]+)/ -base64
 ||jpopsingles.eu/generate-link/aHR0c$doc,urlskip=/\/generate-link\/(aHR0c[^?#]+)/ -base64
-||adslink.pw/webroot/link/api?url=http$doc,urlskip=?url
+||adslink.pw/*/api?url=http$doc,urlskip=?url
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dyvn5w/ubo_getting_detected_on_jpopsingleseu/
 jpopsingles.eu##+js(aeld, DOMContentLoaded, document.documentElement.lang.toLowerCase)
 jpopsingles.eu##+js(rmnt, script, adsSrc)
@@ -1739,6 +1741,7 @@ asianlbfm.net,schoolgirls-asia.org##+js(aopr, loadTool)
 ! https://github.com/uBlockOrigin/uAssets/issues/23634
 @@||paktech2.com^$ghide
 paktech2.com##+js(set, openPopunder, noopFunc)
+paktech2.com##+js(rmnt, script, fromCharCode)
 ! timer to show image
 pimpandhost.com##+js(nano-stb, count)
 ! https://github.com/uBlockOrigin/uAssets/issues/23635
@@ -1912,8 +1915,6 @@ asia.5ivttv.vip##+js(acs, document.readyState, mdpDeblocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/23998
 mp3y.info##+js(nowoif)
 ||mp3y.info/*.php^$frame
-! https://github.com/uBlockOrigin/uAssets/issues/23985
-@@||fx545.site^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/24006
 raidrush.net##+js(nostif, getComputedStyle(el))
 !#if env_firefox
@@ -1924,9 +1925,8 @@ raidrush.net###top_ga:style(position: absolute !important; left: -10000px !impor
 !#endif
 @@||2ix2tv.de^$ghide
 ||youspacko.com^$frame,redirect=noopframe,domain=2ix2tv.de
+tv24livestream.de###abmmx
 ! https://github.com/uBlockOrigin/uAssets/issues/24013
-netu.frembed.lol##+js(nowoif)
-netu.frembed.lol##+js(set, adblockcheck, false)
 frembed.*##+js(acs, atob, %2FpopundersPerIP%5B%5Cs%5CS%5D*%3FDate%5B%5Cs%5CS%5D*%3FgetElementsByTagName%5B%5Cs%5CS%5D*%3FinsertBefore%2F)
 godriveplayer.com##+js(nowoif)
 godriveplayer.com##.pppx
@@ -3045,8 +3045,6 @@ thetimes.com##.ad-container
 uploadhive.com##[href="javascript:void(0);"]
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gpdgm2/bypassing_adblock_detection_for_spotifydown/
 ||vlitag.com^$script,redirect=noopjs,domain=spotifydown.com
-! https://github.com/uBlockOrigin/uAssets/issues/26008
-@@||totalsporteks.io^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/26011
 *$xhr,domain=streamblasters.pm,3p
 ! https://github.com/uBlockOrigin/uAssets/issues/26024
