@@ -125,7 +125,7 @@ export default [
   "key",
   "lay",
   "log",
-  "new",
+  "sdk",
   "tag",
   "web",
   "-p",

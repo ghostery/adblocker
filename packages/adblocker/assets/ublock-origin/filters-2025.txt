@@ -1165,14 +1165,17 @@ darts-scoring.com##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/17444
 ###close-teaser
 ! https://github.com/uBlockOrigin/uAssets/issues/27519
+! https://github.com/uBlockOrigin/uAssets/issues/32027
 ###teaser3[style^="width: 100%;height:0;text-align: center;display: scroll;position:fixed;"]
 !#if cap_html_filtering
 dramafren.org##^script:has-text(/eval\(.+?RegExp/)
 !#else
 dramafren.org##+js(acs, eval, replace)
 !#endif
+dramafren.org##+js(no-xhr-if, adsbygoogle)
 dramafren.org##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-dramafren.org##+js(nowoif, _blank)
+dramafren.org##+js(nowoif)
+dramafren.org###safePopupArea
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=ryderjet.com
 ||ryderjet.com/assets/jquery/css100.js
 ! https://github.com/AdguardTeam/AdguardFilters/issues/200629
@@ -1612,8 +1615,8 @@ l2crypt.com##+js(noeval-if, ads)
 brawlify.com##+js(rmnt, script, %2Fadb%2Fi)
 ||brawlify.com/js/core.js^$script,1p
 ! https://abcnews.go.com/ - top empty space
-abcnews.go.com##.navigation--has-subnav:style(top:0 !important)
-abcnews.go.com##.StickyAdWrapper
+abcnews.com,abcnews.go.com##.navigation--has-subnav:style(top: 0 !important;)
+abcnews.com,abcnews.go.com##.StickyAdWrapper
 ! https://github.com/uBlockOrigin/uAssets/issues/28343
 bgsi.gg##+js(nostif, fired)
 ! https://adultgamescollector.com/ popup
@@ -1787,7 +1790,7 @@ kio.ac##+js(nostif, mode%3A%22no-cors%22)
 magnetdl.*##+js(rpnt, script, %2Fwindow%5C.location%5C.replace%5C(%5B%5E)%5D%2B%5C)%3B%3F%2Fg)
 magnetdl.*##+js(nowoif, !magnetdl., 1)
 ! https://yt1s.com.co/ - popups
-yt1s.com.co##+js(nowoif)
+yt1s.com.co>>##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/28817
 cerberusapp.com##+js(set, stoCazzo, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/28818
@@ -2531,7 +2534,10 @@ perverzija.com##+js(aeld, message, _0x)
 dameungrrr.videoid.baby##+js(aeld, popstate, window.location.href)
 viralpedia.pro##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/30525
-@@||a.asd.$generichide
+! https://github.com/uBlockOrigin/uAssets/issues/31795
+asd.pics##+js(nowoif, _blank)
+asd.pics###downloadButton
+@@||asd.$generichide,to=asd.homes|asd.pics
 ! https://cmsdetect.com/ - popups
 cmsdetect.com##+js(nowoif, _blank)
 cmsdetect.com##.results-bottom-banner
