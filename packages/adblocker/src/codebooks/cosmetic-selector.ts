@@ -159,13 +159,13 @@ export default [
   "es",
   "et",
   "he",
+  "ic",
   "id",
   "im",
   "in",
   "it",
   "la",
   "le",
-  "li",
   "lo",
   "o-",
   "ol",
@@ -186,7 +186,6 @@ export default [
   "st",
   "t-",
   "te",
-  "ti",
   "tr",
   "un",
   " ",
@@ -260,5 +259,6 @@ export default [
   "x",
   "y",
   "Y",
-  "z"
+  "z",
+  "Z"
 ];
