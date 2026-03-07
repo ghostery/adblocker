@@ -1456,19 +1456,18 @@ androidpolice.com,makeuseof.com,movieweb.com,xda-developers.com##+js(cookie-remo
 airtel.in##+js(no-xhr-if, analytics%2Fbulk-pixel)
 ! https://elevenlabs.io/dubbing - Stores the last dubbing result
 elevenlabs.io##+js(set-local-storage-item, IIElevenLabsDubbingResult, %24remove%24)
-! Pepper redirection - pepper.ru/deals/post-428233 | pepper.pl/promocje/post-750379 | dealabs.com/bons-plans/post-2674687
+! Pepper redirection: only in old sales (new ones lost their title) - pepper.pl/promocje/post-750379
 chollometro.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.chollometro.com%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 dealabs.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.dealabs.com%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 hotukdeals.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.hotukdeals.com%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 mydealz.de##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.mydealz.de%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 nl.pepper.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fnl.pepper.com%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
-pepper.it##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.pepper.it%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 pepper.pl##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.pepper.pl%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 pepper.ru##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.pepper.ru%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 preisjaeger.at##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.preisjaeger.at%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 promodescuentos.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.promodescuentos.com%2Fvisit%2F%22%5D%5Btitle%5E%3D%22https%3A%2F%2F%22%5D, %5Btitle%5D)
 pelando.com.br##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.pelando.com.br%2Fapi%2Fredirect%3Furl%3D%22%5D, %3Furl)
-! desidime.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.desidime.com%2Flinks%3Fref%3D%5D%5Bhref*%3D%22%26url%3D%22%5D, %26url)
+! desidime.com##+js(href-sanitizer, a%5Bhref*%3D%22https%3A%2F%2Fwww.desidime.com%2Flinks%3Fref%3D%22%5D%5Bhref*%3D%22%26url%3D%22%5D, %26url)
 ! https://github.com/uBlockOrigin/uAssets/issues/21342
 proboards.com,winclassic.net##+js(rmnt, script, vglnk)
 proboards.com,winclassic.net##^script:has-text(vglnk)
@@ -1873,7 +1872,6 @@ newsletter.adnz.co%2F*$image
 *%2Fr.*%2Ftr%2Fop%2F*$image
 /email-interact-v2/view/*$image
 *%2Femail-interact-v2%2Fview%2F*$image
-/e/o/*$image
 *%2Fe%2Fo%2F*$image
 /track/open.php?$image
 *%2Ftrack%2Fopen.php%3F*$image
@@ -1925,9 +1923,9 @@ newsletter.adnz.co%2F*$image
 .rs6.net%2Fon.jsp%3F*$image
 /sptrack.mailer.*/q/*$image
 *%2Fsptrack.mailer.*%2Fq%2F$image
-/o/p/*$image
 *%2Fo%2Fp%2F$image
 /e.mailer.*/o/p/*$image
+*%2Fe.mailer.*%2Fo%2Fp%2F$image
 /pixel.jpg?campaign_id=$image
 *%2Fpixel.jpg%3Fcampaign_id%3D*$image
 /link-mf.*/CI0/*$image
@@ -1936,6 +1934,8 @@ newsletter.adnz.co%2F*$image
 ||googleusercontent.com/*/wf/open?upn=$image
 ! https://github.com/uBlockOrigin/uAssets/issues/29466
 .salesforce.com%2Fservlet%2Fservlet.ImageServer%3F$image
+!/e/o/*$image
+!/o/p/*$image
 ! beacons.ai analytics
 ||beacons.ai/api/rtanalytics/
 ||beacons.ai/api/public_actions
@@ -2294,5 +2294,7 @@ itmedia.co.jp##+js(set-local-storage-item, %2F%5E_cX_%2F, %24remove%24)
 ||vercel.com/*/vitals
 ||vercel.com/*/view
 ||vercel.com/api/stream/internal$ping
+! https://github.com/uBlockOrigin/uAssets/issues/32090
+||vidara.to/api/heartbeat
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
