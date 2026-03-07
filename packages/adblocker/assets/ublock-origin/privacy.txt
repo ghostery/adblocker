@@ -1285,6 +1285,10 @@ $removeparam=at_ptr_name
 $removeparam=at_recipient_id
 $removeparam=at_recipient_list
 $removeparam=at_send_date
+! Salesforce
+! https://help.salesforce.com/s/articleView?id=mktg.mc_gai_utm_parameters.htm&type=5
+$removeparam=sfmc_id
+$removeparam=sfmc_activityid
 ! https://github.com/brave/brave-browser/issues/24988
 $removeparam=ss_email_id
 ! https://github.com/brave/brave-browser/issues/37847
@@ -1731,10 +1735,12 @@ r.mail.wowvegas.com%2Ftr%2Fop%2F*$image
 /tracking.vegasgems.com/*$image
 *%2Ftracking.vegasgems.com%2F*$image
 ! hubspot
-.hubspotlinks.com/Cto/$image
-.hubspotlinks.com%2FCto%2F*$image
+.hubspotlinks.com/*to/$image
+.hubspotlinks.com%2F*to%2F*$image
 .hubspotlinksstarter.com/*to/$image
 .hubspotlinksstarter.com%2F*to%2F*$image
+.hubspotemail.net/e2t/$image
+.hubspotemail.net%2Fe2t%2F$image
 ! viki.com
 /platform-collector.viki.com/email/*$image
 *%2Fplatform-collector.viki.com%2Femail%2F*$image
@@ -1812,6 +1818,32 @@ r.mail.wowvegas.com%2Ftr%2Fop%2F*$image
 ! kultivi.com
 /mkt.kultivi.com/email/*$image
 *%2Fmkt.kultivi.com%2Femail%2F$image
+! raindrop.io
+/mailredir.raindrop.io/q/*$image
+*%2Fmailredir.raindrop.io%2Fq%2F$image
+! paypal
+/epl.paypal-communication.com/O/*$image
+*%2Fepl.paypal-communication.com%2FO%2F$image
+! aquasoft.de
+/mail.aquasoft.de/wm/ostat.php?$image
+*%2Fmail.aquasoft.de%2Fwm%2Fostat.php%3F*$image
+! clyp.it
+/sendy.clyp.it/t/*$image
+*%2Fsendy.clyp.it%2Ft%2F$image
+! buyandship.com.sg
+.buyandship.com.sg/opn/$image
+.buyandship.com.sg%2Fopn%2F$image
+! convertkit
+.convertkit-mail.com/o/$image
+.convertkit-mail.com%2Fo%2F$image
+! topuniversities.com
+/qs.topuniversities.com/e2t/o/*$image
+! dufry
+/t.news.dufry-communication.com/r/*$image
+! humblebundle
+/sptrack.mailer.humblebundle.com/q/*$image
+! outsideinc
+/hub.outsideinc.com/e3t/Cto/*$image
 ! others
 static.adsugar.ch/img?ord=$image
 static.adsugar.ch%2Fimg%3Ford%3D*$image
@@ -1873,6 +1905,33 @@ newsletter.adnz.co%2F*$image
 .k-trk.com/$image
 .k-trk.com%2F*$image
 /c.*/CI0/*$image
+.netline.com/ltr1/$image
+.netline.com%2Fltr1%2F$image
+/mail.*/ostat.php?$image
+*%2Fmail.*%2Fostat.php%3F*$image
+/email.*/opn/*$image
+/ae.edm.edm_open?$image
+*%2Fae.edm.edm_open%3F$image
+/gm.mmstat.com/*$image
+*%2Fgm.mmstat.com%2F*$image
+/MessageTrackLog.aspx?$image
+*%2FMessageTrackLog.aspx%3F$image
+/e2t/o/*$image
+*%2Fe2t%2Fo%2F$image
+/tr/impression?$image
+*%2Ftr%2Fimpression%3F$image
+.tracker.bannerflow.com/api/tr/impression?$image
+.rs6.net/on.jsp?$image
+.rs6.net%2Fon.jsp%3F*$image
+/sptrack.mailer.*/q/*$image
+*%2Fsptrack.mailer.*%2Fq%2F$image
+/o/p/*$image
+*%2Fo%2Fp%2F$image
+/e.mailer.*/o/p/*$image
+/pixel.jpg?campaign_id=$image
+*%2Fpixel.jpg%3Fcampaign_id%3D*$image
+/link-mf.*/CI0/*$image
+*%2Flink-mf.*%2FCI0%2F$image
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/929
 ||googleusercontent.com/*/wf/open?upn=$image
 ! https://github.com/uBlockOrigin/uAssets/issues/29466
