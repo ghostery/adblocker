@@ -143,6 +143,7 @@ fbstream.*,fbstreams.*##.position-absolute
 vipleague.*##.bg-dark.ratio > .position-absolute
 */script/formula.js|$script
 vipleague.*##.m-1.btn-danger.btn
+vipleague.*##.btn[data-openuri*="/4/"]
 !#if cap_html_filtering
 !buffsports.*,fbstreams.*,mlbbox.me,omuzaani.me,strikeout.im,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
 !#else
@@ -1468,7 +1469,9 @@ streamup.ws##+js(set, detectSandbox, noopFunc)
 streamup.ws##+js(aeld, DOMContentLoaded, Promise)
 streamup.ws##+js(nostif, push)
 ! https://github.com/uBlockOrigin/uAssets/issues/31151
+! https://github.com/uBlockOrigin/uAssets/issues/32085
 s1p1cd.com,strmup.to,strmup.cc,strmup.ws,vidnest.io,vidnest.live##+js(nowoif)
+vidnest.io,vidnest.live##+js(nostif, location.replace, 100)
 vidnest.io,vidnest.live##+js(acs, EventTarget.prototype.addEventListener, open)
 vidnest.io,vidnest.live##+js(nostif, bait.remove)
 vidnest.live##a[href^="https://candai.online/"]
@@ -1477,6 +1480,7 @@ strmup.to,strmup.ws##+js(rmnt, script, popundersPerIP)
 strmup.to##+js(acs, document.createElement, 'script')
 *$script,3p,denyallow=cloudflare.com|cloudflare.net|fastly.net|gstatic.com|jsdelivr.net|jwpcdn.com,domain=s1p1cd.com|streamup.ws|strmup.to
 ||streamup.ws/assets/js/adblock.js$script,1p
+||katfile.online^$image,domain=vidnest.live
 ! animenexus.in ad popups
 animenexus.in##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/27954
@@ -2568,9 +2572,6 @@ sizecharts.net##+js(rmnt, %23text, adinserter)
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$domain=ted.com
 ! https://github.com/uBlockOrigin/uAssets/issues/27915
 talksport.com##+js(rmnt, script, AD_URL)
-! https://github.com/uBlockOrigin/uAssets/issues/30535
-pcoptimizedsettings.com##+js(rmnt, script, .onerror)
-pcoptimizedsettings.com###tie-wrapper > div[style="margin: 15px auto; text-align: center; display: block; clear: both; height: 250px;"]
 ! https://github.com/easylist/easylist/issues/22569
 ||iptvsat-forum.com/banners/$image
 cardshare.biz##+js(acs, %24, btoa)
