@@ -66,6 +66,7 @@ export default [
   "product",
   "sidebar",
   "sponsor",
+  "taboola",
   "wrapper",
   "-child",
   "[class",
@@ -134,7 +135,6 @@ export default [
   "__",
   ", ",
   ".m",
-  ".t",
   "\"]",
   "%2",
   "%5",
@@ -186,6 +186,7 @@ export default [
   "st",
   "t-",
   "te",
+  "ti",
   "tr",
   "un",
   " ",
@@ -259,6 +260,5 @@ export default [
   "x",
   "y",
   "Y",
-  "z",
-  "Z"
+  "z"
 ];
