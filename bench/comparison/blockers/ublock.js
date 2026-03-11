@@ -6,17 +6,17 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { StaticNetFilteringEngine } = require('@gorhill/ubo-core/bundle.min.cjs');
+import { StaticNetFilteringEngine } from '@gorhill/ubo-core';
 
 let engine = null;
 
-module.exports = class UBlockOrigin {
+export default class UBlockOrigin {
   static async initialize({ hostsOnly = false } = {}) {
     engine = await StaticNetFilteringEngine.create({ noPSL: hostsOnly });
   }
 
   static async parse(rawLists) {
-    await engine.useLists([ { name: 'easylist', raw: rawLists } ]);
+    await engine.useLists([{ name: 'easylist', raw: rawLists }]);
     return new UBlockOrigin();
   }
 
@@ -39,4 +39,4 @@ module.exports = class UBlockOrigin {
   matchDebug(details) {
     return this.matchRequest(details) !== 0 ? engine.toLogData().raw : null;
   }
-};
+}

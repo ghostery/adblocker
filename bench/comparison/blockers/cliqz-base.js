@@ -6,16 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FiltersEngine, Request } = require('../../../packages/adblocker');
+import { FiltersEngine, Request } from '@ghostery/adblocker';
 
-module.exports = class Cliqz {
+export default class Cliqz {
   static parse(rawLists, { enableCompression = false, debug = false } = {}) {
-    return new Cliqz(FiltersEngine.parse(rawLists, {
-      enableCompression,
-      integrityCheck: false,
-      loadCosmeticFilters: false,
-      debug,
-    }));
+    return new Cliqz(
+      FiltersEngine.parse(rawLists, {
+        enableCompression,
+        integrityCheck: false,
+        loadCosmeticFilters: false,
+        debug,
+      }),
+    );
   }
 
   constructor(engine) {
@@ -31,19 +33,23 @@ module.exports = class Cliqz {
   }
 
   match({ url, frameUrl, type }) {
-    return this.engine.match(Request.fromRawDetails({
-      url,
-      sourceUrl: frameUrl,
-      type,
-    })).match;
+    return this.engine.match(
+      Request.fromRawDetails({
+        url,
+        sourceUrl: frameUrl,
+        type,
+      }),
+    ).match;
   }
 
   matchDebug({ url, frameUrl, type }) {
-    const { filter = null } = this.engine.match(Request.fromRawDetails({
-      url,
-      sourceUrl: frameUrl,
-      type,
-    }));
+    const { filter = null } = this.engine.match(
+      Request.fromRawDetails({
+        url,
+        sourceUrl: frameUrl,
+        type,
+      }),
+    );
     return filter !== null ? filter.rawLine : null;
   }
-};
+}

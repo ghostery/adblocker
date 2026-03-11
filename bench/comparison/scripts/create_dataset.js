@@ -6,12 +6,13 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const fs = require('fs');
-const createPuppeteerPool = require('puppeteer-pool');
-const stream = require('stream');
-const { getDomain } = require('tldts-experimental');
+import fs from 'node:fs';
+import { Readable } from 'node:stream';
 
-class RequestStreamer extends stream.Readable {
+import createPuppeteerPool from 'puppeteer-pool';
+import { getDomain } from 'tldts-experimental';
+
+class RequestStreamer extends Readable {
   constructor(options) {
     super(options);
 
@@ -27,7 +28,8 @@ class RequestStreamer extends stream.Readable {
     // Terminate stream
     try {
       this.push(null);
-    } catch (ex) {
+      // eslint-disable-next-line no-unused-vars
+    } catch (_ex) {
       /* Ignore */
     }
   }
@@ -58,10 +60,10 @@ async function collectDataset(domains) {
       const requestUrl = request.url();
       if (
         !(
-          requestUrl.startsWith('https://')
-          || requestUrl.startsWith('http://')
-          || requestUrl.startsWith('ws://')
-          || requestUrl.startsWith('wss://')
+          requestUrl.startsWith('https://') ||
+          requestUrl.startsWith('http://') ||
+          requestUrl.startsWith('ws://') ||
+          requestUrl.startsWith('wss://')
         )
       ) {
         return;
@@ -109,14 +111,17 @@ async function collectDataset(domains) {
           // We do not collect URLs unless we are on the home-page
           if (status.ok && url === undefined) {
             const domainOfPage = getDomain(pageUrl);
-            const urlsOnPage = await page.evaluate(() => [...document.querySelectorAll('a')].map(a => a.href).filter(Boolean));
+            const urlsOnPage = await page.evaluate(() =>
+              [...document.querySelectorAll('a')].map((a) => a.href).filter(Boolean),
+            );
             const sameDomainUrls = urlsOnPage.filter(
-              href => href
-                && (href.startsWith('https://')
-                  || href.startsWith('http://')
-                  || href.startsWith('ws://')
-                  || href.startsWith('wss://'))
-                && getDomain(href) === domainOfPage,
+              (href) =>
+                href &&
+                (href.startsWith('https://') ||
+                  href.startsWith('http://') ||
+                  href.startsWith('ws://') ||
+                  href.startsWith('wss://')) &&
+                getDomain(href) === domainOfPage,
             );
             return [...new Set(sameDomainUrls)];
           }

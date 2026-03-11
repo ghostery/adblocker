@@ -6,22 +6,18 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const _N = (strings, number) => strings[0] + number.toLocaleString() + strings[1];
+export const _N = (strings, number) => strings[0] + number.toLocaleString() + strings[1];
 
-module.exports = {
-  _N,
+export const _T = (strings, time) => {
+  if (time === Infinity || time === -Infinity) {
+    time = NaN;
+  }
 
-  _T: (strings, time) => {
-    if (time === Infinity || time === -Infinity) {
-      time = NaN;
-    }
+  const formatted = isNaN(time) ? 'n/a' : _N`${Math.round(time * 1e6) / 1e3} μs`;
+  return strings[0] + formatted + strings[1];
+};
 
-    const formatted = isNaN(time) ? 'n/a' : _N`${Math.round(time * 1e6) / 1e3} μs`;
-    return strings[0] + formatted + strings[1];
-  },
-
-  _S: (strings, size) => {
-    const formatted = size === null ? 'n/a' : _N`${Math.ceil(size / 1024)} KiB`;
-    return strings[0] + formatted + strings[1];
-  },
+export const _S = (strings, size) => {
+  const formatted = size === null ? 'n/a' : _N`${Math.ceil(size / 1024)} KiB`;
+  return strings[0] + formatted + strings[1];
 };

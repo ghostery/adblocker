@@ -6,15 +6,19 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const fs = require('fs');
-const path = require('path');
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
-const { _N, _T, _S } = require('./string.js');
+import { _N, _T, _S } from './string.js';
 
-const requests = require('./requests.json');
+const ROOT_DIR = path.dirname(fileURLToPath(import.meta.url));
+const requests = JSON.parse(
+  fs.readFileSync(path.resolve(ROOT_DIR, 'requests.json'), { encoding: 'utf-8' }),
+);
 
 const ENGINE = process.argv[2];
-const FLAGS = process.argv.slice(3).filter(arg => arg.startsWith('--'));
+const FLAGS = process.argv.slice(3).filter((arg) => arg.startsWith('--'));
 
 const DEBUG = FLAGS.includes('--debug');
 const HOSTS_ONLY = FLAGS.includes('--hosts-only');
@@ -76,22 +80,25 @@ function avg(arr) {
 }
 
 function isSupportedUrl(url) {
-  return !!url && (
-    url.startsWith('http:')
-    || url.startsWith('https:')
-    || url.startsWith('ws:')
-    || url.startsWith('wss:')
+  return (
+    !!url &&
+    (url.startsWith('http:') ||
+      url.startsWith('https:') ||
+      url.startsWith('ws:') ||
+      url.startsWith('wss:'))
   );
 }
 
 function loadLists() {
   const filename = HOSTS_ONLY ? 'hosts.txt' : 'easylist.txt';
-  let content = fs.readFileSync(path.resolve(__dirname, 'lists', filename), { encoding: 'utf-8' })
-                .replace(/^\[Adblock\b.*\n/, '');
+  let content = fs
+    .readFileSync(path.resolve(ROOT_DIR, 'lists', filename), { encoding: 'utf-8' })
+    .replace(/^\[Adblock\b.*\n/, '');
 
   if (!HOSTS_ONLY) {
-    content += fs.readFileSync(path.resolve(__dirname, 'lists', 'easyprivacy.txt'), { encoding: 'utf-8' })
-               .replace(/^\[Adblock\b.*\n/, '');
+    content += fs
+      .readFileSync(path.resolve(ROOT_DIR, 'lists', 'easyprivacy.txt'), { encoding: 'utf-8' })
+      .replace(/^\[Adblock\b.*\n/, '');
   }
 
   // Remove filters with regular expression patterns containing lookahead and
@@ -105,35 +112,42 @@ function loadLists() {
 }
 
 function wait(milliseconds) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
   });
 }
 
-async function memoryUsage(base = { heapUsed: 0, heapTotal: 0, }) {
+async function memoryUsage(base = { heapUsed: 0, heapTotal: 0 }) {
   if (!FLAGS.includes('--memory')) {
-    return ({ heapUsed: 0, heapTotal: 0, });
+    return { heapUsed: 0, heapTotal: 0 };
   }
 
-  gc();
+  gc(); /* eslint-disable-line no-undef */
 
   // Wait for 1 second for GC to run
   await wait(1000);
 
-  let { heapUsed, heapTotal, } = process.memoryUsage();
+  let { heapUsed, heapTotal } = process.memoryUsage();
 
   heapUsed -= base.heapUsed;
   heapTotal -= base.heapTotal;
 
-  return ({ heapUsed, heapTotal, });
+  return { heapUsed, heapTotal };
 }
 
-function getCompare() {
-  const spec = FLAGS.find(f => f.startsWith('--compare='));
+async function getCompare() {
+  const spec = FLAGS.find((f) => f.startsWith('--compare='));
 
   if (typeof spec !== 'undefined') {
-    const [ , filename ] = spec.split('=');
-    return require(path.resolve(filename));
+    const [, filename] = spec.split('=');
+    const resolvedFilename = path.resolve(filename);
+
+    if (path.extname(resolvedFilename) === '.json') {
+      return JSON.parse(fs.readFileSync(resolvedFilename, { encoding: 'utf-8' }));
+    }
+
+    const imported = await import(pathToFileURL(resolvedFilename).href);
+    return imported.default ?? imported;
   }
 
   return null;
@@ -141,11 +155,11 @@ function getCompare() {
 
 async function debug(moduleId, rawLists) {
   const output = [];
-  const compare = getCompare();
+  const compare = await getCompare();
 
   const outputFilename = compare !== null ? `${ENGINE}.diff.json` : `${ENGINE}.debug.json`;
 
-  const Cls = require(moduleId);
+  const { default: Cls } = await import(new URL(moduleId, import.meta.url));
 
   if (Cls.initialize) {
     await Cls.initialize({ hostsOnly: HOSTS_ONLY });
@@ -203,7 +217,7 @@ async function benchmark(moduleId, rawLists) {
 
   // Initialize
   let start = process.hrtime();
-  const Cls = require(moduleId);
+  const { default: Cls } = await import(new URL(moduleId, import.meta.url));
 
   if (Cls.initialize) {
     await Cls.initialize({ hostsOnly: HOSTS_ONLY });
@@ -305,11 +319,11 @@ async function benchmark(moduleId, rawLists) {
   console.log();
   console.log(
     _N`Avg serialization time (${serializationTimings.length} samples): ` +
-    _T`${avg(serializationTimings)}`,
+      _T`${avg(serializationTimings)}`,
   );
   console.log(
     _N`Avg deserialization time (${deserializationTimings.length} samples): ` +
-    _T`${avg(deserializationTimings)}`,
+      _T`${avg(deserializationTimings)}`,
   );
   console.log(_S`Serialized size: ${cacheSize}`);
   console.log(_T`List parsing time: ${parsingTime}`);

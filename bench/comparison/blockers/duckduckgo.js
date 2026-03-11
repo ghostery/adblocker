@@ -6,8 +6,8 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const abp = require('abp-filter-parser');
-const { getHostname } = require('tldts-experimental');
+import abp from 'abp-filter-parser';
+import { getHostname } from 'tldts-experimental';
 
 // This maps webRequest types to DuckDuckGo types
 const DDG_OPTIONS = {
@@ -24,8 +24,7 @@ const DDG_OPTIONS = {
   other: abp.elementTypes.OTHER,
 };
 
-
-module.exports = class DuckDuckGo {
+export default class DuckDuckGo {
   static parse(rawLists) {
     const parsed = {};
     abp.parse(rawLists, parsed);
@@ -42,4 +41,4 @@ module.exports = class DuckDuckGo {
       elementTypeMask: DDG_OPTIONS[type],
     });
   }
-};
+}

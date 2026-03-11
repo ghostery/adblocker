@@ -1,11 +1,12 @@
+import eslint from '@eslint/js';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
-export default tseslint.config(
-  eslint.configs.recommended,
+export default defineConfig(
   eslintPluginPrettierRecommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
@@ -36,6 +37,19 @@ export default tseslint.config(
     files: ['**/test/**/*.ts'],
     rules: {
       '@typescript-eslint/no-unused-expressions': 'off',
+    },
+  },
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+    rules: {
+      ...tseslint.configs.disableTypeChecked.rules,
+      ...eslint.configs.recommended.rules,
     },
   },
 );
