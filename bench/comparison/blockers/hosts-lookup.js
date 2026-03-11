@@ -6,12 +6,11 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { FastHostsLookup } = require('fast-hosts-lookup');
-
-const { extractHostname } = require('./utils.js');
+import { FastHostsLookup } from 'fast-hosts-lookup';
+import { extractHostname } from './utils.js';
 
 // This is an implementation of the most basic hosts-based blocking.
-module.exports = class HostsLookup {
+export default class HostsLookup {
   static parse(rawLists) {
     return new HostsLookup(rawLists);
   }
@@ -45,4 +44,4 @@ module.exports = class HostsLookup {
   match({ url }) {
     return this.lookup.has(extractHostname(url));
   }
-};
+}

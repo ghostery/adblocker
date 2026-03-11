@@ -6,11 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { contentTypes } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/contentTypes.js');
-const { CombinedMatcher } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/matcher.js');
-const { Filter } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/filterClasses.js');
-const { parseURL } = require('@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/url.js');
-
+import { contentTypes } from '@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/contentTypes.js';
+import { CombinedMatcher } from '@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/matcher.js';
+import { Filter } from '@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/filterClasses.js';
+import { parseURL } from '@eyeo/webext-ad-filtering-solution/adblockpluscore/lib/url.js';
 
 // Map of content types reported by the browser to the respecitve content types
 // used by Adblock Plus. Other content types are simply mapped to OTHER.
@@ -26,10 +25,10 @@ const resourceTypes = new Map(
 
     // Treat <img srcset> and <picture> the same as other images.
     yield ['imageset', 'IMAGE'];
-  }()),
+  })(),
 );
 
-module.exports = class AdblockPlus {
+export default class AdblockPlus {
   static parse(rawLists) {
     const lines = rawLists.split(/\n/g);
 
@@ -90,19 +89,13 @@ module.exports = class AdblockPlus {
     //
     // Since the current request data set does not give us a frame hierarchy,
     // we assume that the request is from a top-level frame.
-    const documentFilter = this.matcher.match(
-      sourceURL,
-      contentTypes.DOCUMENT,
-    );
+    const documentFilter = this.matcher.match(sourceURL, contentTypes.DOCUMENT);
 
     if (documentFilter !== null) {
       return documentFilter.text;
     }
 
-    const specificOnly = this.matcher.match(
-      sourceURL,
-      contentTypes.GENERICBLOCK,
-    ) !== null;
+    const specificOnly = this.matcher.match(sourceURL, contentTypes.GENERICBLOCK) !== null;
 
     const filter = this.matcher.match(
       url,
@@ -114,4 +107,4 @@ module.exports = class AdblockPlus {
 
     return filter === null ? null : filter.text;
   }
-};
+}

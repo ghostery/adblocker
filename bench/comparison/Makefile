@@ -21,17 +21,13 @@ ifeq ($(SKIP_SERIALIZATION), 1)
 	run_options := $(run_options) --skip-serialization
 endif
 
-.PHONY: all clean deps run ubo-core brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min re hosts-lookup
+.PHONY: all clean deps run brave cliqz cliqz-compression ublock adblockplus tsurlfilter tldts url min re hosts-lookup
 
 all: deps run
 
 requests.json:
 	curl -O --compressed https://raw.githubusercontent.com/mjethani/scaling-palm-tree/06ef031aa3d2742dc7e6234f579e28a9b6d499b0/requests.json
 
-ubo-core:
-	npx rollup ./node_modules/@gorhill/ubo-core/index.js \
-		--file ./node_modules/@gorhill/ubo-core/bundle.min.cjs --format cjs \
-		--context global --plugin terser
 brave:
 	$(node_command) run.js brave $(run_options)
 

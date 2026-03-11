@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { Engine, FilterSet } = require('adblock-rs');
+import { Engine, FilterSet } from 'adblock-rs';
 
-module.exports = class Brave {
+export default class Brave {
   static parse(rawLists) {
     const filterSet = new FilterSet(false);
     filterSet.addFilters(rawLists.split(/[\n\r]+/g));
@@ -20,7 +20,7 @@ module.exports = class Brave {
   }
 
   serialize() {
-    return this.client.serializeRaw();
+    return this.client.serialize();
   }
 
   deserialize(serialized) {
@@ -28,10 +28,6 @@ module.exports = class Brave {
   }
 
   match({ type, url, frameUrl }) {
-    return this.client.check(
-      url,
-      frameUrl,
-      type,
-    );
+    return this.client.check(url, frameUrl, type);
   }
-};
+}

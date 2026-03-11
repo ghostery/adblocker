@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { parse } = require('tldts-experimental');
+import { parse } from 'tldts-experimental';
 
-module.exports = class Tldts {
+export default class Tldts {
   static parse() {
     return new Tldts();
   }
@@ -16,4 +16,4 @@ module.exports = class Tldts {
   match({ url, frameUrl }) {
     return parse(url) && parse(frameUrl);
   }
-};
+}

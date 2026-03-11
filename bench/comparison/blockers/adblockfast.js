@@ -5,7 +5,7 @@
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
-*/
+ */
 function getRules() {
   return [
     // Privacy (13 Aug 2017 22:41 UTC)
@@ -21,7 +21,7 @@ function getRules() {
   ];
 }
 
-module.exports = class AdblockFast {
+export default class AdblockFast {
   static parse() {
     return new AdblockFast(getRules());
   }
@@ -31,11 +31,11 @@ module.exports = class AdblockFast {
   }
 
   serialize() {
-    return JSON.stringify(this.rules.map(r => r.source));
+    return JSON.stringify(this.rules.map((r) => r.source));
   }
 
   deserialize(serialized) {
-    this.rules = JSON.parse(serialized).map(r => new RegExp(r));
+    this.rules = JSON.parse(serialized).map((r) => new RegExp(r));
   }
 
   match({ url }) {
@@ -47,4 +47,4 @@ module.exports = class AdblockFast {
     }
     return false;
   }
-};
+}

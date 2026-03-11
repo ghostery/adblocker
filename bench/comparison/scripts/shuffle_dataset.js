@@ -6,7 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const fs = require('fs');
+import fs from 'node:fs';
 
 // https://stackoverflow.com/a/2450976/1185079
 function shuffle(array) {
@@ -31,14 +31,14 @@ function shuffle(array) {
 }
 
 function main() {
-  const content = fs.readFileSync(process.argv[process.argv.length - 1], { encoding: 'utf-8' }).trim();
+  const content = fs
+    .readFileSync(process.argv[process.argv.length - 1], { encoding: 'utf-8' })
+    .trim();
   const lines = content.split(/\n/g);
 
   const pagesPerDomain = new Map();
   for (let i = 0; i < lines.length; i += 1) {
-    const {
-      domainId, pageId, frameUrl, url, cpt,
-    } = JSON.parse(lines[i]);
+    const { domainId, pageId, frameUrl, url, cpt } = JSON.parse(lines[i]);
 
     let requestsPerPage = pagesPerDomain.get(domainId);
     if (requestsPerPage === undefined) {
@@ -57,11 +57,14 @@ function main() {
 
   // Keep data only for 500 top domains
   const pageLoads = [];
-  [...pagesPerDomain.keys()].sort((a, b) => a - b).slice(0, 500).forEach((domainId) => {
-    pagesPerDomain.get(domainId).forEach((requestsForPage) => {
-      pageLoads.push(requestsForPage);
+  [...pagesPerDomain.keys()]
+    .sort((a, b) => a - b)
+    .slice(0, 500)
+    .forEach((domainId) => {
+      pagesPerDomain.get(domainId).forEach((requestsForPage) => {
+        pageLoads.push(requestsForPage);
+      });
     });
-  });
 
   const requests = [];
   shuffle(pageLoads).forEach((requestsForPage) => {
