@@ -186,7 +186,6 @@ export default [
   "st",
   "t-",
   "te",
-  "ti",
   "tr",
   "un",
   " ",
@@ -260,5 +259,6 @@ export default [
   "x",
   "y",
   "Y",
-  "z"
+  "z",
+  "Z"
 ];
