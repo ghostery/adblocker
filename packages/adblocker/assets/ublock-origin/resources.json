@@ -64,7 +64,7 @@
     {
       "name": "trusted-create-html.js",
       "aliases": [],
-      "body": "function trustedCreateHTML(e,t=\"\",r=\"\"){if(e===\"\")return;if(t===\"\")return;const n=safeSelf();const o=n.makeLogPrefix(\"trusted-create-html\",e,t,r);const s=n.getExtraArgs(Array.from(arguments),3);self.trustedCreateHTML=true;let u=self.frameElement;while(u!==null){const e=u.ownerDocument;if(e===null)break;const t=e.defaultView;if(t===null)break;if(t.trustedCreateHTML)return;u=u.frameElement}const i=parseInt(r,10);const l=new DOMParser;const c=l.parseFromString(t,\"text/html\");const f=[];while(c.body.firstChild!==null)f.push(document.adoptNode(c.body.firstChild));if(f.length===0)return;const a=[];const d=()=>{for(const e of a){if(e.parentNode===null)continue;e.parentNode.removeChild(e)}n.uboLog(o,\"Node(s) removed\")};const m=(e,t)=>{for(const r of t){e.append(r);if(isNaN(i))continue;a.push(r)}};const h=()=>{const t=document.querySelectorAll(e);if(t.length===0)return false;const r=Math.min(t.length,s.limit||1)-1;for(let e=0;e<r;e++)m(t[e],f.map((e=>e.cloneNode(true))));m(t[r],f);n.uboLog(o,\"Node(s) appended\");if(a.length===0)return true;setTimeout(d,i);return true};const p=()=>{if(h())return;const t=new MutationObserver((()=>{if(h()===false)return;t.disconnect()}));const r={childList:true,subtree:true};if(/[#.[]/.test(e)){r.attributes=true;if(e.includes(\"[\")===false){r.attributeFilter=[];if(e.includes(\"#\"))r.attributeFilter.push(\"id\");if(e.includes(\".\"))r.attributeFilter.push(\"class\")}}t.observe(document,r)};runAt(p,s.runAt||\"loading\")}",
+      "body": "function trustedCreateHTML(e,t=\"\",r=\"\"){if(e===\"\")return;if(t===\"\")return;const n=safeSelf();const o=n.makeLogPrefix(\"trusted-create-html\",e,t,r);const s=n.getExtraArgs(Array.from(arguments),3);self.trustedCreateHTML=true;let u=self.frameElement;while(u){const e=u.ownerDocument;if(e===null)break;const t=e.defaultView;if(t===null)break;if(t.trustedCreateHTML)return;u=u.frameElement}const i=parseInt(r,10);const l=new DOMParser;const c=l.parseFromString(t,\"text/html\");const f=[];while(c.body.firstChild!==null)f.push(document.adoptNode(c.body.firstChild));if(f.length===0)return;const a=[];const d=()=>{for(const e of a){if(e.parentNode===null)continue;e.parentNode.removeChild(e)}n.uboLog(o,\"Node(s) removed\")};const m=(e,t)=>{for(const r of t){e.append(r);if(isNaN(i))continue;a.push(r)}};const h=()=>{const t=document.querySelectorAll(e);if(t.length===0)return false;const r=Math.min(t.length,s.limit||1)-1;for(let e=0;e<r;e++)m(t[e],f.map((e=>e.cloneNode(true))));m(t[r],f);n.uboLog(o,\"Node(s) appended\");if(a.length===0)return true;setTimeout(d,i);return true};const p=()=>{if(h())return;const t=new MutationObserver((()=>{if(h()===false)return;t.disconnect()}));const r={childList:true,subtree:true};if(/[#.[]/.test(e)){r.attributes=true;if(e.includes(\"[\")===false){r.attributeFilter=[];if(e.includes(\"#\"))r.attributeFilter.push(\"id\");if(e.includes(\".\"))r.attributeFilter.push(\"class\")}}t.observe(document,r)};runAt(p,s.runAt||\"loading\")}",
       "dependencies": [
         "run-at.fn",
         "safe-self.fn"
@@ -582,6 +582,14 @@
     },
     {
       "name": "prevent-innerHTML.js",
+      "aliases": [],
+      "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=(t,r)=>{if(e!==\"\"){if(typeof t.matches!==\"function\")return false;if(t.matches(e)===false)return false}return n.testPattern(i,`${r}`)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(this,e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
+      "dependencies": [
+        "safe-self.fn"
+      ]
+    },
+    {
+      "name": "prevent-textContent.js",
       "aliases": [],
       "body": "function preventInnerHTML(e=\"\",t=\"\"){const n=safeSelf();const r=n.makeLogPrefix(\"prevent-innerHTML\",e,t);const i=n.initPattern(t,{canNegate:true});const o=n.Object_getOwnPropertyDescriptor(Element.prototype,\"innerHTML\");if(o===void 0)return;const s=(t,r)=>{if(e!==\"\"){if(typeof t.matches!==\"function\")return false;if(t.matches(e)===false)return false}return n.testPattern(i,`${r}`)};Object.defineProperty(Element.prototype,\"innerHTML\",{get:function(){return o.get?o.get.call(this):o.value},set:function(e){if(s(this,e))n.uboLog(r,\"Prevented\");else if(o.set)o.set.call(this,e);if(n.logLevel>1)n.uboLog(r,`Assigned:\\n${e}`);o.value=e}})}",
       "dependencies": [
