@@ -7,7 +7,6 @@ import { fileURLToPath } from 'node:url';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
-  eslintPluginPrettierRecommended,
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
@@ -18,7 +17,6 @@ export default defineConfig(
       },
     },
     rules: {
-      'prettier/prettier': 2, // Means error
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/unbound-method': 'off',
@@ -52,4 +50,5 @@ export default defineConfig(
       ...eslint.configs.recommended.rules,
     },
   },
+  eslintPluginPrettierRecommended,
 );
