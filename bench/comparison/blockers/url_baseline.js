@@ -6,14 +6,15 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { URL } = require('url');
+import { URL } from 'node:url';
 
-module.exports = class Url {
+export default class Url {
   static parse() {
     return new Url();
   }
 
   match({ url, frameUrl }) {
-    return new URL(url) && new URL(frameUrl);
+    new URL(url);
+    return new URL(frameUrl);
   }
-};
+}

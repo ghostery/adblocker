@@ -6,11 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const {
-  parse,
-  matches,
-  getUrlHost,
-} = require('./min/abp-filter-parser');
+import { parse, matches, getUrlHost } from './min/abp-filter-parser.js';
 
 // This maps webRequest types to MinBrowser types
 const MIN_OPTIONS = {
@@ -27,7 +23,7 @@ const MIN_OPTIONS = {
   other: 'other',
 };
 
-module.exports = class MinBrowser {
+export default class MinBrowser {
   static parse(rawLists) {
     const parsed = {};
     parse(rawLists, parsed, null, { async: false });
@@ -44,4 +40,4 @@ module.exports = class MinBrowser {
       elementType: MIN_OPTIONS[type],
     });
   }
-};
+}

@@ -1,12 +1,12 @@
+import eslint from '@eslint/js';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import { defineConfig } from 'eslint/config';
+import globals from 'globals';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import eslint from '@eslint/js';
 import tseslint from 'typescript-eslint';
-import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
-export default tseslint.config(
-  eslint.configs.recommended,
-  eslintPluginPrettierRecommended,
+export default defineConfig(
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
@@ -17,7 +17,6 @@ export default tseslint.config(
       },
     },
     rules: {
-      'prettier/prettier': 2, // Means error
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/unbound-method': 'off',
@@ -38,4 +37,18 @@ export default tseslint.config(
       '@typescript-eslint/no-unused-expressions': 'off',
     },
   },
+  {
+    files: ['**/*.js'],
+    languageOptions: {
+      globals: {
+        ...globals.node,
+        ...globals.browser,
+      },
+    },
+    rules: {
+      ...tseslint.configs.disableTypeChecked.rules,
+      ...eslint.configs.recommended.rules,
+    },
+  },
+  eslintPluginPrettierRecommended,
 );

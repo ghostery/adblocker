@@ -6,9 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const { extractHostname } = require('./utils.js');
+import { extractHostname } from './utils.js';
 
-module.exports = class Re {
+export default class Re {
   static parse() {
     return new Re();
   }
@@ -16,4 +16,4 @@ module.exports = class Re {
   match({ url, frameUrl }) {
     return extractHostname(url) && extractHostname(frameUrl);
   }
-};
+}

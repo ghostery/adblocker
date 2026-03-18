@@ -2395,6 +2395,7 @@ cracksmid.com##div[style=""] > center > center
 ://message1*.z13.web.core.windows.net^$doc
 ^Anph=(0101)-$doc
 /^https:\/\/[a-z]{5,20}-[0-9a-z]{16}\.z03\.azurefd\.net\/[0-9A-Za-z]+0[0-9A-Za-z]+\/index\.html/$doc,match-case,domain=z03.azurefd.net
+||azurefd.net/?bcda=$doc
 !
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/302#discussioncomment-10338866
 ||pages.dev/*/Fm7-alert.wav
@@ -2502,6 +2503,7 @@ cracksmid.com##div[style=""] > center > center
 ||github.io/*/js/flscn.js
 ||github.io/*/media/beep.mp3
 ||azurefd.net/media/beep.mp3
+||azurefd.net/fullscreen.js
 !
 ! https://github.com/uBlockOrigin/uAssets/issues/29718
 z13.web.core.windows.net##+js(aeld, DOMContentLoaded, fullscreenEnabled)
@@ -3695,7 +3697,7 @@ www.cambe.pr.gov.br##+js(noeval-if, tigervip2)
 ||steamcommunitylog.chez.com^$all
 ! https://github.com/uBlockOrigin/uBOL-home/issues/156
 ! https://github.com/uBlockOrigin/uAssets/issues/27941
-/^https:\/\/s[cfntz]y?[ace][acemnu][a-z]{1,4}or?[mn][a-z]{4,8}[iy][a-z]?\.com\//$doc,to=com|~steamcommunity.com|~szentkoronaradio.com
+/^https:\/\/s[cfntz]y?[ace][acemnu][a-z]{1,4}or?[mn][a-z]{4,8}[iy][a-z]?\.com\//$doc,to=com|~steamcommunity.com|~stauntonandhenry.com|~szentkoronaradio.com
 /^https:\/\/s[cfntz]y?[ace][acemnu][a-z]{1,4}or?[mn][a-z]{4,8}[iy][a-z]?\.cc\//$doc,to=cc
 /^https:\/\/s[cfntz]y?[ace][acemnu][a-z]{1,4}or?[mn][a-z]{4,8}[iy][a-z]?\.ru\//$doc,to=ru
 /^https:\/\/steam\.(?:community)?workshop-?[a-z]+\.com\//$doc,to=com|~steamcommunity.com
@@ -4837,7 +4839,11 @@ webflow.io##html.w-mod-js:not(.wf-active) > body:not([class]):not([id]) > a[clas
 ||threeneptuneboot.com^$doc
 /unsub/unsub^$doc
 /unsub_sent.php|$doc,method=post
-/^https?:\/\/www\.[a-z]{9,20}\.com\/o-[a-z]{4}-[a-z]\d6-[a-f0-9]{32}\b/$doc,match-case,to=com
+! https://github.com/uBlockOrigin/uAssets/discussions/32019
+/^https?:\/\/www\.[a-z]{9,20}\.com\/o-[a-z]{4}-[a-z]\d{2}-[a-f0-9]{32}\b/$doc,match-case,to=com
+!#if env_safari
+/^https?:\/\/www\.[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]?[a-z]?[a-z]?[a-z]?[a-z]?[a-z]?[a-z]?[a-z]?[a-z]?[a-z]?[a-z]?\.com\/o-[a-z][a-z][a-z][a-z]-[a-z][0-9][0-9]-[a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9][a-f0-9]$/$doc,match-case,to=com
+!#endif
 /^https?:\/\/[a-z]+\.[a-z]{4,}\/oop\/\d+_md(?:\/\d+){5}\b/$doc,match-case
 ##html > body.hold-transition.theme-primary.bg-img[style^="background-image"][style*="wallpaperaccess.com"][style*="background-repeat"][style*="background-size"]
 ##html > body > div.container > form#unsubscribe-form[onsubmit="submitUnsubscribeForm(event)"]
@@ -5481,9 +5487,9 @@ sport.elwatannews.com##+js(aost, Array.prototype.indexOf, isWin)
 ! https://survey.dawn .com/MetaMask-Help.html - phishing
 ||survey.dawn.com^$all
 ! https://github.com/AdguardTeam/AdguardFilters/issues/217414
-/^https://d[0-9a-z]{19}\.[a-z]{3,4}-[a-z]{7,8}\.[a-z]{3}\/xm\/xm\d\/\?/$doc,to=pro|sbs
+/^https://d[0-9a-z]{19}\.[a-z]{3,4}-[a-z]{7,8}(?:\.[a-z]{2})?\.[a-z]{2,3}\/xm\/xm\d\/\?/$doc,to=co.in|pro|sbs
 !#if env_safari
-/^https://d[0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z]\.[a-z][a-z][a-z][a-z]?-[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]?\.[ps][br][os]\/xm\/xm[0-9]\/\?/$doc
+/^https://d[0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z][0-9a-z]\.[a-z][a-z][a-z][a-z]?-[a-z][a-z][a-z][a-z][a-z][a-z][a-z][a-z]?\.[cps][bor][os]?\.?i?n?\/xm\/xm[0-9]\/\?/$doc
 !#endif
 ||expleboted.com^$all
 ||hoplariumped.com^$all
@@ -5835,6 +5841,16 @@ comix.to##+js(json-edit-fetch-response, .result.items.*%5B%3F.content*%3D%22'%2B
 ||api.extensionanalyticspro.top^
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/972
 ublockorigin.com##.title::before:style(content: 'This is not the official uBlock Origin site.' !important; font-size: 32px !important; color: red !important; font-weight: bold !important;)
-ublockdns.com##nav+section>div:first-child::before:style(content: 'Not related to uBlock Origin.' !important; font-size: 32px !important; color: red !important; font-weight: bold !important;)
+ublockdns.com##main>section>div:first-child::before:style(content: 'Not related to uBlock Origin.' !important; font-size: 32px !important; color: red !important; font-weight: bold !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/32080
 ||ryosweb.com^$all
+! https://www.malwarebytes.com/blog/threat-intel/2026/03/fake-cleanmymac-site-installs-shub-stealer-and-backdoors-crypto-wallets
+||cleanmymacos.org^$all
+! https://x.com/masaomi346/status/2030929145740558697
+||cdn-server.beer/api/css.js
+! https://pushsecurity.com/blog/installfix/
+||claude-code-$doc,to=edgeone.app|pages.dev|squarespace.com
+! https://www.remove.bg/
+||remover-bg.com^$all
+! https://github.com/uBlockOrigin/uAssets/issues/32160
+||romsns.com^$all

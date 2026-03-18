@@ -6,10 +6,10 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-const CliqzBase = require('./cliqz-base');
+import CliqzBase from './cliqz-base.js';
 
-module.exports = class Cliqz extends CliqzBase {
+export default class Cliqz extends CliqzBase {
   static parse(rawLists, { debug = false } = {}) {
     return super.parse(rawLists, { debug });
   }
-};
+}

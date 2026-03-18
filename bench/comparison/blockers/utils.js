@@ -6,11 +6,9 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
-'use strict';
+const HOSTNAME_RE = /^[^:]+:(?:\/\/(?:[^/]*@)?(\[[^\]]*\]|[^:/]+))?/;
 
-const HOSTNAME_RE = /^[^:]+:(?:\/\/(?:[^\/]*@)?(\[[^\]]*\]|[^:\/]+))?/;
-
-exports.extractHostname = function extractHostname(url) {
-  const [ , hostname = '' ] = HOSTNAME_RE.exec(url) || [ , '' ];
+export function extractHostname(url) {
+  const [, hostname = ''] = HOSTNAME_RE.exec(url) || ['', ''];
   return hostname;
-};
+}

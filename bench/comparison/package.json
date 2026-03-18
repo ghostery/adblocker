@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.27.7",
   "description": "Content blockers benchmark",
+  "type": "module",
   "author": {
     "name": "Ghostery"
   },
@@ -15,19 +16,19 @@
   },
   "scripts": {
     "download-requests": "make requests.json",
-    "build-ubo": "make ubo-core",
-    "postinstall": "yarn run download-requests && yarn run build-ubo"
+    "postinstall": "yarn run download-requests"
   },
   "bugs": {
     "url": "https://github.com/ghostery/adblocker/issues"
   },
   "dependencies": {
-    "@adguard/tsurlfilter": "2.2.19",
-    "@eyeo/webext-ad-filtering-solution": "1.7.0",
-    "@gorhill/ubo-core": "https://github.com/gorhill/uBlock/releases/download/1.58.0/uBlock0_1.58.0.npm.tgz",
-    "adblock-rs": "0.8.10",
-    "fast-hosts-lookup": "https://github.com/mjethani/fast-hosts-lookup#9136bb8c331ee5dba8ac1a0018552cace11e2afa",
-    "tldts-experimental": "^6.0.14"
+    "@adguard/tsurlfilter": "^4.0.2",
+    "@eyeo/webext-ad-filtering-solution": "4.0.0",
+    "@gorhill/ubo-core": "^0.1.30",
+    "abp-filter-parser": "^0.2.0",
+    "adblock-rs": "0.12.1",
+    "fast-hosts-lookup": "https://github.com/mjethani/fast-hosts-lookup.git#commit=9136bb8c331ee5dba8ac1a0018552cace11e2afa",
+    "tldts-experimental": "^7.0.25"
   },
   "contributors": [
     {
@@ -62,21 +63,5 @@
       "name": "Anton Lazarev",
       "email": "antonok35@gmail.com"
     }
-  ],
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^25.0.4",
-    "@rollup/plugin-json": "^6.0.0",
-    "rollup": "^4.22.4"
-  },
-  "resolutions": {
-    "@ghostery/adblocker": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker",
-    "@ghostery/adblocker-content": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-content",
-    "@ghostery/adblocker-electron": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-electron",
-    "@ghostery/adblocker-electron-preload": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-electron-preload",
-    "@ghostery/adblocker-extended-selectors": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-extended-selectors",
-    "@ghostery/adblocker-playwright": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-playwright",
-    "@ghostery/adblocker-puppeteer": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-puppeteer",
-    "@ghostery/adblocker-webextension": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-webextension",
-    "@ghostery/adblocker-webextension-cosmetics": "portal:/Users/chrmod/Projects/github.com/ghostery/adblocker/packages/adblocker-webextension-cosmetics"
-  }
+  ]
 }

@@ -2273,7 +2273,7 @@ weirdwolf.net##+js(nowoif)
 desiflix.*,girlmms.com,ottxmaza.com,sexmazahd.com,webxmaza.com##+js(nowoif)
 !#if env_chromium
 $script,3p,denyallow=facebook.net|unpkg.com|vk.com|zencdn.net,domain=desiflix.*|girlmms.com|ottxmaza.com|sexmazahd.com|webxmaza.com
-*$script,3p,denyallow=blogger.com|facebook.net|fastlylb.net|fbcdn.net|google.com|googleapis.com|disqus.com|wp.com,domain=9xmovie.*
+*$script,3p,denyallow=blogger.com|facebook.net|fastlylb.net|fbcdn.net|google.com|googleapis.com|disqus.com|telegram.im|wp.com,domain=9xmovie.*
 $script,3p,denyallow=google.com|googleapis.com|gstatic.com,domain=9xlinks.*
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/24596
@@ -2476,11 +2476,11 @@ btv.bg,btvnovinite.bg,btvsport.bg##div[id^="leading_video_player_autoplay_wrappe
 btv.bg,btvnovinite.bg,btvsport.bg##div[id^="leading_video_player_autoplay_"][id$="_main_wrapper"]:style(display: block !important;)
 btv.bg,btvnovinite.bg,btvsport.bg##.vjs-continue-watching-bar
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=btv.bg|btvnovinite.bg|btvsport.bg
-btv.bg,btvsport.bg,btvnovinite.bg##+js(no-xhr-if, googlesyndication)
-btv.bg,btvsport.bg,btvnovinite.bg##+js(no-fetch-if, googlesyndication)
-@@*$ghide,domain=btv.bg|btvsport.bg|btvnovinite.bg
-@@*$script,1p,domain=btv.bg|btvsport.bg|btvnovinite.bg
-btvnovinite.bg##+js(no-fetch-if, imasdk)
+btv.bg,btvsport.bg,btvnovinite.bg,svetatnazdraveto.bg##+js(no-xhr-if, googlesyndication)
+btv.bg,btvsport.bg,btvnovinite.bg,svetatnazdraveto.bg##+js(no-fetch-if, googlesyndication)
+@@*$ghide,domain=btv.bg|btvsport.bg|btvnovinite.bg|svetatnazdraveto.bg
+@@*$script,1p,domain=btv.bg|btvsport.bg|btvnovinite.bg|svetatnazdraveto.bg
+btvnovinite.bg,svetatnazdraveto.bg##+js(no-fetch-if, imasdk)
 ! https://github.com/uBlockOrigin/uAssets/issues/25050
 javsek.net##+js(nosiif, pop)
 $script,3p,denyallow=facebook.net|fbcdn.net,domain=javsek.net
@@ -2846,6 +2846,7 @@ sdna.gr###disqus_thread:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/25725
 tempmail.ninja##aside[class] > div.mx-auto:has(> ins.adsbygoogle)
 tempmail.ninja##+js(trusted-set-attr, ins.adsbygoogle, data-ad-status, filled)
+tempmail.ninja##+js(trusted-create-html, ins.adsbygoogle, %3Cdiv%3E%3Ciframe%3E%3C%2Fiframe%3E%3C%2Fdiv%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/25731
 pricearchive.org##+js(set-cookie, aalset, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/25734
@@ -3133,8 +3134,8 @@ reliabletv.me##+js(set, window.navigator.brave, undefined)
 viralxxxporn.com##+js(set, flashvars.adv_pre_src, )
 viralxxxporn.com##+js(set, flashvars.mlogo, )
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gvr4li/adblock_detection_on_zdsptvcom/
-@@*$ghide,to=activo.mx|dynamicsupply.net|foroactivo.com|zdsports.org|~www.activo.mx|~www.foroactivo.com
-@@||blogspot.com^$ghide,to=zscnl.blogspot.com|zsnls.blogspot.com
+@@*$ghide,domain=activo.mx|dynamicsupply.net|foroactivo.com|zdsports.org|~www.activo.mx|~www.foroactivo.com
+@@||blogspot.com^$ghide,domain=zscnl.blogspot.com|zsnls.blogspot.com
 tarjetarojaenvivo.lat##^script#aclib
 ||tarjetarojaenvivo.lat/lib.js^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190811
