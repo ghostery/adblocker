@@ -24,13 +24,13 @@ jobs:
         ; then echo "IS_CHANGED=TRUE" >> "$GITHUB_OUTPUT" \
         ; fi
 
-    - uses: yogevbd/enforce-label-action@2.1.0
+    - uses: yogevbd/enforce-label-action@a3c219da6b8fa73f6ba62b68ff09c469b3a1c024 # v2.2.2
       if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == 'TRUE'
       with:
         REQUIRED_LABELS_ANY: "PR: Breaking Change :boom:,PR: New Feature :rocket:,PR: Performance :running_woman:,PR: Internal :house:"
         REQUIRED_LABELS_ANY_DESCRIPTION: "Select at least one label: PR: Breaking Change :boom:, PR: New Feature :rocket:, PR: Performance :running_woman:, PR: Internal :house:"
 
-    - uses: yogevbd/enforce-label-action@2.1.0
+    - uses: yogevbd/enforce-label-action@a3c219da6b8fa73f6ba62b68ff09c469b3a1c024 # v2.2.2
       if: steps.DIFF_ENGINE_VERSION.outputs.IS_CHANGED == ''
       with:
         REQUIRED_LABELS_ANY: "PR: Breaking Change :boom:,PR: Bug Fix :bug:,PR: Dependencies :nut_and_bolt:,PR: Docs :memo:,PR: Internal :house:,PR: New Feature :rocket:,PR: Performance :running_woman:,PR: Polish :nail_care:"
