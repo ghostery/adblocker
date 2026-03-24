@@ -51,6 +51,9 @@ musee-moyenage.fr##body.tac-modal-open:style(overflow: auto !important;)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/31175
 groupeapocom.com###website_cookies_bar
+! https://github.com/uBlockOrigin/uAssets/pull/32247
+||la7.it/la7_iabtcf2/cmp.js
+||privacymanager.io^$domain=la7.it
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -534,8 +537,6 @@ kleinanzeigen.de##+js(trusted-click-element, button%5Baria-label%3D%22Datenschut
 alehinta.fi##+js(trusted-set-cookie, cookie-consent, %7B%22categories%22%3A%5B%22analytics%22%5D%2C%22level%22%3A%5B%22analytics%22%5D%2C%22revision%22%3A0%2C%22data%22%3Anull%2C%22rfc_cookie%22%3Afalse%2C%22consent_date%22%3A%22%24currentISODate%24%22%2C%22consent_uuid%22%3A%22738928d9-c950-46d2-a732-700c986cf81a%22%2C%22last_consent_update%22%3A%22%24currentISODate%24%22%7D, 1year)
 ! fyndiq.*
 fyndiq.dk,fyndiq.fi,fyndiq.no,fyndiq.se##+js(trusted-set-cookie, euconsent-v2, CQXekwAQcAnQAAHABBENCHFgAAAAAAAAACQgAAAAAAAA.YAAAAAAAAAAA)
-! https://github.com/uBlockOrigin/uAssets/issues/30036
-105.net##+js(trusted-click-element, %23iubenda-cs-banner%20button.iubenda-cs-close-btn)
 ! https://github.com/uBlockOrigin/uAssets/issues/30042
 ai.google.dev##+js(trusted-set-local-storage-item, glue.CookieNotificationBar, %5B%7B%22category%22%3A%222A%22%2C%22date%22%3A%22%24currentISODate%24%22%2C%22eea%22%3Atrue%2C%22siteId%22%3A%22ai.google.dev%22%2C%22status%22%3A%22ACCEPTED%22%7D%5D)
 16100.fi##+js(trusted-set-cookie, cookie_consent, eyJpdiI6ImwwWXVzYitiUmpWSDJmMWtkdHMvanc9PSIsInZhbHVlIjoicERPYnN6akRVbCttQVBaSHhMTzd3TW4xZGJTVWxqK2JwTlNYWjhlZ29JanVXOWdQU2x5RVhaRVpuR0l3QjBYOSIsIm1hYyI6ImM4YmU4OTYzZjYwODEyMmRlMmFmZjU1ZmE0YjcyZDA0ZmQ2MmEyOWZhNjA5NzA4ZGQwOWY2NzgyNjEwOTBhMDAiLCJ0YWciOiIifQ%253D%253D, 1year, , reload, 1)
@@ -564,6 +565,16 @@ antallaktikaonline.gr,auto-onderdelen24.nl,autoalkatreszonline24.hu,autodeler.co
 lenovo.com##+js(trusted-set-cookie, _evidon_suppress_notification_cookie, %7B%22date%22%3A%22%24currentISODate%24%22%2C%22suppressed%22%3Atrue%7D, , , domain, .lenovo.com)
 ! https://github.com/brave-experiments/cookiecrumbler-issues/issues/2208
 fes.de##+js(trusted-set-cookie, cookie_consent, %257B%2522consent%2522%3Atrue%2C%2522options%2522%3A%255B%255D%257D)
+! https://github.com/brave-experiments/cookiecrumbler-issues/issues/2229
+gx.me##+js(trusted-set-cookie, cookie-consent, %7B%22marketing%22%3Afalse%2C%22necessary%22%3Atrue%2C%22version%22%3A2%7D, , , domain, .gx.me)
+! https://github.com/uBlockOrigin/uAssets/pull/32241
+opensea.io##+js(trusted-click-element, button%5Bdata-role%3D%22necessary%22%5D)
+! https://github.com/AdguardTeam/AdguardFilters/issues/227274
+iteraplay.com##+js(trusted-set-local-storage-item, itera_cookie_consent, %7B%22strictlyNecessary%22%3Atrue%2C%22analytics%22%3Afalse%2C%22marketing%22%3Afalse%2C%22functional%22%3Afalse%7D)
+! https://github.com/AdguardTeam/AdguardFilters/issues/227341
+cinemark.com.br##+js(set-cookie, cookies_config, deny)
+! https://github.com/uBlockOrigin/uAssets/pull/32262
+theweathernetwork.com##+js(trusted-click-element, %23didomi-notice-disagree-button)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -664,9 +675,6 @@ eurogamer.nl,eurogamer.es,eurogamer.net,eurogamer.pl,eurogamer.pt##+js(trusted-s
 ! Functional cookie
 pushsquare.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A0%252CC0003%253A1%252CC0004%253A0%252CSTACK42%253A0, 1year)
 pushsquare.com##+js(trusted-set-cookie, eupubconsent-v2, CPwbUmgPwbUmgAcABBENDSCgAAAAAH_AAChQJnNf_X__b2_r-_7_f_t0eY1P9_7__-0zjhfdl-8N3f_X_L8X52M5vF36tqoKuR4ku3bBIUdlHPHcTVmw6okVryPsbk2cr7NKJ7PEmlMbM2dYGH9_n9_z-ZKY7___f__z_v-v___9____7-3f3__5__--__e_V_-9zfn9_____9vP___9v-_9_3________3_r9_7_D_-f_87_XWxBQAJMNS4gC7IkZCbaMIoEQIwrCQqgUAFEAkLRAYQurgp2VwE-sBkAIEUATwQAhgBRkACAAASAJCIAJAjgQCAQCAQAAgAVCAQAMbAAPAC0EAgAFAdCxTigCUCwgyISIhTAhKkSCgnsqEEoP1BXCEMssCKDR_xUICNZAxWBEJCxehwBICXiSQPdUb4ACEAKAUUoViKT8wBDgmbLVXgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAA.YAAAD_gAAAAA, 1year)
-! https://www.reddit.com/r/uBlockOrigin/comments/15pt2zz/how_to_get_rid_of_this_cookiebot_crap_it_pops_up/
-! Embedded content - Statistics + Marketing cookies
-bt.dk##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Atrue%252Cmarketing%3Atrue%7D, 1year)
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/2777 - Functional cookie
 dlalakierni.pl##+js(trusted-set-cookie, AtomStore%5BCOOKIES_ACCEPTED%5D, 1, 1year, , reload, 1)
 dlalakierni.pl##+js(trusted-set-cookie, AtomStore%5BFUNCTIONAL_COOKIES_ACCEPTED%5D, 1, 1year)
@@ -4011,3 +4019,14 @@ poki.com##+js(trusted-set-local-storage-item, state%2Fprivacy%2FfamilyModeCookie
 poki.com##+js(trusted-set-local-storage-item, state%2Fprivacy%2FpokiAnalytics, %7B%22time%22%3A%24now%24%2C%22value%22%3A%22false%22%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/32165
 politiken.dk##+js(trusted-click-element, button%23CybotCookiebotDialogBodyButtonDecline)
+! https://github.com/uBlockOrigin/uAssets/issues/32234
+dilosi.services.gov.gr##+js(trusted-set-cookie, dilosi_cookie, Accept_cookies)
+! Only Necessary
+! https://github.com/brave-experiments/cookiecrumbler-issues/issues/912
+bt.dk##+js(trusted-click-element, %23CybotCookiebotDialogBodyButtonDecline)
+! Reject
+frenchbee.com##+js(trusted-click-element, %23onetrust-reject-all-handler, , 1000)
+! "OK"
+hbomax.com##+js(trusted-click-element, button.btn.btn--privacy-primary, , 1000)
+! https://github.com/AdguardTeam/AdguardFilters/issues/227343 - functional
+spmaiscultura.prefeitura.sp.gov.br##+js(trusted-set-cookie, spmaiscultura-prefs, %257B%2522functional%2522%253Atrue%252C%2522analytics%2522%253Afalse%257D)
