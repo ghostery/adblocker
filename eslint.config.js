@@ -7,6 +7,9 @@ import { fileURLToPath } from 'node:url';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
+  {
+    ignores: ['**/.migration-test/**'],
+  },
   ...tseslint.configs.recommendedTypeChecked,
   {
     languageOptions: {
