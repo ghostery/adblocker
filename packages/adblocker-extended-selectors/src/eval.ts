@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { classifySelector, SelectorType } from './extended.js';
 import type { AST, Complex, PseudoClass } from './types.js';
 
 const createXpathExpression = (function () {
@@ -20,6 +21,26 @@ const createXpathExpression = (function () {
     const expression = document.createExpression(query);
     expressions.push([query, expression]);
     return expression;
+  };
+})();
+
+const cachedIsExtended = (function () {
+  const extended: string[] = [];
+  const standard: string[] = [];
+
+  return function classify(selector: string) {
+    if (extended.includes(selector)) {
+      return true;
+    }
+    if (standard.includes(selector)) {
+      return false;
+    }
+    if (classifySelector(selector) === SelectorType.Extended) {
+      extended.push(selector);
+      return true;
+    }
+    standard.push(selector);
+    return false;
   };
 })();
 
@@ -364,6 +385,11 @@ function transpose(element: Element, selector: AST): Element[] | null {
           if (--number === 0) {
             return [parentElement];
           }
+        }
+      } else if (cachedIsExtended(argument) === false) {
+        const closest = element.closest(argument);
+        if (closest !== null) {
+          return [closest];
         }
       } else {
         while ((parentElement = parentElement.parentElement) !== null) {
