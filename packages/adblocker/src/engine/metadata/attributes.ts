@@ -69,39 +69,6 @@ export interface IAttribute {
 
 export type SourceMap = Map<FilterId, IAttribute>;
 
-function mergeAttribute(root: IAttribute, leaf: IAttribute): void {
-  for (const location of leaf.locations) {
-    const redundantIndex = root.locations.findIndex(function (existingLocation) {
-      return location.name === existingLocation.name;
-    });
-    if (redundantIndex === -1) {
-      root.locations.push(location);
-    } else {
-      // Replace the existing metadata
-      root.locations.splice(redundantIndex, 1, location);
-    }
-  }
-}
-
-function generateSourceMap(lists: Map<string, List>): SourceMap {
-  const sourceMap: SourceMap = new Map();
-  for (const [name, map] of lists) {
-    for (const [filterId, lineNumber] of map) {
-      const root = sourceMap.get(filterId);
-      const leaf = {
-        locations: [{ name, lineNumber }],
-      };
-      if (root === undefined) {
-        sourceMap.set(filterId, leaf);
-      } else {
-        mergeAttribute(root, leaf);
-      }
-    }
-  }
-
-  return sourceMap;
-}
-
 export class AttributeProvider {
   public static deserialize(view: StaticDataView): AttributeProvider {
     const lists: Map<string, List> = new Map();
@@ -120,86 +87,171 @@ export class AttributeProvider {
       lists.set(name, list);
     }
 
-    const sourceMap = generateSourceMap(lists);
-
-    return new this({ lists, sourceMap });
+    return new this({ lists });
   }
 
   public readonly lists: Map<string, List>;
-  private readonly sourceMap: SourceMap;
+  public readonly reverseIndex: Map<FilterId, IAttribute>;
 
-  constructor({
-    lists = new Map(),
-    sourceMap = new Map(),
-  }: {
-    lists?: Map<string, List> | undefined;
-    sourceMap?: SourceMap | undefined;
-  }) {
+  constructor({ lists = new Map() }: { lists?: Map<string, List> | undefined }) {
     this.lists = lists;
-    this.sourceMap = sourceMap;
+    this.reverseIndex = new Map();
   }
 
-  private upsert(filterId: FilterId, leaf: IAttribute) {
-    const root = this.sourceMap.get(filterId);
-    if (root === undefined) {
-      this.sourceMap.set(filterId, leaf);
-    } else {
-      mergeAttribute(root, leaf);
+  private upsert(filterId: FilterId, newAttribute: IAttribute) {
+    const currentAttribute = this.reverseIndex.get(filterId);
+    if (currentAttribute === undefined) {
+      this.reverseIndex.set(filterId, newAttribute);
+      return;
     }
-  }
 
-  public importFilter(filterId: FilterId, attribute: IAttribute) {
-    for (const { name, lineNumber } of attribute.locations) {
-      const list = this.lists.get(name);
-      if (list === undefined) {
-        this.lists.set(name, new Map([[filterId, lineNumber]]));
+    for (const newLocation of newAttribute.locations) {
+      const index = currentAttribute.locations.findIndex(function (location) {
+        return location.name === newLocation.name;
+      });
+      if (index === -1) {
+        currentAttribute.locations.push(newLocation);
       } else {
-        list.set(filterId, lineNumber);
+        currentAttribute.locations[index].lineNumber = newLocation.lineNumber;
       }
-
-      this.upsert(filterId, {
-        locations: [{ name, lineNumber }],
-      });
     }
   }
 
-  public dropFilter(filterId: FilterId) {
-    for (const [, map] of this.lists) {
-      map.delete(filterId);
+  public addFilter(name: string, filterId: FilterId, lineNumber: LineNumber) {
+    const list = this.lists.get(name);
+    if (list === undefined) {
+      this.lists.set(name, new Map([[filterId, lineNumber]]));
+    } else {
+      list.set(filterId, lineNumber);
     }
 
-    this.sourceMap.delete(filterId);
+    this.upsert(filterId, {
+      locations: [
+        {
+          name,
+          lineNumber,
+        },
+      ],
+    });
   }
 
-  public importList(name: string, map: List) {
-    this.lists.set(name, map);
+  public removeFilter(name: string, filterId: FilterId) {
+    const list = this.lists.get(name);
+    if (list === undefined) {
+      return;
+    }
 
-    for (const [filterId, lineNumber] of map) {
-      this.upsert(filterId, {
-        locations: [{ name, lineNumber }],
-      });
+    list.delete(filterId);
+
+    const attribute = this.reverseIndex.get(filterId);
+    if (attribute === undefined) {
+      return;
+    }
+
+    const index = attribute.locations.findIndex(function (location) {
+      return location.name === name;
+    });
+    if (index === -1) {
+      return;
+    }
+
+    if (attribute.locations.length === 1) {
+      this.reverseIndex.delete(filterId);
+    } else {
+      attribute.locations.splice(index, 1);
     }
   }
 
-  public dropList(name: string) {
-    this.lists.delete(name);
+  public addList(name: string, newList: List) {
+    const currentList = this.lists.get(name);
+    if (currentList !== undefined) {
+      for (const [filterId] of currentList) {
+        if (newList.has(filterId)) {
+          continue;
+        }
 
-    for (const [filterId, attribute] of this.sourceMap) {
-      if (attribute.locations.length === 1) {
-        this.sourceMap.delete(filterId);
-      } else {
+        const attribute = this.reverseIndex.get(filterId);
+        if (attribute === undefined) {
+          this.reverseIndex.delete(filterId);
+          continue;
+        }
+
         const index = attribute.locations.findIndex(function (location) {
           return location.name === name;
         });
-        if (index !== -1) {
+        if (index === -1) {
+          continue;
+        }
+
+        if (attribute.locations.length === 1) {
+          this.reverseIndex.delete(filterId);
+        } else {
           attribute.locations.splice(index, 1);
         }
       }
     }
+
+    for (const [filterId, lineNumber] of newList) {
+      this.upsert(filterId, {
+        locations: [
+          {
+            name,
+            lineNumber,
+          },
+        ],
+      });
+    }
+
+    this.lists.set(name, newList);
+  }
+
+  public removeList(name: string) {
+    const list = this.lists.get(name);
+    if (list === undefined) {
+      return;
+    }
+
+    for (const [filterId] of list) {
+      const attribute = this.reverseIndex.get(filterId);
+      if (attribute === undefined) {
+        continue;
+      }
+
+      const index = attribute.locations.findIndex(function (location) {
+        return location.name === name;
+      });
+      if (index === -1) {
+        continue;
+      }
+
+      if (attribute.locations.length === 1) {
+        this.reverseIndex.delete(filterId);
+      } else {
+        attribute.locations.splice(index, 1);
+      }
+    }
+    this.lists.delete(name);
   }
 
   public getAttribute(filterId: FilterId): IAttribute | undefined {
-    return this.sourceMap.get(filterId);
+    let attribute = this.reverseIndex.get(filterId);
+    if (attribute !== undefined) {
+      return attribute;
+    }
+
+    attribute = {
+      locations: [],
+    } satisfies IAttribute;
+
+    for (const [name, list] of this.lists) {
+      const lineNumber = list.get(filterId);
+      if (lineNumber !== undefined) {
+        attribute.locations.push({ name, lineNumber });
+      }
+    }
+
+    this.reverseIndex.set(filterId, attribute);
+    return attribute;
   }
 
   public getSerializedSize(): number {
