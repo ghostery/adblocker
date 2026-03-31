@@ -43,6 +43,7 @@ function transformListIntoChunks(list: List): Chunk[] {
   for (let i = 0, k = 0; i < sorted.length; i = ++k) {
     const [filterId, lineNumber] = sorted[i];
     const chunk: FilterId[] = [filterId];
+    // Start at i + 1 or every chunk stays size 1.
     for (k = i + 1; k < sorted.length; k++) {
       if (lineNumber + 1 !== sorted[k][ListRef.LineNumber]) {
         break;
@@ -95,6 +96,7 @@ export class AttributeProvider {
 
   constructor({ lists = new Map() }: { lists?: Map<string, List> | undefined }) {
     this.lists = lists;
+    // Cache only; `lists` is the only one serialised.
     this.reverseIndex = new Map();
   }
 
@@ -112,8 +114,30 @@ export class AttributeProvider {
       if (index === -1) {
         currentAttribute.locations.push(newLocation);
       } else {
-        currentAttribute.locations[index].lineNumber = newLocation.lineNumber;
+        currentAttribute.locations.splice(index, 1, newLocation);
       }
+    }
+  }
+
+  private unlink(filterId: FilterId, name: string) {
+    const attribute = this.reverseIndex.get(filterId);
+    if (attribute === undefined) {
+      return;
+    }
+
+    const index = attribute.locations.findIndex(function (location) {
+      return location.name === name;
+    });
+    if (index === -1) {
+      return;
+    }
+
+    // If we have a valid index and the count of locations is 1,
+    // we just remove the filter.
+    if (attribute.locations.length === 1) {
+      this.reverseIndex.delete(filterId);
+    } else {
+      attribute.locations.splice(index, 1);
     }
   }
 
@@ -142,52 +166,19 @@ export class AttributeProvider {
     }
 
     list.delete(filterId);
-
-    const attribute = this.reverseIndex.get(filterId);
-    if (attribute === undefined) {
-      return;
-    }
-
-    const index = attribute.locations.findIndex(function (location) {
-      return location.name === name;
-    });
-    if (index === -1) {
-      return;
-    }
-
-    if (attribute.locations.length === 1) {
-      this.reverseIndex.delete(filterId);
-    } else {
-      attribute.locations.splice(index, 1);
-    }
+    this.unlink(filterId, name);
   }
 
   public addList(name: string, newList: List) {
     const currentList = this.lists.get(name);
     if (currentList !== undefined) {
+      // Drop stale entries before overwriting this list.
       for (const [filterId] of currentList) {
         if (newList.has(filterId)) {
           continue;
         }
 
-        const attribute = this.reverseIndex.get(filterId);
-        if (attribute === undefined) {
-          this.reverseIndex.delete(filterId);
-          continue;
-        }
-
-        const index = attribute.locations.findIndex(function (location) {
-          return location.name === name;
-        });
-        if (index === -1) {
-          continue;
-        }
-
-        if (attribute.locations.length === 1) {
-          this.reverseIndex.delete(filterId);
-        } else {
-          attribute.locations.splice(index, 1);
-        }
+        this.unlink(filterId, name);
       }
     }
 
@@ -202,6 +193,7 @@ export class AttributeProvider {
       });
     }
 
+    // Keep `lists` in sync with reverseIndex updates.
     this.lists.set(name, newList);
   }
 
@@ -212,24 +204,9 @@ export class AttributeProvider {
     }
 
     for (const [filterId] of list) {
-      const attribute = this.reverseIndex.get(filterId);
-      if (attribute === undefined) {
-        continue;
-      }
-
-      const index = attribute.locations.findIndex(function (location) {
-        return location.name === name;
-      });
-      if (index === -1) {
-        continue;
-      }
-
-      if (attribute.locations.length === 1) {
-        this.reverseIndex.delete(filterId);
-      } else {
-        attribute.locations.splice(index, 1);
-      }
+      this.unlink(filterId, name);
     }
+
     this.lists.delete(name);
   }
 
