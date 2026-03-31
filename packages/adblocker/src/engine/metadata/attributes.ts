@@ -43,7 +43,7 @@ function transformListIntoChunks(list: List): Chunk[] {
   for (let i = 0, k = 0; i < sorted.length; i = ++k) {
     const [filterId, lineNumber] = sorted[i];
     const chunk: FilterId[] = [filterId];
-    for (k = i; k < sorted.length; k++) {
+    for (k = i + 1; k < sorted.length; k++) {
       if (lineNumber + 1 !== sorted[k][ListRef.LineNumber]) {
         break;
       }
