@@ -7,8 +7,7 @@
  */
 
 import { promises as fs } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 
 import {
   fullLists,
@@ -42,8 +41,6 @@ class Counter<K> {
   }
 }
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
@@ -51,7 +48,7 @@ async function loadAllLists(): Promise<string> {
   return (
     await Promise.all(
       fullLists
-        .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+        .map((path) => join(import.meta.dirname, '..', 'assets', path.slice(PREFIX.length)))
         .map((path) => fs.readFile(path, 'utf-8')),
     )
   ).join('\n');

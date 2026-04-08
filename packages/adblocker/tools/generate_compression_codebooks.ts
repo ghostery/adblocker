@@ -1,6 +1,5 @@
 import { promises as fs } from 'node:fs';
-import { resolve, join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve, join } from 'node:path';
 import { Smaz } from '@remusao/smaz';
 import { generate } from '@remusao/smaz-generate';
 
@@ -12,8 +11,6 @@ import {
   hasUnicode,
 } from '../src/index.js';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
@@ -21,7 +18,7 @@ async function loadAllLists(): Promise<string> {
   return (
     await Promise.all(
       fullLists
-        .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+        .map((path) => join(import.meta.dirname, '..', 'assets', path.slice(PREFIX.length)))
         .map((path) => fs.readFile(path, 'utf-8')),
     )
   ).join('\n');
@@ -142,7 +139,7 @@ async function generateCodebook(kind: string): Promise<string[]> {
 (async () => {
   const kind = process.argv[process.argv.length - 1];
   const codebook = await generateCodebook(kind);
-  const output = resolve(__dirname, `../src/codebooks/${kind}.ts`);
+  const output = resolve(import.meta.dirname, `../src/codebooks/${kind}.ts`);
   console.log('Updating', output);
   await fs.writeFile(
     output,

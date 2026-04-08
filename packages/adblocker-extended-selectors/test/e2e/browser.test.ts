@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import path from 'path';
-import { fileURLToPath } from 'url';
 
 // Add type for the injected UMD global
 declare global {
@@ -19,15 +18,12 @@ test.beforeEach(async ({ page }) => {
     const text = `[browser] ${msg.text()}`;
     if (type === 'log') console.log(text);
     else if (type === 'info') console.info(text);
-    else if (type === 'warn') console.warn(text);
+    else if (type === 'warning') console.warn(text);
     else if (type === 'error') console.error(text);
   });
   // Inject the UMD bundle into the page context
   await page.addScriptTag({
-    path: path.resolve(
-      path.dirname(fileURLToPath(import.meta.url)),
-      '../../dist/adblocker.umd.min.js',
-    ),
+    path: path.resolve(import.meta.dirname, '../../dist/adblocker.umd.min.js'),
   });
 });
 

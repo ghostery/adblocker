@@ -9,9 +9,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as zlib from 'zlib';
-import { fileURLToPath } from 'url';
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 import { fullLists } from '../src/index.js';
 import { IPattern } from '../src/engine/metadata/patterns.js';
@@ -20,12 +17,14 @@ import { IOrganization } from '../src/engine/metadata/organizations.js';
 
 export function loadEasyListFilters(): string[] {
   return JSON.parse(
-    fs.readFileSync(path.resolve(__dirname, 'data', 'easylist.json'), { encoding: 'utf-8' }),
+    fs.readFileSync(path.resolve(import.meta.dirname, 'data', 'easylist.json'), {
+      encoding: 'utf-8',
+    }),
   );
 }
 
 function readAsset(filepath: string) {
-  return fs.readFileSync(path.resolve(__dirname, '../', filepath), 'utf-8');
+  return fs.readFileSync(path.resolve(import.meta.dirname, '../', filepath), 'utf-8');
 }
 
 const PREFIX =
@@ -45,7 +44,9 @@ export function loadResources() {
 }
 
 export function getNaughtyStrings(): string[] {
-  return fs.readFileSync(path.resolve(__dirname, 'data', 'blns.txt'), 'utf-8').split('\n');
+  return fs
+    .readFileSync(path.resolve(import.meta.dirname, 'data', 'blns.txt'), 'utf-8')
+    .split('\n');
 }
 
 type TrackerDB = {
@@ -57,7 +58,9 @@ type TrackerDB = {
 export function getRawTrackerDB(): TrackerDB {
   const trackerdb: TrackerDB = JSON.parse(
     zlib
-      .unzipSync(fs.readFileSync(path.resolve(__dirname, 'data', 'trackerdb_20221213.json.gz')))
+      .unzipSync(
+        fs.readFileSync(path.resolve(import.meta.dirname, 'data', 'trackerdb_20221213.json.gz')),
+      )
       .toString('utf-8'),
   );
 
@@ -115,7 +118,11 @@ export function typedArrayEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
 }
 
 export function getRequestSamplePath(url: string): string {
-  return path.resolve(__dirname, 'data/samples', url.replace(/[^a-z0-9.]/g, '_') + '.br');
+  return path.resolve(
+    import.meta.dirname,
+    'data/samples',
+    url.replace(/[^a-z0-9.]/g, '_') + '.br',
+  );
 }
 
 export function loadRequestSample(path: string): string {

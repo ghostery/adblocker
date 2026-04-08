@@ -1,10 +1,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
-import { resolve, join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve, join } from 'node:path';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-
-const engineSourcePath = resolve(__dirname, join('..', 'src', 'engine', 'engine.ts'));
+const engineSourcePath = resolve(import.meta.dirname, join('..', 'src', 'engine', 'engine.ts'));
 const engineSource = readFileSync(engineSourcePath, 'utf-8');
 
 writeFileSync(
