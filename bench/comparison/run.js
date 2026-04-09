@@ -8,11 +8,11 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath, pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url';
 
 import { _N, _T, _S } from './string.js';
 
-const ROOT_DIR = path.dirname(fileURLToPath(import.meta.url));
+const ROOT_DIR = import.meta.dirname;
 const requests = JSON.parse(
   fs.readFileSync(path.resolve(ROOT_DIR, 'requests.json'), { encoding: 'utf-8' }),
 );

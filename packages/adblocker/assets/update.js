@@ -1,8 +1,5 @@
-/* global fetch */
-
 import { writeFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { log } from 'node:console';
 import { NetworkFilter, parseFilter } from '@ghostery/adblocker';
 
@@ -26,8 +23,6 @@ const FILTER_LISTS = [
   ['easyprivacy', 'easylist', 'easyprivacy.txt'],
   ['easylist-cookie', 'easylist', 'easylist-cookie.txt'],
 ];
-
-const ASSETS_PATH = dirname(fileURLToPath(import.meta.url));
 
 async function downloadResource(resourceName) {
   const { revisions } = await fetch(
@@ -53,14 +48,14 @@ async function downloadResource(resourceName) {
 
 // Update resources.json
 writeFileSync(
-  join(ASSETS_PATH, 'ublock-origin', 'resources.json'),
+  join(import.meta.dirname, 'ublock-origin', 'resources.json'),
   JSON.stringify(JSON.parse(await downloadResource('ublock-resources-json')), null, 2),
   'utf-8',
 );
 
 // Update resources.txt
 writeFileSync(
-  join(ASSETS_PATH, 'ublock-origin', 'resources.txt'),
+  join(import.meta.dirname, 'ublock-origin', 'resources.txt'),
   await downloadResource('ublock-resources'),
   'utf-8',
 );
@@ -110,7 +105,11 @@ for (const [resourceName, outputPrefixPath, outputFileName] of FILTER_LISTS) {
       return line;
     });
 
-  writeFileSync(join(ASSETS_PATH, outputPrefixPath, outputFileName), lines.join('\n'), 'utf-8');
+  writeFileSync(
+    join(import.meta.dirname, outputPrefixPath, outputFileName),
+    lines.join('\n'),
+    'utf-8',
+  );
 }
 
 log({ duplicates: duplicatesCount, badfilters: badfiltersCount });

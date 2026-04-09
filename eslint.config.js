@@ -2,8 +2,6 @@ import eslint from '@eslint/js';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
-import { dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import tseslint from 'typescript-eslint';
 
 export default defineConfig(
@@ -15,8 +13,7 @@ export default defineConfig(
     languageOptions: {
       parserOptions: {
         project: ['./tsconfig.eslint.json', './packages/*/tsconfig.json', './bench/tsconfig.json'],
-        // import.meta.dirname requires node 21
-        tsconfigRootDir: dirname(fileURLToPath(import.meta.url)),
+        tsconfigRootDir: import.meta.dirname,
       },
     },
     rules: {

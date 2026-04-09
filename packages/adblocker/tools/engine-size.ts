@@ -7,20 +7,17 @@
  */
 
 import { readFileSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { gzipSync, brotliCompressSync } from 'node:zlib';
 
 import { FiltersEngine, adsLists, adsAndTrackingLists, fullLists } from '../src/index.js';
-
-const __dirname = dirname(fileURLToPath(import.meta.url));
 
 const PREFIX =
   'https://raw.githubusercontent.com/ghostery/adblocker/master/packages/adblocker/assets';
 
 async function loadFromLocalAssets(lists: string[]): Promise<string> {
   return lists
-    .map((path) => join(__dirname, '..', 'assets', path.slice(PREFIX.length)))
+    .map((path) => join(import.meta.dirname, '..', 'assets', path.slice(PREFIX.length)))
     .map((path) => readFileSync(path, 'utf-8'))
     .join('\n');
 }

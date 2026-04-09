@@ -9,8 +9,7 @@
 import { expect } from 'chai';
 import 'mocha';
 import { createReadStream, existsSync } from 'node:fs';
-import { join, dirname } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import { mkdir, readdir, rm, writeFile } from 'node:fs/promises';
 import { fork, spawn } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -80,7 +79,7 @@ async function builder() {
 
 async function createBuilder(version: string = 'latest') {
   // Create working dir
-  const dir = join(dirname(fileURLToPath(import.meta.url)), '.migration-test');
+  const dir = join(import.meta.dirname, '.migration-test');
   if (!existsSync(dir)) {
     await mkdir(dir);
   }
