@@ -4067,3 +4067,10 @@ e-jumbo.ro##+js(trusted-set-cookie, %7BConsentChecked, %22userHasSetCookies%22%3
 ! https://github.com/uBlockOrigin/uAssets/issues/32456
 @@||onetrust.com^$script,xhr,domain=nectar.com
 nectar.com##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1500)
+! https://github.com/uBlockOrigin/uAssets/issues/22466#issuecomment-4222244532
+@@||cdn.cookielaw.org/scripttemplates/*/otBannerSdk.js$script,domain=nowtv.com.tr
+nowtv.com.tr#@##onetrust-consent-sdk
+nowtv.com.tr#@##onetrust-banner-sdk
+nowtv.com.tr##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1500)
+! https://github.com/uBlockOrigin/uAssets/issues/32498
+scandinavianoutdoor.fi##+js(trusted-set-local-storage-item, cookieconsent, %7B%22consents%22%3A%5B%22ESSENTIAL%22%5D%7D)
