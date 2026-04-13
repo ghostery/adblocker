@@ -2333,6 +2333,8 @@ parkingbase.com##+js(trusted-set-local-storage-item, cookie-consent, %7B%22hasCo
 palaisgalliera.paris.fr##+js(trusted-set-cookie, orejime, %7B%22strictly_necessary%22%3Atrue%2C%22tracking%22%3Afalse%2C%22youtube%22%3Atrue%2C%22dailymotion%22%3Atrue%2C%22Facebook%22%3Atrue%7D)
 ! consent wall, accept
 cmp.klart.se##+js(trusted-click-element, button%5Baria-label%3D%22Godk%C3%A4nn%20alla%22%5D, , 1000)
+! reject, allow language switching
+caixabank.com##+js(trusted-click-element, span%23%23%23cookies-deny-button, , 1000)
 ! decline
 cremadescalvosotelo.com##+js(trusted-set-cookie, cookies_consent, !gtag%3Dfalse)
 ! basic
@@ -4067,3 +4069,12 @@ e-jumbo.ro##+js(trusted-set-cookie, %7BConsentChecked, %22userHasSetCookies%22%3
 ! https://github.com/uBlockOrigin/uAssets/issues/32456
 @@||onetrust.com^$script,xhr,domain=nectar.com
 nectar.com##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1500)
+! https://github.com/uBlockOrigin/uAssets/issues/22466#issuecomment-4222244532
+@@||cdn.cookielaw.org/scripttemplates/*/otBannerSdk.js$script,domain=nowtv.com.tr
+nowtv.com.tr#@##onetrust-consent-sdk
+nowtv.com.tr#@##onetrust-banner-sdk
+nowtv.com.tr##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-handler%22%5D, , 1500)
+! https://github.com/uBlockOrigin/uAssets/issues/32498
+scandinavianoutdoor.fi##+js(trusted-set-local-storage-item, cookieconsent, %7B%22consents%22%3A%5B%22ESSENTIAL%22%5D%7D)
+! Essential only
+ixolabs.ai##+js(trusted-set-cookie, ixo_cookie_consent, %7B%22essential%22%3Atrue%2C%22analytics%22%3Afalse%2C%22functional%22%3Afalse%7D)

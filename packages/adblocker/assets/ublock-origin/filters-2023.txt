@@ -1390,8 +1390,6 @@ zefoy.com##^script:has-text(/'.adsbygoogle'|text-danger|warning|Adblock|_0x/)
 !#if !cap_html_filtering
 zefoy.com##+js(rmnt, script, %2F'.adsbygoogle'%7Ctext-danger%7Cwarning%7CAdblock%7C_0x%2F)
 !#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/140616
-alludemycourses.com##+js(aeld, DOMContentLoaded, adsBlocked)
 ! https://github.com/uBlockOrigin/uAssets/issues/17838
 unitystr.com##+js(no-fetch-if, googlesyndication)
 ! linkshub. to ads
@@ -3369,7 +3367,8 @@ twitter.com,x.com,~platform.twitter.com##+js(json-prune-xhr-response, data.user.
 twitter.com,x.com,~platform.twitter.com##+js(json-prune-xhr-response, data.immersiveMedia.timeline.instructions.%5B%5D.entries.%5B-%5D.content.itemContent.promotedMetadata, , propsToMatch, url%3A%2FImmersiveMedia)
 ! https://github.com/uBlockOrigin/uAssets/issues/29749#issuecomment-3277237498
 x.com##article[data-testid="tweet"] a[href^="https://linkneverdiel.com"]
-x.com##+js(nowoif, %2F%5C.php%5Cb.*_blank%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/32488
+! x.com##+js(nowoif, %2F%5C.php%5Cb.*_blank%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/29749#issuecomment-3281040355
 ! https://github.com/uBlockOrigin/uAssets/issues/32060
 ! x.com##+js(trusted-json-edit, .%5B%3F.media_entities.*.video_info.variants%5D..url_data.url%3D%22https%3A%2F%2Ftwitter.undefined%22)
