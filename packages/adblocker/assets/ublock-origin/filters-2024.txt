@@ -386,7 +386,6 @@ file-upload.net##+js(set, advertisement3, true)
 ! [badfilter] /werbebanner-$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/15914
 file-upload.*##+js(aopr, start)
-||remaininghopefully.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/31945
 file-upload.org##+js(acs, JSON.parse, document.head.appendChild)
 ||cfd/tags/*.js$script,3p
@@ -2336,9 +2335,10 @@ chasingthedonkey.com##+js(nowoif)
 ! https://www.taste.com.au/food-news/arnotts-told-us-secret-recipe-their-discontinued-honey-jumbles-biscuits/y036sar4 - top placeholder
 taste.com.au##.main-header:style(top: 0 !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/24714
-@@||codicibancari.it/scripts/tracking/pixel/conversion/prebid_*.js$domain=decompiler.com
+@@||codicibancari.it/*/prebid_*.js$domain=decompiler.com
 decompiler.com##+js(acs, document.getElementById, %2Fadblock%2Fi)
-decompiler.com##+js(rpnt, script, %2Fif.*%3F%5C(.*%3F%5C)%2F, if(false), condition, %2F%5C%5BString%7CparentNode%5C.replaceChild%7CfromCharCode%2F)
+decompiler.com##+js(set, becpjiox, true)
+decompiler.com##+js(rpnt, script, %2Fif.*%3F%5C(.*%3F%5C)%2F, if(false), condition, %2F%5C.style%5C.pointerEvents%7C%5C.style%5C.opacity%7C%5C.setAttribute%5C('hr'%7C%5C.createElement%5C(%22button%22%5C)%7C%5C.addEventListener%5C(%22click%22%7Cwindow%5C%5B'al'%5C%2B'ert'%5C%5D%7ColdButton%5C%5B'replaceWith'%5C%5D%2F)
 ! ytlarge detection
 @@||ytlarge.com^$ghide
 @@||googlesyndication.com^$script,xhr,domain=ytlarge.com
@@ -2384,8 +2384,6 @@ avxhm.se##center:has(a[href^="https://canv.ai/"])
 avxhm.se##center:has(a[href^="https://canv.ai/"]) ~ span:has(a[href^="https://canv.ai/"])
 ! https://github.com/uBlockOrigin/uAssets/issues/24842
 repack-games.com##+js(rmnt, script, ai_adb)
-! hesgoal-*.io detection
-hesgoal-tv.io,hesgoal-vip.io##+js(rmnt, script, %2Fadbl%2Fi)
 ! hesgoal. watch popups
 ||hesgoal.watch^$csp=sandbox allow-forms allow-same-origin allow-scripts allow-modals allow-orientation-lock allow-pointer-lock allow-presentation allow-top-navigation
 ! https://github.com/uBlockOrigin/uAssets/issues/24812
@@ -2442,8 +2440,6 @@ cgcosplay.org###page + div[id][class*=" "]
 ! https://github.com/uBlockOrigin/uAssets/issues/24937
 ||sainsburys.co.uk/groceries-api/$xhr,1p,removeparam=include[PRODUCT_AD]
 sainsburys.co.uk##+js(json-prune, ads.%5B-%5D.ad_id)
-! https://tiroalpaloes.com/ - anti-adb
-tiroalpaloes.com##+js(aeld, load, nextFunction)
 ! https://github.com/uBlockOrigin/uAssets/issues/24953
 crackshash.com##+js(acs, document.getElementsByClassName, wp-ad)
 crackshash.com##[id^="crack"]:has(.wp-ad)
@@ -3102,9 +3098,6 @@ akirabox.com,akirabox.to##+js(nowoif, _blank)
 ||fastfilehost.link^$all
 ||rapidsend.cfd^$all
 ||generating.link^$all
-! https://github.com/AdguardTeam/AdguardFilters/issues/193137
-redvido.com##+js(acs, onload, open)
-redvido.com##+js(aopr, Adcash)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/193130
 ! https://github.com/AdguardTeam/AdguardFilters/issues/216165
 upns.*##+js(nowoif)
@@ -3127,6 +3120,7 @@ movielinkbd.*,mcloud.guru##+js(nowoif, _blank)
 neodrive.xyz##+js(rmnt, script, FingerprintJS)
 ||jaya9.app/?af=$doc,popup
 ||jaya9.best/?af=$doc,popup
+||jaya9bangladesh.com/?af=$doc,popup
 ||staletraffic.com^$popup,doc
 ! https://github.com/uBlockOrigin/uAssets/issues/26527
 historicaerials.com##+js(nostif, %2FExecuted%7Cmodal%2F)
@@ -3142,7 +3136,6 @@ viralxxxporn.com##+js(set, flashvars.adv_pre_src, )
 viralxxxporn.com##+js(set, flashvars.mlogo, )
 ! https://www.reddit.com/r/uBlockOrigin/comments/1gvr4li/adblock_detection_on_zdsptvcom/
 @@*$ghide,domain=activo.mx|dynamicsupply.net|foroactivo.com|zdsports.org|~www.activo.mx|~www.foroactivo.com
-@@||blogspot.com^$ghide,domain=zscnl.blogspot.com|zsnls.blogspot.com
 tarjetarojaenvivo.lat##^script#aclib
 ||tarjetarojaenvivo.lat/lib.js^
 ! https://github.com/AdguardTeam/AdguardFilters/issues/190811
@@ -3354,8 +3347,6 @@ ebook-hell.to##+js(nowoif)
 ||ebook-hell.to/jquery/jspololife.js
 ! https://github.com/uBlockOrigin/uAssets/issues/26371
 ibooks.to##+js(rmnt, script, ai_adb)
-! https://www.gpldose.com/ anti-adb
-gpldose.com##+js(aopr, Dataffcecd)
 ! https://github.com/uBlockOrigin/uAssets/issues/26395
 ##.sharethis-inline-share-buttons.st-hidden
 ! https://github.com/AdguardTeam/AdguardFilters/issues/194399
