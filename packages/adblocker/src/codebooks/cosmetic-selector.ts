@@ -183,7 +183,6 @@ export default [
   "s_",
   "s-",
   "se",
-  "si",
   "st",
   "t-",
   "te",
@@ -260,5 +259,6 @@ export default [
   "x",
   "y",
   "Y",
-  "z"
+  "z",
+  "Z"
 ];
