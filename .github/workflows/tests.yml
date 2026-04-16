@@ -8,6 +8,9 @@ jobs:
 
     runs-on: ${{ matrix.os }}
 
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ github.workspace }}/.playwright-browsers
+
     timeout-minutes: 10
 
     strategy:
@@ -29,6 +32,16 @@ jobs:
 
       - name: Install dependencies
         run: yarn install --immutable
+
+      - name: Detect Playwright version
+        id: playwright-version
+        run: echo "version=$(node -e 'process.stdout.write(require("./node_modules/playwright/package.json").version)')" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Playwright browsers
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
+        with:
+          path: ${{ env.PLAYWRIGHT_BROWSERS_PATH }}
+          key: ${{ runner.os }}-playwright-${{ steps.playwright-version.outputs.version }}
 
       - name: Build
         run: yarn build
