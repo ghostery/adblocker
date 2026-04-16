@@ -578,6 +578,8 @@ cinemark.com.br##+js(set-cookie, cookies_config, deny)
 theweathernetwork.com##+js(trusted-click-element, %23didomi-notice-disagree-button)
 ! https://github.com/uBlockOrigin/uAssets/pull/32538
 craftelier.com##+js(trusted-set-cookie, pr-cookie-consent, %5B%5D, , , domain, .craftelier.com)
+! https://github.com/uBlockOrigin/uAssets/pull/32556
+moleson.rentalp.com##+js(trusted-set-cookie, USE_COOKIE_CONSENT_STATE, %7B%22firstParty%22%3Atrue%2C%22thirdParty%22%3Afalse%2C%22necessary%22%3Atrue%7D)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -1234,7 +1236,7 @@ n-tv.de##+js(trusted-set-cookie, consentUUID, a8dac56d-c5d7-4a8a-bab2-da9eb2f28d
 ! reject, allow Listen to this article
 lbc.co.uk##+js(trusted-set-cookie, consentUUID, de4972d9-e581-40c3-921b-296d6456fad0_34)
 ! reject
-aftonbladet.se,omniekonomi.se,bt.no,vg.no##+js(trusted-set-cookie, consentUUID, 1_34_38)
+omniekonomi.se,bt.no,vg.no##+js(trusted-set-cookie, consentUUID, 1_34_38)
 ! derstandard.at,derstandard.de
 ! https://old.reddit.com/r/uBlockOrigin/comments/1evyir1/derstandardat/
 consent.faz.net,derstandard.at,derstandard.de##+js(trusted-click-element, button%5Btitle%3D%22Einverstanden%22%5D, , 1000)
@@ -1356,7 +1358,7 @@ bloodyelbow.com>>,consent.radiotimes.com##+js(trusted-click-element, button%5Bti
 ! agree
 sp-consent.szbz.de##+js(trusted-click-element, button%5Btitle%3D%22Alles%20akzeptieren%22%5D, , 1000)
 ! agree
-cmp.omni.se,cmp.svd.se,cmp.aftonbladet.se,cmp.tv.nu##+js(trusted-click-element, button%5Btitle%3D%22Godk%C3%A4nn%20alla%20cookies%22%5D, , 1000)
+cmp.omni.se,cmp.svd.se,cmp.tv.nu##+js(trusted-click-element, button%5Btitle%3D%22Godk%C3%A4nn%20alla%20cookies%22%5D, , 1000)
 ! accept weltkunst.de
 weltkunst.de>>##+js(trusted-click-element, button%5Btitle%3D%22ALLE%20AKZEPTIEREN%22%5D, , 1000)
 ! reject
@@ -4087,3 +4089,6 @@ nowtv.com.tr##+js(trusted-click-element, button%5Bid%3D%22onetrust-reject-all-ha
 scandinavianoutdoor.fi##+js(trusted-set-local-storage-item, cookieconsent, %7B%22consents%22%3A%5B%22ESSENTIAL%22%5D%7D)
 ! Essential only
 ixolabs.ai##+js(trusted-set-cookie, ixo_cookie_consent, %7B%22essential%22%3Atrue%2C%22analytics%22%3Afalse%2C%22functional%22%3Afalse%7D)
+! Accept
+! https://github.com/brave-experiments/cookiecrumbler-issues/issues/1996
+aftonbladet.se##+js(trusted-click-element, %23notice%20button%5Btitle%3D%22Godk%C3%A4nn%20alla%22%5D)
