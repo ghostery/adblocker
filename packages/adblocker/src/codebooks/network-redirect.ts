@@ -51,6 +51,7 @@ export default [
   "in",
   "le",
   "ma",
+  "on",
   "oo",
   "re",
   "st",
