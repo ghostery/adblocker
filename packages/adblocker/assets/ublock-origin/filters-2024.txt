@@ -2148,8 +2148,11 @@ ezaudiobookforsoul.com##+js(set, cabdSettings, undefined)
 freeshot.live##+js(no-fetch-if, %2Foutbrain%7Cadligature%7Cquantserve%7Cadligature%7Csrvtrck%2F)
 freeshot.live##+js(acs, document.querySelectorAll, popMagic)
 popcdn.day##+js(aopw, detectedAdblock)
-! https://github.com/uBlockOrigin/uAssets/issues/24297#event-13341237136
+! https://github.com/uBlockOrigin/uAssets/issues/24297
 watch.shout-tv.com##+js(json-prune-fetch-response, adsConfiguration, , propsToMatch, %2Fvod)
+! https://www.reddit.com/r/uBlockOrigin/comments/1smrmv8/video_ads_on_shout_tv/
+watch.shout-tv.com##+js(trusted-json-edit-fetch-response, .streams.*.adUnits%3D%5B%5D, propsToMatch, %2Fmanifest%2Fvideo)
+watch.shout-tv.com##+js(trusted-replace-xhr-response, %2F%23EXTINF%5B%5E%5Cn%5D%2B%5Cn%5B%5E%5Cn%5D%2B%3Fsegment%5B%5E%5Cn%5D%2B%2Fgms, , .m3u8)
 ! https://github.com/uBlockOrigin/uAssets/issues/24303
 @@||cdn.cxense.com/cx.js$script,domain=tvaplus.ca
 @@||api.cxense.com^$script,domain=tvaplus.ca
@@ -2336,9 +2339,9 @@ chasingthedonkey.com##+js(nowoif)
 ! https://www.taste.com.au/food-news/arnotts-told-us-secret-recipe-their-discontinued-honey-jumbles-biscuits/y036sar4 - top placeholder
 taste.com.au##.main-header:style(top: 0 !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/24714
-@@||codicibancari.it^$script,domain=decompiler.com
+@@/prebid.$script,from=decompiler.com
+decompiler.com##+js(trusted-replace-node-text, script, %2Fif.*%3F%5C(.*%3F%5C)%2F, if(false), condition, %2F%5C.style%5C.pointerEvents%7C%5C.style%5C.opacity%7C%5C.setAttribute%5C('hr'%7C%5C.createElement%5C(%22button%22%5C)%7C%5C.addEventListener%5C(%22click%22%7Cwindow%5C%5B'al'%5C%2B'ert'%5C%5D%7ColdButton%5C%5B'replaceWith'%5C%5D%7C'%20%5C%2B%20'%7CreplaceSubmit%7CreplaceSubmitWithWarnButton%7C'pointerEvents'%7CdisableLink%2F)
 decompiler.com##+js(acs, document.getElementById, %2Fadblock%2Fi)
-decompiler.com##+js(rpnt, script, %2Fif.*%3F%5C(.*%3F%5C)%2F, if(false), condition, %2F%5C.style%5C.pointerEvents%7C%5C.style%5C.opacity%7C%5C.setAttribute%5C('hr'%7C%5C.createElement%5C(%22button%22%5C)%7C%5C.addEventListener%5C(%22click%22%7Cwindow%5C%5B'al'%5C%2B'ert'%5C%5D%7ColdButton%5C%5B'replaceWith'%5C%5D%7C'%20%5C%2B%20'%2F)
 ! ytlarge detection
 @@||ytlarge.com^$ghide
 @@||googlesyndication.com^$script,xhr,domain=ytlarge.com
