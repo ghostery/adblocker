@@ -126,7 +126,6 @@ export default [
   "52C",
   "53A",
   "age",
-  "app",
   "box",
   "com",
   "div",
@@ -260,5 +259,6 @@ export default [
   "x",
   "y",
   "Y",
-  "z"
+  "z",
+  "Z"
 ];
