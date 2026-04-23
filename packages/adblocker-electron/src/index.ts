@@ -9,7 +9,7 @@
 import * as electron from 'electron';
 import { parse } from 'tldts-experimental';
 
-import { ElectronRequestType, FiltersEngine, Request } from '@ghostery/adblocker';
+import { FiltersEngine, Request } from '@ghostery/adblocker';
 import type { IBackgroundCallback } from '@ghostery/adblocker-electron-preload';
 
 import { PRELOAD_PATH } from './preload_path.js';
@@ -33,14 +33,14 @@ export function fromElectronDetails(
           requestId: `${id}`,
           sourceUrl: referrer,
           tabId: webContentsId,
-          type: (resourceType || 'other') as ElectronRequestType,
+          type: resourceType || 'other',
           url,
         }
       : {
           _originalRequestDetails: details,
           requestId: `${id}`,
           sourceUrl: referrer,
-          type: (resourceType || 'other') as ElectronRequestType,
+          type: resourceType || 'other',
           url,
         },
   );
