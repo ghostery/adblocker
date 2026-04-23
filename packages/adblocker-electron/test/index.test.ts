@@ -3,7 +3,6 @@ import 'mocha';
 
 import {
   ElectronBlocker,
-  ElectronRequestType,
   fromElectronDetails,
   getHostnameHashesFromLabelsBackward,
 } from '../src/index.js';
@@ -13,7 +12,7 @@ describe('#fromElectronDetails', () => {
     id: 0,
     method: 'GET',
     referrer: 'https://sub.source.com',
-    resourceType: 'script' as ElectronRequestType,
+    resourceType: 'script',
     timestamp: 0,
     uploadData: [],
     url: 'https://sub.url.com',
