@@ -3353,9 +3353,6 @@ elahmad.com##*:style(-webkit-touch-callout: default !important; -webkit-user-sel
 ! adpres. ro right click select copy f keys
 adpres.ro##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 adpres.ro##+js(aopw, stopPrntScr)
-! https://www.reddit.com/r/uBlockOrigin/comments/qkf91l/timeanddatecom/
-@@||timeanddate.com^$ghide
-timeanddate.com###ad300
 ! https://www.reddit.com/r/uBlockOrigin/comments/qo0a54/adblock_detected/
 racevpn.com##+js(aopw, document.onkeydown)
 ! https://github.com/bogachenko/fuckfuckadblock/issues/237 AG/FB Social
@@ -5336,8 +5333,11 @@ noicetranslations.blogspot.com##+js(rmnt, script, disableselect)
 bloomberglinea.com,bloomberglinea.com.br##+js(aeld, copy)
 ! https://github.com/hogekai/ad-compass/tree/main
 ||jsdelivr.net/npm/ad-compass@latest/dist/ad-compass.umd.js
+! https://www.reddit.com/r/uBlockOrigin/comments/qkf91l/timeanddatecom/
+@@||timeanddate.com^$ghide
+timeanddate.com###ad300
 ! https://github.com/uBlockOrigin/uAssets/issues/23472
-timeanddate.com##+js(aeld, load, ad-wrap)
+timeanddate.com,timeanddate.de,timeanddate.no##+js(aeld, load, ad-wrap)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/178173
 wear.jp##+js(trusted-set-session-storage-item, status_of_app_redirect_half_modal_on_coordinate_list, %7B%22displayed%22%3Atrue%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/23524
@@ -5976,3 +5976,8 @@ doordash.com##div[class^="StyledStackChildren-"]:has(> div[data-testid="appDownl
 doordash.com##+js(trusted-set-local-storage-item, appDownloadPromptDismissedV3Ttl, %7B%22value%22%3A%2299999999999999%22%5C%2C%22expiresAt%22%3A99999999999999%7D)
 ! https://github.com/uBlockOrigin/uAssets/discussions/32533
 nebula.tv##+js(trusted-click-element, main%20div%5Bdata-theater-mode%5D%20button%5Btype%3D%22submit%22%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/32627
+1shows.ru##+js(set, console.clear, trueFunc)
+1shows.ru##+js(set, console.log, trueFunc)
+1shows.ru##+js(set, console.table, trueFunc)
+1shows.ru##+js(aeld, keydown, 123%3D%3D%3Di)
