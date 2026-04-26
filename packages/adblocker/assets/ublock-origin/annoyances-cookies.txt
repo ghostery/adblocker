@@ -313,6 +313,7 @@ nature.com##+js(trusted-set-cookie, sncc, P%253D8%253AV%253D77.0.0%2526C%253DC01
 springernature.com##+js(trusted-set-cookie, sncc, P%253D49%253AV%253D60.0.0%2526C%253DC01%2526D%253Dtrue, , , domain, springernature.com)
 palgrave.com##+js(trusted-set-cookie, sncc, P%253D65%253AV%253D14.0.0%2526C%253DC01%2526D%253Dtrue, , , domain, palgrave.com)
 apress.com##+js(trusted-set-cookie, sncc, P%253D71%253AV%253D9.0.0%2526C%253DC01%2526D%253Dtrue, , , domain, apress.com)
+scientificamerican.com##+js(trusted-set-cookie, sncc, P%253D144%253AV%253D10.0.0%2526C%253DC01%252CC02%252CC03%252CC04%252CC05%252CC06%2526D%253Dtrue, , , domain, scientificamerican.com)
 ! reject
 gizmodo.com,kotaku.com##+js(trusted-set-local-storage-item, sddan%3Acmp, %7B%22tc%22%3A%22CQdF08AQdF08ABcAKCENCLFgAAAAAEPgAAqIJNQAASagZgALgAcAB4AFQALgAcABAACQAFQAMoAaABqADwAJkAXABdADEAGgAN4AfAA_ACEgEQARIAw4BlAGWANEAc8A-wD9AIQARQAiwBGICOAI6ASYAq4BcwC8gGKANEAa8A2gB_wEegJiATSAocBTQC1AFzALzAYsAyQBpoDkwAA%22%2C%22lp%22%3A%24now%24%7D)
 gizmodo.com,kotaku.com##+js(trusted-set-cookie, euconsent-v2, CQdF08AQdF08ABcAKBENCLFgAAAAAEPgAAqIJNQAASagZgALgAcAB4AFQALgAcABAACQAFQAMoAaABqADwAJkAXABdADEAGgAN4AfAA_ACEgEQARIAw4BlAGWANEAc8A-wD9AIQARQAiwBGICOAI6ASYAq4BcwC8gGKANEAa8A2gB_wEegJiATSAocBTQC1AFzALzAYsAyQBpoDkwAA)
@@ -712,6 +713,8 @@ nordax.com##+js(trusted-set-cookie, cookie_consent, %257B%2522allowEssentials%25
 ! Accept all = 2nd button
 www.youtube.com##+js(trusted-click-element, ytd-button-renderer.ytd-consent-bump-v2-lightbox%20%2B%20ytd-button-renderer.ytd-consent-bump-v2-lightbox%20button%5Baria-label%5D, , 1000)
 m.youtube.com##+js(trusted-click-element, ytm-button-renderer.eom-accept%20button, , 2000)
+! Update UK consent (Accept)
+www.youtube.com##+js(trusted-click-element, .ytd-consent-bump-v2-lightbox%20%3E%20yt-button-shape%20%3E%20button%5Baria-label%3D%22Accept%20the%20use%20of%20cookies%20and%20other%20data%20for%20the%20purposes%20described%22%5D, , 1000)
 ! GDPR dialog when moving from Google to Youtube
 ! https://github.com/uBlockOrigin/uAssets/discussions/18598#discussioncomment-7362961
 consent.youtube.com##+js(trusted-click-element, form%5Baction%5D%20button%5Bjsname%3D%22b3VHJd%22%5D)
@@ -4093,6 +4096,14 @@ scandinavianoutdoor.fi##+js(trusted-set-local-storage-item, cookieconsent, %7B%2
 ixolabs.ai##+js(trusted-set-cookie, ixo_cookie_consent, %7B%22essential%22%3Atrue%2C%22analytics%22%3Afalse%2C%22functional%22%3Afalse%7D)
 ! Accept
 ! https://github.com/brave-experiments/cookiecrumbler-issues/issues/1996
-aftonbladet.se##+js(trusted-click-element, %23notice%20button%5Btitle%3D%22Godk%C3%A4nn%20alla%22%5D)
+aftonbladet.se,godare.se,omni.se,svd.se##+js(trusted-click-element, %23notice%20button%5Btitle%3D%22Godk%C3%A4nn%20alla%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/pull/32576
 arena.ai##+js(trusted-set-cookie-reload, cookie-preferences, %7B%22functionality%22%3Atrue%2C%22advertising%22%3Afalse%2C%22analytics%22%3Afalse%2C%22socialMedia%22%3Atrue%2C%22lastUpdated%22%3A%2299999999999999%22%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/32634
+videohelper.com##+js(trusted-set-cookie, starter-cookie-data, hasAckowledged)
+! https://github.com/uBlockOrigin/uAssets/pull/32653
+silknet.com##+js(trusted-set-cookie, validCookies, general)
+! https://github.com/uBlockOrigin/uAssets/issues/32673
+gowinston.ai##+js(trusted-click-element, button.cky-btn-accept)
+! cookies
+online.globus.ru##+js(trusted-set-local-storage-item, notifications-ls, %7B%22state%22%3A%7B%22isCookieNotified%22%3Atrue%7D%2C%22version%22%3A0%7D)

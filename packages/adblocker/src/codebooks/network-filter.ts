@@ -8,7 +8,7 @@
 /* eslint-disable prettier/prettier */
 export default [
   ",ipaddress=/^(1(72\\.67\\.\\d{3}|04\\.21\\.\\d+)\\.\\d+|188\\.114\\.9[67]\\.[08]|64:ff9b::[a-f0-9]{4}:[a-f0-9]{1,4})$/,replace='/^/<script>(()=>{window.open=new Proxy(window.open,{apply:(n,o,w)=>{}});let e=document.querySelector(\"script\");e.innerHTML.includes(\"window.open\")&&e.parentElement.removeChild(e)})();<\\/script>/i'",
-  "\\/(?:assets|build|bundles|chunks|dist|files|j|public|scripts|static)?\\/?(?:js\\/)?[0-9_a-z]{6,16}\\/?[0-9_a-z]{5,120}(?:[-.](?:app|bundle|ma?in|module|prod|index|v\\d|vendor))?(?:\\.js)?$/$script,3p,match-case,",
+  "\\/(?:assets|build|bundles|chunks|dist|files|j|public|scripts|static)?\\/?(?:js\\/)?[0-9_a-z]{6,16}\\/?[0-9_a-z]{5,120}(?:[-.](?:app|bundle|ma?in|module|prod|index|v\\d|vendor))?(?:\\.js)?(?:\\?r=\\d)?$/$script,3p,match-case,",
   "~adatoolbar.com|~aswpsdkus.com|~chimpstatic.com|~clickiocmp.com|~mojirater.com|~polldaddy.com|~squareoffs.com|~succeedscene.com|~tallysight.com|~veraviews.com,",
   "/^https:\\/\\/(?:www\\d\\.)?[-a-z]{6,}\\.(?:club|com|info|net|org)\\/(?=[-_a-zA-Z]{0,42}\\d)(?=[-_0-9a-z]{0,42}[A-Z])[-_0-9a-zA-Z]{43}\\/\\?",
   "/^https:\\/\\/s[cfntz]y?[ace][acemnu][a-z]{1,4}or?[mn][a-z]{4,8}[iy][a-z]?\\.",
@@ -147,7 +147,6 @@ export default [
   "/w",
   "\\.",
   "\\/",
-  "ab",
   "ac",
   "ad",
   "al",
@@ -174,6 +173,7 @@ export default [
   "in",
   "it",
   "js",
+  "la",
   "le",
   "li",
   "lo",

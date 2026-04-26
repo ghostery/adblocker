@@ -960,6 +960,11 @@ alternativeto.net##section#alternative-list > ol > li:has(> .bannerLink)
 alternativeto.net##section#alternative-list > ol > li:has(div[data-testid="adsense-wrapper"])
 alternativeto.net##section#alternative-list > div:not([class]):has(> div[data-testid="adsense-wrapper"])
 alternativeto.net##+js(json-prune, props.sponsoredAlternative)
+! https://github.com/uBlockOrigin/uAssets/issues/20358
+alternativeto.net##main > div.flex.justify-center > div.w-full.box-border.flex > div.w-full.container.wide-container
+alternativeto.net##.container > h2[class^="Heading-module-scss-module__"][class^="Heading-module-scss"]:has-text(supported by)
+alternativeto.net##main > section.container.wide-container > div.container > div.mt-10
+alternativeto.net##[href*="aff_c?"]
 ! helmiau. com anti adb
 @@||helmiau.com^$script,1p
 ! https://explorecams.com/photos/model/dmc-fh8 anti-adb
@@ -1400,7 +1405,9 @@ bellesa.co##[href*="preroll"]:upward(2)
 ||res.cloudinary.com/$image,domain=bellesa.co
 ! https://github.com/uBlockOrigin/uAssets/issues/17859
 satkurier.pl##+js(no-fetch-if, ads)
-satkurier.pl##+js(nostif, getComputedStyle)
+satkurier.pl##+js(nostif, %2FgetComputedStyle%7Cbait%2F)
+satkurier.pl##+js(set, AController_3, noopFunc)
+satkurier.pl##+js(trusted-replace-argument, document.createElement, 0, json%3A%22div%22, condition, ins)
 satkurier.pl###m_top_1_mainpage
 satkurier.pl###navbarMenu + div[style*="text-align:center;"]
 ! https://github.com/uBlockOrigin/uAssets/issues/17872
@@ -2549,6 +2556,7 @@ history.com##+js(no-xhr-if, time-events)
 @@||aetnd.com^$ghide
 @@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$domain=play.aetv.com|play.mylifetime.com
 @@||play.*.com/vendor/VisitorAPI.js$script,1p,domain=play.aetv.com|play.mylifetime.com
+@@||pubads.g.doubleclick.net/ondemand/hls/content/$domain=play.aetv.com
 ||play.*.com/vendor/$domain=play.aetv.com|play.mylifetime.com
 ||dai.google.com/ondemand/hls/content/*/time-events.json$domain=play.aetv.com|play.mylifetime.com
 ! https://github.com/uBlockOrigin/uAssets/issues/30633
@@ -3492,6 +3500,7 @@ easybib.com##+js(trusted-click-element, button%5Bdata-test%3D%22watch-ad-button%
 easybib.com##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/21062
 realmadryt.pl##+js(no-fetch-if, method%3AGET)
+realmadryt.pl##+js(aeld, , adb)
 ! filmydown .site/fast-dl .co/.biz popups
 fast-dl.*,filmydown.*##+js(nowoif)
 ||toptdspup.com^
