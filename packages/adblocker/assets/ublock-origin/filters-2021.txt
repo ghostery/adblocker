@@ -1906,10 +1906,12 @@ demonoid.is##+js(rpnt, style, visibility%3A%20visible%20!important%3B, display%3
 send-anywhere.com##+js(nano-sib, skipOptions)
 send-anywhere.com###transfer-reward-ad
 ! https://www.reddit.com/r/uBlockOrigin/comments/owcag5/previously_blocked_ads_suddenly_showing_on/
-||brightcove.com/playback/*/*?ad_config_id$removeparam=ad_config_id,xhr,domain=tvnz.co.nz
-||brightcovecdn.com/playback/*/*?ad_config_id$removeparam=ad_config_id,xhr,domain=tvnz.co.nz
+!||brightcove.com/playback/*/*?ad_config_id$removeparam=ad_config_id,xhr,domain=tvnz.co.nz
+!||brightcovecdn.com/playback/*/*?ad_config_id$removeparam=ad_config_id,xhr,domain=tvnz.co.nz
 ! https://github.com/easylist/easylist/commit/458ff20983414424f5170fee13f18cccb17f337d - anti-adb
 tvnz.co.nz##+js(no-fetch-if, method%3AHEAD%20url%3Adoubleclick.net)
+! https://github.com/uBlockOrigin/uAssets/issues/32615
+tvnz.co.nz##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22https%3A%22)%5D%5D), , .mpd)
 ! https://www.reddit.com/r/uBlockOrigin/comments/owh9eq/please_help_me_disable_this_anti_adblock/
 @@||pharmacyreviewer.com^$ghide
 @@||pharmacyreviewer.com/forum/js/$script,1p
@@ -2706,6 +2708,10 @@ calculator-online.net##.sticky_ad
 calculator-online.net##.related_box:has(.adds):style(height: 1px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/10421
 onionplay.*###clickfkplayer[href]:remove-attr(href)
+! https://github.com/uBlockOrigin/uAssets/issues/32693
+onionplay.io###fakeplayer
+onionplay.io###dooplay_player_content .source-box:style(display: block !important;)
+onionplay.io##+js(set-attr, %23dooplay_player_content%20.source-box%20iframe.metaframe%5Bdata-src%5D%3Anot(%5Bsrc%5D), src, %5Bdata-src%5D)
 ! afScript popups
 iguarras.com,iputitas.net##+js(aopr, afScript)
 ! https://github.com/easylist/easylist/pull/11459
