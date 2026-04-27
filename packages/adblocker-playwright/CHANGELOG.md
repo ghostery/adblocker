@@ -1,3 +1,29 @@
+# v2.14.2 (Mon Apr 27 2026)
+
+#### ⚠️ Pushed to `master`
+
+- Update dependencies ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- internal: retire nodejs v20 [#5582](https://github.com/ghostery/adblocker/pull/5582) ([@seia-soto](https://github.com/seia-soto))
+- internal: TypeScript 6.0 migration [#5546](https://github.com/ghostery/adblocker/pull/5546) ([@seia-soto](https://github.com/seia-soto))
+- Housekeeping [#5518](https://github.com/ghostery/adblocker/pull/5518) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5619](https://github.com/ghostery/adblocker/pull/5619) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps-dev): Bump tshy from 3.3.2 to 4.0.0 [#5551](https://github.com/ghostery/adblocker/pull/5551) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump nyc from 17.1.0 to 18.0.0 [#5489](https://github.com/ghostery/adblocker/pull/5489) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update dependencies [#5486](https://github.com/ghostery/adblocker/pull/5486) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.14.0 (Thu Feb 12 2026)
 
 #### :nut_and_bolt: Dependencies

@@ -1,3 +1,32 @@
+# v2.14.2 (Mon Apr 27 2026)
+
+#### ⚠️ Pushed to `master`
+
+- Update dependencies ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- internal: retire nodejs v20 [#5582](https://github.com/ghostery/adblocker/pull/5582) ([@seia-soto](https://github.com/seia-soto))
+- internal: TypeScript 6.0 migration [#5546](https://github.com/ghostery/adblocker/pull/5546) ([@seia-soto](https://github.com/seia-soto))
+- Housekeeping [#5518](https://github.com/ghostery/adblocker/pull/5518) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5619](https://github.com/ghostery/adblocker/pull/5619) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps): Bump @types/node from 25.5.2 to 25.6.0 [#5592](https://github.com/ghostery/adblocker/pull/5592) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump tshy from 3.3.2 to 4.0.0 [#5551](https://github.com/ghostery/adblocker/pull/5551) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/node from 25.3.2 to 25.3.3 [#5497](https://github.com/ghostery/adblocker/pull/5497) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @types/node from 25.3.0 to 25.3.2 [#5494](https://github.com/ghostery/adblocker/pull/5494) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update dependencies [#5486](https://github.com/ghostery/adblocker/pull/5486) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps): Bump @types/node from 25.2.3 to 25.3.0 [#5474](https://github.com/ghostery/adblocker/pull/5474) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.14.0 (Thu Feb 12 2026)
 
 #### :rocket: New Feature
