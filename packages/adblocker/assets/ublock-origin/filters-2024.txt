@@ -2207,18 +2207,20 @@ freemodsapp.in,onlytech.com##^script:has-text(/eval\(.+?decodeURIComponent/)
 ! https://github.com/uBlockOrigin/uAssets/issues/26229
 ! https://github.com/uBlockOrigin/uAssets/issues/28913
 ! https://github.com/uBlockOrigin/uAssets/issues/29284
+! https://github.com/uBlockOrigin/uAssets/issues/32709
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=p2pplay.pro
 !#if env_firefox
 tokuzilla.net##[onclick*="_blank"]:remove-attr(onclick)
 tokuzl.net##[onclick="goToURL();"]:remove-attr(onclick)
+tukoz.com##a[href][onclick^="window.open"]:remove-attr(onclick)
 !#else
 tokuzilla.net##+js(ra, onclick, %5Bonclick*%3D%22_blank%22%5D, complete)
 tokuzl.net##+js(ra, onclick, %5Bonclick%3D%22goToURL()%3B%22%5D, complete)
+tukoz.com##+js(ra, onclick, a%5Bhref%5D%5Bonclick%5E%3D%22window.open%22%5D, complete)
 !#endif
-tokuzilla.net,tokuzl.net##+js(nowoif, _blank)
-tokuzilla.net,tokuzl.net##+js(aeld, click, overlay)
-tokuzilla.net,tokuzl.net##.overlay
-p2pplay.pro##+js(json-prune, ads)
+tokuzilla.net,tokuzl.net,tukoz.com##+js(nowoif, _blank)
+tokuzilla.net,tokuzl.net,tukoz.com##+js(aeld, click, overlay)
+tokuzilla.net,tokuzl.net,tukoz.com##.overlay
 p2pplay.pro##div[style^="position:fixed;inset:0px;z-index:2147483647;background:black;opacity:0.01"]
 p2pplay.pro##div[style^="position: fixed; inset: 0px; z-index: 2147483647; background: black; opacity: 0.01"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/183713
@@ -2306,8 +2308,40 @@ chasingthedonkey.com##+js(nowoif)
 taste.com.au##.main-header:style(top: 0 !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/24714
 @@/prebid*$script,from=decompiler.com
+@@||codicibancari.it^$script,domain=decompiler.com
+@@||scuolamaternamaffei.it^$script,domain=decompiler.com
 decompiler.com##+js(trusted-replace-node-text, script, %2Fif.*%3F%5C(.*%3F%5C)%2F, if(false), condition, %2F%5C.style%5C.pointerEvents%7C%5C.style%5C.opacity%7C%5C.setAttribute%5C('hr'%7C%5C.createElement%5C(%22button%22%5C)%7C%5C.addEventListener%5C(%22click%22%7Cwindow%5C%5B'al'%5C%2B'ert'%5C%5D%7ColdButton%5C%5B'replaceWith'%5C%5D%7C'%20%5C%2B%20'%7CreplaceSubmit%7CreplaceSubmitWithWarnButton%7C'pointerEvents'%7CdisableLink%2F)
-decompiler.com##+js(rmnt, script, 'alert')
+decompiler.com##+js(rmnt, script, %2F%22'alert'%22%7C%5C%5Cx61%2F)
+decompiler.com##+js(rmnt, script, var%20w%20%3D%20window%3B)
+decompiler.com##+js(rmnt, script, var%20n%20%3D%20'kdf'%3B)
+decompiler.com##+js(rmnt, script, var%20v%20%3D%20w%5Bn%5D%3B)
+decompiler.com##+js(rmnt, script, if(%20!v%20)%7B)
+decompiler.com##+js(rmnt, script, var%20_s%20%3D%20'style')
+decompiler.com##+js(rmnt, script, var%20_pe%20%3D%20'pointer%5Cx45vents')
+decompiler.com##+js(rmnt, script, var%20_op%20%3D%20'opacity')
+decompiler.com##+js(rmnt, script, var%20_sa%20%3D%20'setAttribute')
+decompiler.com##+js(rmnt, script, var%20_ce%20%3D%20'createElement')
+decompiler.com##+js(rmnt, script, var%20_ae%20%3D%20'addEventListener')
+decompiler.com##+js(rmnt, script, var%20_rw%20%3D%20'replaceWith')
+decompiler.com##+js(rmnt, script, var%20_al%20%3D%20'%5Cx61lert')
+decompiler.com##+js(rmnt, script, var%20xaqjzoot%20%3D%20function)
+decompiler.com##+js(rmnt, script, var%20link%20%3D%20document.getElementById)
+decompiler.com##+js(rmnt, script, link%5B_s%5D%5B_pe%5D%20%3D%20%22none%22)
+decompiler.com##+js(rmnt, script, link%5B_s%5D%5B_op%5D%20%3D%20%220.65%22)
+decompiler.com##+js(rmnt, script, link%5B_sa%5D('href', '%23'))
+decompiler.com##+js(rmnt, script, var%20ncgvfmcn%20%3D%20function)
+decompiler.com##+js(rmnt, script, var%20oldButton%20%3D%20document.getElementById)
+decompiler.com##+js(rmnt, script, var%20newButton%20%3D%20document%5B_ce%5D(%22button%22))
+decompiler.com##+js(rmnt, script, newButton.textContent%20%3D%20oldButton.value)
+decompiler.com##+js(rmnt, script, newButton.className%20%3D%20oldButton.className)
+decompiler.com##+js(rmnt, script, newButton.id%20%3D%20oldButton.id)
+decompiler.com##+js(rmnt, script, newButton.type%20%3D%20%22button%22)
+decompiler.com##+js(rmnt, script, newButton%5B_ae%5D(%22click%22, function())
+decompiler.com##+js(rmnt, script, w%5B_al%5D(warnMsg))
+decompiler.com##+js(rmnt, script, oldButton%5B_rw%5D(newButton))
+decompiler.com##+js(rmnt, script, ncgvfmcn(%22download_zip_button%22)
+decompiler.com##+js(rmnt, script, xaqjzoot(%22firstDownloadFileLink%22))
+decompiler.com##+js(rmnt, script, xaqjzoot(%22secondDownloadFileLink%22))
 ! ytlarge detection
 @@||ytlarge.com^$ghide
 @@||googlesyndication.com^$script,xhr,domain=ytlarge.com
