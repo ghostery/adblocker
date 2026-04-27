@@ -12,13 +12,21 @@ interface FetchResponse {
   json: () => Promise<any>;
 }
 
-export type Fetch = (url: string) => Promise<FetchResponse>;
+interface FetchInit {
+  redirect?: 'error' | 'follow' | 'manual';
+}
+
+export type Fetch = (url: string, init?: FetchInit) => Promise<FetchResponse>;
 
 /**
  * Built-in fetch helpers can be used to initialize the adblocker from
  * pre-built presets or raw lists (fetched from multiple sources). In case of
  * failure (e.g. timeout), the whole process of initialization fails. Timeouts
  * are not so uncommon, and retrying to fetch usually succeeds.
+ *
+ * Redirects are rejected (`redirect: 'error'`) to protect against redirect-based
+ * attacks where a compromised or hijacked origin could point to an attacker-
+ * controlled host serving malicious filter lists.
  */
 export function fetchWithRetry(fetch: Fetch, url: string): Promise<FetchResponse> {
   let retry = 3;
@@ -28,7 +36,7 @@ export function fetchWithRetry(fetch: Fetch, url: string): Promise<FetchResponse
   // the remote server times-out, but retrying fetching of the same URL will
   // usually succeed.
   const fetchWrapper = (): Promise<FetchResponse> => {
-    return fetch(url).catch((ex) => {
+    return fetch(url, { redirect: 'error' }).catch((ex) => {
       if (retry > 0) {
         retry -= 1;
         return new Promise((resolve, reject) => {

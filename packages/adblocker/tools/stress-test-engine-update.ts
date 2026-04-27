@@ -19,7 +19,6 @@
  * 5. check: no ID collisions for filters
  */
 
-import axios from 'axios';
 import { brotliDecompressSync } from 'zlib';
 import {
   Config,
@@ -148,20 +147,22 @@ function filtersDiff(
   return differences;
 }
 
+async function fetchOrThrow(url: string): Promise<Response> {
+  const response = await fetch(url, { redirect: 'error' });
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.status} ${response.statusText}`);
+  }
+  return response;
+}
+
 async function getMeta(url: string): Promise<{ name: string; revisions: string[] }> {
-  const meta = (await axios.get(url)).data;
-  if (typeof meta === 'string') {
-    const buffer = Buffer.from(
-      (
-        await axios.get(url, {
-          responseType: 'arraybuffer',
-        })
-      ).data,
-    );
+  const text = await (await fetchOrThrow(url)).text();
+  try {
+    return JSON.parse(text);
+  } catch {
+    const buffer = Buffer.from(await (await fetchOrThrow(url)).arrayBuffer());
     return JSON.parse(brotliDecompressSync(buffer).toString('utf-8'));
   }
-
-  return meta;
 }
 
 /**
@@ -184,15 +185,9 @@ async function getRevision(url: string): Promise<string> {
     return cached;
   }
 
-  let data: string = (await axios.get(url)).data;
+  let data = await (await fetchOrThrow(url)).text();
   if (!data.startsWith('[Ad')) {
-    const buffer = Buffer.from(
-      (
-        await axios.get(url, {
-          responseType: 'arraybuffer',
-        })
-      ).data,
-    );
+    const buffer = Buffer.from(await (await fetchOrThrow(url)).arrayBuffer());
 
     try {
       data = brotliDecompressSync(buffer).toString('utf-8');

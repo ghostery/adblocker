@@ -27,6 +27,7 @@ const FILTER_LISTS = [
 async function downloadResource(resourceName) {
   const { revisions } = await fetch(
     `https://cdn.ghostery.com/adblocker/resources/${resourceName}/metadata.json`,
+    { redirect: 'error' },
   ).then((result) => {
     if (!result.ok) {
       throw new Error(
@@ -38,6 +39,7 @@ async function downloadResource(resourceName) {
   const latestRevision = revisions.at(-1);
   return fetch(
     `https://cdn.ghostery.com/adblocker/resources/${resourceName}/${latestRevision}/list.txt`,
+    { redirect: 'error' },
   ).then((result) => {
     if (!result.ok) {
       throw new Error(`Failed to fetch ${resourceName}: ${result.status}: ${result.statusText}`);
