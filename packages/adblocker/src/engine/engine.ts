@@ -681,6 +681,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       ...this.redirects.getFilters(),
       ...this.csp.getFilters(),
       ...this.hideExceptions.getFilters(),
+      ...this.removeparams.getFilters(),
     ];
 
     for (const filter of this.htmlFilters.getFilters()) {

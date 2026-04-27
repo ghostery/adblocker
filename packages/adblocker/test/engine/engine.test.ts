@@ -2124,6 +2124,14 @@ foo.com###selector
         ]).getFilters();
         expect(filters).to.have.property('networkFilters').that.have.length(1);
       });
+
+      it('merges $removeparam', () => {
+        const filters = FilterEngine.merge([
+          FilterEngine.parse('foo$removeparam=zar'),
+          FilterEngine.parse('bar'),
+        ]).getFilters();
+        expect(filters).to.have.property('networkFilters').that.have.length(2);
+      });
     });
 
     context('with cosmetic filters', () => {
