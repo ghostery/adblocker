@@ -83,6 +83,7 @@ describe('Serialization', () => {
           optionValue: undefined,
           rawLine: undefined,
           regex: undefined,
+          isCaseSensitive: undefined,
         }),
       );
     });
