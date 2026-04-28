@@ -350,6 +350,7 @@ function computeFilterId(
   domains: Domains | undefined,
   denyallow: Domains | undefined,
   optionValue: string | undefined,
+  isCaseSensitive: boolean | undefined,
 ): number {
   let hash = (HASH_SEED * HASH_INTERNAL_MULT) ^ mask;
 
@@ -377,6 +378,10 @@ function computeFilterId(
     for (let i = 0; i < optionValue.length; i += 1) {
       hash = (hash * HASH_INTERNAL_MULT) ^ optionValue.charCodeAt(i);
     }
+  }
+
+  if (isCaseSensitive !== undefined) {
+    hash = (hash * HASH_INTERNAL_MULT) ^ (1 << +isCaseSensitive);
   }
 
   return hash >>> 0;
@@ -1673,6 +1678,7 @@ export default class NetworkFilter implements IFilter {
       this.domains,
       this.denyallow,
       this.optionValue,
+      this.isCaseSensitive,
     );
   }
 
@@ -1685,6 +1691,7 @@ export default class NetworkFilter implements IFilter {
         this.domains,
         this.denyallow,
         this.optionValue,
+        this.isCaseSensitive,
       );
     }
     return this.id;
