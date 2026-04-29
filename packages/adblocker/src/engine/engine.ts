@@ -566,7 +566,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    */
   public getSerializedSize(): number {
     let estimatedSize: number =
-      sizeOfByte() + // engine version
+      sizeOfByte() * 2 + // engine version
       this.config.getSerializedSize() +
       this.resources.getSerializedSize() +
       this.preprocessors.getSerializedSize() +
@@ -582,6 +582,7 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       4; // checksum
 
     // Estimate size of `this.lists` which stores information of checksum for each list.
+    estimatedSize += sizeOfByte() * 2; // list size
     for (const [name, checksum] of this.lists) {
       estimatedSize += sizeOfASCII(name) + sizeOfASCII(checksum);
     }
