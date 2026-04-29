@@ -117,7 +117,7 @@ describe('ReverseIndex', () => {
               const reverseIndex = new ReverseIndex({
                 config,
                 deserialize: NetworkFilter.deserialize,
-                filters: parseFilters('||foo.com').networkFilters,
+                filters: parseFilters('||foo.com', { debug: true }).networkFilters,
                 optimize,
               });
 
@@ -126,13 +126,16 @@ describe('ReverseIndex', () => {
               expect(filters.map((f) => f.rawLine)).to.eql(['||foo.com']);
 
               // Add one new filter
-              reverseIndex.update(parseFilters('||bar.com').networkFilters, undefined);
+              reverseIndex.update(
+                parseFilters('||bar.com', { debug: true }).networkFilters,
+                undefined,
+              );
               filters = reverseIndex.getFilters();
               expect(filters.map((f) => f.rawLine)).to.eql(['||foo.com', '||bar.com']);
 
               // Add a third filter and remove the two others
               reverseIndex.update(
-                parseFilters('||baz.com').networkFilters,
+                parseFilters('||baz.com', { debug: true }).networkFilters,
                 new Set(filters.map((f) => f.getId())),
               );
               filters = reverseIndex.getFilters();
@@ -158,7 +161,7 @@ describe('ReverseIndex', () => {
               const exampleIndex = new ReverseIndex({
                 config,
                 deserialize: NetworkFilter.deserialize,
-                filters: parseFilters(filters).networkFilters,
+                filters: parseFilters(filters, { debug: true }).networkFilters,
                 optimize,
               });
 
