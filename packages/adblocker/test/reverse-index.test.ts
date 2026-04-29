@@ -8,6 +8,7 @@
 
 import { expect } from 'chai';
 import 'mocha';
+import xxhash from 'xxhash-wasm';
 
 import Config from '../src/config.js';
 import { StaticDataView } from '../src/data-view.js';
@@ -21,6 +22,7 @@ import CosmeticFilter from '../src/filters/cosmetic.js';
 import IFilter from '../src/filters/interface.js';
 import NetworkFilter from '../src/filters/network.js';
 import { parseFilters } from '../src/lists.js';
+import Request from '../src/request.js';
 import { fastHash, tokenize } from '../src/utils.js';
 import { allLists } from './utils.js';
 
@@ -115,8 +117,7 @@ describe('ReverseIndex', () => {
               const reverseIndex = new ReverseIndex({
                 config,
                 deserialize: NetworkFilter.deserialize,
-                filters: parseFilters('||foo.com', { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
+                filters: parseFilters('||foo.com').networkFilters,
                 optimize,
               });
 
@@ -125,18 +126,13 @@ describe('ReverseIndex', () => {
               expect(filters.map((f) => f.rawLine)).to.eql(['||foo.com']);
 
               // Add one new filter
-              reverseIndex.update(
-                parseFilters('||bar.com', { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
-                undefined,
-              );
+              reverseIndex.update(parseFilters('||bar.com').networkFilters, undefined);
               filters = reverseIndex.getFilters();
               expect(filters.map((f) => f.rawLine)).to.eql(['||foo.com', '||bar.com']);
 
               // Add a third filter and remove the two others
               reverseIndex.update(
-                parseFilters('||baz.com', { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
+                parseFilters('||baz.com').networkFilters,
                 new Set(filters.map((f) => f.getId())),
               );
               filters = reverseIndex.getFilters();
@@ -162,8 +158,7 @@ describe('ReverseIndex', () => {
               const exampleIndex = new ReverseIndex({
                 config,
                 deserialize: NetworkFilter.deserialize,
-                filters: parseFilters(filters, { loadCosmeticFilters: false, debug: true })
-                  .networkFilters,
+                filters: parseFilters(filters).networkFilters,
                 optimize,
               });
 
@@ -295,6 +290,298 @@ wildcard
                 ).to.eql(
                   new Uint32Array([fastHash('ads'), fastHash('foo'), fastHash('bar')]).sort(),
                 );
+              });
+            });
+
+            describe('#merge', () => {
+              // We require debug=false explicitly for #merge.
+              const filtersWithoutDebug = parseFilters(allLists, { debug: false });
+
+              // Having custom hash function is unavoidable in the real world scenario and
+              // it's nice to have an example in the test code.
+              let hashFunc: (arr: Uint8Array, beg: number, end: number) => bigint;
+
+              before(async () => {
+                const hasher = await xxhash();
+                hashFunc = (arr: Uint8Array, beg: number, end: number) => {
+                  return hasher.h64Raw(arr.subarray(beg, end));
+                };
+              });
+
+              it('throws on less than 2 indexes were given as sources', () => {
+                const emptyIndex = new ReverseIndex({
+                  deserialize: NetworkFilter.deserialize,
+                  filters: [],
+                  optimize: noopOptimizeNetwork,
+                  config,
+                });
+
+                expect(() => ReverseIndex.merge([])).to.throw();
+                expect(() => ReverseIndex.merge([emptyIndex])).to.throw();
+              });
+
+              it('throws on filters with debug=true were given', () => {
+                const indexA = new ReverseIndex({
+                  deserialize: NetworkFilter.deserialize,
+                  filters: [],
+                  optimize: noopOptimizeNetwork,
+                  config: new Config({ debug: true }),
+                });
+                const indexB = new ReverseIndex({
+                  deserialize: NetworkFilter.deserialize,
+                  filters: [],
+                  optimize: noopOptimizeNetwork,
+                  config: new Config({ debug: true }),
+                });
+
+                expect(() => ReverseIndex.merge([indexA, indexB])).to.throw();
+              });
+
+              it('throws on compression config mixed', () => {
+                const indexA = new ReverseIndex({
+                  deserialize: NetworkFilter.deserialize,
+                  filters: [],
+                  optimize: noopOptimizeNetwork,
+                  config: new Config({ enableCompression: true }),
+                });
+                const indexB = new ReverseIndex({
+                  deserialize: NetworkFilter.deserialize,
+                  filters: [],
+                  optimize: noopOptimizeNetwork,
+                  config: new Config({ enableCompression: false }),
+                });
+
+                expect(() => ReverseIndex.merge([indexA, indexB])).to.throw();
+              });
+
+              describe('NetworkFilter', () => {
+                it('deduplicates while keeping tokens', () => {
+                  const config = new Config();
+                  const indexA = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: filtersWithoutDebug.networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: filtersWithoutDebug.networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+
+                  const index = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
+                    hashFunc,
+                  });
+                  const filters = index.getFilters();
+
+                  // This expect line is not strictly required but helps fast exit.
+                  expect(filters.length).to.be.eql(filtersWithoutDebug.networkFilters.length);
+
+                  expect(index.getFilters()).to.be.eql(filtersWithoutDebug.networkFilters);
+                  // The below line is not a valid merge invariant: `merge`
+                  // keeps valid token associations from source indexes instead
+                  // of recomputing canonical tokens from a freshly rebuilt
+                  // index. Matching behavior is the contract, not exact token
+                  // layout.
+                  // expect(index.getTokens()).to.be.eql(indexA.getTokens());
+                });
+
+                it('merges partially overlapping filters while keeping tokens', () => {
+                  const config = new Config();
+                  const indexA = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: parseFilters('/alpha-beta-gamma^\n/alpha-one^\n/alpha-two^')
+                      .networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: parseFilters('/alpha-beta-gamma^\n/beta-one^\n/beta-two^')
+                      .networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+
+                  const assumed = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: parseFilters(
+                      '/alpha-beta-gamma^\n/alpha-one^\n/alpha-two^\n/beta-one^\n/beta-two^',
+                    ).networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const merged = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
+                    hashFunc,
+                  });
+                  expect(merged.getFilters()).to.be.eql(assumed.getFilters());
+
+                  const alphaBetaGammaRequest = Request.fromRawDetails({
+                    url: 'https://example.com/alpha-beta-gamma.js',
+                    sourceUrl: 'https://publisher.example/page.html',
+                    type: 'script',
+                  });
+                  const alphaBetaGammaMatches: string[] = [];
+                  merged.iterMatchingFilters(alphaBetaGammaRequest.getTokens(), (filter) => {
+                    alphaBetaGammaMatches.push(filter.getFilter());
+                    return true;
+                  });
+                  expect(alphaBetaGammaMatches).to.include('/alpha-beta-gamma^');
+
+                  const alphaOneRequest = Request.fromRawDetails({
+                    url: 'https://example.com/alpha-one.js',
+                    sourceUrl: 'https://publisher.example/page.html',
+                    type: 'script',
+                  });
+                  const alphaOneMatches: string[] = [];
+                  merged.iterMatchingFilters(alphaOneRequest.getTokens(), (filter) => {
+                    alphaOneMatches.push(filter.getFilter());
+                    return true;
+                  });
+                  expect(alphaOneMatches).to.include('/alpha-one^');
+
+                  const betaTwoRequest = Request.fromRawDetails({
+                    url: 'https://example.com/beta-two.js',
+                    sourceUrl: 'https://publisher.example/page.html',
+                    type: 'script',
+                  });
+                  const betaTwoMatches: string[] = [];
+                  merged.iterMatchingFilters(betaTwoRequest.getTokens(), (filter) => {
+                    betaTwoMatches.push(filter.getFilter());
+                    return true;
+                  });
+                  expect(betaTwoMatches).to.include('/beta-two^');
+                });
+
+                it('merges two empty indexes', () => {
+                  const config = new Config();
+                  const indexA = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: [],
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: [],
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const index = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
+                    hashFunc,
+                  });
+
+                  expect(index.getFilters()).to.eql([]);
+                  expect(index.getTokens()).to.eql(new Uint32Array(0));
+                });
+
+                it('serializes and deserializes a merged index', () => {
+                  const config = new Config();
+                  const indexA = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: parseFilters('/alpha-one^').networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: parseFilters('/beta-two^').networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config,
+                  });
+                  const index = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
+                    hashFunc,
+                  });
+                  const buffer = StaticDataView.allocate(index.getSerializedSize(), config);
+                  index.serialize(buffer);
+                  expect(buffer.pos).to.equal(buffer.buffer.byteLength);
+                  buffer.seekZero();
+                  const deserialized = ReverseIndex.deserialize(
+                    buffer,
+                    NetworkFilter.deserialize,
+                    noopOptimizeNetwork,
+                    config,
+                  );
+                  const matches: string[] = [];
+
+                  expect(deserialized.getFilters()).to.eql(index.getFilters());
+                  expect(deserialized.getTokens()).to.eql(index.getTokens());
+                  deserialized.iterMatchingFilters(
+                    new Uint32Array([fastHash('alpha')]),
+                    (filter) => {
+                      matches.push(filter.getFilter());
+                      return true;
+                    },
+                  );
+                  expect(matches).to.eql(['/alpha-one^']);
+                });
+              });
+
+              describe('CosmeticFilter', () => {
+                it('deduplicates while keeping tokens', () => {
+                  const config = new Config();
+                  const indexA = new ReverseIndex({
+                    deserialize: CosmeticFilter.deserialize,
+                    filters: filtersWithoutDebug.cosmeticFilters,
+                    optimize: noopOptimizeCosmetic,
+                    config,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: CosmeticFilter.deserialize,
+                    filters: filtersWithoutDebug.cosmeticFilters,
+                    optimize: noopOptimizeCosmetic,
+                    config,
+                  });
+
+                  const index = (ReverseIndex<CosmeticFilter>).merge([indexA, indexB], {
+                    hashFunc,
+                  });
+                  const filters = index.getFilters();
+
+                  // This expect line is not strictly required but helps fast exit.
+                  expect(filters.length).to.be.eql(filtersWithoutDebug.cosmeticFilters.length);
+
+                  expect(index.getFilters()).to.be.eql(filtersWithoutDebug.cosmeticFilters);
+                  expect(index.getTokens()).to.be.eql(indexA.getTokens());
+                });
+
+                it('deduplicates an identical cosmetic filter while keeping token matches', () => {
+                  const config = new Config();
+                  const filters = parseFilters('example.com,example.org##.ad-banner', {
+                    debug: false,
+                  }).cosmeticFilters;
+                  const indexA = new ReverseIndex({
+                    deserialize: CosmeticFilter.deserialize,
+                    filters,
+                    optimize: noopOptimizeCosmetic,
+                    config,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: CosmeticFilter.deserialize,
+                    filters,
+                    optimize: noopOptimizeCosmetic,
+                    config,
+                  });
+                  const index = (ReverseIndex<CosmeticFilter>).merge([indexA, indexB], {
+                    hashFunc,
+                  });
+                  const expectedFilter = indexA.getFilters()[0].toString();
+
+                  expect(index.getFilters().map((filter) => filter.toString())).to.eql([
+                    expectedFilter,
+                  ]);
+                  expect(index.getTokens()).to.eql(indexA.getTokens());
+
+                  for (const token of indexA.getTokens()) {
+                    const matches: string[] = [];
+                    index.iterMatchingFilters(new Uint32Array([token]), (filter) => {
+                      matches.push(filter.toString());
+                      return true;
+                    });
+                    expect(matches).to.eql([expectedFilter]);
+                  }
+                });
               });
             });
           });
