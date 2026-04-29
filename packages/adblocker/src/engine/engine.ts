@@ -34,9 +34,7 @@ import { Metadata, IPatternLookupResult } from './metadata.js';
 import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
-import { ICategory } from './metadata/categories.js';
-import { IOrganization } from './metadata/organizations.js';
-import { IPattern } from './metadata/patterns.js';
+import { binaryMerge, legacyMerge } from './merger.js';
 
 export const ENGINE_VERSION = 853;
 
@@ -264,12 +262,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
   public static merge<T extends typeof FilterEngine>(
     this: T,
     engines: InstanceType<T>[],
-    {
-      skipResources = false,
-      overrideConfig = {},
-    }: {
+    opts: {
       skipResources?: boolean;
       overrideConfig?: Partial<Config>;
+      useBinaryMerge?: boolean;
     } = {},
   ): InstanceType<T> {
     if (!engines || engines.length < 2) {
@@ -284,94 +280,11 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
       }
     }
 
-    const lists = new Map();
-
-    const networkFilters: Map<number, NetworkFilter> = new Map();
-    const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
-    const preprocessors: Preprocessor[] = [];
-
-    const metadata: {
-      organizations: Record<string, IOrganization>;
-      categories: Record<string, ICategory>;
-      patterns: Record<string, IPattern>;
-    } = {
-      organizations: {},
-      categories: {},
-      patterns: {},
-    };
-
-    for (const engine of engines) {
-      const filters = engine.getFilters();
-
-      for (const networkFilter of filters.networkFilters) {
-        networkFilters.set(networkFilter.getId(), networkFilter);
-      }
-
-      for (const cosmeticFilter of filters.cosmeticFilters) {
-        cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
-      }
-
-      for (const preprocessor of engine.preprocessors.preprocessors) {
-        preprocessors.push(preprocessor);
-      }
-
-      for (const [key, value] of engine.lists) {
-        if (lists.has(key)) {
-          continue;
-        }
-
-        lists.set(key, value);
-      }
-
-      if (engine.metadata !== undefined) {
-        for (const organization of engine.metadata.organizations.getValues()) {
-          if (metadata.organizations[organization.key] === undefined) {
-            metadata.organizations[organization.key] = organization;
-          }
-        }
-        for (const category of engine.metadata.categories.getValues()) {
-          if (metadata.categories[category.key] === undefined) {
-            metadata.categories[category.key] = category;
-          }
-        }
-        for (const pattern of engine.metadata.patterns.getValues()) {
-          if (metadata.patterns[pattern.key] === undefined) {
-            metadata.patterns[pattern.key] = pattern;
-          }
-        }
-      }
+    if (opts.useBinaryMerge === true) {
+      return binaryMerge.call(this, engines, opts) as InstanceType<T>;
     }
 
-    const engine = new this({
-      networkFilters: Array.from(networkFilters.values()),
-      cosmeticFilters: Array.from(cosmeticFilters.values()),
-      preprocessors,
-
-      lists,
-      config: new Config({ ...engines[0].config, ...overrideConfig }),
-    }) as InstanceType<T>;
-
-    if (
-      Object.keys(metadata.categories).length +
-        Object.keys(metadata.organizations).length +
-        Object.keys(metadata.patterns).length !==
-      0
-    ) {
-      engine.metadata = new Metadata(metadata);
-    }
-
-    if (skipResources !== true) {
-      for (const engine of engines.slice(1)) {
-        if (engine.resources.checksum !== engines[0].resources.checksum) {
-          throw new Error(
-            `resource checksum of all merged engines must match with the first one: "${engines[0].resources.checksum}" but got: "${engine.resources.checksum}"`,
-          );
-        }
-      }
-      engine.resources = Resources.copy(engines[0].resources);
-    }
-
-    return engine;
+    return legacyMerge.call(this, engines, opts) as InstanceType<T>;
   }
 
   public static parse<T extends FilterEngine>(
