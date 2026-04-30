@@ -85,6 +85,11 @@ function usePushScriptsInjection() {
 }
 const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 
+let TEXT_ENCODER: TextEncoder;
+if (typeof TextEncoder !== 'undefined') {
+  TEXT_ENCODER = new TextEncoder();
+}
+
 /**
  * Create an instance of `Request` from WebRequest details.
  */
@@ -243,7 +248,6 @@ export function filterRequestHTML(
   // Create filter to observe loading of resource
   const filter = filterResponseData(request.id) as StreamFilter;
   const decoder = new TextDecoder();
-  const encoder = new TextEncoder();
   const htmlFilter = new StreamingHtmlFilter(rules);
   let accumulatedBufferSize = 0;
 
@@ -258,7 +262,7 @@ export function filterRequestHTML(
         htmlFilter.write(decoder.decode()) +
         htmlFilter.flush(accumulatedBufferSize < MAXIMUM_RESPONSE_BUFFER_SIZE);
       if (remaining.length !== 0) {
-        filter.write(encoder.encode(remaining));
+        filter.write(TEXT_ENCODER.encode(remaining));
       }
     } catch (ex) {
       // If we reach this point, there is probably no way we can recover...
@@ -290,7 +294,9 @@ export function filterRequestHTML(
     }
 
     try {
-      filter.write(encoder.encode(htmlFilter.write(decoder.decode(event.data, { stream: true }))));
+      filter.write(
+        TEXT_ENCODER.encode(htmlFilter.write(decoder.decode(event.data, { stream: true }))),
+      );
     } catch (ex) {
       // If we fail to decode a chunk, we need to be extra conservative and stop
       // listening to streaming response. Teardown takes care of flushing any
