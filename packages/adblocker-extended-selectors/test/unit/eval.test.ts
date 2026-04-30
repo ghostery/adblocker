@@ -347,6 +347,26 @@ describe('eval', () => {
         expect(result).to.be.true;
       });
 
+      it('matches current path with accepted m and u regex flags', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div')!;
+
+        expect(matches(element, parse(':matches-path(/home$/m)')!)).to.be.true;
+        expect(matches(element, parse(':matches-path(/\\u0068ome/u)')!)).to.be.true;
+      });
+
+      it('does not treat unsupported g and s flags as valid regex flags', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/home' });
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div')!;
+
+        expect(matches(element, parse(':matches-path(/home/g)')!)).to.be.false;
+        expect(matches(element, parse(':matches-path(/h.me/s)')!)).to.be.false;
+      });
+
       it('combines with other selectors', () => {
         const html = `
           <div class="content">Test 2</div>
@@ -378,6 +398,38 @@ describe('eval', () => {
         const ast = parse(':matches-path(/search/)')!;
         const result = matches(element, ast);
         expect(result).to.be.false;
+      });
+
+      it('does not handle plain text as regex', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/marketplace/item' });
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/marketplace/item)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.true;
+      });
+
+      it('falls back to plain path matching with query string', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, {
+          url: 'https://example.com/marketplace/item?ref=/item/42',
+        });
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/item/42)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.true;
+      });
+
+      it('treats slash-containing plain path ending in valid flags as regex syntax', () => {
+        const html = '<div>Test</div>';
+        const jsdom = new JSDOM(html, { url: 'https://example.com/foo/i' });
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div')!;
+        const ast = parse(':matches-path(/foo/i)')!;
+        const result = matches(element, ast);
+        expect(result).to.be.true;
       });
     });
 
@@ -421,6 +473,21 @@ describe('eval', () => {
       it('handles regex for both attribute name and value', () => {
         testMatches(':matches-attr(/h?ref/=/1.*4$/)', '<a href="1234">Link</a>', 'a', true);
         testMatches(':matches-attr(/h?ref/=/1.*3$/)', '<a ref="1234">Link</a>', 'a', false);
+      });
+
+      it('handles accepted regex flags for attribute names and values', () => {
+        testMatches(':matches-attr(/DATA-FOO/i="test")', '<a data-foo="test">Link</a>', 'a', true);
+        testMatches(':matches-attr(href=/^bar/m)', '<a href="foo&#10;bar">Link</a>', 'a', true);
+        testMatches(':matches-attr(href=/\\u0068ome/u)', '<a href="home">Link</a>', 'a', true);
+      });
+
+      it('throws on unsupported regex flags for attribute names and values', () => {
+        expect(() =>
+          testMatches(':matches-attr(/href/g)', '<a href="test">Link</a>', 'a', true),
+        ).to.throw('Invalid regex flags: g');
+        expect(() =>
+          testMatches(':matches-attr(href=/te.t/s)', '<a href="test">Link</a>', 'a', true),
+        ).to.throw('Invalid regex flags: s');
       });
     });
 
@@ -535,6 +602,41 @@ describe('eval', () => {
             const result = matches(element, ast);
             expect(result).to.be.true;
           }
+        }
+      });
+
+      it('matches element with regex CSS property value with accepted m and u flags', () => {
+        const html = `
+          <style>
+            div {
+              display: block;
+            }
+          </style>
+          <div>Test</div>
+        `;
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          expect(matches(element, parse(':matches-css(display: /block/m)')!)).to.be.true;
+          expect(matches(element, parse(':matches-css(display: /bl\\u006fck/u)')!)).to.be.true;
+        }
+      });
+
+      it('throws on unsupported regex flags for CSS property values', () => {
+        const html = '<div style="display: block">Test</div>';
+        const jsdom = new JSDOM(html);
+        globalThis.window = jsdom.window as any;
+        const element = jsdom.window.document.querySelector('div');
+        expect(element).to.not.be.null;
+        if (element !== null) {
+          expect(() => matches(element, parse(':matches-css(display: /block/g)')!)).to.throw(
+            'Invalid regex flags: g',
+          );
+          expect(() => matches(element, parse(':matches-css(display: /block/s)')!)).to.throw(
+            'Invalid regex flags: s',
+          );
         }
       });
 

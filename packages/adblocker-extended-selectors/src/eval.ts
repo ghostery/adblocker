@@ -95,7 +95,7 @@ function parseRegex(str: string): RegExp {
     const pattern = str.slice(1, lastSlashIndex);
     const flags = str.slice(lastSlashIndex + 1);
 
-    if (!/^[gimsuyd]*$/.test(flags)) {
+    if (flags.length > 3 || !/^[imu]*$/.test(flags)) {
       throw new Error(`Invalid regex flags: ${flags}`);
     }
 
@@ -203,8 +203,12 @@ export function matches(element: Element, selector: AST): boolean {
       const path = window.location.pathname;
       const search = window.location.search;
       const fullUrl = path + search;
-      const regex = parseRegex(argument);
-      return regex.test(fullUrl);
+      try {
+        const regex = parseRegex(argument);
+        return regex.test(fullUrl);
+      } catch (e) {
+        return fullUrl.includes(argument);
+      }
     } else if (selector.name === 'matches-attr') {
       const { argument } = selector;
       if (argument === undefined) {
