@@ -37,6 +37,7 @@ export default [
   "otification",
   ":has-text(",
   "background",
+  "visibility",
   "analytics",
   "container",
   "Container",
@@ -259,6 +260,5 @@ export default [
   "x",
   "y",
   "Y",
-  "z",
-  "Z"
+  "z"
 ];
