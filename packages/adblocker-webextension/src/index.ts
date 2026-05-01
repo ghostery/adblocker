@@ -85,10 +85,7 @@ function usePushScriptsInjection() {
 }
 const USE_PUSH_SCRIPTS_INJECTION = usePushScriptsInjection();
 
-let TEXT_ENCODER: TextEncoder;
-if (typeof TextEncoder !== 'undefined') {
-  TEXT_ENCODER = new TextEncoder();
-}
+const TEXT_ENCODER = new TextEncoder();
 
 /**
  * Create an instance of `Request` from WebRequest details.
@@ -522,15 +519,12 @@ export class WebExtensionBlocker extends FiltersEngine {
    * 1. Request is 'main_frame'
    * 2. `enableHtmlFiltering` is set to `true`.
    * 3. `browser.webRequest.filterResponseData` (Firefox only!).
-   * 4. `TextEncoder` and `TextDecoder` are available.
    */
   public performHTMLFiltering(browser: Browser, request: Request): void {
     if (
       this.config.enableHtmlFiltering === true &&
       browser.webRequest !== undefined &&
-      browser.webRequest.filterResponseData !== undefined &&
-      typeof TextDecoder !== 'undefined' &&
-      typeof TextEncoder !== 'undefined'
+      browser.webRequest.filterResponseData !== undefined
     ) {
       const htmlFilters = this.getHtmlFilters(request);
       if (htmlFilters.length !== 0) {
