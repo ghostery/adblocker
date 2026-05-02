@@ -108,7 +108,7 @@ export default [
   "de",
   "di",
   "do",
-  "e-",
+  "ds",
   "eb",
   "ec",
   "ed",

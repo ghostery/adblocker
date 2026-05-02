@@ -2176,11 +2176,15 @@ upiapi.in##+js(set, detectAdBlock, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/19433
 ! https://github.com/uBlockOrigin/uAssets/issues/22074
 ! https://github.com/uBlockOrigin/uAssets/issues/29130
+! https://github.com/uBlockOrigin/uAssets/issues/29364
 *&caid=$xhr,removeparam=caid,domain=max.com
-play.hbomax.com,play.max.com##+js(json-prune, ssaiInfo%20fallback.ssaiInfo)
 play.hbomax.com,play.max.com##+js(json-prune, adtech-brightline%20adtech-google-pal%20adtech-iab-om)
-play.hbomax.com,play.max.com##+js(json-prune-fetch-response, ssaiInfo%20fallback.ssaiInfo, , propsToMatch, %2FplaybackInfo)
-play.hbomax.com,play.max.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , .mpd)
+! play.hbomax.com,play.max.com##+js(json-prune, ssaiInfo%20fallback.ssaiInfo)
+! play.hbomax.com,play.max.com##+js(json-prune-fetch-response, ssaiInfo%20fallback.ssaiInfo, , propsToMatch, %2FplaybackInfo)
+! play.hbomax.com,play.max.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , .mpd)
+play.hbomax.com##+js(json-prune-fetch-response, ssaiInfo, , propsToMatch, %2FplaybackInfo)
+play.hbomax.com##+js(json-prune-fetch-response, fallback.ssaiInfo%20manifest.url, fallback.ssaiInfo, propsToMatch, %2FplaybackInfo)
+play.hbomax.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22AdaptationSet%22%5D%5B%40contentType%3D%22text%22%5D)%5D), , %2Fdash.mpd)
 ! https://github.com/uBlockOrigin/uAssets/issues/21255#issuecomment-3609784708
 peacocktv.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(.%2F%2F*%5Bname()%3D%22SegmentTimeline%22%5D)%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%5D%5D%5Bnot(.%2F%2F*%5Bname()%3D%22ContentProtection%22%5D)%5D), , %2F-vod-.%2B%5C.mpd%2F)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/130913
@@ -2249,9 +2253,6 @@ bitcotasks.com##+js(rmnt, script, AdblockRegixFinder)
 ! https://github.com/uBlockOrigin/uAssets/issues/16207
 hatecoin.me###wcfloatDiv4
 ||hbagency.it^
-! https://github.com/uBlockOrigin/uAssets/issues/15140
-||assets.maxroll.gg/wp-content/assets/img/adblock/$image
-maxroll.gg##.adsmanager-ad-container
 ! https://github.com/uBlockOrigin/uAssets/issues/15144
 ! https://github.com/uBlockOrigin/uAssets/issues/15157
 *$script,redirect-rule=noopjs,domain=freetron.top
