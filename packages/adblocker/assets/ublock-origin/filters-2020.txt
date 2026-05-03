@@ -1933,10 +1933,13 @@ discoveryplus.*##+js(json-prune, data.attributes.config.freewheel%20data.attribu
 ! https://github.com/uBlockOrigin/uAssets/issues/18875
 ! https://github.com/uBlockOrigin/uAssets/issues/21007
 ! https://github.com/uBlockOrigin/uAssets/issues/27265
-discoveryplus.*,go.discovery.com,investigationdiscovery.com,watch.foodnetwork.com##+js(json-prune, data.attributes.ssaiInfo.forecastTimeline%20data.attributes.ssaiInfo.vendorAttributes.nonLinearAds%20data.attributes.ssaiInfo.vendorAttributes.videoView%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adMetadata%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adParameters%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.timeOffset)
+discoveryplus.*,go.discovery.com,watch.foodnetwork.com##+js(json-prune, data.attributes.ssaiInfo.forecastTimeline%20data.attributes.ssaiInfo.vendorAttributes.nonLinearAds%20data.attributes.ssaiInfo.vendorAttributes.videoView%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adMetadata%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.ads.%5B%5D.adParameters%20data.attributes.ssaiInfo.vendorAttributes.breaks.%5B%5D.timeOffset)
 discoveryplus.*,go.discovery.com,investigationdiscovery.com,go.tlc.com,sciencechannel.com,watch.foodnetwork.com##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'dash_clear_fmp4')%20and%20contains(text()%2C'%2Fa%2F')%5D%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'dash_clear_fmp4')%20and%20contains(text()%2C'%2Fa%2F')%5D%5D), , .mpd)
 ! https://github.com/uBlockOrigin/uAssets/issues/27520
 play.discoveryplus.com##+js(json-prune, ssaiInfo)
+! https://github.com/uBlockOrigin/uAssets/issues/20172
+! https://github.com/uBlockOrigin/uAssets/issues/25997
+go.tlc.com,investigationdiscovery.com##+js(json-prune-xhr-response, data.attributes.ssaiInfo, , propsToMatch, %2FvideoPlaybackInfo)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/67651
 venge.io##+js(nofab)
 venge.io##+js(set, adsProvider.init, noopFunc)
