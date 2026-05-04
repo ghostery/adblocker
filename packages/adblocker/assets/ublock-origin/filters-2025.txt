@@ -1804,8 +1804,10 @@ kio.ac##+js(nostif, mode%3A%22no-cors%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/28793
 magnetdl.*##+js(rpnt, script, %2Fwindow%5C.location%5C.replace%5C(%5B%5E)%5D%2B%5C)%3B%3F%2Fg)
 magnetdl.*##+js(nowoif, !magnetdl., 1)
-! https://yt1s.com.co/ - popups
-yt1s.com.co>>##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/13128
+!yt1s.com.co>>##+js(nowoif)
+yt1s.com.co>>##+js(no-fetch-if, googlesyndication.com)
+yt1s.com.co>>##+js(trusted-replace-argument, window.open, 1, repl%3A%2Fblank%2Fself%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28817
 cerberusapp.com##+js(set, stoCazzo, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/28818
@@ -2784,10 +2786,6 @@ flacdownloader.com##.promo-banner
 soccerfullmatch.com##+js(nowoif, !_self)
 ! https://github.com/uBlockOrigin/uAssets/issues/31018
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=olevod.com
-! https://github.com/uBlockOrigin/uAssets/issues/31078
-g9r6.com##+js(nowoif)
-g9r6.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-g9r6.com##body.video-embed-mode > div[class][style]:not(#root)
 ! https://github.com/uBlockOrigin/uAssets/issues/31081
 snapinsta.to##+js(rmnt, style, .modal-content)
 snapinsta.to###dlModal
