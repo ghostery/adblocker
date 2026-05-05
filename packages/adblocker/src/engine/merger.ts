@@ -302,7 +302,10 @@ export function binaryMerge<T extends typeof FilterEngine>(
     );
   }
 
-  if (overrideConfig.enableCompression !== engines[0].config.enableCompression) {
+  if (
+    typeof overrideConfig.enableCompression === 'boolean' &&
+    overrideConfig.enableCompression !== engines[0].config.enableCompression
+  ) {
     throw new Error(
       `the resulting engine should have same compression config when merging engines!`,
     );
