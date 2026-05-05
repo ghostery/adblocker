@@ -21,6 +21,7 @@ import { Metadata } from './metadata.js';
 import { ICategory } from './metadata/categories.js';
 import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
+import { noopOptimizeCosmetic, noopOptimizeNetwork, optimizeNetwork } from './optimizer.js';
 import ReverseIndex from './reverse-index.js';
 
 export type HashFunc = (arr: Uint8Array, beg: number, end: number) => number | string | bigint;
@@ -202,9 +203,12 @@ function mergeNetworkFilterBucket(
   hashFunc?: HashFunc,
 ): NetworkFilterBucket {
   const bucket = new NetworkFilterBucket({ config });
+  const optimize = config.enableOptimizations ? optimizeNetwork : noopOptimizeNetwork;
 
   bucket.index = ReverseIndex.merge(
     sources.map((source) => source.index),
+    config,
+    optimize,
     { hashFunc },
   );
   bucket.badFilters = FiltersContainer.merge(
@@ -228,22 +232,32 @@ function mergeCosmeticFilterBucket(
   );
   bucket.classesIndex = ReverseIndex.merge(
     sources.map((source) => source.classesIndex),
+    config,
+    noopOptimizeCosmetic,
     { hashFunc },
   );
   bucket.hostnameIndex = ReverseIndex.merge(
     sources.map((source) => source.hostnameIndex),
+    config,
+    noopOptimizeCosmetic,
     { hashFunc },
   );
   bucket.hrefsIndex = ReverseIndex.merge(
     sources.map((source) => source.hrefsIndex),
+    config,
+    noopOptimizeCosmetic,
     { hashFunc },
   );
   bucket.idsIndex = ReverseIndex.merge(
     sources.map((source) => source.idsIndex),
+    config,
+    noopOptimizeCosmetic,
     { hashFunc },
   );
   bucket.unhideIndex = ReverseIndex.merge(
     sources.map((source) => source.unhideIndex),
+    config,
+    noopOptimizeCosmetic,
     { hashFunc },
   );
 
@@ -252,23 +266,39 @@ function mergeCosmeticFilterBucket(
 
 function mergeHTMLBucket(sources: HTMLBucket[], config: Config, hashFunc?: HashFunc): HTMLBucket {
   const bucket = new HTMLBucket({ config });
+  const optimize = config.enableOptimizations ? optimizeNetwork : noopOptimizeNetwork;
 
-  bucket.networkIndex = ReverseIndex.merge(
-    sources.map((source) => source.networkIndex),
-    { hashFunc },
-  );
-  bucket.exceptionsIndex = ReverseIndex.merge(
-    sources.map((source) => source.exceptionsIndex),
-    { hashFunc },
-  );
-  bucket.cosmeticIndex = ReverseIndex.merge(
-    sources.map((source) => source.cosmeticIndex),
-    { hashFunc },
-  );
-  bucket.unhideIndex = ReverseIndex.merge(
-    sources.map((source) => source.unhideIndex),
-    { hashFunc },
-  );
+  if (config.loadNetworkFilters === true) {
+    bucket.networkIndex = ReverseIndex.merge(
+      sources.map((source) => source.networkIndex),
+      config,
+      optimize,
+      {
+        hashFunc,
+      },
+    );
+    bucket.exceptionsIndex = ReverseIndex.merge(
+      sources.map((source) => source.exceptionsIndex),
+      config,
+      optimize,
+      { hashFunc },
+    );
+  }
+
+  if (config.loadCosmeticFilters === true) {
+    bucket.cosmeticIndex = ReverseIndex.merge(
+      sources.map((source) => source.cosmeticIndex),
+      config,
+      noopOptimizeCosmetic,
+      { hashFunc },
+    );
+    bucket.unhideIndex = ReverseIndex.merge(
+      sources.map((source) => source.unhideIndex),
+      config,
+      noopOptimizeCosmetic,
+      { hashFunc },
+    );
+  }
 
   return bucket;
 }
@@ -313,63 +343,79 @@ export function binaryMerge<T extends typeof FilterEngine>(
 
   const metadata = mergeMetadata(engines);
   const lists = mergeLists(engines);
-  const preprocessors = mergePreprocessors(engines);
-
   const config = new Config({ ...engines[0].config, ...overrideConfig });
   const engine = new this({
     config,
     lists,
   }) as InstanceType<T>;
 
-  engine.preprocessors = new PreprocessorBucket({ preprocessors });
+  // Bucket skipping follows target config loading flags. Do not skip buckets
+  // for loadExtendedSelectors, enableInMemoryCache, or enableOptimizations:
+  // those tune matching/injection/cache/optimizer behavior, not whole bucket
+  // loading.
+  engine.preprocessors = new PreprocessorBucket({
+    preprocessors: config.loadPreprocessors === true ? mergePreprocessors(engines) : [],
+  });
 
-  engine.importants = mergeNetworkFilterBucket(
-    engines.map((source) => source.importants),
-    config,
-    hashFunc,
-  );
-  engine.redirects = mergeNetworkFilterBucket(
-    engines.map((source) => source.redirects),
-    config,
-    hashFunc,
-  );
-  engine.removeparams = mergeNetworkFilterBucket(
-    engines.map((source) => source.removeparams),
-    config,
-    hashFunc,
-  );
-  engine.filters = mergeNetworkFilterBucket(
-    engines.map((source) => source.filters),
-    config,
-    hashFunc,
-  );
-  engine.exceptions = mergeNetworkFilterBucket(
-    engines.map((source) => source.exceptions),
-    config,
-    hashFunc,
-  );
+  if (config.loadNetworkFilters === true) {
+    engine.importants = mergeNetworkFilterBucket(
+      engines.map((source) => source.importants),
+      config,
+      hashFunc,
+    );
+    engine.redirects = mergeNetworkFilterBucket(
+      engines.map((source) => source.redirects),
+      config,
+      hashFunc,
+    );
+    engine.removeparams = mergeNetworkFilterBucket(
+      engines.map((source) => source.removeparams),
+      config,
+      hashFunc,
+    );
+    engine.filters = mergeNetworkFilterBucket(
+      engines.map((source) => source.filters),
+      config,
+      hashFunc,
+    );
+    engine.exceptions =
+      config.loadExceptionFilters === true
+        ? mergeNetworkFilterBucket(
+            engines.map((source) => source.exceptions),
+            config,
+            hashFunc,
+          )
+        : new NetworkFilterBucket({ config });
+    engine.csp =
+      config.loadCSPFilters === true
+        ? mergeNetworkFilterBucket(
+            engines.map((source) => source.csp),
+            config,
+            hashFunc,
+          )
+        : new NetworkFilterBucket({ config });
+    engine.hideExceptions = mergeNetworkFilterBucket(
+      engines.map((source) => source.hideExceptions),
+      config,
+      hashFunc,
+    );
+  }
 
-  engine.csp = mergeNetworkFilterBucket(
-    engines.map((source) => source.csp),
-    config,
-    hashFunc,
-  );
-  engine.cosmetics = mergeCosmeticFilterBucket(
-    engines.map((source) => source.cosmetics),
-    config,
-    hashFunc,
-  );
-  engine.hideExceptions = mergeNetworkFilterBucket(
-    engines.map((source) => source.hideExceptions),
-    config,
-    hashFunc,
-  );
+  if (config.loadCosmeticFilters === true) {
+    engine.cosmetics = mergeCosmeticFilterBucket(
+      engines.map((source) => source.cosmetics),
+      config,
+      hashFunc,
+    );
+  }
 
-  engine.htmlFilters = mergeHTMLBucket(
-    engines.map((source) => source.htmlFilters),
-    config,
-    hashFunc,
-  );
+  if (config.enableHtmlFiltering === true) {
+    engine.htmlFilters = mergeHTMLBucket(
+      engines.map((source) => source.htmlFilters),
+      config,
+      hashFunc,
+    );
+  }
 
   if (hasMetadata(metadata)) {
     engine.metadata = new Metadata(metadata);

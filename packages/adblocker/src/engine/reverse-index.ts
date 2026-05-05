@@ -96,6 +96,8 @@ const EMPTY_BUCKET: number = Number.MAX_SAFE_INTEGER >>> 0;
 export default class ReverseIndex<T extends IFilter> {
   public static merge<T extends IFilter>(
     sources: ReverseIndex<T>[],
+    config: Config,
+    optimize: (filters: T[]) => T[],
     opts?: {
       hashFunc?: HashFunc | undefined;
     },
@@ -121,14 +123,22 @@ export default class ReverseIndex<T extends IFilter> {
       }
     }
 
+    if (config.debug === true) {
+      throw new Error('ReverseIndex.merge requires debug=false for target config.');
+    }
+
+    if (config.enableCompression !== firstSource.config.enableCompression) {
+      throw new Error('ReverseIndex.merge requires target config compression to match sources.');
+    }
+
     // Fast exit if there are no filters to merge.
     const numberOfFilters = sources.reduce((total, source) => total + source.numberOfFilters, 0);
     if (numberOfFilters === 0) {
       return new ReverseIndex({
-        config: firstSource.config,
+        config,
         deserialize: firstSource.deserializeFilter,
         filters: [],
-        optimize: firstSource.optimize,
+        optimize,
       });
     }
 
@@ -241,7 +251,7 @@ export default class ReverseIndex<T extends IFilter> {
 
     const view = StaticDataView.allocate(
       tokensLookupIndexSize * 4 + bucketsIndexSize * 4 + filtersIndexSize,
-      firstSource.config,
+      config,
     );
     const tokensLookupIndex = view.getUint32ArrayView(tokensLookupIndexSize);
     const bucketsIndex = view.getUint32ArrayView(bucketsIndexSize);
@@ -276,10 +286,10 @@ export default class ReverseIndex<T extends IFilter> {
     view.seekZero();
 
     return new ReverseIndex({
-      config: firstSource.config,
+      config,
       deserialize: firstSource.deserializeFilter,
       filters: [],
-      optimize: firstSource.optimize,
+      optimize,
     }).updateInternals({
       bucketsIndex,
       filtersIndexStart,

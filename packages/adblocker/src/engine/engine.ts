@@ -273,6 +273,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    *
    * Call `updateEnv` on the merged engine before use when preprocessor bindings
    * should affect which filters are active.
+   *
+   * Binary merge skips buckets disabled by target load flags. It does not skip
+   * buckets for `loadExtendedSelectors`, `enableInMemoryCache`, or
+   * `enableOptimizations`, which do not represent whole filter categories.
    */
   public static merge<T extends typeof FilterEngine>(
     this: T,
