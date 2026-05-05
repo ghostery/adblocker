@@ -296,9 +296,15 @@ export function binaryMerge<T extends typeof FilterEngine>(
     }
   }
 
-  if (overrideConfig.debug === true || overrideConfig.enableCompression === true) {
+  if (overrideConfig.debug === true) {
     throw new Error(
       `the resulting engine cannot have debug or compression when merging engines with binaryMerge method!`,
+    );
+  }
+
+  if (overrideConfig.enableCompression !== engines[0].config.enableCompression) {
+    throw new Error(
+      `the resulting engine should have same compression config when merging engines!`,
     );
   }
 
