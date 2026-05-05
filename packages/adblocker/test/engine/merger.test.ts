@@ -366,9 +366,7 @@ describe('#binaryMerge', () => {
           hashFunc,
           overrideConfig: { enableCompression: true },
         }),
-      ).to.throw(
-        'the resulting engine cannot have debug or compression when merging engines with binaryMerge method!',
-      );
+      ).to.throw('the resulting engine should have same compression config when merging engines!');
     });
 
     it('allows config override', () => {
