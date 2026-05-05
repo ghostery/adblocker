@@ -8,8 +8,8 @@
 
 import { expect } from 'chai';
 import 'mocha';
-import xxhash from 'xxhash-wasm';
 
+import xxhash from 'xxhash-wasm';
 import Config from '../../../src/config.js';
 import { StaticDataView } from '../../../src/data-view.js';
 import FiltersContainer from '../../../src/engine/bucket/filters.js';
