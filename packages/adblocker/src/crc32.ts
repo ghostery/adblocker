@@ -36,7 +36,7 @@ export default function crc32(buf: Uint8Array, start: number, end: number): numb
   let C = -1;
   let i = start;
 
-  while (i < end - 7) {
+  while (i < L) {
     C ^= buf[i] | (buf[i + 1] << 8) | (buf[i + 2] << 16) | (buf[i + 3] << 24);
     C =
       T7[C & 0xff] ^
