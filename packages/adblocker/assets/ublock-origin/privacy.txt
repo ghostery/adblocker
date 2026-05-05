@@ -780,7 +780,7 @@ lit.link##+js(href-sanitizer, a%5Bhref%5E%3D%22%2Fredirects%2Flink-ad%3Fredirect
 ! https://github.com/uBlockOrigin/uAssets/issues/32013
 ||page.link/?link=http$doc,urlskip=?link
 ! https://github.com/uBlockOrigin/uAssets/issues/32136
-||www.amazon.*/gp/r.html?*&U=http$doc,urlskip=?U
+||www.amazon.*/gp/*.html?*&U=http$doc,urlskip=?U
 ! https://github.com/uBlockOrigin/uAssets/issues/32641
 ||zsp1.ah.nl/*/URhttp*$doc,urlskip=/\/UR(http.+)/
 ! Click Trackers
@@ -2638,5 +2638,8 @@ lnk.to,smarturl.it##+js(set, linkfire.tracking, %7B%7D)
 ||cza.crazygames.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/7164
 ||pornhub.*/redirect/$doc,urlskip=/(https%253A%252F%252F[^?#]+)/ -uricomponent -uricomponent
+! https://github.com/uBlockOrigin/uAssets/issues/31536
+pooembed.eu##+js(no-xhr-if, body%3Apageview%20method%3APOST)
+||poocloud.in/api/event
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
