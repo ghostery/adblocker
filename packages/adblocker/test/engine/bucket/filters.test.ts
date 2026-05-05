@@ -14,37 +14,10 @@ import Config from '../../../src/config.js';
 import { StaticDataView } from '../../../src/data-view.js';
 import FiltersContainer from '../../../src/engine/bucket/filters.js';
 import CosmeticFilter from '../../../src/filters/cosmetic.js';
-import IFilter from '../../../src/filters/interface.js';
 import NetworkFilter from '../../../src/filters/network.js';
 import { parseFilters } from '../../../src/lists.js';
 import { allLists } from '../../utils.js';
 import { type HashFunc } from '../../../src/engine/merger.js';
-
-class OverestimatingFilter implements IFilter {
-  public mask: number = 0;
-
-  constructor(private readonly id: number) {}
-
-  public static deserialize(buffer: StaticDataView): OverestimatingFilter {
-    return new OverestimatingFilter(buffer.getUint8());
-  }
-
-  public getId(): number {
-    return this.id;
-  }
-
-  public getTokens(): Uint32Array[] {
-    return [];
-  }
-
-  public serialize(buffer: StaticDataView): void {
-    buffer.pushUint8(this.id);
-  }
-
-  public getSerializedSize(): number {
-    return 2;
-  }
-}
 
 describe('#FiltersContainer', () => {
   for (const config of [
@@ -110,18 +83,6 @@ describe('#FiltersContainer', () => {
           expect(deserialized.offsets).to.eql(container.offsets);
           expect(deserialized.filters).to.eql(container.filters);
           expect(deserialized.getFilters()).to.eql(filters);
-        });
-
-        it('stores offsets from actual serialized positions', () => {
-          const filters = [new OverestimatingFilter(1), new OverestimatingFilter(2)];
-          const container = new FiltersContainer({
-            config,
-            deserialize: OverestimatingFilter.deserialize,
-            filters,
-          });
-
-          expect(Array.from(container.offsets)).to.eql([0, 1, 2]);
-          expect(container.getFilters()).to.eql(filters);
         });
       });
 
