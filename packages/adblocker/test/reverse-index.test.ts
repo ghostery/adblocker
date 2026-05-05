@@ -320,8 +320,10 @@ wildcard
                   config,
                 });
 
-                expect(() => ReverseIndex.merge([])).to.throw();
-                expect(() => ReverseIndex.merge([emptyIndex])).to.throw();
+                expect(() => ReverseIndex.merge([], config, noopOptimizeNetwork)).to.throw();
+                expect(() =>
+                  ReverseIndex.merge([emptyIndex], config, noopOptimizeNetwork),
+                ).to.throw();
               });
 
               it('throws on filters with debug=true were given', () => {
@@ -338,7 +340,9 @@ wildcard
                   config: new Config({ debug: true }),
                 });
 
-                expect(() => ReverseIndex.merge([indexA, indexB])).to.throw();
+                expect(() =>
+                  ReverseIndex.merge([indexA, indexB], config, noopOptimizeNetwork),
+                ).to.throw();
               });
 
               it('throws on compression config mixed', () => {
@@ -355,7 +359,9 @@ wildcard
                   config: new Config({ enableCompression: false }),
                 });
 
-                expect(() => ReverseIndex.merge([indexA, indexB])).to.throw();
+                expect(() =>
+                  ReverseIndex.merge([indexA, indexB], config, noopOptimizeNetwork),
+                ).to.throw();
               });
 
               describe('NetworkFilter', () => {
@@ -374,9 +380,12 @@ wildcard
                     config,
                   });
 
-                  const index = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
-                    hashFunc,
-                  });
+                  const index = (ReverseIndex<NetworkFilter>).merge(
+                    [indexA, indexB],
+                    config,
+                    noopOptimizeNetwork,
+                    { hashFunc },
+                  );
                   const filters = index.getFilters();
 
                   // This expect line is not strictly required but helps fast exit.
@@ -416,9 +425,12 @@ wildcard
                     optimize: noopOptimizeNetwork,
                     config,
                   });
-                  const merged = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
-                    hashFunc,
-                  });
+                  const merged = (ReverseIndex<NetworkFilter>).merge(
+                    [indexA, indexB],
+                    config,
+                    noopOptimizeNetwork,
+                    { hashFunc },
+                  );
                   expect(merged.getFilters()).to.be.eql(assumed.getFilters());
 
                   const alphaBetaGammaRequest = Request.fromRawDetails({
@@ -472,12 +484,86 @@ wildcard
                     optimize: noopOptimizeNetwork,
                     config,
                   });
-                  const index = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
-                    hashFunc,
-                  });
+                  const index = (ReverseIndex<NetworkFilter>).merge(
+                    [indexA, indexB],
+                    config,
+                    noopOptimizeNetwork,
+                    { hashFunc },
+                  );
 
                   expect(index.getFilters()).to.eql([]);
                   expect(index.getTokens()).to.eql(new Uint32Array(0));
+                });
+
+                it('uses target optimize function', () => {
+                  const sourceConfig = new Config({ enableCompression: config.enableCompression });
+                  const targetConfig = new Config({
+                    enableCompression: config.enableCompression,
+                    enableOptimizations: true,
+                  });
+                  const indexA = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: parseFilters(
+                      'ads$domain=example.com|foo.com\nads$domain=example.org|foo.com',
+                    ).networkFilters,
+                    optimize: noopOptimizeNetwork,
+                    config: sourceConfig,
+                  });
+                  const indexB = new ReverseIndex({
+                    deserialize: NetworkFilter.deserialize,
+                    filters: [],
+                    optimize: noopOptimizeNetwork,
+                    config: sourceConfig,
+                  });
+                  let commonToken: number | undefined;
+
+                  for (const token of indexA.getTokens()) {
+                    const unoptimizedMatches: NetworkFilter[] = [];
+                    indexA.iterMatchingFilters(new Uint32Array([token]), (filter) => {
+                      unoptimizedMatches.push(filter);
+                      return true;
+                    });
+
+                    if (unoptimizedMatches.length > 1) {
+                      commonToken = token;
+                      break;
+                    }
+                  }
+
+                  expect(commonToken).not.to.equal(undefined);
+
+                  const index = (ReverseIndex<NetworkFilter>).merge(
+                    [indexA, indexB],
+                    targetConfig,
+                    optimizeNetwork,
+                    { hashFunc },
+                  );
+                  const matches: NetworkFilter[] = [];
+
+                  index.iterMatchingFilters(new Uint32Array([commonToken!]), (filter) => {
+                    matches.push(filter);
+                    return true;
+                  });
+
+                  expect(matches).to.have.length(1);
+                  expect(
+                    matches[0].match(
+                      Request.fromRawDetails({
+                        url: 'https://example.com/ads.js',
+                        sourceUrl: 'https://example.com/page.html',
+                        type: 'script',
+                      }),
+                    ),
+                  ).to.equal(true);
+                  expect(
+                    matches[0].match(
+                      Request.fromRawDetails({
+                        url: 'https://example.org/ads.js',
+                        sourceUrl: 'https://example.org/page.html',
+                        type: 'script',
+                      }),
+                    ),
+                  ).to.equal(true);
                 });
 
                 it('serializes and deserializes a merged index', () => {
@@ -494,9 +580,12 @@ wildcard
                     optimize: noopOptimizeNetwork,
                     config,
                   });
-                  const index = (ReverseIndex<NetworkFilter>).merge([indexA, indexB], {
-                    hashFunc,
-                  });
+                  const index = (ReverseIndex<NetworkFilter>).merge(
+                    [indexA, indexB],
+                    config,
+                    noopOptimizeNetwork,
+                    { hashFunc },
+                  );
                   const buffer = StaticDataView.allocate(index.getSerializedSize(), config);
                   index.serialize(buffer);
                   expect(buffer.pos).to.equal(buffer.buffer.byteLength);
@@ -538,9 +627,12 @@ wildcard
                     config,
                   });
 
-                  const index = (ReverseIndex<CosmeticFilter>).merge([indexA, indexB], {
-                    hashFunc,
-                  });
+                  const index = (ReverseIndex<CosmeticFilter>).merge(
+                    [indexA, indexB],
+                    config,
+                    noopOptimizeCosmetic,
+                    { hashFunc },
+                  );
                   const filters = index.getFilters();
 
                   // This expect line is not strictly required but helps fast exit.
@@ -567,9 +659,12 @@ wildcard
                     optimize: noopOptimizeCosmetic,
                     config,
                   });
-                  const index = (ReverseIndex<CosmeticFilter>).merge([indexA, indexB], {
-                    hashFunc,
-                  });
+                  const index = (ReverseIndex<CosmeticFilter>).merge(
+                    [indexA, indexB],
+                    config,
+                    noopOptimizeCosmetic,
+                    { hashFunc },
+                  );
                   const expectedFilter = indexA.getFilters()[0].toString();
 
                   expect(index.getFilters().map((filter) => filter.toString())).to.eql([
