@@ -10,6 +10,7 @@ import Config from '../../config.js';
 import crc32 from '../../crc32.js';
 import { EMPTY_UINT32_ARRAY, EMPTY_UINT8_ARRAY, StaticDataView } from '../../data-view.js';
 import IFilter from '../../filters/interface.js';
+import { type HashFunc } from '../merger.js';
 
 // Serialized containers use this layout:
 //   [number of filters][N + 1 offsets][serialized filter bytes]
@@ -29,7 +30,7 @@ export default class FiltersContainer<T extends IFilter> {
   public static merge<T extends IFilter>(
     sources: FiltersContainer<T>[],
     opts?: {
-      hashFunc?: (arr: Uint8Array, beg: number, end: number) => number | string | bigint;
+      hashFunc?: HashFunc | undefined;
     },
   ): FiltersContainer<T> {
     if (sources.length < 2) {

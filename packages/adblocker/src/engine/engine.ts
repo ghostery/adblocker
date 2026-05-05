@@ -34,7 +34,7 @@ import { Metadata, IPatternLookupResult } from './metadata.js';
 import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
-import { binaryMerge, legacyMerge } from './merger.js';
+import { binaryMerge, legacyMerge, MergeOptions } from './merger.js';
 
 export const ENGINE_VERSION = 853;
 
@@ -256,30 +256,29 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    * unintended side effects.
    * However, resources are deep-copied from the first engine.
    *
-   * Optionally, you can specify a second parameter to skip merging specific resources.
-   * If resource merging is skipped, the resulting engine will be assigned empty resources.
+   * Optionally, you can specify a second parameter to skip merging specific
+   * resources or override the resulting engine config. If resource merging is
+   * skipped, the resulting engine will be assigned empty resources.
+   *
+   * Set `useBinaryMerge` to use the byte-level merge path. This method is
+   * faster for large engines, but it has stricter requirements: source engines
+   * must not be built with `debug: true`, their compression settings must
+   * match, and the resulting engine cannot enable debug or compression through
+   * `overrideConfig`.
+   *
+   * When using `useBinaryMerge`, you can pass `hashFunc` to deduplicate
+   * serialized filters. Prefer a collision-resistant bigint or string hash for
+   * large merges; the built-in fallback is intended for convenience and does
+   * not provide strict collision-proof deduplication.
+   *
+   * Call `updateEnv` on the merged engine before use when preprocessor bindings
+   * should affect which filters are active.
    */
   public static merge<T extends typeof FilterEngine>(
     this: T,
     engines: InstanceType<T>[],
-    opts: {
-      skipResources?: boolean;
-      overrideConfig?: Partial<Config>;
-      useBinaryMerge?: boolean;
-    } = {},
+    opts: MergeOptions = {},
   ): InstanceType<T> {
-    if (!engines || engines.length < 2) {
-      throw new Error('merging engines requires at least two engines');
-    }
-
-    for (const engine of engines) {
-      if (engine.config.enableCompression !== engines[0].config.enableCompression) {
-        throw new Error(
-          `compression of all merged engines must match with the first one: "${engines[0].config.enableCompression}" but got: "${engine.config.enableCompression}"`,
-        );
-      }
-    }
-
     if (opts.useBinaryMerge === true) {
       return binaryMerge.call(this, engines, opts) as InstanceType<T>;
     }

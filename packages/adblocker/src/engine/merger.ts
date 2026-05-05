@@ -23,19 +23,28 @@ import { IOrganization } from './metadata/organizations.js';
 import { IPattern } from './metadata/patterns.js';
 import ReverseIndex from './reverse-index.js';
 
-type MergeOptions = {
+export type HashFunc = (arr: Uint8Array, beg: number, end: number) => number | string | bigint;
+
+export type MergeOptions = {
   skipResources?: boolean;
   overrideConfig?: Partial<Config>;
+
+  // `binaryMerge` specifics;
+  useBinaryMerge?: boolean;
+  // See the comment in reverse-index.ts for this option.
+  hashFunc?: HashFunc;
 };
 
-type MergedMetadata = {
+type MetadataCollection = {
   organizations: Record<string, IOrganization>;
   categories: Record<string, ICategory>;
   patterns: Record<string, IPattern>;
 };
 
-function mergeMetadata<T extends typeof FilterEngine>(engines: InstanceType<T>[]): MergedMetadata {
-  const metadata: MergedMetadata = {
+export function mergeMetadata<T extends typeof FilterEngine>(
+  engines: InstanceType<T>[],
+): MetadataCollection {
+  const metadata: MetadataCollection = {
     organizations: {},
     categories: {},
     patterns: {},
@@ -64,7 +73,54 @@ function mergeMetadata<T extends typeof FilterEngine>(engines: InstanceType<T>[]
   return metadata;
 }
 
-function hasMetadata(metadata: MergedMetadata): boolean {
+export function mergeLists<T extends typeof FilterEngine>(
+  engines: InstanceType<T>[],
+): Map<string, string> {
+  const lists = new Map<string, string>();
+
+  for (const engine of engines) {
+    for (const [key, value] of engine.lists) {
+      if (lists.has(key)) {
+        continue;
+      }
+
+      lists.set(key, value);
+    }
+  }
+
+  return lists;
+}
+
+export function mergePreprocessors<T extends typeof FilterEngine>(
+  engines: InstanceType<T>[],
+): Preprocessor[] {
+  const preprocessors: Preprocessor[] = [];
+
+  for (const engine of engines) {
+    for (const preprocessor of engine.preprocessors.preprocessors) {
+      const local = preprocessors.find((local) => local.condition === preprocessor.condition);
+
+      if (local === undefined) {
+        preprocessors.push(
+          new Preprocessor({
+            condition: preprocessor.condition,
+            filterIDs: new Set(preprocessor.filterIDs),
+          }),
+        );
+
+        continue;
+      }
+
+      for (const filterID of preprocessor.filterIDs) {
+        local.filterIDs.add(filterID);
+      }
+    }
+  }
+
+  return preprocessors;
+}
+
+function hasMetadata(metadata: MetadataCollection): boolean {
   return (
     Object.keys(metadata.categories).length +
       Object.keys(metadata.organizations).length +
@@ -94,13 +150,12 @@ export function legacyMerge<T extends typeof FilterEngine>(
     }
   }
 
-  const lists = new Map<string, string>();
-
   const networkFilters: Map<number, NetworkFilter> = new Map();
   const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
-  const preprocessors: Preprocessor[] = [];
 
   const metadata = mergeMetadata(engines);
+  const lists = mergeLists(engines);
+  const preprocessors = mergePreprocessors(engines);
 
   for (const engine of engines) {
     const filters = engine.getFilters();
@@ -111,18 +166,6 @@ export function legacyMerge<T extends typeof FilterEngine>(
 
     for (const cosmeticFilter of filters.cosmeticFilters) {
       cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
-    }
-
-    for (const preprocessor of engine.preprocessors.preprocessors) {
-      preprocessors.push(preprocessor);
-    }
-
-    for (const [key, value] of engine.lists) {
-      if (lists.has(key)) {
-        continue;
-      }
-
-      lists.set(key, value);
     }
   }
 
@@ -156,11 +199,18 @@ export function legacyMerge<T extends typeof FilterEngine>(
 function mergeNetworkFilterBucket(
   sources: NetworkFilterBucket[],
   config: Config,
+  hashFunc?: HashFunc,
 ): NetworkFilterBucket {
   const bucket = new NetworkFilterBucket({ config });
 
-  bucket.index = ReverseIndex.merge(sources.map((source) => source.index));
-  bucket.badFilters = FiltersContainer.merge(sources.map((source) => source.badFilters));
+  bucket.index = ReverseIndex.merge(
+    sources.map((source) => source.index),
+    { hashFunc },
+  );
+  bucket.badFilters = FiltersContainer.merge(
+    sources.map((source) => source.badFilters),
+    { hashFunc },
+  );
 
   return bucket;
 }
@@ -168,26 +218,57 @@ function mergeNetworkFilterBucket(
 function mergeCosmeticFilterBucket(
   sources: CosmeticFilterBucket[],
   config: Config,
+  hashFunc?: HashFunc,
 ): CosmeticFilterBucket {
   const bucket = new CosmeticFilterBucket({ config });
 
-  bucket.genericRules = FiltersContainer.merge(sources.map((source) => source.genericRules));
-  bucket.classesIndex = ReverseIndex.merge(sources.map((source) => source.classesIndex));
-  bucket.hostnameIndex = ReverseIndex.merge(sources.map((source) => source.hostnameIndex));
-  bucket.hrefsIndex = ReverseIndex.merge(sources.map((source) => source.hrefsIndex));
-  bucket.idsIndex = ReverseIndex.merge(sources.map((source) => source.idsIndex));
-  bucket.unhideIndex = ReverseIndex.merge(sources.map((source) => source.unhideIndex));
+  bucket.genericRules = FiltersContainer.merge(
+    sources.map((source) => source.genericRules),
+    { hashFunc },
+  );
+  bucket.classesIndex = ReverseIndex.merge(
+    sources.map((source) => source.classesIndex),
+    { hashFunc },
+  );
+  bucket.hostnameIndex = ReverseIndex.merge(
+    sources.map((source) => source.hostnameIndex),
+    { hashFunc },
+  );
+  bucket.hrefsIndex = ReverseIndex.merge(
+    sources.map((source) => source.hrefsIndex),
+    { hashFunc },
+  );
+  bucket.idsIndex = ReverseIndex.merge(
+    sources.map((source) => source.idsIndex),
+    { hashFunc },
+  );
+  bucket.unhideIndex = ReverseIndex.merge(
+    sources.map((source) => source.unhideIndex),
+    { hashFunc },
+  );
 
   return bucket;
 }
 
-function mergeHTMLBucket(sources: HTMLBucket[], config: Config): HTMLBucket {
+function mergeHTMLBucket(sources: HTMLBucket[], config: Config, hashFunc?: HashFunc): HTMLBucket {
   const bucket = new HTMLBucket({ config });
 
-  bucket.networkIndex = ReverseIndex.merge(sources.map((source) => source.networkIndex));
-  bucket.exceptionsIndex = ReverseIndex.merge(sources.map((source) => source.exceptionsIndex));
-  bucket.cosmeticIndex = ReverseIndex.merge(sources.map((source) => source.cosmeticIndex));
-  bucket.unhideIndex = ReverseIndex.merge(sources.map((source) => source.unhideIndex));
+  bucket.networkIndex = ReverseIndex.merge(
+    sources.map((source) => source.networkIndex),
+    { hashFunc },
+  );
+  bucket.exceptionsIndex = ReverseIndex.merge(
+    sources.map((source) => source.exceptionsIndex),
+    { hashFunc },
+  );
+  bucket.cosmeticIndex = ReverseIndex.merge(
+    sources.map((source) => source.cosmeticIndex),
+    { hashFunc },
+  );
+  bucket.unhideIndex = ReverseIndex.merge(
+    sources.map((source) => source.unhideIndex),
+    { hashFunc },
+  );
 
   return bucket;
 }
@@ -195,7 +276,7 @@ function mergeHTMLBucket(sources: HTMLBucket[], config: Config): HTMLBucket {
 export function binaryMerge<T extends typeof FilterEngine>(
   this: T,
   engines: InstanceType<T>[],
-  { skipResources = false, overrideConfig = {} }: MergeOptions = {},
+  { skipResources = false, overrideConfig = {}, hashFunc }: MergeOptions = {},
 ): InstanceType<T> {
   if (!engines || engines.length < 2) {
     throw new Error('merging engines requires at least two engines');
@@ -215,24 +296,15 @@ export function binaryMerge<T extends typeof FilterEngine>(
     }
   }
 
-  const lists = new Map<string, string>();
-  const preprocessors = [];
+  if (overrideConfig.debug === true || overrideConfig.enableCompression === true) {
+    throw new Error(
+      `the resulting engine cannot have debug or compression when merging engines with binaryMerge method!`,
+    );
+  }
 
   const metadata = mergeMetadata(engines);
-
-  for (const engine of engines) {
-    for (const preprocessor of engine.preprocessors.preprocessors) {
-      preprocessors.push(preprocessor);
-    }
-
-    for (const [key, value] of engine.lists) {
-      if (lists.has(key)) {
-        continue;
-      }
-
-      lists.set(key, value);
-    }
-  }
+  const lists = mergeLists(engines);
+  const preprocessors = mergePreprocessors(engines);
 
   const config = new Config({ ...engines[0].config, ...overrideConfig });
   const engine = new this({
@@ -245,40 +317,49 @@ export function binaryMerge<T extends typeof FilterEngine>(
   engine.importants = mergeNetworkFilterBucket(
     engines.map((source) => source.importants),
     config,
+    hashFunc,
   );
   engine.redirects = mergeNetworkFilterBucket(
     engines.map((source) => source.redirects),
     config,
+    hashFunc,
   );
   engine.removeparams = mergeNetworkFilterBucket(
     engines.map((source) => source.removeparams),
     config,
+    hashFunc,
   );
   engine.filters = mergeNetworkFilterBucket(
     engines.map((source) => source.filters),
     config,
+    hashFunc,
   );
   engine.exceptions = mergeNetworkFilterBucket(
     engines.map((source) => source.exceptions),
     config,
+    hashFunc,
   );
 
   engine.csp = mergeNetworkFilterBucket(
     engines.map((source) => source.csp),
     config,
+    hashFunc,
   );
   engine.cosmetics = mergeCosmeticFilterBucket(
     engines.map((source) => source.cosmetics),
     config,
+    hashFunc,
   );
   engine.hideExceptions = mergeNetworkFilterBucket(
     engines.map((source) => source.hideExceptions),
     config,
+    hashFunc,
   );
 
   engine.htmlFilters = mergeHTMLBucket(
     engines.map((source) => source.htmlFilters),
     config,
+    hashFunc,
   );
 
   if (hasMetadata(metadata)) {

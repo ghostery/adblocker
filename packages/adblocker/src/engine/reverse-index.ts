@@ -10,6 +10,7 @@ import Config from '../config.js';
 import crc32 from '../crc32.js';
 import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view.js';
 import IFilter from '../filters/interface.js';
+import { type HashFunc } from './merger.js';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 export function nextPow2(v: number): number {
@@ -96,7 +97,7 @@ export default class ReverseIndex<T extends IFilter> {
   public static merge<T extends IFilter>(
     sources: ReverseIndex<T>[],
     opts?: {
-      hashFunc?: (arr: Uint8Array, beg: number, end: number) => number | string | bigint;
+      hashFunc?: HashFunc | undefined;
     },
   ): ReverseIndex<T> {
     if (sources.length < 2) {
