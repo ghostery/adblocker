@@ -13,7 +13,7 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
 
       - name: Prepare repository
         run: |
@@ -24,7 +24,7 @@ jobs:
         run: corepack enable
 
       - name: Use node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           cache: yarn
           node-version-file: '.tool-versions'
@@ -41,7 +41,7 @@ jobs:
 
       - name: Generate a token
         id: generate-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@d72941d797fd3113feb6b93fd0dec494b13a2547 # v1.12.0
         with:
           app-id: ${{ secrets.ADBLOCKERBOT_APP_ID }}
           private-key: ${{ secrets.ADBLOCKERBOT_PRIVATE_KEY }}
