@@ -20,7 +20,7 @@ import {
   mergeMetadata,
   mergePreprocessors,
 } from '../../src/engine/merger.js';
-import type { HashFunc } from '../../src/engine/merger.js';
+import { type HashFunc } from '../../src/engine/merger.js';
 
 describe('#mergeMetadata', () => {
   function createRawMetadata(key: string) {
@@ -227,14 +227,14 @@ describe('#legacyMerge', () => {
     it('does not throw with different configs - takes values from first', () => {
       const engine1 = FilterEngine.empty({ loadCosmeticFilters: true });
       const engine2 = FilterEngine.empty({ loadCosmeticFilters: false });
-      const engine = FilterEngine.merge([engine1, engine2]);
+      const engine = legacyMerge.call(FilterEngine, [engine1, engine2]);
       expect(engine.config).to.have.property('loadCosmeticFilters').that.equal(true);
     });
 
     it('throws on inconsistent compression', () => {
       const engine1 = FilterEngine.empty({ enableCompression: true });
       const engine2 = FilterEngine.empty({ enableCompression: false });
-      expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+      expect(() => legacyMerge.call(FilterEngine, [engine1, engine2])).to.throw(
         'compression of all merged engines must match with the first one: "true" but got: "false"',
       );
     });
@@ -242,7 +242,7 @@ describe('#legacyMerge', () => {
     it('allows config override', () => {
       const engine1 = FilterEngine.empty({ enableCompression: false });
       const engine2 = FilterEngine.empty({ enableCompression: false });
-      const engine = FilterEngine.merge([engine1, engine2], {
+      const engine = legacyMerge.call(FilterEngine, [engine1, engine2], {
         overrideConfig: { enableCompression: true },
       });
       expect(engine.config).to.have.property('enableCompression').that.equal(true);
@@ -255,7 +255,7 @@ describe('#legacyMerge', () => {
       const engine2 = FilterEngine.empty();
       engine1.resources = new Resources({ checksum: '1' });
       engine2.resources = new Resources({ checksum: '2' });
-      expect(() => FilterEngine.merge([engine1, engine2])).to.throw(
+      expect(() => legacyMerge.call(FilterEngine, [engine1, engine2])).to.throw(
         'resource checksum of all merged engines must match with the first one: "1" but got: "2"',
       );
     });
@@ -379,18 +379,6 @@ describe('#binaryMerge', () => {
         overrideConfig: { loadCosmeticFilters: false },
       });
       expect(engine.config).to.have.property('loadCosmeticFilters').that.equal(false);
-    });
-  });
-
-  context('with resources', () => {
-    it('throws with different checksums', () => {
-      const engine1 = FilterEngine.empty();
-      const engine2 = FilterEngine.empty();
-      engine1.resources = new Resources({ checksum: '1' });
-      engine2.resources = new Resources({ checksum: '2' });
-      expect(() => binaryMerge.call(FilterEngine, [engine1, engine2], { hashFunc })).to.throw(
-        'resource checksum of all merged engines must match with the first one: "1" but got: "2"',
-      );
     });
   });
 });

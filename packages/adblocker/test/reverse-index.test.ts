@@ -25,6 +25,7 @@ import { parseFilters } from '../src/lists.js';
 import Request from '../src/request.js';
 import { fastHash, tokenize } from '../src/utils.js';
 import { allLists } from './utils.js';
+import { type HashFunc } from '../src/engine/merger.js';
 
 describe('ReverseIndex', () => {
   const { cosmeticFilters, networkFilters } = parseFilters(allLists, { debug: true });
@@ -302,11 +303,11 @@ wildcard
 
               // Having custom hash function is unavoidable in the real world scenario and
               // it's nice to have an example in the test code.
-              let hashFunc: (arr: Uint8Array, beg: number, end: number) => bigint;
+              let hashFunc: HashFunc;
 
               before(async () => {
                 const hasher = await xxhash();
-                hashFunc = (arr: Uint8Array, beg: number, end: number) => {
+                hashFunc = (arr, beg, end) => {
                   return hasher.h64Raw(arr.subarray(beg, end));
                 };
               });

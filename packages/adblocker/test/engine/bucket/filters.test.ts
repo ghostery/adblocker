@@ -18,6 +18,7 @@ import IFilter from '../../../src/filters/interface.js';
 import NetworkFilter from '../../../src/filters/network.js';
 import { parseFilters } from '../../../src/lists.js';
 import { allLists } from '../../utils.js';
+import { type HashFunc } from '../../../src/engine/merger.js';
 
 class OverestimatingFilter implements IFilter {
   public mask: number = 0;
@@ -221,7 +222,7 @@ describe('#FiltersContainer', () => {
       });
 
       describe('#merge', () => {
-        let hashFunc: (arr: Uint8Array, beg: number, end: number) => bigint;
+        let hashFunc: HashFunc;
 
         before(async () => {
           const hasher = await xxhash();
@@ -375,7 +376,7 @@ describe('#FiltersContainer', () => {
         });
 
         it('passes valid serialized network filter ranges to the supplied hash function', () => {
-          const filters = parseFilters('/alpha-one^\n/beta-two^', { debug: false }).networkFilters;
+          const filters = parseFilters('/alpha-one^\n/beta-two^').networkFilters;
           const sourceA = new FiltersContainer({
             config,
             deserialize: NetworkFilter.deserialize,
@@ -387,7 +388,7 @@ describe('#FiltersContainer', () => {
             filters: [],
           });
           const seen: NetworkFilter[] = [];
-          const recordingHashFunc = (arr: Uint8Array, beg: number, end: number): bigint => {
+          const recordingHashFunc: HashFunc = (arr, beg, end) => {
             seen.push(
               NetworkFilter.deserialize(
                 StaticDataView.fromUint8Array(arr.subarray(beg, end), config),
