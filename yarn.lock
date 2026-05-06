@@ -436,6 +436,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@electron/get@npm:^5.0.0":
+  version: 5.0.0
+  resolution: "@electron/get@npm:5.0.0"
+  dependencies:
+    debug: "npm:^4.1.1"
+    env-paths: "npm:^3.0.0"
+    graceful-fs: "npm:^4.2.11"
+    progress: "npm:^2.0.3"
+    semver: "npm:^7.6.3"
+    sumchecker: "npm:^3.0.1"
+    undici: "npm:^7.24.4"
+  dependenciesMeta:
+    undici:
+      optional: true
+  checksum: 10/b69a1874c80f2164e99f8fbab1916bd4f4bfd038310b7bcdadaebc5290f4b9cd61347286a71ed01a74863b14fd31d8def1bd3a6f2eac1d2324a6b0268b1bf309
+  languageName: node
+  linkType: hard
+
 "@emnapi/core@npm:^1.1.0":
   version: 1.8.1
   resolution: "@emnapi/core@npm:1.8.1"
@@ -770,7 +788,7 @@ __metadata:
     "@ghostery/adblocker-electron": "npm:^2.15.0"
     "@types/node": "npm:25.6.0"
     cross-fetch: "npm:^4.1.0"
-    electron: "npm:41.3.0"
+    electron: "npm:42.0.0"
     eslint: "npm:^10.2.1"
     rimraf: "npm:^6.1.3"
     tshy: "npm:^4.1.1"
@@ -787,7 +805,7 @@ __metadata:
     "@rollup/plugin-node-resolve": "npm:^16.0.3"
     "@rollup/plugin-typescript": "npm:^12.3.0"
     "@types/chrome": "npm:^0.1.40"
-    electron: "npm:41.3.0"
+    electron: "npm:42.0.0"
     eslint: "npm:^10.2.1"
     rimraf: "npm:^6.1.3"
     rollup: "npm:^4.60.2"
@@ -808,7 +826,7 @@ __metadata:
     "@types/mocha": "npm:^10.0.10"
     "@types/node": "npm:25.6.0"
     chai: "npm:^6.2.2"
-    electron: "npm:41.3.0"
+    electron: "npm:42.0.0"
     eslint: "npm:^10.2.1"
     mocha: "npm:^11.7.5"
     nyc: "npm:^18.0.0"
@@ -4817,7 +4835,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron@npm:*, electron@npm:41.3.0":
+"electron@npm:*":
   version: 41.3.0
   resolution: "electron@npm:41.3.0"
   dependencies:
@@ -4827,6 +4845,20 @@ __metadata:
   bin:
     electron: cli.js
   checksum: 10/ec6eb7d6a865f94ce8c1856d3cdea7fb654c8d8eaa08d20a8558f559a004cbc056bf88cc7d78bf5fe82502fefe3e29017b368c15109c5f5c1d6294a5720de4af
+  languageName: node
+  linkType: hard
+
+"electron@npm:42.0.0":
+  version: 42.0.0
+  resolution: "electron@npm:42.0.0"
+  dependencies:
+    "@electron/get": "npm:^5.0.0"
+    "@types/node": "npm:^24.9.0"
+    extract-zip: "npm:^2.0.1"
+  bin:
+    electron: cli.js
+    install-electron: install.js
+  checksum: 10/3a69112e5727fdee8bac6e7bece372a3fcdb2f1bfd2c0650e79821e665d963f8dd4a9221f2a7864c45e1589d3abf0ccb4c7a22af50fe54d35a30fc07547be6d1
   languageName: node
   linkType: hard
 
@@ -4921,6 +4953,13 @@ __metadata:
   version: 2.2.1
   resolution: "env-paths@npm:2.2.1"
   checksum: 10/65b5df55a8bab92229ab2b40dad3b387fad24613263d103a97f91c9fe43ceb21965cd3392b1ccb5d77088021e525c4e0481adb309625d0cb94ade1d1fb8dc17e
+  languageName: node
+  linkType: hard
+
+"env-paths@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "env-paths@npm:3.0.0"
+  checksum: 10/b2b0a0d0d9931a13d279c22ed94d78648a1cc5f408f05d47ff3e0c1616f0aa0c38fb33deec5e5be50497225d500607d57f9c8652c4d39c2f2b7608cd45768128
   languageName: node
   linkType: hard
 
@@ -6099,7 +6138,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.6":
+"graceful-fs@npm:^4.1.11, graceful-fs@npm:^4.1.15, graceful-fs@npm:^4.1.2, graceful-fs@npm:^4.1.6, graceful-fs@npm:^4.2.0, graceful-fs@npm:^4.2.11, graceful-fs@npm:^4.2.6":
   version: 4.2.11
   resolution: "graceful-fs@npm:4.2.11"
   checksum: 10/bf152d0ed1dc159239db1ba1f74fdbc40cb02f626770dcd5815c427ce0688c2635a06ed69af364396da4636d0408fcf7d4afdf7881724c3307e46aff30ca49e2
@@ -10801,7 +10840,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^7.25.0":
+"undici@npm:^7.24.4, undici@npm:^7.25.0":
   version: 7.25.0
   resolution: "undici@npm:7.25.0"
   checksum: 10/038d3568c72bb976e3cc389284f7f1cc64cd70d578300e4676a449fbcb624a35fe99ac127b5f3729f18b8246d6c090444ab61b1b67736bb88f52a3e913d76bf8
