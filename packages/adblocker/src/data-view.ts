@@ -7,7 +7,7 @@
  */
 
 import Compression from './compression.js';
-import crc32 from './crc32.js';
+import crc32c from '@chainsafe/fast-crc32c';
 
 interface IDataViewOptions {
   enableCompression: boolean;
@@ -225,7 +225,7 @@ export class StaticDataView {
   }
 
   public checksum(): number {
-    return crc32(this.buffer, 0, this.pos);
+    return crc32c.calculate(this.buffer.subarray(0, this.pos));
   }
 
   public dataAvailable(): boolean {
