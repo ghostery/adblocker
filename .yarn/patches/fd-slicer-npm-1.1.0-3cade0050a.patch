@@ -1,0 +1,67 @@
+diff --git a/index.js b/index.js
+index 65d32a3ecb7d22329f5465cb2ef127f70e54be43..2c017a246c7d9fa9579f14e19182167ff3ebae26 100644
+--- a/index.js
++++ b/index.js
+@@ -87,33 +87,32 @@ function ReadStream(context, options) {
+   this.start = options.start || 0;
+   this.endOffset = options.end;
+   this.pos = this.start;
+-  this.destroyed = false;
++  this._hasRef = true;
+ }
+ 
+ ReadStream.prototype._read = function(n) {
+   var self = this;
+-  if (self.destroyed) return;
++  if (!self._hasRef) return;
+ 
+   var toRead = Math.min(self._readableState.highWaterMark, n);
+   if (self.endOffset != null) {
+     toRead = Math.min(toRead, self.endOffset - self.pos);
+   }
+   if (toRead <= 0) {
+-    self.destroyed = true;
+     self.push(null);
+-    self.context.unref();
++    self._unref();
+     return;
+   }
+   self.context.pend.go(function(cb) {
+-    if (self.destroyed) return cb();
++    if (!self._hasRef) return cb();
+     var buffer = new Buffer(toRead);
+     fs.read(self.context.fd, buffer, 0, toRead, self.pos, function(err, bytesRead) {
++      if (!self._hasRef) return cb();
+       if (err) {
+         self.destroy(err);
+       } else if (bytesRead === 0) {
+-        self.destroyed = true;
+         self.push(null);
+-        self.context.unref();
++        self._unref();
+       } else {
+         self.pos += bytesRead;
+         self.push(buffer.slice(0, bytesRead));
+@@ -123,14 +122,17 @@ ReadStream.prototype._read = function(n) {
+   });
+ };
+ 
+-ReadStream.prototype.destroy = function(err) {
+-  if (this.destroyed) return;
+-  err = err || new Error("stream destroyed");
+-  this.destroyed = true;
+-  this.emit('error', err);
++ReadStream.prototype._unref = function() {
++  if (!this._hasRef) return;
++  this._hasRef = false;
+   this.context.unref();
+ };
+ 
++ReadStream.prototype._destroy = function(err, callback) {
++  this._unref();
++  callback(err);
++};
++
+ util.inherits(WriteStream, Writable);
+ function WriteStream(context, options) {
+   options = options || {};
