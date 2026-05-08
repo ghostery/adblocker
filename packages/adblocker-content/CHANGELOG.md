@@ -1,3 +1,17 @@
+# v2.17.0 (Fri May 08 2026)
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5665](https://github.com/ghostery/adblocker/pull/5665) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps): Bump @types/node from 25.6.0 to 25.6.2 [#5660](https://github.com/ghostery/adblocker/pull/5660) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.16.0 (Fri May 08 2026)
 
 #### :house: Internal
