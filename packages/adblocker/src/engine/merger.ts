@@ -135,7 +135,7 @@ function hasMetadata(metadata: MetadataCollection): boolean {
  * can live next to byte-level merging during the transition.
  */
 export function legacyMerge<T extends typeof FilterEngine>(
-  this: T,
+  self: T,
   engines: InstanceType<T>[],
   { skipResources = false, overrideConfig = {} }: MergeOptions = {},
 ): InstanceType<T> {
@@ -170,7 +170,7 @@ export function legacyMerge<T extends typeof FilterEngine>(
     }
   }
 
-  const engine = new this({
+  const engine = new self({
     networkFilters: Array.from(networkFilters.values()),
     cosmeticFilters: Array.from(cosmeticFilters.values()),
     preprocessors,
@@ -304,7 +304,7 @@ function mergeHTMLBucket(sources: HTMLBucket[], config: Config, hashFunc?: HashF
 }
 
 export function binaryMerge<T extends typeof FilterEngine>(
-  this: T,
+  self: T,
   engines: InstanceType<T>[],
   { skipResources = false, overrideConfig = {}, hashFunc }: MergeOptions = {},
 ): InstanceType<T> {
@@ -344,7 +344,7 @@ export function binaryMerge<T extends typeof FilterEngine>(
   const metadata = mergeMetadata(engines);
   const lists = mergeLists(engines);
   const config = new Config({ ...engines[0].config, ...overrideConfig });
-  const engine = new this({
+  const engine = new self({
     config,
     lists,
   }) as InstanceType<T>;

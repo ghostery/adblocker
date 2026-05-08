@@ -36,7 +36,7 @@ import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
 import { binaryMerge, legacyMerge, MergeOptions } from './merger.js';
 
-export const ENGINE_VERSION = 853;
+export const ENGINE_VERSION = 864;
 
 function findApplicableHideException(filters: NetworkFilter[]): NetworkFilter | undefined {
   if (filters.length === 0) {
@@ -284,10 +284,10 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
     opts: MergeOptions = {},
   ): InstanceType<T> {
     if (opts.useBinaryMerge === true) {
-      return binaryMerge.call(this, engines, opts) as InstanceType<T>;
+      return binaryMerge(this, engines, opts);
     }
 
-    return legacyMerge.call(this, engines, opts) as InstanceType<T>;
+    return legacyMerge(this, engines, opts);
   }
 
   public static parse<T extends FilterEngine>(
