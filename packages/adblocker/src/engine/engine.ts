@@ -34,11 +34,9 @@ import { Metadata, IPatternLookupResult } from './metadata.js';
 import Preprocessor, { Env } from '../preprocessor.js';
 import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
-import { ICategory } from './metadata/categories.js';
-import { IOrganization } from './metadata/organizations.js';
-import { IPattern } from './metadata/patterns.js';
+import { binaryMerge, legacyMerge, MergeOptions } from './merger.js';
 
-export const ENGINE_VERSION = 863;
+export const ENGINE_VERSION = 864;
 
 function findApplicableHideException(filters: NetworkFilter[]): NetworkFilter | undefined {
   if (filters.length === 0) {
@@ -258,120 +256,38 @@ export default class FilterEngine extends EventEmitter<EngineEventHandlers> {
    * unintended side effects.
    * However, resources are deep-copied from the first engine.
    *
-   * Optionally, you can specify a second parameter to skip merging specific resources.
-   * If resource merging is skipped, the resulting engine will be assigned empty resources.
+   * Optionally, you can specify a second parameter to skip merging specific
+   * resources or override the resulting engine config. If resource merging is
+   * skipped, the resulting engine will be assigned empty resources.
+   *
+   * Set `useBinaryMerge` to use the byte-level merge path. This method is
+   * faster for large engines, but it has stricter requirements: source engines
+   * must not be built with `debug: true`, their compression settings must
+   * match, and the resulting engine cannot enable debug or compression through
+   * `overrideConfig`.
+   *
+   * When using `useBinaryMerge`, you can pass `hashFunc` to deduplicate
+   * serialized filters. Prefer a collision-resistant bigint or string hash for
+   * large merges; the built-in fallback is intended for convenience and does
+   * not provide strict collision-proof deduplication.
+   *
+   * Call `updateEnv` on the merged engine before use when preprocessor bindings
+   * should affect which filters are active.
+   *
+   * Binary merge skips buckets disabled by target load flags. It does not skip
+   * buckets for `loadExtendedSelectors`, `enableInMemoryCache`, or
+   * `enableOptimizations`, which do not represent whole filter categories.
    */
   public static merge<T extends typeof FilterEngine>(
     this: T,
     engines: InstanceType<T>[],
-    {
-      skipResources = false,
-      overrideConfig = {},
-    }: {
-      skipResources?: boolean;
-      overrideConfig?: Partial<Config>;
-    } = {},
+    opts: MergeOptions = {},
   ): InstanceType<T> {
-    if (!engines || engines.length < 2) {
-      throw new Error('merging engines requires at least two engines');
+    if (opts.useBinaryMerge === true) {
+      return binaryMerge(this, engines, opts);
     }
 
-    for (const engine of engines) {
-      if (engine.config.enableCompression !== engines[0].config.enableCompression) {
-        throw new Error(
-          `compression of all merged engines must match with the first one: "${engines[0].config.enableCompression}" but got: "${engine.config.enableCompression}"`,
-        );
-      }
-    }
-
-    const lists = new Map();
-
-    const networkFilters: Map<number, NetworkFilter> = new Map();
-    const cosmeticFilters: Map<number, CosmeticFilter> = new Map();
-    const preprocessors: Preprocessor[] = [];
-
-    const metadata: {
-      organizations: Record<string, IOrganization>;
-      categories: Record<string, ICategory>;
-      patterns: Record<string, IPattern>;
-    } = {
-      organizations: {},
-      categories: {},
-      patterns: {},
-    };
-
-    for (const engine of engines) {
-      const filters = engine.getFilters();
-
-      for (const networkFilter of filters.networkFilters) {
-        networkFilters.set(networkFilter.getId(), networkFilter);
-      }
-
-      for (const cosmeticFilter of filters.cosmeticFilters) {
-        cosmeticFilters.set(cosmeticFilter.getId(), cosmeticFilter);
-      }
-
-      for (const preprocessor of engine.preprocessors.preprocessors) {
-        preprocessors.push(preprocessor);
-      }
-
-      for (const [key, value] of engine.lists) {
-        if (lists.has(key)) {
-          continue;
-        }
-
-        lists.set(key, value);
-      }
-
-      if (engine.metadata !== undefined) {
-        for (const organization of engine.metadata.organizations.getValues()) {
-          if (metadata.organizations[organization.key] === undefined) {
-            metadata.organizations[organization.key] = organization;
-          }
-        }
-        for (const category of engine.metadata.categories.getValues()) {
-          if (metadata.categories[category.key] === undefined) {
-            metadata.categories[category.key] = category;
-          }
-        }
-        for (const pattern of engine.metadata.patterns.getValues()) {
-          if (metadata.patterns[pattern.key] === undefined) {
-            metadata.patterns[pattern.key] = pattern;
-          }
-        }
-      }
-    }
-
-    const engine = new this({
-      networkFilters: Array.from(networkFilters.values()),
-      cosmeticFilters: Array.from(cosmeticFilters.values()),
-      preprocessors,
-
-      lists,
-      config: new Config({ ...engines[0].config, ...overrideConfig }),
-    }) as InstanceType<T>;
-
-    if (
-      Object.keys(metadata.categories).length +
-        Object.keys(metadata.organizations).length +
-        Object.keys(metadata.patterns).length !==
-      0
-    ) {
-      engine.metadata = new Metadata(metadata);
-    }
-
-    if (skipResources !== true) {
-      for (const engine of engines.slice(1)) {
-        if (engine.resources.checksum !== engines[0].resources.checksum) {
-          throw new Error(
-            `resource checksum of all merged engines must match with the first one: "${engines[0].resources.checksum}" but got: "${engine.resources.checksum}"`,
-          );
-        }
-      }
-      engine.resources = Resources.copy(engines[0].resources);
-    }
-
-    return engine;
+    return legacyMerge(this, engines, opts);
   }
 
   public static parse<T extends FilterEngine>(

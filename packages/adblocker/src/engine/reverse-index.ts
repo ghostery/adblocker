@@ -7,8 +7,10 @@
  */
 
 import Config from '../config.js';
+import crc32 from '../crc32.js';
 import { StaticDataView, EMPTY_UINT32_ARRAY, sizeOfBytes } from '../data-view.js';
 import IFilter from '../filters/interface.js';
+import { type HashFunc } from './merger.js';
 
 // https://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2
 export function nextPow2(v: number): number {
@@ -92,6 +94,211 @@ const EMPTY_BUCKET: number = Number.MAX_SAFE_INTEGER >>> 0;
  *   3. Select the best token for each filter (lowest frequency)
  */
 export default class ReverseIndex<T extends IFilter> {
+  public static merge<T extends IFilter>(
+    sources: ReverseIndex<T>[],
+    config: Config,
+    optimize: (filters: T[]) => T[],
+    opts?: {
+      hashFunc?: HashFunc | undefined;
+    },
+  ): ReverseIndex<T> {
+    if (sources.length < 2) {
+      throw new Error('ReverseIndex.merge requires at least two source indexes.');
+    }
+
+    const firstSource = sources[0];
+
+    for (const source of sources) {
+      if (source.config.debug === true) {
+        // Reverse-index merging deduplicates serialized filter bytes directly.
+        // Debug builds embed non-semantic data such as `rawLine` and domain
+        // debug parts in those bytes, so equivalent filters could hash
+        // differently. Supporting this would require deserializing filters and
+        // rebuilding semantic IDs, which defeats the purpose of this fast path.
+        throw new Error('ReverseIndex.merge requires debug=false for every source.');
+      }
+
+      if (source.config.enableCompression !== firstSource.config.enableCompression) {
+        throw new Error('ReverseIndex.merge requires matching compression settings.');
+      }
+    }
+
+    if (config.debug === true) {
+      throw new Error('ReverseIndex.merge requires debug=false for target config.');
+    }
+
+    if (config.enableCompression !== firstSource.config.enableCompression) {
+      throw new Error('ReverseIndex.merge requires target config compression to match sources.');
+    }
+
+    // Fast exit if there are no filters to merge.
+    const numberOfFilters = sources.reduce((total, source) => total + source.numberOfFilters, 0);
+    if (numberOfFilters === 0) {
+      return new ReverseIndex({
+        config,
+        deserialize: firstSource.deserializeFilter,
+        filters: [],
+        optimize,
+      });
+    }
+
+    // `crc32` is used as a built-in hash function as they're already embedded
+    // in the library. As 32bit hash functions will have a lot of collision
+    // after ~130k of inputs, so they're not really recommended. Always
+    // implement the hash function in the below priority table. Do allocate the
+    // function before going to heavy loop.
+    // a) a function returns BigInt (low memory pressure and collision)
+    // b) a function returns number (in case of <130k input)
+    // c) a function returns string (high memory pressure)
+    // Hash-collision resistance is delegated to the caller-provided `hashFunc`.
+    // Use a collision-resistant string or bigint hash when merging large
+    // indexes; the built-in crc32 fallback is intended for convenience, not
+    // strict collision-proof deduplication.
+    const hashFunc = typeof opts?.hashFunc === 'function' ? opts.hashFunc : crc32;
+
+    const filtersByHash: Map<
+      number | bigint | string,
+      {
+        tokens: number[];
+        bytes: Uint8Array;
+      }
+    > = new Map();
+
+    // Recover serialized filter ranges from bucket pointers. The bucket index
+    // stores absolute offsets into `source.view.buffer`; sorting unique offsets
+    // gives filter starts, and the next offset gives the previous filter end.
+    for (let sourceIndex = 0; sourceIndex < sources.length; sourceIndex += 1) {
+      const source = sources[sourceIndex];
+      const tokensByOffset: Map<number, number[]> = new Map();
+
+      for (let i = 1; i < source.bucketsIndex.length; i += 2) {
+        const arr = tokensByOffset.get(source.bucketsIndex[i]);
+        if (typeof arr === 'undefined') {
+          tokensByOffset.set(source.bucketsIndex[i], [source.bucketsIndex[i - 1]]);
+        } else {
+          arr.push(source.bucketsIndex[i - 1]);
+        }
+      }
+
+      if (tokensByOffset.size !== source.numberOfFilters) {
+        // Normal NetworkFilter/CosmeticFilter instances are indexed at least
+        // once; filters without concrete tokens use the wildcard token 0 via
+        // `[Uint32Array(0)]`. If a custom or malformed filter returns strict
+        // `[]`, it is serialized but has no bucket pointer, so this merge path
+        // cannot infer its byte range from the reverse-index alone.
+        throw new Error(
+          `ReverseIndex.merge cannot infer filter byte ranges for source ${sourceIndex}: ${source.numberOfFilters} filters were serialized, but only ${tokensByOffset.size} have bucket entries.`,
+        );
+      }
+
+      // We need to sort the collected offsets because their order is not
+      // ensured.
+      const aligned = Array.from(tokensByOffset.keys()).sort(function (a, b) {
+        return a - b;
+      });
+      aligned.push(source.view.buffer.byteLength);
+
+      // Hash each serialized filter range and keep one representative per hash.
+      // This contributes to the memory pressure rather saving the full buffer
+      // with other data types.
+      for (
+        let i = 1,
+          hash: number | bigint | string,
+          tokens: number[],
+          filter:
+            | {
+                tokens: number[];
+                bytes: Uint8Array;
+              }
+            | undefined;
+        i < aligned.length;
+        i++
+      ) {
+        hash = hashFunc(source.view.buffer, aligned[i - 1], aligned[i]);
+        tokens = tokensByOffset.get(aligned[i - 1])!;
+        filter = filtersByHash.get(hash);
+        // Token policy for duplicated serialized filters:
+        // - Keep the fast compact merge path as the default.
+        // - Preserve one complete source-selected token association; do not
+        //   union tokens or recompute global best tokens here.
+        // - Exact `getTokens()` / bucket layout is not canonical merge output;
+        //   tests should assert filters and matching behavior instead.
+        // - Hash-collision handling is a separate dedupe concern and should not
+        //   change this token-choice policy.
+        //
+        // The same serialized filter can be indexed under different tokens in
+        // different sources because each source has its own histogram. Prefer
+        // the representative with the most selected token groups to keep the
+        // runtime index compact while preserving matching correctness.
+        if (typeof filter === 'undefined' || filter.tokens.length < tokens.length) {
+          filtersByHash.set(hash, {
+            tokens: tokensByOffset.get(aligned[i - 1])!,
+            bytes: source.view.buffer.subarray(aligned[i - 1], aligned[i]),
+          });
+        }
+      }
+    }
+
+    // Rebuild a compact reverse-index from the deduplicated serialized filters.
+    let totalNumberOfIndexedTokens = 0;
+    let filtersIndexSize = 0;
+    for (const filter of filtersByHash.values()) {
+      totalNumberOfIndexedTokens += filter.tokens.length;
+      filtersIndexSize += filter.bytes.byteLength;
+    }
+    const bucketsIndexSize = totalNumberOfIndexedTokens * 2;
+    const tokensLookupIndexSize = Math.max(2, nextPow2(totalNumberOfIndexedTokens));
+
+    const view = StaticDataView.allocate(
+      tokensLookupIndexSize * 4 + bucketsIndexSize * 4 + filtersIndexSize,
+      config,
+    );
+    const tokensLookupIndex = view.getUint32ArrayView(tokensLookupIndexSize);
+    const bucketsIndex = view.getUint32ArrayView(bucketsIndexSize);
+    const filtersIndexStart = view.getPos();
+
+    const mask = tokensLookupIndexSize - 1;
+    const suffixes: [number, number][][] = [];
+    for (let i = 0; i < tokensLookupIndexSize; i += 1) {
+      suffixes.push([]);
+    }
+
+    for (const filter of filtersByHash.values()) {
+      const filterIndex = view.getPos();
+      view.buffer.set(filter.bytes, filterIndex);
+      view.setPos(filterIndex + filter.bytes.byteLength);
+
+      for (const token of filter.tokens) {
+        suffixes[token & mask].push([token, filterIndex]);
+      }
+    }
+
+    let indexInBucketsIndex = 0;
+    for (let i = 0; i < tokensLookupIndexSize; i += 1) {
+      const filtersForMask = suffixes[i];
+      tokensLookupIndex[i] = indexInBucketsIndex;
+      for (const [token, filterIndex] of filtersForMask) {
+        bucketsIndex[indexInBucketsIndex++] = token;
+        bucketsIndex[indexInBucketsIndex++] = filterIndex;
+      }
+    }
+
+    view.seekZero();
+
+    return new ReverseIndex({
+      config,
+      deserialize: firstSource.deserializeFilter,
+      filters: [],
+      optimize,
+    }).updateInternals({
+      bucketsIndex,
+      filtersIndexStart,
+      numberOfFilters: filtersByHash.size,
+      tokensLookupIndex,
+      view: view,
+    });
+  }
+
   public static deserialize<T extends IFilter>(
     buffer: StaticDataView,
     deserialize: (view: StaticDataView) => T,
