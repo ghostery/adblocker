@@ -19,8 +19,8 @@ export const EMPTY_UINT32_ARRAY = new Uint32Array(0);
 // Check if current architecture is little endian
 const LITTLE_ENDIAN: boolean = new Int8Array(new Int16Array([1]).buffer)[0] === 1;
 
-// TextEncoder doesn't need to be recreated every time unlike TextDecoder
 const TEXT_ENCODER = new TextEncoder();
+const TEXT_DECODER = new TextDecoder('utf8', { ignoreBOM: true });
 
 // Store compression in a lazy, global singleton
 let getCompressionSingleton: () => Compression = () => {
@@ -412,9 +412,7 @@ export class StaticDataView {
   public getUTF8(): string {
     const byteLength = this.getLength();
     this.pos += byteLength;
-    return new TextDecoder('utf8', { ignoreBOM: true }).decode(
-      this.buffer.subarray(this.pos - byteLength, this.pos),
-    );
+    return TEXT_DECODER.decode(this.buffer.subarray(this.pos - byteLength, this.pos));
   }
 
   public pushASCII(str: string): void {
@@ -518,9 +516,7 @@ export class StaticDataView {
 
   public getRawCosmetic(): string {
     if (this.compression !== undefined) {
-      return new TextDecoder('utf8', { ignoreBOM: true }).decode(
-        this.compression.cosmeticRaw.decompressRaw(this.getBytes()),
-      );
+      return TEXT_DECODER.decode(this.compression.cosmeticRaw.decompressRaw(this.getBytes()));
     }
     return this.getUTF8();
   }
@@ -535,9 +531,7 @@ export class StaticDataView {
 
   public getRawNetwork(): string {
     if (this.compression !== undefined) {
-      return new TextDecoder('utf8', { ignoreBOM: true }).decode(
-        this.compression.networkRaw.decompressRaw(this.getBytes()),
-      );
+      return TEXT_DECODER.decode(this.compression.networkRaw.decompressRaw(this.getBytes()));
     }
     return this.getUTF8();
   }

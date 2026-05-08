@@ -98,23 +98,24 @@ web.facebook.com,www.facebook.com##+js(json-prune-xhr-response, data.viewer.side
 web.facebook.com,www.facebook.com##+js(json-edit, ..data.viewer..nodes.*%5B%3F.__typename%3D%3D%22AdsSideFeedUnit%22%5D)
 web.facebook.com,www.facebook.com##+js(set, Env.nxghljssj, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-3060431385
-web.facebook.com,www.facebook.com##div[role="complementary"] a[rel="nofollow noreferrer external"][attributionsrc^="/privacy_sandbox/comet/register/source/"][attributionsrc*="?eid="]
+web.facebook.com,www.facebook.com##div[role="complementary"] a[rel="nofollow noreferrer external"][attributionsrc^="/privacy_sandbox/comet/register/"][attributionsrc*="?eid="]
 web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcompletion="ignore-dynamic"] a[aria-label][attributionsrc="_blank"][href*="utm_medium"][href*="utm_source"][href*="utm_id"][href*="utm_content"][href*="utm_term"][href*="utm_campaign"]
 web.facebook.com,www.facebook.com##div[role="complementary"] a[attributionsrc][href^="http"][target="_blank"][role="link"][rel*="noreferrer"]:has(img[src])
 web.facebook.com,www.facebook.com##div[role="complementary"] h3 span[style^="-webkit-box-orient:vertical"]:has-text(/^Sponsored$/)
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
-web.facebook.com,www.facebook.com##+js(json-edit, ..__bbox.result.data.node%5B%3F%40.*.__typename%3D%3D%22SponsoredData%22%5D)
-web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
+web.facebook.com,www.facebook.com##+js(json-edit, ..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D)
+web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, ..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D, propsToMatch, %2Fgraphql)
-web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F%40.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
+web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, JSON.parse)
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=timmaybealready.com,important
-timmaybealready.com##+js(nowoif)
-timmaybealready.com##+js(set, console.clear, undefined)
-timmaybealready.com##+js(acs, globalThis, break%3Bcase)
-timmaybealready.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||timmaybealready.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=charlessheimprove.com,important
+charlessheimprove.com##+js(nowoif)
+charlessheimprove.com##+js(set, console.clear, undefined)
+charlessheimprove.com##+js(acs, globalThis, break%3Bcase)
+charlessheimprove.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||charlessheimprove.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -301,6 +302,8 @@ gledaitv.*##+js(trusted-replace-argument, document.querySelector, 0, json%3A%22b
 gledaitv.*##+js(set, scriptBlocked, false)
 gledaitv.*##+js(set, blocked, false)
 gledaitv.*##+js(set, testUrls, %5B%5D)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=bg-gledai.video,redirect=google-ima.js
+||viads.com^$script,domain=bg-gledai.video,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/1093
 @@||ads.*.js|$script,3p,domain=seirsanduk.*|seir-sanduk.com|seirsanduk.com|seirsanduk.net|seirsanduk.online
 @@||ads.*.js?$script,3p,domain=seirsanduk.*|seir-sanduk.com|seirsanduk.com|seirsanduk.net|seirsanduk.online
@@ -422,5 +425,6 @@ embedtv.best##+js(rpnt, script, (popupLoaded), (true))
 ! https://github.com/uBlockOrigin/uAssets/issues/17018#issuecomment-4226692901
 myanimelist.net##a.ga-click[data-ga-click-type="hia"]
 myanimelist.net##div[id$="_NXU_wrap"], div[id$="_NXU_TITLE_wrap"]
-! https://github.com/uBlockOrigin/uAssets/issues/32546#issuecomment-4253067253
-! [badfilter] ||ac.rule34.xxx^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/32452
+getthispdf.com##+js(rmnt, script, document.styleSheets)
+getthispdf.com##+js(set, _adBlockState, undefined)

@@ -848,11 +848,14 @@ animeshqip.org###__popup_overlay
 animeshqip.org###__site_cover
 animeshqip.org###adOverlay
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=uns.bio,redirect=google-ima.js
+! https://www.anishqip.com/ - antiadb, popups
+||anishqip.com/skagje.js
+||animeshqip.org/security_check.php$script,domain=anishqip.com
 ! https://github.com/uBlockOrigin/uAssets/pull/27002
 editor.plantuml.com##body:style(margin:0 !important)
 editor.plantuml.com##body>#external_container:style(height:100% !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/27007
-solewe.com##+js(rmnt, script, %2Fadbl%2Fi)
+! https://github.com/AdguardTeam/AdguardFilters/issues/230715
 solewe.com##+js(nostif, offsetHeight)
 ! mrbobd. com ads
 mrbobd.com###clickfakeplayer[href]:remove-attr(href)
@@ -1801,8 +1804,10 @@ kio.ac##+js(nostif, mode%3A%22no-cors%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/28793
 magnetdl.*##+js(rpnt, script, %2Fwindow%5C.location%5C.replace%5C(%5B%5E)%5D%2B%5C)%3B%3F%2Fg)
 magnetdl.*##+js(nowoif, !magnetdl., 1)
-! https://yt1s.com.co/ - popups
-yt1s.com.co>>##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/13128
+!yt1s.com.co>>##+js(nowoif)
+yt1s.com.co>>##+js(no-fetch-if, googlesyndication.com)
+yt1s.com.co>>##+js(trusted-replace-argument, window.open, 1, repl%3A%2Fblank%2Fself%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28817
 cerberusapp.com##+js(set, stoCazzo, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/28818
@@ -2057,6 +2062,8 @@ idlixku.com##+js(nano-stb, ()%3D%3Ej(e%3D%3Ee-1), *)
 ! https://tv9.idlixku.com/movie/wonder-woman-1984-2020/ ads
 *.mp4$media,domain=jeniusplay.com,redirect=noopmp3-0.1s
 idlixku.com##+js(nostif, start)
+idlixku.com##[src*=".gif"]
+idlixku.com##+js(rpnt, script, window.addEventListener(%22error%22, (function()%7B'use%20strict'%3Bwindow.n%3D0.001%3Bconst%20speedUp%3D10%3Bconst%20nativeNow%3Dperformance.now%3Bperformance.now%3Dfunction()%7Breturn(nativeNow.apply(this)*speedUp)%3B%7D%3Bconst%20originalST%3Dwindow.setTimeout%3Bwindow.setTimeout%3Dfunction(callback%2Cdelay%2C...args)%7Blet%20newDelay%3Ddelay%3Bif(delay%3D%3D%3D1000%7C%7Cdelay%3D%3D%3D7000)%7BnewDelay%3D1%3B%7Dif(typeof%20callback%3D%3D%3D'function'%26%26callback.toString().includes('i%20%26%26%20t'))%7BnewDelay%3D1%3B%7Dreturn%20originalST(callback%2CnewDelay%2C...args)%3B%7D%3Bconst%20originalSI%3Dwindow.setInterval%3Bwindow.setInterval%3Dfunction(callback%2Cdelay%2C...args)%7Bif(delay%3D%3D%3D1000%7C%7C(typeof%20callback%3D%3D%3D'function'%26%26callback.toString().includes('i%20%26%26%20t')))%7Bdelay%3D1%3B%7Dreturn%20originalSI(callback%2Cdelay%2C...args)%3B%7D%3B%7D)()%3Bwindow.addEventListener(%22error%22, sedCount, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/29287
 agar.io##html:style(--bottom-banner-height: 0 !important;)
 ! https://daftsex.biz DL timer
@@ -2124,7 +2131,7 @@ policesecurity.com##+js(nosiif, EFFECTIVE_APPS_GCB_BLOCKED_MESSAGE)
 ||tv.onefootball.com/assets/videojs-contrib-ads$script,redirect=noopjs
 tv.onefootball.com##+js(rpnt, script, function%20OptanonWrapper()%20%7B%7D, %2F*start*%2F(()%3D%3E%7Bconst%20o%3D%7Bapply%3A(o%2Ct%2Ce)%3D%3E(%22ads%22%3D%3D%3De%5B0%5D%26%26%22object%22%3D%3Dtypeof%20t%26%26null!%3D%3Dt%26%26(t.ads%3D()%3D%3E%7B%7D)%2CReflect.apply(o%2Ct%2Ce))%7D%3Bwindow.Object.prototype.hasOwnProperty%3Dnew%20Proxy(window.Object.prototype.hasOwnProperty%2Co)%7D)()%3Bdocument.currentScript.textContent%3Ddocument.currentScript.textContent.replace(%2F%5C%2F%5C*start%5C*%5C%2F(.*)%5C%2F%5C*end%5C*%5C%2F%2Fg%2C%22%22)%3B%2F*end*%2Ffunction%20OptanonWrapper()%20%7B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/31583
-indexsubtitle.cc##+js(acs, Math.random, style.setProperty)
+indexsubtitle.cc##+js(rmnt, script, catch)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210444
 windroid777.com##+js(rmnt, script, detectAdBlock)
 ! https://github.com/uBlockOrigin/uAssets/issues/29412
@@ -2518,9 +2525,9 @@ app.simracing.gp##+js(nostif, .getComputedStyle)
 blogspot.com,web.app##img[onclick="kemana()"]
 ! https://github.com/uBlockOrigin/uAssets/issues/30374
 animekai.*,anikai.to##+js(nowoif, _blank)
-animekai.*,anikai.to##+js(nosiif, %3Bif(!()
+animekai.*,anikai.to,flixtor.mov,myflixer.bz,sflix.fi,yflix.to##+js(nosiif, %2F%3Bif%5C(!%5C(%7C%3Dnull%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/29557
-/sw.js^$script,domain=animekai.to|anikai.to|animekai.*|anikai.*
+/sw.js^$script,domain=animekai.*|anikai.*|animekai.to|anikai.to|animekai.pw|animekai.fi|animekai.fo|animekai.gs|animekai.la
 ! https://github.com/uBlockOrigin/uAssets/issues/29438
 1moviesz.to,myflixer.bz,flixzone.co,moontv.to,sflix.fi##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/30385
@@ -2779,10 +2786,6 @@ flacdownloader.com##.promo-banner
 soccerfullmatch.com##+js(nowoif, !_self)
 ! https://github.com/uBlockOrigin/uAssets/issues/31018
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=olevod.com
-! https://github.com/uBlockOrigin/uAssets/issues/31078
-g9r6.com##+js(nowoif)
-g9r6.com##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
-g9r6.com##body.video-embed-mode > div[class][style]:not(#root)
 ! https://github.com/uBlockOrigin/uAssets/issues/31081
 snapinsta.to##+js(rmnt, style, .modal-content)
 snapinsta.to###dlModal
@@ -2795,7 +2798,6 @@ correotemporal.org##+js(trusted-create-html, ins.adsbygoogle, div)
 fileq.net##+js(nowoif)
 fileq.net##+js(set, clicked, 2)
 ! https://github.com/uBlockOrigin/uAssets/issues/23928
-||s.nitropay.com/ads-*.js^$script,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/30991
 ||s.nitropay.com/ads-*.js$3p,script,redirect=nitropay_ads.js
 ! https://polseksongs.blogspot.com/ anti-adb
@@ -2854,6 +2856,8 @@ iptvpulse.top##+js(rpnt, script, if%20(document.hidden), if%20(1))
 !iptvpulse.top##+js(rpnt, script, document.hidden, true)
 iptvpulse.top##+js(rpnt, script, %2FadWindow%20%3D%20window.open.*%3F%3B%2F, adWindow%20%3D%20true%3B)
 !iptvpulse.top##+js(nowoif, _blank, 10, obj)
+premium-unlock.rajababucox.workers.dev###final-btn:style(display: block !important;)
+premium-unlock.rajababucox.workers.dev###action-btn
 ! https://github.com/uBlockOrigin/uAssets/issues/31282
 chess.com##body.with-und:remove-class(with-und)
 ! https://github.com/uBlockOrigin/uAssets/issues/31255

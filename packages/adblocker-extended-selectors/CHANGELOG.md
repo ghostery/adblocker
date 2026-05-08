@@ -1,3 +1,27 @@
+# v2.16.0 (Fri May 08 2026)
+
+#### :house: Internal
+
+- ci: migrate to node26 and update dependencies [#5654](https://github.com/ghostery/adblocker/pull/5654) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
+# v2.14.5 (Mon May 04 2026)
+
+#### :bug: Bug Fix
+
+- fix(extended-selectors): invalid regex handling [#5633](https://github.com/ghostery/adblocker/pull/5633) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.14.2 (Mon Apr 27 2026)
 
 #### ⚠️ Pushed to `master`

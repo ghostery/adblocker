@@ -583,10 +583,12 @@ craftelier.com##+js(trusted-set-cookie, pr-cookie-consent, %5B%5D, , , domain, .
 moleson.rentalp.com##+js(trusted-set-cookie, USE_COOKIE_CONSENT_STATE, %7B%22firstParty%22%3Atrue%2C%22thirdParty%22%3Afalse%2C%22necessary%22%3Atrue%7D)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/229358
 mediaguru.cz##+js(trusted-click-element, .b-cookie%20button%5Bdata-cookie-reject%5D, , 500)
+! https://tietokonekauppa.fi/
+tietokonekauppa.fi##+js(trusted-set-cookie, cookieConsent, %7B%22consentAnalytics%22%3A%22denied%22%5C%2C%22consentAds%22%3A%22denied%22%7D, 1year)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
-dailymail.co.uk##+js(trusted-click-element, div%5Bdata-project%3D%22mol-fe-cmp%22%5D%20button%5Bclass*%3D%22consent%22%5D%3Anot(%5Bclass*%3D%22reject%22%5D))
+dailymail.co.uk,dailymail.com##+js(trusted-click-element, div%5Bdata-project%3D%22mol-fe-cmp%22%5D%20button%5Bclass*%3D%22consent%22%5D%3Anot(%5Bclass*%3D%22reject%22%5D))
 ! Closing Optanon Alert Box
 1001games.com,1001hry.cz,1001jeux.fr,1001jocuri.ro,1001jogos.com.br,1001jogos.pt,1001pelit.com,1001spiele.de,auth.hbomax.com,elkspel.nl,gamespot.com,giochixl.it,glamour.com,grajteraz.pl,isladejuegos.com,jatekokxl.hu,mtvuutiset.fi,paixnidiaxl.gr,pushsquare.com,spelo.se,spillespill.no,spilxl.dk,thejournal.ie,thetrainline.com,vkmag.com,zdnet.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24, 1year)
 ! Mandatory + functional
@@ -755,6 +757,8 @@ tennisassa.fi##+js(trusted-click-element, label%5Bclass%3D%22input-choice__label
 ! https://github.com/uBlockOrigin/uAssets/issues/20117
 everyeye.it##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
 everyeye.it##html > body:style(margin-top: 45px !important;)
+! reject trackers
+noctua.at##+js(trusted-set-local-storage-item, user_consent, %7B%22version%22%3A1%2C%22consents%22%3A%7B%22statistics%22%3Afalse%2C%22videoIntegration%22%3Atrue%7D%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20154
 @@||cdn.cookielaw.org/scripttemplates/otSDKStub.js$script,domain=breitbart.com
 breitbart.com##+js(trusted-set-cookie, OptanonConsent, groups%3DC0003%253A1%252CC0002%253A1%252CC0001%253A1%252CC0005%253A1%252CC0004%253A1, 1year)
@@ -782,7 +786,7 @@ f1racing.pl##+js(trusted-click-element, %5Bhref%3D%22%2Fx-set-cookie%2F%22%5D)
 starcar.de##+js(trusted-set-cookie, privacy_consent, %257B%2522essentials%2522%253Atrue%252C%2522statistics%2522%253Afalse%252C%2522marketing%2522%253Afalse%252C%2522maps%2522%253Atrue%252C%2522youtube%2522%253Atrue%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20344
 !#if env_mobile
-dailymail.co.uk##+js(trusted-set-cookie, AndroidExpiry, AndroidExpiry, 1year)
+dailymail.co.uk,dailymail.com##+js(trusted-set-cookie, AndroidExpiry, AndroidExpiry, 1year)
 !#endif
 ! https://www.hubsite365.com/en-eu - 3rd-party content
 hubsite365.com##+js(trusted-set-cookie, hs365-accepted-cookies, %5B%7B%2522description%2522%3A%2522Enable%2520you%2520to%2520navigate%2520and%2520use%2520the%2520basic%2520functions%2520and%2520to%2520store%2520preferences.%2522%252C%2522key%2522%3A%2522technically_required%2522%252C%2522label%2522%3A%2522Technically%2520necessary%2520cookies%2522%252C%2522isMandatory%2522%3Atrue%7D%252C%7B%2522description%2522%3A%2522Display%2520third%2520party%2520content%2520like%252C%2520for%2520example%252C%2520YouTube%2520videos%2520or%2520twitter%2520feeds.%2522%252C%2522key%2522%3A%25223rdParty%2522%252C%2522label%2522%3A%2522Third-Party%2520Content%2522%7D%5D)
@@ -1608,7 +1612,7 @@ gamestar.de,gamepro.de##+js(trusted-click-element, .cmp-accept, , 3500)
 tk.de##+js(set-cookie, tkConsentDiensteVonDrittanbietern, 1, , reload, 1)
 tk.de##+js(set-cookie, tkConsentNutzergerechteGestaltung, 0)
 tk.de##+js(set-cookie, tkConsentWirtschaftlicherWerbeeinsatz, 0)
-tk.de##+js(trusted-set-cookie, tkConsentSettingsSaved, v1)
+tk.de##+js(trusted-set-cookie, tkConsentSettingsSaved, v2)
 www.tk.de##+js(trusted-set-cookie, CONSENTMGR, c1%3A0%257Cc3%3A0%257Cc9%3A1%257Cts%3A%24now%24%257Cconsent%3Atrue, , , domain, www.tk.de)
 ! https://www.salzburg.info/en/salzburg/unesco-world-cultural-heritage - blurred images
 salzburg.info##+js(set-attr, img.js-lazy-img%5Bsrc%5E%3D%22data%3Aimage%2F%22%5D, src, %5Bdata-src%5D)
@@ -3702,7 +3706,7 @@ sourcepoint.theguardian.com##+js(trusted-click-element, button%5Btitle%3D%22Acce
 sourcepoint.theguardian.com##+js(trusted-click-element, button%5Btitle%3D%22Do%20not%20sell%20or%20share%20my%20personal%20information%22%5D, , 1000)
 ! NZ IP (Reject)
 www.theguardian.com##+js(trusted-set-cookie, consentDate, %24currentISODate%24)
-www.theguardian.com##+js(trusted-set-cookie, consentUUID, 37ab4eb6-4bfa-4619-8ee5-71b4a40871d7_52)
+www.theguardian.com##+js(trusted-set-cookie, consentUUID, 37ab4eb6-4bfa-4619-8ee5-71b4a40871d7_52_55)
 ! https://github.com/uBlockOrigin/uAssets/issues/27488
 max.com##+js(trusted-set-cookie, eupubconsent-v2, CQQt_NAQQt_NAAcABBENBnFgAAAAAAAAABpYJQMB3CJ8BSFDYSZ1IIskaIUXwRABxkQhAgLBAwABiBKAOIQAkCAgAABANCACAAIAMHBAAAFADIAAAAAAIAgAIAAMIAAQAABIIABAAAAAAAAQCAgAAABAAQAQgmAEAAcAgAAlgAIoAFAAAABCAACBAAAAEAAFAAEAAAAAAAAAAAAIICwABQAAjAAAAAAAABgQAAAAAAAEAAABoQAIAA4ATgD9wIVhIEQACwAKgAcAA8ACAAGQANAAeABMACkAFUAN4AegA_ACEAEcAJoAYYAygBzgDuAH6AP8AkoBfQEiAJ2AUOAtgBeYDLgGxgQYAheKgBABMAEcMgBABMAEcOADQAOAA8ANAAjgCEAP3AhWOgSAALAAqABwAEAAMgAaAA8ACYAFIAKoAYgA3gB6AD8AJoATgAwwBlADRAHOAO4AfoA_wCLAEdAJKAiwBF4CRAE7AKHAWwAvMBlgDLgIMEAAYADwA0AQrIQDgAFgBMACqAGIAN4AegBHADnAHcAP8AvoCFgEWAQYJAAwB3AMsAfuSgHgALAA4ADwAJgAUgAqgBiAEcAhYBFgCLwEiALYAXmBBgoAJAEcAJwAdwB_wFSAKyAfuBCsCF5SA-AAsACoAHAAQAAyABoADwAJgAUgAqgBiAD8AMoAaIA5wB-gEWAI6ASUAuoB7QELAIvASIAnYBQ4C2AF5gMsAZcBBgsAYAAeABkAFQAQgAkABsAEcAKQAdwBRQCmgF2AMIAZwA04B1QD2gIFAQsAtgBj4DYwICgQwA.YAAAAAAAAAAA, , , domain, .max.com, reload, 1)
 max.com##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
@@ -4096,11 +4100,12 @@ scandinavianoutdoor.fi##+js(trusted-set-local-storage-item, cookieconsent, %7B%2
 ixolabs.ai##+js(trusted-set-cookie, ixo_cookie_consent, %7B%22essential%22%3Atrue%2C%22analytics%22%3Afalse%2C%22functional%22%3Afalse%7D)
 ! Accept
 ! https://github.com/brave-experiments/cookiecrumbler-issues/issues/1996
-aftonbladet.se,godare.se,omni.se,svd.se##+js(trusted-click-element, %23notice%20button%5Btitle%3D%22Godk%C3%A4nn%20alla%22%5D)
+aftonbladet.se,godare.se,omni.se,svd.se,tv.nu##+js(trusted-click-element, %23notice%20button%5Btitle%3D%22Godk%C3%A4nn%20alla%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/pull/32576
 arena.ai##+js(trusted-set-cookie-reload, cookie-preferences, %7B%22functionality%22%3Atrue%2C%22advertising%22%3Afalse%2C%22analytics%22%3Afalse%2C%22socialMedia%22%3Atrue%2C%22lastUpdated%22%3A%2299999999999999%22%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/32634
-videohelper.com##+js(trusted-set-cookie, starter-cookie-data, hasAckowledged)
+! https://github.com/AdguardTeam/AdguardFilters/issues/230086
+boostmusic.com,videohelper.com##+js(trusted-set-cookie, starter-cookie-data, hasAckowledged)
 ! https://github.com/uBlockOrigin/uAssets/pull/32653
 silknet.com##+js(trusted-set-cookie, validCookies, general)
 ! https://github.com/uBlockOrigin/uAssets/issues/32673
@@ -4109,3 +4114,16 @@ gowinston.ai##+js(trusted-click-element, button.cky-btn-accept)
 online.globus.ru##+js(trusted-set-local-storage-item, notifications-ls, %7B%22state%22%3A%7B%22isCookieNotified%22%3Atrue%7D%2C%22version%22%3A0%7D)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/229908
 cookie.bmgproductionmusic.com##+js(trusted-click-element, .message-component%20button%5Baria-label%3D%22Reject%22%5D)
+! https://github.com/easylist/easylist/issues/23899
+abcya.com##+js(trusted-set-local-storage-item, abcya_cb_production, %7B%22value%22%3A%221%22%2C%22expiry%22%3A9999999999999%7D)
+! aviasales sites cookies
+aviasales.*##+js(trusted-set-cookie, cookies_policy, %7B%22accepted%22%3Atrue%2C%22technical%22%3Atrue%2C%22marketing%22%3Afalse%7D)
+! accept
+! https://github.com/brave-experiments/cookiecrumbler-issues/issues/743
+ladbible.com##+js(trusted-click-element, .cmp-banner%20.accept-all)
+! https://github.com/uBlockOrigin/uAssets/issues/31373
+01net.com##+js(trusted-click-element, button%5Bclass%5E%3D%22sd-cmp%22%5D%3Ahas(.sd-cmp-cWOb7), , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/32818
+zenskirecenziraj.com##+js(trusted-set-cookie, zenski_cmp, basic)
+! https://github.com/uBlockOrigin/uAssets/issues/32795
+tlc.com##+js(trusted-click-element, .btn.btn-primary)
