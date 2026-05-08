@@ -1,3 +1,30 @@
+# v2.16.0 (Fri May 08 2026)
+
+#### :running_woman: Performance
+
+- `@ghostery/adblocker`
+  - perf: slicing-by-8 technique from Kounavis and Berry [#5648](https://github.com/ghostery/adblocker/pull/5648) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- fix(ci): drop 26 from the test pipeline [#5663](https://github.com/ghostery/adblocker/pull/5663) ([@seia-soto](https://github.com/seia-soto))
+- chore(ci): improve test time by skipping playwright deps [#5662](https://github.com/ghostery/adblocker/pull/5662) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker`
+  - Update local assets [#5657](https://github.com/ghostery/adblocker/pull/5657) (ghostery-adblocker-bot@users.noreply.github.com [@seia-soto](https://github.com/seia-soto) [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5653](https://github.com/ghostery/adblocker/pull/5653) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5649](https://github.com/ghostery/adblocker/pull/5649) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5645](https://github.com/ghostery/adblocker/pull/5645) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - ci: migrate to node26 and update dependencies [#5654](https://github.com/ghostery/adblocker/pull/5654) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.15.0 (Mon May 04 2026)
 
 #### :running_woman: Performance
