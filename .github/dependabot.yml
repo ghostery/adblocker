@@ -5,6 +5,27 @@ updates:
     schedule:
       interval: daily
       time: "04:00"
+    groups:
+      tldts:
+        patterns:
+          - "tldts*"
+      playwright:
+        patterns:
+          - "@playwright/*"
+          - "playwright"
+      webextension:
+        patterns:
+          - "webextension-polyfill"
+          - "@types/webextension-polyfill"
+          - "@types/chrome"
+      production-dependencies:
+        dependency-type: "production"
+        patterns:
+          - "*"
+      development-dependencies:
+        dependency-type: "development"
+        patterns:
+          - "*"
     open-pull-requests-limit: 99
     labels:
       - "PR: Dependencies :nut_and_bolt:"
