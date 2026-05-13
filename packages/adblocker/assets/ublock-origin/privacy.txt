@@ -906,6 +906,8 @@ arstechnica.com,dermnetnz.org##.gsc-webResult a[data-cturl]:remove-attr(/^data-c
 !#if !ext_ubol
 ! Block Attribution reporting
 www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26rt%3D%5Cd%2B%5C.%5Cd%2B.%2B%3F%26volume%3D%5Cd%2B%26cbr%3D.%2B%3F%26fexp%3Dv1%25%5B-%250-9C%5D%7B300%2C%7D%26.%2B%3F%26muted%3D%5Cd(%26vis%3D3)%3F%26docid%3D%2F%20method%3APOST)
+! 1st-party google tag manager script
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4}\/$/$script,1p,match-case
 !#endif
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213240
 ||bdvmetricas.banvenez.com.ve^
@@ -2643,5 +2645,7 @@ pooembed.eu##+js(no-xhr-if, body%3Apageview%20method%3APOST)
 ||poocloud.in/api/event
 ! https://github.com/uBlockOrigin/uAssets/issues/32838
 ||amazonaws.com/telemetry.bydata/obv2/bydataAnalytics.js
+! https://github.com/uBlockOrigin/uAssets/issues/32896
+||slate.com/analytics
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
