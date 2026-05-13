@@ -58,7 +58,6 @@
   ],
   "packageManager": "yarn@4.13.0",
   "scripts": {
-    "postinstall": "patch-package",
     "lint": "lerna run --parallel lint",
     "build": "lerna run build",
     "test": "yarn workspaces foreach -A run test",
@@ -79,7 +78,6 @@
     "eslint-plugin-prettier": "^5.5.5",
     "globals": "^17.6.0",
     "lerna": "^9.0.7",
-    "patch-package": "^8.0.1",
     "prettier": "^3.8.3",
     "tsx": "^4.21.0",
     "typescript": "^6.0.3",
@@ -164,5 +162,8 @@
         "color": "#5dbdcc"
       }
     ]
+  },
+  "resolutions": {
+    "@remusao/counter@npm:^2.1.0": "patch:@remusao/counter@npm%3A2.1.0#~/.yarn/patches/@remusao-counter-npm-2.1.0-3a2b9a70d3.patch"
   }
 }
