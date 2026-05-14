@@ -1569,11 +1569,19 @@ export default class NetworkFilter implements IFilter {
 
       if (numberOfNegatedOptions < numberOfCptOptions) {
         for (const type of getListOfRequestTypesNegated(this)) {
-          options.push(`~${type}`);
+          if (type === 'sub_frame') {
+            options.push('~subdocument');
+          } else {
+            options.push(`~${type}`);
+          }
         }
       } else {
         for (const type of getListOfRequestTypes(this)) {
-          options.push(type);
+          if (type === 'sub_frame') {
+            options.push('subdocument');
+          } else {
+            options.push(type);
+          }
         }
       }
     }
