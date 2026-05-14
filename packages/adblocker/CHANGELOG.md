@@ -1,3 +1,29 @@
+# v2.17.1 (Thu May 14 2026)
+
+#### :bug: Bug Fix
+
+- fix: NetworkFilter.toString returning $sub_frame [#5686](https://github.com/ghostery/adblocker/pull/5686) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5687](https://github.com/ghostery/adblocker/pull/5687) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5683](https://github.com/ghostery/adblocker/pull/5683) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5667](https://github.com/ghostery/adblocker/pull/5667) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5666](https://github.com/ghostery/adblocker/pull/5666) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump the production-dependencies group with 2 updates [#5678](https://github.com/ghostery/adblocker/pull/5678) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.0 (Fri May 08 2026)
 
 #### :rocket: New Feature

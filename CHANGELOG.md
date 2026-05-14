@@ -1,3 +1,41 @@
+# v2.17.1 (Thu May 14 2026)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: NetworkFilter.toString returning $sub_frame [#5686](https://github.com/ghostery/adblocker/pull/5686) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- chore: use yarn patch [#5681](https://github.com/ghostery/adblocker/pull/5681) ([@seia-soto](https://github.com/seia-soto))
+- chore(ci): group dependency updates [#5676](https://github.com/ghostery/adblocker/pull/5676) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer`
+  - chore(lint): remove unused no-constant-condition disablement [#5685](https://github.com/ghostery/adblocker/pull/5685) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker`
+  - Update local assets [#5687](https://github.com/ghostery/adblocker/pull/5687) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5683](https://github.com/ghostery/adblocker/pull/5683) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5667](https://github.com/ghostery/adblocker/pull/5667) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5666](https://github.com/ghostery/adblocker/pull/5666) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- `@ghostery/adblocker-electron-example`
+  - chore(electron-example): move @types/node to devdeps [#5680](https://github.com/ghostery/adblocker/pull/5680) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 3 updates [#5679](https://github.com/ghostery/adblocker/pull/5679) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump the playwright group with 2 updates [#5677](https://github.com/ghostery/adblocker/pull/5677) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump ip-address from 10.1.0 to 10.2.0 [#5655](https://github.com/ghostery/adblocker/pull/5655) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - Build(deps): Bump the production-dependencies group with 2 updates [#5678](https://github.com/ghostery/adblocker/pull/5678) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.0 (Fri May 08 2026)
 
 #### :rocket: New Feature

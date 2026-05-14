@@ -1,3 +1,20 @@
+# v2.17.1 (Thu May 14 2026)
+
+#### :house: Internal
+
+- chore(lint): remove unused no-constant-condition disablement [#5685](https://github.com/ghostery/adblocker/pull/5685) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump the production-dependencies group with 2 updates [#5678](https://github.com/ghostery/adblocker/pull/5678) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.0 (Fri May 08 2026)
 
 #### :nut_and_bolt: Dependencies

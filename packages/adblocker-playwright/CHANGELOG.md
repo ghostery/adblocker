@@ -1,3 +1,15 @@
+# v2.17.1 (Thu May 14 2026)
+
+#### :house: Internal
+
+- chore(lint): remove unused no-constant-condition disablement [#5685](https://github.com/ghostery/adblocker/pull/5685) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.0 (Fri May 08 2026)
 
 #### :nut_and_bolt: Dependencies
