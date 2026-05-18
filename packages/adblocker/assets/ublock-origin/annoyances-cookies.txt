@@ -585,6 +585,8 @@ moleson.rentalp.com##+js(trusted-set-cookie, USE_COOKIE_CONSENT_STATE, %7B%22fir
 mediaguru.cz##+js(trusted-click-element, .b-cookie%20button%5Bdata-cookie-reject%5D, , 500)
 ! https://tietokonekauppa.fi/
 tietokonekauppa.fi##+js(trusted-set-cookie, cookieConsent, %7B%22consentAnalytics%22%3A%22denied%22%5C%2C%22consentAds%22%3A%22denied%22%7D, 1year)
+! https://github.com/uBlockOrigin/uAssets/issues/32933
+etos.nl##+js(trusted-click-element, button%23cookie-dismiss, !cookie%3Acookie-consent, 1000)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -2633,8 +2635,6 @@ refunder.*##+js(trusted-set-cookie, cookie_consent, %7B%22rejectAll%22%3Atrue%7D
 airbaltic.com##+js(trusted-click-element, button.cookiebanner__buttons__deny, , 1000)
 ! refuse
 zorgzaam010.nl##+js(trusted-click-element, button.button-refuse, , 1000)
-! refuse
-etos.nl##+js(trusted-click-element, button%23cookie-dismiss, , 1000)
 ! saveConsent
 paruvendu.fr##+js(trusted-click-element, a%5Bonclick%3D%22cmp_pv.cookie.saveConsent('onlyLI')%3B%22%5D, , 1000)
 ! approve
