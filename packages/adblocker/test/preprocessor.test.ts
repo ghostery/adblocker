@@ -175,6 +175,64 @@ describe('preprocessors', () => {
 !#endif`);
   });
 
+  it('keeps nested else scoped to parent conditions', () => {
+    const emptyEnv = new Env();
+    const engine = FilterEngine.parse(
+      `!#if false
+!#if true
+||foo.com^
+!#else
+||bar.com^
+!#endif
+!#endif`,
+      {
+        loadPreprocessors: true,
+      },
+    );
+    engine.updateEnv(emptyEnv);
+
+    expect(engine.match(requests.foo)).to.have.property('match', false);
+    expect(engine.match(requests.bar)).to.have.property('match', false);
+  });
+
+  it('preserves filters from repeated blocks with the same condition', () => {
+    const emptyEnv = new Env();
+    const engine = FilterEngine.parse(
+      `!#if ext_ghostery
+||foo.com^
+!#endif
+!#if ext_ghostery
+||bar.com^
+!#endif`,
+      {
+        loadPreprocessors: true,
+      },
+    );
+    engine.updateEnv(emptyEnv);
+
+    expect(engine.match(requests.foo)).to.have.property('match', false);
+    expect(engine.match(requests.bar)).to.have.property('match', false);
+  });
+
+  it('keeps parent conditions active after a nested block closes', () => {
+    const emptyEnv = new Env();
+    const engine = FilterEngine.parse(
+      `!#if false
+!#if true
+||foo.com^
+!#endif
+||bar.com^
+!#endif`,
+      {
+        loadPreprocessors: true,
+      },
+    );
+    engine.updateEnv(emptyEnv);
+
+    expect(engine.match(requests.foo)).to.have.property('match', false);
+    expect(engine.match(requests.bar)).to.have.property('match', false);
+  });
+
   it('resolves spread conditions', () => {
     doTest(`!#if ext_ghostery
 !#if false
