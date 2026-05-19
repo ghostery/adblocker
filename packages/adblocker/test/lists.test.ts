@@ -143,9 +143,9 @@ bar.co.uk^*baz
   });
 
   it('handles continued filters with surrounding whitespace', () => {
-    expect(getLinesWithFilters('  ||foo.com^$domain=example.com| \\' + '\n    example.org   ')).to.eql(
-      new Set(['||foo.com^$domain=example.com|example.org']),
-    );
+    expect(
+      getLinesWithFilters('  ||foo.com^$domain=example.com| \\' + '\n    example.org   '),
+    ).to.eql(new Set(['||foo.com^$domain=example.com|example.org']));
   });
 });
 
@@ -301,7 +301,7 @@ describe('#parseFilters', () => {
 
     it('handles preprocessors with trailing whitespace', () => {
       const result = parseFilters(
-        `!#if true   
+        `!#if true
 ||foo.com
 !#endif   `,
         config,
