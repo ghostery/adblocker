@@ -177,11 +177,8 @@ export function parseFilters(
     let line = lines[i];
 
     // Check if `line` should be left-trimmed
-    if (
-      line.length !== 0 &&
-      (line.charCodeAt(0) <= 32 || line.charCodeAt(line.length - 1) <= 32)
-    ) {
-      line = line.trim();
+    if (line.length !== 0 && line.charCodeAt(0) <= 32) {
+      line = line.trimStart();
     }
 
     // Handle continuations
@@ -208,6 +205,11 @@ export function parseFilters(
           break;
         }
       }
+    }
+
+    // Check if `line` should be right-trimmed
+    if (line.length !== 0 && line.charCodeAt(line.length - 1) <= 32) {
+      line = line.trimEnd();
     }
 
     // Detect if filter is supported, network or cosmetic

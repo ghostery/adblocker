@@ -141,6 +141,12 @@ bar.co.uk^*baz
       `),
     ).to.eql(new Set(['||foo.com']));
   });
+
+  it('handles continued filters with surrounding whitespace', () => {
+    expect(getLinesWithFilters('  ||foo.com^$domain=example.com| \\' + '\n    example.org   ')).to.eql(
+      new Set(['||foo.com^$domain=example.com|example.org']),
+    );
+  });
 });
 
 describe('#parseFilters', () => {
