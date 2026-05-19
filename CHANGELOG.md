@@ -1,3 +1,33 @@
+# v2.17.2 (Tue May 19 2026)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: preprocessor scoping issue [#5696](https://github.com/ghostery/adblocker/pull/5696) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5690](https://github.com/ghostery/adblocker/pull/5690) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump minimatch from 9.0.3 to 10.2.5 [#5694](https://github.com/ghostery/adblocker/pull/5694) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump ws from 8.20.0 to 8.20.1 [#5695](https://github.com/ghostery/adblocker/pull/5695) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5691](https://github.com/ghostery/adblocker/pull/5691) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - Build(deps-dev): Bump the development-dependencies group across 1 directory with 5 updates [#5692](https://github.com/ghostery/adblocker/pull/5692) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.1 (Thu May 14 2026)
 
 #### :bug: Bug Fix

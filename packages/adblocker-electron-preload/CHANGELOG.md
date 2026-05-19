@@ -1,3 +1,15 @@
+# v2.17.2 (Tue May 19 2026)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5691](https://github.com/ghostery/adblocker/pull/5691) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 1
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+
+---
+
 # v2.17.0 (Fri May 08 2026)
 
 #### :nut_and_bolt: Dependencies

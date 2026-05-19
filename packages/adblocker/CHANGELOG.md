@@ -1,3 +1,26 @@
+# v2.17.2 (Tue May 19 2026)
+
+#### :bug: Bug Fix
+
+- fix: preprocessor scoping issue [#5696](https://github.com/ghostery/adblocker/pull/5696) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- Update local assets [#5690](https://github.com/ghostery/adblocker/pull/5690) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 5 updates [#5692](https://github.com/ghostery/adblocker/pull/5692) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.1 (Thu May 14 2026)
 
 #### :bug: Bug Fix
