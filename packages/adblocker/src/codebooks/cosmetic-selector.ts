@@ -162,7 +162,6 @@ export default [
   "he",
   "id",
   "in",
-  "it",
   "la",
   "le",
   "li",
@@ -260,5 +259,6 @@ export default [
   "x",
   "y",
   "Y",
-  "z"
+  "z",
+  "Z"
 ];
