@@ -53,11 +53,11 @@ export function detectPreprocessor(line: string) {
     return PreprocessorTokens.BEGIF;
   }
 
-  if (line.startsWith('!#else')) {
+  if (line === '!#else') {
     return PreprocessorTokens.ELSE;
   }
 
-  if (line.startsWith('!#endif')) {
+  if (line === '!#endif') {
     return PreprocessorTokens.ENDIF;
   }
 
@@ -161,7 +161,7 @@ export const evaluate = (expression: string, env: Env): boolean => {
   }
 
   // If there is incomplete parenthesis
-  if (stack[0] === '(' || stack[0] === ')') {
+  if (stack.includes('(')) {
     return false;
   }
 

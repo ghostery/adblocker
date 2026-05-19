@@ -183,7 +183,7 @@ export function parseFilters(
 
     // Check if `line` should be left-trimmed
     if (line.length !== 0 && line.charCodeAt(0) <= 32) {
-      line = line.trim();
+      line = line.trimStart();
     }
 
     // Handle continuations
@@ -214,7 +214,7 @@ export function parseFilters(
 
     // Check if `line` should be right-trimmed
     if (line.length !== 0 && line.charCodeAt(line.length - 1) <= 32) {
-      line = line.trim();
+      line = line.trimEnd();
     }
 
     // Detect if filter is supported, network or cosmetic
