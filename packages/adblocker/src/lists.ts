@@ -9,7 +9,11 @@
 import Config from './config.js';
 import CosmeticFilter from './filters/cosmetic.js';
 import NetworkFilter from './filters/network.js';
-import Preprocessor, { PreprocessorTokens, detectPreprocessor } from './preprocessor.js';
+import Preprocessor, {
+  PreprocessorTokens,
+  detectPreprocessor,
+  joinConditions,
+} from './preprocessor.js';
 
 export const enum FilterType {
   NOT_SUPPORTED = 0,
@@ -170,8 +174,9 @@ export function parseFilters(
   const notSupportedFilters: NonSupportedFilter[] = [];
   const lines = list.split('\n');
 
-  const preprocessors: Preprocessor[] = [];
-  const preprocessorStack: Preprocessor[] = [];
+  const preprocessors: Map<string, Preprocessor> = new Map();
+  const conditions: string[] = [];
+  let preprocessor: Preprocessor | null = null;
 
   for (let i = 0; i < lines.length; i += 1) {
     let line = lines[i];
@@ -219,8 +224,8 @@ export function parseFilters(
       const filter = NetworkFilter.parse(line, config.debug);
       if (filter !== null) {
         networkFilters.push(filter);
-        if (preprocessorStack.length > 0) {
-          preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
+        if (preprocessor !== null) {
+          preprocessor.filterIDs.add(filter.getId());
         }
       } else {
         notSupportedFilters.push({
@@ -234,8 +239,8 @@ export function parseFilters(
       if (filter !== null) {
         if (config.loadGenericCosmeticsFilters === true || filter.isGenericHide() === false) {
           cosmeticFilters.push(filter);
-          if (preprocessorStack.length > 0) {
-            preprocessorStack[preprocessorStack.length - 1].filterIDs.add(filter.getId());
+          if (preprocessor !== null) {
+            preprocessor.filterIDs.add(filter.getId());
           }
         }
       } else {
@@ -249,30 +254,28 @@ export function parseFilters(
       const preprocessorToken = detectPreprocessor(line);
 
       if (preprocessorToken === PreprocessorTokens.BEGIF) {
-        if (preprocessorStack.length > 0) {
-          preprocessorStack.push(
-            new Preprocessor({
-              condition: `(${preprocessorStack[preprocessorStack.length - 1].condition})&&(${Preprocessor.getCondition(line)})`,
-            }),
-          );
-        } else {
-          preprocessorStack.push(Preprocessor.parse(line));
+        const condition = Preprocessor.getCondition(line);
+        conditions.push(condition);
+        const nextCondition = joinConditions(conditions);
+        preprocessor = preprocessors.get(nextCondition)!;
+        if (preprocessor === undefined) {
+          preprocessor = new Preprocessor({
+            condition: nextCondition,
+          });
+          preprocessors.set(nextCondition, preprocessor);
         }
-      } else if (
-        (preprocessorToken === PreprocessorTokens.ENDIF ||
-          preprocessorToken === PreprocessorTokens.ELSE) &&
-        preprocessorStack.length > 0
-      ) {
-        const lastPreprocessor = preprocessorStack.pop()!;
-
-        preprocessors.push(lastPreprocessor);
-
-        if (preprocessorToken === PreprocessorTokens.ELSE) {
-          preprocessorStack.push(
-            new Preprocessor({
-              condition: `!(${lastPreprocessor.condition})`,
-            }),
-          );
+      } else if (preprocessorToken === PreprocessorTokens.ENDIF) {
+        conditions.pop();
+        preprocessor = preprocessors.get(joinConditions(conditions)) || null;
+      } else if (preprocessorToken === PreprocessorTokens.ELSE && conditions.length > 0) {
+        conditions.push(`!(${conditions.pop()})`);
+        const nextCondition = joinConditions(conditions);
+        preprocessor = preprocessors.get(nextCondition)!;
+        if (preprocessor === undefined) {
+          preprocessor = new Preprocessor({
+            condition: nextCondition,
+          });
+          preprocessors.set(nextCondition, preprocessor);
         }
       } else if (filterType === FilterType.NOT_SUPPORTED_ADGUARD) {
         notSupportedFilters.push({
@@ -293,7 +296,9 @@ export function parseFilters(
   return {
     networkFilters,
     cosmeticFilters,
-    preprocessors: preprocessors.filter((preprocessor) => preprocessor.filterIDs.size > 0),
+    preprocessors: Array.from(preprocessors.values()).filter(
+      (preprocessor) => preprocessor.filterIDs.size > 0,
+    ),
     notSupportedFilters,
   };
 }

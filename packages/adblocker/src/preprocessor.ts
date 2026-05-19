@@ -189,6 +189,14 @@ export const evaluate = (expression: string, env: Env): boolean => {
   return stack[0] === true;
 };
 
+export const joinConditions = (expressions: string[]): string => {
+  if (expressions.length === 1) {
+    return expressions[0];
+  }
+
+  return expressions.map((expression) => `(${expression})`).join('&&');
+};
+
 export default class Preprocessor {
   public static getCondition(line: string) {
     return line.slice(5 /* '!#if '.length */).replace(/\s/g, '');
