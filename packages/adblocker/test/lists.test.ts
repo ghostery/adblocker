@@ -292,6 +292,18 @@ describe('#parseFilters', () => {
       expect(result).to.have.property('preprocessors').that.have.lengthOf(1);
       expect(result).to.have.property('networkFilters').that.have.lengthOf(1);
     });
+
+    it('handles preprocessors with trailing whitespace', () => {
+      const result = parseFilters(
+        `!#if true   
+||foo.com
+!#endif   `,
+        config,
+      );
+
+      expect(result).to.have.property('preprocessors').that.have.lengthOf(1);
+      expect(result).to.have.property('networkFilters').that.have.lengthOf(1);
+    });
   });
 });
 

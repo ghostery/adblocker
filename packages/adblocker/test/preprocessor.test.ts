@@ -66,6 +66,7 @@ describe('conditions', () => {
     expect(evaluate('(true', env)).to.be.false;
     expect(evaluate('((true)', env)).to.be.false;
     expect(evaluate('true((true)', env)).to.be.false;
+    expect(evaluate('true&&(false||true', env)).to.be.false;
   });
 });
 
@@ -150,6 +151,38 @@ describe('preprocessors', () => {
 !#else
 ||bar.com^
 !#endif`);
+  });
+
+  it('requires exact else and endif tokens', () => {
+    const invalidElseEngine = FilterEngine.parse(
+      `!#if false
+||bar.com^
+!#else invalid
+||foo.com^
+!#endif`,
+      {
+        loadPreprocessors: true,
+      },
+    );
+    invalidElseEngine.updateEnv(env);
+
+    expect(invalidElseEngine.match(requests.foo)).to.have.property('match', false);
+    expect(invalidElseEngine.match(requests.bar)).to.have.property('match', false);
+
+    const invalidEndifEngine = FilterEngine.parse(
+      `!#if false
+||bar.com^
+!#endif invalid
+||foo.com^
+!#endif`,
+      {
+        loadPreprocessors: true,
+      },
+    );
+    invalidEndifEngine.updateEnv(env);
+
+    expect(invalidEndifEngine.match(requests.foo)).to.have.property('match', false);
+    expect(invalidEndifEngine.match(requests.bar)).to.have.property('match', false);
   });
 
   it('resolves nested conditions', () => {
