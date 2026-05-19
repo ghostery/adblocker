@@ -1,3 +1,15 @@
+# v2.17.3 (Tue May 19 2026)
+
+#### :bug: Bug Fix
+
+- fix: explicit preprocessor conditions and parenthesis parsing [#5693](https://github.com/ghostery/adblocker/pull/5693) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.2 (Tue May 19 2026)
 
 #### :bug: Bug Fix
