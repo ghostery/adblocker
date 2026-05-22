@@ -724,7 +724,7 @@ bellinghamherald.com,bnd.com,bradenton.com,centredaily.com,charlotteobserver.com
 taigoforum.de##+js(acs, %24, .show)
 ! https://github.com/uBlockOrigin/uAssets/issues/17018
 myanimelist.net##[data-koukoku-width]:remove()
-myanimelist.net##+js(rmnt, style, body%3Anot(.ownlist))
+myanimelist.net##+js(rmnt, style, body%3Ais(%3Anot(.ownlist)))
 ! https://github.com/uBlockOrigin/uAssets/issues/25757
 myanimelist.net##[class*="-malside"]
 myanimelist.net##[class*="-pdatla"]
@@ -1207,6 +1207,10 @@ dobreprogramy.pl##+js(trusted-replace-argument, RegExp.prototype.test, 0, json%3
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/32909
 dobreprogramy.pl##div[class*=" "]:not([class*="-"], [id]):has(> img[src^="https://v.wpimg.pl/"])
+! https://github.com/uBlockOrigin/uAssets/issues/32959
+wp.pl#@#body > div:nth-of-type(1)[style^="display: block;"]:not(#page)
+||dot.wp.pl/*/dot.gif?$css,redirect=noop.css
+||std.wpcdn.pl/images/adv/$image,redirect=1x1.gif
 ! https://github.com/uBlockOrigin/uAssets/issues/17527
 tralhasvarias.blogspot.com##+js(nano-stb, decodeURL, *)
 tralhasvarias.blogspot.com##+js(nano-sib, updateProgress, *)
