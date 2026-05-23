@@ -1901,6 +1901,8 @@ asia.5ivttv.vip##+js(acs, document.readyState, mdpDeblocker)
 ||dai.google.com/ssai/event/*/streams$xhr,domain=sbt.com.br
 ||pubads.g.doubleclick.net/ssai/event/*/streams$xhr,domain=sbtnews.sbt.com.br,important
 ||dai.google.com/linear/pods/$xhr,from=sbtnews.sbt.com.br
+||cdn.s73cloud.com^$domain=mais.sbt.com.br
+mais.sbt.com.br##+js(trusted-replace-xhr-response, %2F%23EXTINF%3A%5B%5E%5Cn%5D%2B%5Cn%5B%5E%5Cn%5D%2B%3F%5C%2Fpreroll%5C%2F%5B%5E%5Cn%5D%2B%2Fgms, , .m3u8)
 ! https://github.com/uBlockOrigin/uAssets/issues/23988
 ||khantv.live/ad2.php^
 ! https://github.com/uBlockOrigin/uAssets/issues/23998
@@ -2163,6 +2165,7 @@ mathdf.com##+js(set, adBlockEnabled, false)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=powernationtv.com
 ! https://github.com/uBlockOrigin/uAssets/issues/16775#issuecomment-2212319154
 actionviewphotography.com,exporntoons.net,tyler-brown.com,ukdevilz.com##+js(acs, document.querySelectorAll, popMagic)
+/static/players/*/vast.js$1p
 ! https://github.com/uBlockOrigin/uAssets/issues/24414
 realcanadiansuperstore.ca##+js(json-prune-fetch-response, layout.sections.mainContentCollection.components.%5B%5D.data.productTiles.%5B-%5D.sponsoredCreative.adGroupId, , propsToMatch, %2Fsearch)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1dyipwv/site_redirects_when_i_click_on_play/
@@ -2313,11 +2316,6 @@ hiraethtranslation.com##+js(rmnt, script, adsSrc)
 chasingthedonkey.com##+js(nowoif)
 ! https://www.taste.com.au/food-news/arnotts-told-us-secret-recipe-their-discontinued-honey-jumbles-biscuits/y036sar4 - top placeholder
 taste.com.au##.main-header:style(top: 0 !important)
-! https://github.com/uBlockOrigin/uAssets/issues/24714
-||ethicalads.io^$script,domain=decompiler.com,important
-||googletagmanager.com^$script,domain=decompiler.com,important
-@@*$script,3p,domain=decompiler.com
-decompiler.com##+js(set, ethicalads, true)
 ! ytlarge detection
 @@||ytlarge.com^$ghide
 @@||googlesyndication.com^$script,xhr,domain=ytlarge.com
