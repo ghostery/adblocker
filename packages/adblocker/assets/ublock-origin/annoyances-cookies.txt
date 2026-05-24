@@ -54,6 +54,9 @@ groupeapocom.com###website_cookies_bar
 ! https://github.com/uBlockOrigin/uAssets/pull/32247
 ||la7.it/la7_iabtcf2/cmp.js
 ||privacymanager.io^$domain=la7.it
+! https://github.com/AdguardTeam/AdguardFilters/issues/231768
+! [badfilter] @@||cdn.privacy-mgmt.com/unified/wrappermessagingwithoutdetection.js$domain=businessinsider.com,badfilter
+businessinsider.com##.related-posts
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -587,6 +590,15 @@ mediaguru.cz##+js(trusted-click-element, .b-cookie%20button%5Bdata-cookie-reject
 tietokonekauppa.fi##+js(trusted-set-cookie, cookieConsent, %7B%22consentAnalytics%22%3A%22denied%22%5C%2C%22consentAds%22%3A%22denied%22%7D, 1year)
 ! https://github.com/uBlockOrigin/uAssets/issues/32933
 etos.nl##+js(trusted-click-element, button%23cookie-dismiss, !cookie%3Acookie-consent, 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/32998
+united-domains.de##+js(trusted-click-element, .cookie-layer-dialog%20button.confirm-selection)
+!#if cap_html_filtering
+united-domains.de##^script#real-cookie-banner-pro-vendor-real-cookie-banner-pro-banner-js
+!#else
+united-domains.de##div[consent-skip-blocker]:remove()
+!#endif
+! https://github.com/uBlockOrigin/uAssets/pull/33006
+diamantrad.com,lpi.org##+js(trusted-click-element, button%23CookieBoxSaveButton, , 1000)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -1558,8 +1570,6 @@ prada.com##+js(trusted-set-cookie, PRADACONSENT_V3, c1%3A0%7Cc3%3A0%7Cc6%3A0%7Cc
 sinergy.ch,agglo-valais-central.ch##+js(trusted-click-element, button.refuseAll, , 1000)
 ! required/functional
 falatozz.hu##+js(trusted-set-cookie, cookieAccepted, required%2Cfunctional, , , reload, 1)
-! technically necessary
-united-domains.de##+js(trusted-set-cookie, CookieSettingsGroupId, 0193703c-779e-701d-bdba-fad9eea47938.13, , , reload, 1)
 ! accept
 biomedcentral.com##+js(trusted-click-element, button%5Bdata-cc-action%3D%22accept%22%5D, , 1000)
 ! accept hsbc.de/hsbc.pl/hsbc.fr/hsbc.es etc
@@ -2513,8 +2523,6 @@ vevovo.be,vendezvotrevoiture.be,wirkaufendeinauto.at,vikoberallebiler.dk,wijkope
 auto-doc.fr,autodoc.*,autodoc24.*,topautoosat.fi,autoteiledirekt.de,autoczescionline24.pl,tuttoautoricambi.it,onlinecarparts.co.uk,autoalkatreszek24.hu,autodielyonline24.sk,reservdelar24.se,pecasauto24.pt,reservedeler24.co.no,piecesauto24.lu,rezervesdalas24.lv,besteonderdelen.nl,recambioscoche.es,antallaktikaexartimata.gr,piecesauto.fr,teile-direkt.ch##+js(trusted-click-element, button%5Bdata-cookies%3D%22disallow_all_cookies%22%5D, , 1000)
 auto-doc.*,auto-doc.fr##.popup-traffic-mobile
 auto-doc.*,auto-doc.fr##body:style(overflow: auto !important;)
-! essential
-lpi.org##+js(trusted-click-element, button%23CookieBoxSaveButton, , 1000)
 ! accept
 elgrafico.com.ar##+js(trusted-set-cookie, elgrafico_com_ar, %7B%22consent%22%3A%22ca%22%7D)
 ! essential, video=true
@@ -4128,3 +4136,5 @@ ladbible.com##+js(trusted-click-element, .cmp-banner%20.accept-all)
 zenskirecenziraj.com##+js(trusted-set-cookie, zenski_cmp, basic)
 ! https://github.com/uBlockOrigin/uAssets/issues/32795
 tlc.com##+js(trusted-click-element, .btn.btn-primary)
+! https://www.eventim.ro/event/alifantis-mirica-gemini-2-0-casa-de-cultura-a-sindicatelor-21322560/ - maps breakage
+eventim.ro##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmpboxbtnyes, , 1000)

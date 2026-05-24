@@ -909,6 +909,7 @@ www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26
 ! 1st-party google tag manager script
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4}\/$/$script,1p,match-case
 !#endif
+||youtube.com/youtubei/v1/log_event
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213240
 ||bdvmetricas.banvenez.com.ve^
 ! https://www.bilet.com/ido
@@ -1464,6 +1465,10 @@ www.lenovo.com##+js(trusted-replace-argument, history.replaceState, 2, '', condi
 !#endif
 ! https://www.halaldownload.com/%d8%af%d8%a7%d9%86%d9%84%d9%88%d8%af-%d9%82%d8%b3%d9%85%d8%aa-6-%d9%81%d8%b5%d9%84-2-%d8%b2%d8%ae%d9%85-%da%a9%d8%a7%d8%b1%db%8c-%d8%a8%d8%a7%d8%b2%da%af%d8%b4%d8%aa/ - Download links
 ||upera.shop/ref/$doc,uritransform=/^\/ref\/[^\/]+//
+! https://zoomit.ir/product
+||api2.zoomit.ir/catalog/store-links/*/click?url=$urlskip=?url,doc
+! https://offerdaily.ir/2793-%DA%A9%D8%AF-%D8%AA%D8%AE%D9%81%DB%8C%D9%81-%D8%A7%D8%B3%D9%86%D9%BE-%D8%B4%D8%A7%D9%BE-%D8%A7%D8%B1%D8%B3%D8%A7%D9%84-%D8%B1%D8%A7%DB%8C%DA%AF%D8%A7%D9%86 - "استفاده از کد تخفیف"
+||offerdaily.ir/external^$doc,urlskip=/\/external\/(.*)/ -base64
 ! https://www.makeuseof.com/best-vs-code-chatgpt-extensions/ - Tracking cookies
 androidpolice.com,makeuseof.com,movieweb.com,xda-developers.com##+js(cookie-remover, %2FarticlesRead%7CpreviousPage%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/20440
