@@ -930,30 +930,6 @@ rebajagratis.com,tv.latinlucha.es##^script:has-text(/adsBlocked|"popundersPerIP"
 !#else
 rebajagratis.com,tv.latinlucha.es##+js(rmnt, script, %2FadsBlocked%7C%22popundersPerIP%22%2F)
 !#endif
-! RPMShare
-! https://github.com/uBlockOrigin/uAssets/issues/27110
-! https://github.com/uBlockOrigin/uAssets/issues/28212
-! https://rpmshare.rpmvip.com/#klagy
-! https://kdhindidubbed.rpmstream.live/#q9lai
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=anichin.rpmvid.com|disneycdn.net|rpmhub.site|rpmlive.online|rpmplay.me|rpmplay.xyz|rpmstream.live|rpmvip.com|vidplayer.live
-! https://tokuvn.com/kamen-rider-ryuki.html?sv=fe#player
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=strp2p.com,important
-! https://www.desicinema.org/movies/sarangapani-jathakam/ ad popups
-rpmplay.xyz##+js(aopr, open)
-||boaststockingsaucer.com^
-! nsfw pandamovies .org /watchporn4k. com
-easyvidplayer.com,embedseek.online,player4me.online##+js(aeld, click, popunder)
-easyvidplayer.com,embedseek.online,player4me.online##+js(aost, document.createElement, displayLayer)
-easyvidplayer.com##+js(aeld, click, adId)
-easyvidplayer.com,rpmplay.online,pandamovies.org,watchporn4k.com##+js(nowoif)
-pandamovies.org,watchporn4k.com###video-overlay
-watchporn4k.com##.happy-player-beside
-*$script,3p,domain=easyvidplayer.com|embedseek.online|player4me.online
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=easyvidplayer.com|embedseek.online|player4me.online|rpmplay.online
-||blinksbobblepadding.com^
-||magazineschnappstrusting.com^
-||nibaz.com^
-||tookfree.com^
 ! bemyhole .com (NSFW) - ads, popups
 bemyhole.com##+js(rmnt, script, egoTab)
 bemyhole.com##.headline-sidebar
@@ -1492,7 +1468,8 @@ strmup.to##+js(acs, document.createElement, 'script')
 ||streamup.ws/assets/js/adblock.js$script,1p
 ||katfile.online^$image,domain=vidnest.live
 ! https://github.com/uBlockOrigin/uAssets/issues/31151#issuecomment-4031113319
-vidsonic.net##+js(rpnt, script, (detected%20%26%26%20true), (false))
+vidsonic.net##+js(rpnt, script, if%20(_detectWebView()), return%20false%3Bif%20(_detectWebView()))
+vidsonic.net##+js(aeld, error, %2Fadblock%2Fi)
 ! animenexus.in ad popups
 animenexus.in##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/27954
@@ -1952,21 +1929,26 @@ buickforums.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/28525#issuecomment-3064625698
 ! https://github.com/uBlockOrigin/uAssets/issues/29228
 ! https://github.com/uBlockOrigin/uAssets/issues/32347
+! https://github.com/uBlockOrigin/uAssets/issues/33024
 ! https://arabshentai.com/episodes/%d8%a7%d9%84%d8%b3%d9%8a%d8%af%d8%a9-%d9%83%d8%a7%d9%86%d8%aa-%d9%81%d8%a7%d8%b3%d9%82%d8%a9-2/
 ! https://smoothpre.com/f/47li0zinsom8
 ! https://mivalyo.com/file/47li0zinsom8
 ! https://www.reddit.com/r/uBlockOrigin/comments/1nc7jwl/nsfw_site_seems_to_be_blocking_trailers_with/
-||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=cloudwish.xyz|fapsharing.com|fc2stream.tv|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|mivalyo.com|mmvh01.xyz|movearnpre.com|mycloudz.cc|nekovid.xyz|smoothpre.com|trailerhg.xyz|vstream.id
-cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,vstream.id,arabshentai.com>>,avtub.cx>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.*>>##+js(set, uas, %5B%5D)
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=pelispop.mov|cloudwish.xyz|fapsharing.com|fc2stream.tv|gradehgplus.com|javindo.site|javindosub.site|kamehaus.net|minochinos.com|mivalyo.com|mmvh01.xyz|movearnpre.com|mycloudz.cc|nekovid.xyz|smoothpre.com|trailerhg.xyz|vstream.id
+cloudwish.xyz,gradehgplus.com,javindo.site,javindosub.site,kamehaus.net,movearnpre.com,vstream.id##+js(set, uas, %5B%5D)
+arabshentai.com>>,avtub.cx>>,javdo.cc>>,javenglish.cc>>,javhd.*>>,javhdz.*>>,roshy.tv>>,sextb.*>>##+js(set, uas, %5B%5D)
 sextb.*>>##+js(nostif, ast)
 sextb.*>>##+js(trusted-set, premium, json%3A1)
 sextb.*>>##+js(nowoif)
 sextb.*>>##+js(trusted-override-element-method, HTMLAnchorElement.prototype.click, a%5Bhref%5D%5Btarget%3D%22_blank%22%5D)
 sextb.net##.right:has(script)
 /assets/jquery/*.js?type=adult^$script,1p
+/assets/jquery/static.js?type=mainstream^$script,1p
 /wp-content/plugins/anti-adblocker/*
 /popup/earnvids.js
+/vast-player-oxserver.js
 ||non.arabshentai.com^
+||minochinos.com/assets/jquery/static.js
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ogmw3q/sextbnet_nsfw_forces_you_to_disable_ubo/
 sextb.*#@#.ad-placeholder:not(#detect, #detect_ad_empire, #filter_ads_by_classname, .adsbox)
 ! https://github.com/uBlockOrigin/uAssets/issues/29030
@@ -2403,6 +2385,7 @@ dailymotion.com##.WatchingDiscovery__adSection___eLtfR
 ! https://github.com/uBlockOrigin/uAssets/commit/ddafd8d16d0c945ad7befcd2d6f35d846645c161
 ! https://github.com/uBlockOrigin/uAssets/issues/31350
 ! https://github.com/uBlockOrigin/uAssets/issues/31433
+! https://www.reddit.com/r/uBlockOrigin/comments/1t93q82/euronews_videos_try_to_loads_ads_slow_performance/
 ||dmxleo.dailymotion.com/*.m3u8?auth=
 !#if !env_mobile
 !#if !env_chromium
@@ -2410,8 +2393,10 @@ dailymotion.com##.WatchingDiscovery__adSection___eLtfR
 geo.dailymotion.com##+js(set, DMP_ENABLE_ADS, false)
 !#else
 www.dailymotion.com>>,~google.com##+js(xml-prune, %5BbreakId%5D, , _VMAP_)
+euronews.com>>##+js(set, DMP_ENABLE_ADS, false)
 !#endif
 !#endif
+||dmxleo.dailymotion.com/cdn/manifest/video/*.m3u8?af=*_VMAP_
 ! https://github.com/uBlockOrigin/uAssets/issues/31838
 ||dmxleo.dailymotion.com/cdn/manifest/video/*?af=*monetization$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/30056
