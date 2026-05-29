@@ -62,6 +62,8 @@ businessinsider.com##.related-posts
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
 ! https://old.reddit.com/r/uBlockOrigin/comments/1l8i7qu/unusual_traffic_warning_from_google_search_in/
 www.google.*##+js(trusted-click-element, button%23W0wltc, , 500)
+! https://github.com/uBlockOrigin/uAssets/issues/31715#issuecomment-4555169088
+gemini.google.com##+js(trusted-click-element, button%5Bdata-test-id%3D%22reject-button%22%5D, , 500)
 ! When moving from Google search to other Google services or opening them directly. E.G. https://translate.google.com/
 consent.google.*##+js(trusted-click-element, form%5Baction%5D%20button%5Bjsname%3D%22tWT92d%22%5D)
 ! https://github.com/DandelionSprout/adfilt/discussions/932#discussioncomment-8260397
@@ -601,6 +603,10 @@ united-domains.de##div[consent-skip-blocker]:remove()
 diamantrad.com,lpi.org##+js(trusted-click-element, button%23CookieBoxSaveButton, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/pull/33012
 urlando.de##+js(trusted-set-cookie, urlando_consent, %7B%22analytics%22%3Afalse%2C%22marketing%22%3Afalse%2C%22timestamp%22%3A%22%24currentISODate%24%22%7D)
+! https://github.com/uBlockOrigin/uAssets/pull/33058
+admind-ai.com##+js(trusted-set-local-storage-item, admind_cookie_consent_v1, %7B%22necessary%22%3Atrue%2C%22analytics%22%3Afalse%2C%22preferences%22%3Afalse%2C%22timestamp%22%3A%22%24currentISODate%24%22%2C%22version%22%3A1%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/33078
+tirerack.com##+js(trusted-click-element, %23meru-cm%20button.meru-cc__bn%5Baria-label%3D%22Reject%20All%22%5D, , 2000)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -4140,3 +4146,5 @@ zenskirecenziraj.com##+js(trusted-set-cookie, zenski_cmp, basic)
 tlc.com##+js(trusted-click-element, .btn.btn-primary)
 ! https://www.eventim.ro/event/alifantis-mirica-gemini-2-0-casa-de-cultura-a-sindicatelor-21322560/ - maps breakage
 eventim.ro##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmpboxbtnyes, , 1000)
+! https://github.com/uBlockOrigin/uAssets/pull/33067
+lequipe.fr##+js(trusted-click-element, .CmpUnsubscriber%20.Cmp__action--yes, , 1000)
