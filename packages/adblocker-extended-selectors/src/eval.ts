@@ -581,6 +581,7 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
         }
       }
     }
+    return results;
   }
 
   return [];
