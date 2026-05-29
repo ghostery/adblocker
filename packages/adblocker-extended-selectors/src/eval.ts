@@ -6,6 +6,7 @@
  * file, You can obtain one at https://mozilla.org/MPL/2.0/.
  */
 
+import { EXTENDED_PSEUDO_CLASSES } from './extended.js';
 import type { AST, Complex, PseudoClass } from './types.js';
 
 const createXpathExpression = (function () {
@@ -429,12 +430,81 @@ function traverse(root: Element, selectors: AST[]): Element[] {
 }
 
 /**
- * Check if the selector is delegating the traversal process to the external method.
+ * Check if the selector is delegating the traversal process to
+ * the external method. Therefore, we can skip selecting
+ * subjective element.
  * @param selector The pseudo class selector
  */
 function isDelegatedPseudoClass(selector: PseudoClass): boolean {
-  if (selector.name === 'xpath') {
-    return true;
+  return (
+    // `xpath` and `upward` changes the subjective element
+    selector.name === 'xpath' ||
+    selector.name === 'upward' ||
+    // `matches-path` doesn't depend on the element
+    selector.name === 'matches-path'
+  );
+}
+
+export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): boolean {
+  if (
+    selector.type === 'id' ||
+    selector.type === 'class' ||
+    selector.type === 'type' ||
+    selector.type === 'attribute'
+  ) {
+    return false;
+  }
+
+  if (selector.type === 'list') {
+    for (const item of selector.list) {
+      if (isExtendedSelector(item, isUnderHasSubtree)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  if (selector.type === 'compound') {
+    for (const item of selector.compound) {
+      if (isExtendedSelector(item, isUnderHasSubtree)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  if (selector.type === 'complex') {
+    if (isExtendedSelector(selector.right, isUnderHasSubtree)) {
+      return true;
+    } else if (
+      selector.left !== undefined &&
+      isExtendedSelector(selector.left, isUnderHasSubtree)
+    ) {
+      return true;
+    }
+    return false;
+  }
+
+  if (selector.type === 'pseudo-class') {
+    if (isDelegatedPseudoClass(selector)) {
+      return true;
+    }
+
+    if (selector.name === 'has') {
+      if (selector.subtree === undefined) {
+        // invalid selector
+        return false;
+      } else if (isUnderHasSubtree) {
+        return true;
+      }
+
+      return isExtendedSelector(selector.subtree, true);
+    }
+
+    return (
+      EXTENDED_PSEUDO_CLASSES.has(selector.name) ||
+      (selector.subtree !== undefined && isExtendedSelector(selector.subtree, isUnderHasSubtree))
+    );
   }
 
   return false;
@@ -489,20 +559,28 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   }
 
   if (selector.type === 'pseudo-class') {
-    const results: Element[] = [];
     // This code is intended to be matched with `document.documentElement.querySelectorAll`.
     // Since `document` is at the higher position rather `document.documentElement`,
     // it can't select `html` for an instance.
-    for (const subjective of isDelegatedPseudoClass(selector)
-      ? [element]
-      : element.querySelectorAll('*')) {
+    if (isDelegatedPseudoClass(selector)) {
+      return traverse(element, [selector]);
+    }
+
+    if (!isExtendedSelector(selector)) {
+      // If the selector is not extended, we can rely on native method.
+      // The selector type of pseudo-class means, there's a single
+      // pseudo-selector not chained.
+      return Array.from(element.querySelectorAll(selector.content));
+    }
+
+    const results: Element[] = [];
+    for (const subjective of element.querySelectorAll('*')) {
       for (const result of traverse(subjective, [selector])) {
         if (!results.includes(result)) {
           results.push(result);
         }
       }
     }
-    return results;
   }
 
   return [];

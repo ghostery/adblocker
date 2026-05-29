@@ -11,7 +11,13 @@ import 'mocha';
 
 import { JSDOM } from 'jsdom';
 
-import { querySelectorAll, matchPattern, matches, handlePseudoDirective } from '../../src/eval.js';
+import {
+  querySelectorAll,
+  matchPattern,
+  matches,
+  handlePseudoDirective,
+  isExtendedSelector,
+} from '../../src/eval.js';
 import { parse } from '../../src/parse.js';
 import {
   classifySelector,
@@ -95,6 +101,14 @@ function testHandlePseudoDirective(
   }
 
   callback(document);
+}
+
+function testIsExtendedSelector(selector: string, expected: boolean): void {
+  const ast = parse(selector);
+  expect(ast).to.not.be.undefined;
+  if (ast !== undefined) {
+    expect(isExtendedSelector(ast)).to.equal(expected);
+  }
 }
 
 describe('eval', () => {
@@ -1043,25 +1057,25 @@ describe('eval', () => {
             // `:upward(div)`: Look parent with tag name of `div`
             // ` `: Select every children at any depth
             // `:has(:upward(a))`: Select every element has children which can look parent with tag name of `a`
-            // - From (whitespace) combinator, we select "p", "a", and "span". However, "span" cannot be selected
-            //   because it doesn't have a child element, making `:has` ineffective
+            // - From (whitespace) combinator, we select "p", "a", and "span"
+            // but "span" is the only one having "a" as parent.
             testQuerySelectorAll(
               'p:upward(div) :has(:upward(a))',
               `<article>
                 <div>
-                  <p id="res1">
-                    <a id="res2"><span /></a>
+                  <p>
+                    <a><span id="res1" /></a>
                   </p>
                 </div>
                 <div><p /></div>
               </article>
               <article>
                 <div>
-                  <p><a /></p>
+                  <p><a></a></p>
                 </div>
                 <div><p /></div>
               </article>`,
-              ['#res1', '#res2'],
+              ['#res1'],
             );
           });
         });
@@ -1256,4 +1270,62 @@ describe('eval', () => {
       });
     });
   });
+
+  describe('isExtendedSelector', () => {
+    it('returns false for simple selectors', () => {
+      testIsExtendedSelector('div', false);
+      testIsExtendedSelector('.ad', false);
+      testIsExtendedSelector('#ad', false);
+      testIsExtendedSelector('[data-ad]', false);
+    });
+
+    it('returns false for unsupported non-delegated pseudo classes', () => {
+      testIsExtendedSelector(':hover', false);
+      testIsExtendedSelector(':hover:active', false);
+      testIsExtendedSelector(':hover > :active', false);
+    });
+
+    it('returns true for supported extended pseudo classes', () => {
+      testIsExtendedSelector(':has-text(ad)', true);
+      testIsExtendedSelector(':matches-path(/ads/)', true);
+      testIsExtendedSelector(':matches-attr(href)', true);
+      testIsExtendedSelector(':matches-css(display: block)', true);
+    });
+
+    it('returns true for delegated pseudo classes', () => {
+      testIsExtendedSelector(':upward(1)', true);
+      testIsExtendedSelector(':xpath(//div)', true);
+    });
+
+    it('walks selector lists', () => {
+      testIsExtendedSelector(':hover, :active', false);
+      testIsExtendedSelector(':hover, :has-text(ad)', true);
+    });
+
+    it('walks compound selectors', () => {
+      testIsExtendedSelector(':hover:has-text(ad)', true);
+      testIsExtendedSelector('div:hover', false);
+    });
+
+    it('walks complex selectors', () => {
+      testIsExtendedSelector(':hover > :has-text(ad)', true);
+      testIsExtendedSelector('div > :active', false);
+    });
+
+    it('checks :has subtree selectors', () => {
+      testIsExtendedSelector(':has(:hover)', false);
+      testIsExtendedSelector(':has(:has-text(ad))', true);
+      testIsExtendedSelector(':has(span:has(a))', true);
+      testIsExtendedSelector(':has(div > span:has(a))', true);
+      testIsExtendedSelector(':has', false);
+    });
+
+    it('checks recursive native pseudo-class subtree selectors', () => {
+      testIsExtendedSelector(':not(:hover)', false);
+      testIsExtendedSelector(':not(:has-text(ad))', true);
+      testIsExtendedSelector(':where(:active)', false);
+      testIsExtendedSelector(':where(:matches-attr(href))', true);
+    });
+  });
+});
 });
