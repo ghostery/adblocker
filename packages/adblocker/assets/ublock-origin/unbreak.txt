@@ -2933,6 +2933,11 @@ variety.com##^html > head > link[rel="canonical"]:not([href*="/video/"]):upward(
 ! https://github.com/uBlockOrigin/uAssets/issues/21432#issuecomment-1971403010
 @@||connatix.com^$script,domain=deadline.com
 deadline.com#@#.cnx-player-wrapper
+! ex.co
+! https://github.com/uBlockOrigin/uAssets/issues/33077
+@@||ex.co/player/$script,domain=standard.co.uk
+@@||cdn.ex.co^$image,media,domain=standard.co.uk
+@@||cdn.ex.co/content/$xhr
 ! https://github.com/uBlockOrigin/uAssets/issues/17000
 mediaite.com#@#.adthrive-video-player
 mediaite.com##.adthrive-video-player:style(padding-bottom: 0 !important;)
@@ -4404,5 +4409,3 @@ amboss.com##+js(set, ambossAnalytics.getUserAttribution, noopFunc)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=mnetplus.world
 ! https://github.com/uBlockOrigin/uAssets/issues/32955
 proxyorb.com##+js(aeld, load, dataset.ready, elements, script%5Bsrc%5E%3D%22https%3A%2F%2Fwww.googletagmanager.com%2Fgtag%2Fjs%3Fid%3D%22%5D)
-! https://www.eventim.ro/event/alifantis-mirica-gemini-2-0-casa-de-cultura-a-sindicatelor-21322560/ - maps breakage
-@@||stay22.com/embed/$frame,domain=eventim.ro

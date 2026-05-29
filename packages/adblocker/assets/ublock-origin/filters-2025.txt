@@ -152,20 +152,14 @@ vipleague.*##.bg-dark.ratio > .position-absolute
 vipleague.*##.m-1.btn-danger.btn
 vipleague.*##.btn[data-openuri*="/4/"]
 !#if cap_html_filtering
-!buffsports.*,fbstreams.*,mlbbox.me,omuzaani.me,strikeout.im,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
+!buffsports.*,fbstreams.*,mlbbox.me,strikeout.im,vipleague.*,wavewalt.me##^script:has-text(/adserverDomain|delete window|FingerprintJS/)
 !#else
-!buffsports.*,fbstreams.*,mlbbox.me,omuzaani.me,strikeout.im,vipleague.*,wavewalt.me##+js(rmnt, script, %2FadserverDomain%7Cdelete%20window%7CFingerprintJS%2F)
-buffsports.*,fbstreams.*,mlbbox.me,omuzaani.me,strikeout.im,vipleague.*,wavewalt.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
+!buffsports.*,fbstreams.*,mlbbox.me,strikeout.im,vipleague.*,wavewalt.me##+js(rmnt, script, %2FadserverDomain%7Cdelete%20window%7CFingerprintJS%2F)
+buffsports.*,fbstreams.*,mlbbox.me,strikeout.im,vipleague.*,wavewalt.me##+js(acs, EventTarget.prototype.addEventListener, delete%20window)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/30016
 ! https://github.com/uBlockOrigin/uAssets/issues/30168
-omuzaani.me,strikeout.im,wavewalt.me#@#.Ad-Container:not(.adsbygoogle)
-!omuzaani.me##+js(rpnt, script, window.navigator.brave, undefined)
-*$image,3p,domain=omuzaani.me,redirect=1x1.gif
-@@||omuzaani.me^$ghide
-! https://github.com/uBlockOrigin/uAssets/issues/27593#issuecomment-3428447252
-omuzaani.me##+js(nostif, %2Flocation%5C.(replace%7Chref)%7CstopAndExitFullscreen%2F)
-omuzaani.me##+js(nowoif)
+strikeout.im,wavewalt.me#@#.Ad-Container:not(.adsbygoogle)
 sterham.net,buffsports.io>>##+js(aopr, Adcash)
 casthill.net,sterham.net##+js(nowoif)
 ! https://forums.lanik.us/viewtopic.php?f=64&t=29322
@@ -426,7 +420,6 @@ ext=$script,1p,domain=pouvideo.*|povvideo.*|povw1deo.*|povwideo.*|powv1deo.*|pow
 /js/fpu3/pu4.min.js
 /js/gpu3/pu5.min.js
 ||ghastlyejection.com^
-||zonedummy.com^
 !#if ext_ubol
 *$frame,3p,denyallow=google.com,domain=powcloud.one
 *$script,3p,denyallow=googleapis.com|google.com|gstatic.com,domain=powcloud.one
@@ -779,7 +772,6 @@ nikke.win##+js(no-fetch-if, %2Fdoubleclick%7Cgoogle-analytics%2F)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1i5th37/adblock_detected/
 interfans.org##+js(aeld, DOMContentLoaded, adsBlocked)
 ! https://github.com/uBlockOrigin/uAssets/issues/26905
-||immoweb.be/*/dpg/advertisements^
 immoweb.be##[id^="adims_"]
 ! animez.org popups
 animez.org##+js(nowoif)
@@ -1607,7 +1599,13 @@ l2crypt.com##+js(noeval-if, ads)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/205018
 1337x.fyi,1337x.pro##+js(trusted-rpnt, script, window.location.replace(urlRandom)%3B, )
 ! https://github.com/uBlockOrigin/uAssets/issues/28317
-brawlify.com##+js(rmnt, script, %2Fadb%2Fi)
+!#if cap_html_filtering
+brawlify.com##^script:has-text(/adb|ta_session_id/i)
+!#else
+brawlify.com##+js(rmnt, script, %2Fadb%7Cta_session_id%2Fi)
+!#endif
+brawlify.com##+js(set, __venatusLoaderInit, true)
+brawlify.com##+js(set-session-storage-item, %2F%5Eta_%2F, %24remove%24)
 ||brawlify.com/js/core.js^$script,1p
 ! https://abcnews.go.com/ - top empty space
 abcnews.com,abcnews.go.com##.navigation--has-subnav:style(top: 0 !important;)
@@ -1646,7 +1644,6 @@ cryptofaucet.club##.op2
 cryptofaucet.club###lgl
 cryptofaucet.club##div.cb[style="height: 50px;"]
 ! https://github.com/uBlockOrigin/uAssets/issues/28408
-thefappeningblog.com##.wbar
 thefappeningblog.com##li.menu-item:has(> a[href][target="_blank"])
 thefappeningblog.com##.dogytop
 thefappeningblog.com##a[target="_blank"][href*="?"]:not([href*="thefappeningblog.com"])
@@ -1793,8 +1790,6 @@ yt1s.com.co>>##+js(no-fetch-if, googlesyndication.com)
 yt1s.com.co>>##+js(trusted-replace-argument, window.open, 1, repl%3A%2Fblank%2Fself%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28817
 cerberusapp.com##+js(set, stoCazzo, true)
-! https://github.com/uBlockOrigin/uAssets/issues/28818
-streamecho.top##+js(acs, addEventListener, detect)
 ! https://github.com/uBlockOrigin/uAssets/issues/28827
 videq.cloud##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/28829
@@ -1978,8 +1973,6 @@ jsfiddle.net##+js(set, _bsa, %7B%7D)
 fastpic.org##+js(trusted-set-cookie, k3a9q, %24now%24%257C1)
 ! nobledicion.yoveo.xyz detection
 nobledicion.yoveo.xyz##+js(noeval-if, googlesyndication)
-! https://stevenuniverse.best/cartoons/gravity-falls/ - anti-adb
-stevenuniverse.best##+js(acs, document.addEventListener, bait)
 ! https://github.com/uBlockOrigin/uAssets/issues/29110
 klouderr.com##+js(trusted-create-html, body, %3Cdiv%20id%3D%22rpjMdOwCJNxQ%22%20style%3D%22display%3A%20none%3B%22%3E%3C%2Fdiv%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/29116
@@ -2504,9 +2497,6 @@ thehealthsite.com##header:style(top: 0px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/30287
 ! https://github.com/easylist/easylist/issues/22570
 edumail.su,rainmail.xyz##+js(rmnt, script, enable_ad_block_detector)
-! https://github.com/uBlockOrigin/uAssets/issues/30293
-mangadex.org##a[href^="https://www.runoperagx.com/"]
-||mangadex.org/promo/
 ! https://github.com/uBlockOrigin/uAssets/issues/22402
 imleagues.com##+js(nostif, .redirected)
 ! https://github.com/uBlockOrigin/uAssets/issues/30327
@@ -2530,8 +2520,6 @@ filesq.net##.download-button:style(display: block !important;)
 mangaread.org##+js(acs, document.addEventListener, promos)
 mangaread.org###promo-desktop
 mangaread.org###promo-mobile
-! https://www.reddit.com/r/uBlockOrigin/comments/1o5nqis/ads_appearing_on_mobygames/
-mobygames.com##.square-ad-wrapper
 ! https://smallencode.me/
 ||smallencode.me/small.js
 /^https:\/\/smallencode\.me\/[a-zA-Z0-9]+\/[0-9]+\.js$/$script,1p,domain=smallencode.me
@@ -2546,8 +2534,6 @@ djamix.net##+js(no-fetch-if, googlesyndication)
 ||api.gplinks.com/track/js/power-cdn.js$script,domain=djamix.net
 ! https://github.com/uBlockOrigin/uAssets/issues/30451
 mlbbox.me##+js(rmnt, script, %2FFingerprintJS%7CAdcash%2F)
-||dl4d3y1ajyv3q.cloudfront.net^
-||oundhertobeconsist.org^
 ! tsz.com.np detection
 tsz.com.np##+js(nostif, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/30470
@@ -2620,7 +2606,7 @@ playertv24.com##+js(nowoif)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1oko10j/ubo_started_being_detected_on_elamigosgamez_this/
 elamigosgamez.com##+js(nostif, checkAdblockUser, 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/215765
-spedostream2.shop,play.watch20.space##+js(set, adblock_detect, noopFunc)
+spedostream2.shop##+js(set, adblock_detect, noopFunc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/216094
 seoschmiede.at##+js(rmnt, script, %2Fpirate%2Fi)
 ! https://ico3c.com/bkg/hn9q5h6ijs47
@@ -2738,8 +2724,6 @@ goplay.su##+js(remove-cookie, %2Fabd%2F)
 ||ssp.goplay.su^$xhr
 ||infolkwitness.shop^
 ||naegaithumoreragau.qpon^
-||prissyupland.qpon^
-||yawperalluvio.cyou^
 ! https://github.com/uBlockOrigin/uAssets/issues/30953
 bandle.app##+js(set, nitroAds.abp, true)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1p8yuiq/how_do_i_remove_this/
