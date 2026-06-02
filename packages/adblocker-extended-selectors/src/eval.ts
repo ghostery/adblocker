@@ -573,6 +573,9 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
       return Array.from(element.querySelectorAll(selector.content));
     }
 
+    // Otherwise, this code is intended to be matched with `document.documentElement.querySelectorAll`.
+    // Since `document` is at the higher position rather `document.documentElement`,
+    // it can't select `html` for an instance.
     const results: Element[] = [];
     for (const subjective of element.querySelectorAll('*')) {
       for (const result of traverse(subjective, [selector])) {
