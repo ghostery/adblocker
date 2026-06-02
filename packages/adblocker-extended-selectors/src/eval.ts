@@ -495,7 +495,7 @@ export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): bo
         // invalid selector
         return false;
       } else if (isUnderHasSubtree) {
-        return true;
+        return true; // since native CSS forbids :has inside :has
       }
 
       return isExtendedSelector(selector.subtree, true);
