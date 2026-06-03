@@ -907,7 +907,9 @@ arstechnica.com,dermnetnz.org##.gsc-webResult a[data-cturl]:remove-attr(/^data-c
 ! Block Attribution reporting
 www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26rt%3D%5Cd%2B%5C.%5Cd%2B.%2B%3F%26volume%3D%5Cd%2B%26cbr%3D.%2B%3F%26fexp%3Dv1%25%5B-%250-9C%5D%7B300%2C%7D%26.%2B%3F%26muted%3D%5Cd(%26vis%3D3)%3F%26docid%3D%2F%20method%3APOST)
 ! 1st-party google tag manager script
-/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4}\/$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,8}\/$/$script,1p,match-case
+! [dup] from ublock-origin/quick-fixes.txt
+! @@/jsi18n/|$script,1p
 ! petametrics
 ||petametrics.com^$~script
 !#endif
@@ -1551,8 +1553,6 @@ pitchfork.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fcna.st%2F%22%5
 ! https://www.vpnmentor.com
 ||vpnmentor.com/jssdk/track/
 vpnmentor.com##+js(cookie-remover, %2F_alooma%2F)
-! torrentfreak.com
-||torrentfreak.com/js/script.js
 ! jiosaavn.com
 ||jiosaavn.com/stats.php^
 ! https://github.com/AdguardTeam/AdguardFilters/pull/185966
@@ -1748,9 +1748,6 @@ r.mail.wowvegas.com%2Ftr%2Fop%2F*$image
 ! twitter
 /twitter.com/scribe/ibis?$image
 *%2Ftwitter.com%2Fscribe%2Fibis%3F*$image
-! https://github.com/uBlockOrigin/uAssets/issues/33072
-||api.x.com/1.1/graphql/error_log.json
-||x.com/i/api/1.1/graphql/user_flow.json
 ! shopee
 /tracking.mail.shopee.$image
 *%2Ftracking.mail.shopee.$image
