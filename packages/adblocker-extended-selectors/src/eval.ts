@@ -559,9 +559,6 @@ export function querySelectorAll(element: Element, selector: AST): Element[] {
   }
 
   if (selector.type === 'pseudo-class') {
-    // This code is intended to be matched with `document.documentElement.querySelectorAll`.
-    // Since `document` is at the higher position rather `document.documentElement`,
-    // it can't select `html` for an instance.
     if (isDelegatedPseudoClass(selector)) {
       return traverse(element, [selector]);
     }
