@@ -1,3 +1,23 @@
+# v2.18.0 (Thu Jun 04 2026)
+
+#### :house: Internal
+
+- chore: update dependencies [#5723](https://github.com/ghostery/adblocker/pull/5723) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump electron from 42.3.0 to 42.3.2 in the production-dependencies group [#5721](https://github.com/ghostery/adblocker/pull/5721) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5709](https://github.com/ghostery/adblocker/pull/5709) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 42.1.0 to 42.2.0 in the production-dependencies group [#5699](https://github.com/ghostery/adblocker/pull/5699) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 4 updates [#5701](https://github.com/ghostery/adblocker/pull/5701) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.2 (Tue May 19 2026)
 
 #### :nut_and_bolt: Dependencies

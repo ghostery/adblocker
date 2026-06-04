@@ -1,3 +1,30 @@
+# v2.18.0 (Thu Jun 04 2026)
+
+#### :house: Internal
+
+- chore: update dependencies [#5723](https://github.com/ghostery/adblocker/pull/5723) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#5718](https://github.com/ghostery/adblocker/pull/5718) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5711](https://github.com/ghostery/adblocker/pull/5711) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5707](https://github.com/ghostery/adblocker/pull/5707) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5705](https://github.com/ghostery/adblocker/pull/5705) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5704](https://github.com/ghostery/adblocker/pull/5704) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5700](https://github.com/ghostery/adblocker/pull/5700) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5698](https://github.com/ghostery/adblocker/pull/5698) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 4 updates [#5717](https://github.com/ghostery/adblocker/pull/5717) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 4 updates [#5701](https://github.com/ghostery/adblocker/pull/5701) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.3 (Tue May 19 2026)
 
 #### :bug: Bug Fix

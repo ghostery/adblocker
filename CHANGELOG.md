@@ -1,3 +1,51 @@
+# v2.18.0 (Thu Jun 04 2026)
+
+#### :running_woman: Performance
+
+- `@ghostery/adblocker-extended-selectors`
+  - perf: unnecessary `querySelectorAll('*')` [#5715](https://github.com/ghostery/adblocker/pull/5715) ([@seia-soto](https://github.com/seia-soto) [@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- fix(ci): electron install faliure and reintroduce node v26 again [#5716](https://github.com/ghostery/adblocker/pull/5716) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - chore: update dependencies [#5723](https://github.com/ghostery/adblocker/pull/5723) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker`
+  - Update local assets [#5718](https://github.com/ghostery/adblocker/pull/5718) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5711](https://github.com/ghostery/adblocker/pull/5711) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5707](https://github.com/ghostery/adblocker/pull/5707) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5705](https://github.com/ghostery/adblocker/pull/5705) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5704](https://github.com/ghostery/adblocker/pull/5704) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5700](https://github.com/ghostery/adblocker/pull/5700) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5698](https://github.com/ghostery/adblocker/pull/5698) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 7.4.0 to 7.4.2 in the tldts group [#5719](https://github.com/ghostery/adblocker/pull/5719) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 6 updates [#5722](https://github.com/ghostery/adblocker/pull/5722) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 7.0.30 to 7.4.0 in the tldts group across 1 directory [#5706](https://github.com/ghostery/adblocker/pull/5706) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tmp from 0.2.5 to 0.2.7 [#5712](https://github.com/ghostery/adblocker/pull/5712) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump serialize-javascript from 6.0.2 to 7.0.5 [#5702](https://github.com/ghostery/adblocker/pull/5702) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`
+  - Build(deps): Bump electron from 42.3.0 to 42.3.2 in the production-dependencies group [#5721](https://github.com/ghostery/adblocker/pull/5721) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+  - Build(deps): Bump electron from 42.1.0 to 42.2.0 in the production-dependencies group [#5699](https://github.com/ghostery/adblocker/pull/5699) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5709](https://github.com/ghostery/adblocker/pull/5709) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker`
+  - Build(deps-dev): Bump the development-dependencies group across 1 directory with 4 updates [#5717](https://github.com/ghostery/adblocker/pull/5717) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - Build(deps-dev): Bump the development-dependencies group across 1 directory with 4 updates [#5701](https://github.com/ghostery/adblocker/pull/5701) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.17.3 (Tue May 19 2026)
 
 #### :bug: Bug Fix

@@ -1,3 +1,25 @@
+# v2.18.0 (Thu Jun 04 2026)
+
+#### :running_woman: Performance
+
+- perf: unnecessary `querySelectorAll('*')` [#5715](https://github.com/ghostery/adblocker/pull/5715) ([@seia-soto](https://github.com/seia-soto) [@philipp-classen](https://github.com/philipp-classen))
+
+#### :house: Internal
+
+- chore: update dependencies [#5723](https://github.com/ghostery/adblocker/pull/5723) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps-dev): Bump the development-dependencies group across 1 directory with 4 updates [#5701](https://github.com/ghostery/adblocker/pull/5701) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 3
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.17.2 (Tue May 19 2026)
 
 #### :nut_and_bolt: Dependencies

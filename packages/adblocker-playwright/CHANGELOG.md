@@ -1,3 +1,15 @@
+# v2.18.0 (Thu Jun 04 2026)
+
+#### :house: Internal
+
+- chore: update dependencies [#5723](https://github.com/ghostery/adblocker/pull/5723) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.17.1 (Thu May 14 2026)
 
 #### :house: Internal
