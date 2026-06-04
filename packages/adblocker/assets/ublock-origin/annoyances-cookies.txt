@@ -607,6 +607,15 @@ urlando.de##+js(trusted-set-cookie, urlando_consent, %7B%22analytics%22%3Afalse%
 admind-ai.com##+js(trusted-set-local-storage-item, admind_cookie_consent_v1, %7B%22necessary%22%3Atrue%2C%22analytics%22%3Afalse%2C%22preferences%22%3Afalse%2C%22timestamp%22%3A%22%24currentISODate%24%22%2C%22version%22%3A1%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/33078
 tirerack.com##+js(trusted-click-element, %23meru-cm%20button.meru-cc__bn%5Baria-label%3D%22Reject%20All%22%5D, , 2000)
+! https://github.com/uBlockOrigin/uAssets/issues/33101
+handyhuellen.de,smartphonehoesjes.nl,ploonk.fr##+js(trusted-set-local-storage-item, mage_consent, %7B%22timestamp%22%3A%24now%24%2C%22data%22%3A%7B%22functional%22%3Atrue%2C%22marketing%22%3Afalse%7D%7D)
+! https://github.com/uBlockOrigin/uAssets/pull/33130
+ispazio.net##+js(trusted-set-cookie, isp_consent, %7B%22v%22%3A1%2C%22ts%22%3A%24now%24%2C%22f%22%3A0%2C%22e%22%3A0%2C%22m%22%3A0%2C%22a%22%3A0%7D)
+! https://github.com/uBlockOrigin/uAssets/pull/33132
+clubic.com##+js(trusted-click-element, .didomi-continue-without-agreeing)
+! https://github.com/uBlockOrigin/uAssets/issues/33142
+garuda-indonesia.com##+js(trusted-set-cookie, consent%3Acookie, %7B%22essentialCookies%22%3Atrue%2C%22marketingCookies%22%3Afalse%2C%22analyticCookies%22%3Afalse%2C%22consentStatus%22%3A%22Rejected%22%2C%22id%22%3A%22%22%7D, , , domain, .garuda-indonesia.com)
+garuda-indonesia.com##+js(set-local-storage-item, cookies, agree)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -878,7 +887,7 @@ snowandrock.com##+js(trusted-set-cookie, consent_setting, analytics%253A0%257Cfu
 ! All store information on device cookies
 borncity.com,drimble.nl,beurs.nl,iex.nl,luchtvaartnieuws.nl,beursonline.nl,belegger.nl,beursgorilla.nl,dailybuzz.nl,bnn.de,dosenbach.ch,dw.com,kinepolis.*,mediaite.com,nzz.ch,winfuture.de,lippu.fi,racingnews365.com,reifendirekt.ch,vaillant.*##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20%23cmpbntyestxt, , 1000)
 ! .cmptxt_btn_no (shadowroot)
-webtoons.com,bauhaus.no,bauhaus.se,beko-group.de,billiger.de,burda.com,continental-tires.com,vanharen.nl,deichmann.com,meraluna.de,slashdot.org,hermann-saunierduval.it,protherm.cz,saunierduval.es,protherm.sk,protherm.ua,saunierduval.hu,saunierduval.ro,saunierduval.at,awb.nl##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmptxt_btn_no, , 1000)
+lrb.co.uk,webtoons.com,bauhaus.no,bauhaus.se,beko-group.de,billiger.de,burda.com,continental-tires.com,vanharen.nl,deichmann.com,meraluna.de,slashdot.org,hermann-saunierduval.it,protherm.cz,saunierduval.es,protherm.sk,protherm.ua,saunierduval.hu,saunierduval.ro,saunierduval.at,awb.nl##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmptxt_btn_no, , 1000)
 ! .cmptxt_btn_save
 spar.hu,group.vattenfall.com##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmptxt_btn_save, , 1000)
 ! custom-functional
@@ -1296,11 +1305,13 @@ ilgazzettino.it,ilmessaggero.it,ilsecoloxix.it##+js(trusted-click-element, butto
 ! weather.com##+js(trusted-set-cookie, consentUUID, df843851-527a-4aec-8dab-5ba35e570618_32_33)
 weather.com##+js(trusted-set-local-storage-item, userConsents, %7B%22functional-technology%22%3Atrue%7D)
 ! weather.com (.pt IP)
-weather.com>>##+js(trusted-click-element, button%5Btitle%3D%22Aceitar%20todos%22%5D, , 1000)
+! weather.com>>##+js(trusted-click-element, button%5Btitle%3D%22Aceitar%20todos%22%5D, , 1000)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/205068
-weather.com>>##+js(trusted-click-element, button.cta-button%5Btitle%3D%22T%C3%BCm%C3%BCn%C3%BC%20reddet%22%5D)
+! weather.com>>##+js(trusted-click-element, button.cta-button%5Btitle%3D%22T%C3%BCm%C3%BCn%C3%BC%20reddet%22%5D)
 ! weather.com UK IP
 cdn.privacy-mgmt.com##+js(trusted-click-element, button%5Btitle%3D%22Reject%20all%22%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/33140
+weather.com>>##+js(trusted-click-element, button.sp_choice_type_13)
 ! accept / impulse.de
 privacy.menshealth.de,privacy.motorradonline.de,impulse.de>>,consent.watson.de,consent.kino.de,consent.desired.de,cmpv2.fn.de##+js(trusted-click-element, button%5Btitle%3D%22Akzeptieren%20und%20weiter%22%5D, , 1000)
 ! fix scroll delay
@@ -2278,8 +2289,6 @@ otpportalok.hu##+js(trusted-set-cookie, cookie_time_prod, %24now%24)
 comune.palermo.it##+js(trusted-click-element, button.cmplz-deny, , 1000)
 ! essential
 abconcerts.be##+js(trusted-set-cookie, _cookie-consent, %7B%22version%22%3A%221%22%2C%22consent%22%3A%22yes%22%2C%22categories%22%3A%5B%5D%7D)
-! functional
-smartphonehoesjes.nl,ploonk.fr,handyhuellen.de##+js(trusted-set-local-storage-item, mage_consent, %7B%22timestamp%22%3A1%2C%22data%22%3A%7B%22functional%22%3Atrue%2C%22marketing%22%3Afalse%7D%7D)
 ! reject
 get-in-engineering.de##+js(trusted-click-element, button%5Baria-label%3D%22Reject%20all%22%5D, , 1000)
 ! essential
@@ -4148,3 +4157,5 @@ tlc.com##+js(trusted-click-element, .btn.btn-primary)
 eventim.ro##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmpboxbtnyes, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/pull/33067
 lequipe.fr##+js(trusted-click-element, .CmpUnsubscriber%20.Cmp__action--yes, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/33124
+cmp.travelbook.de##+js(trusted-click-element, .cmp-banner%20button.accept-all)

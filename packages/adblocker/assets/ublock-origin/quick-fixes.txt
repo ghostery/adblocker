@@ -89,7 +89,7 @@ www.youtube.com##+js(trusted-replace-fetch-response, %22adSlots%22, %22no_ads%22
 ! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, %22params%22%3A%22, %22params%22%3A%22yAEB, condition, %2F(%22contentPlaybackContext%22%3A%7B%22.*%2C%22params%22%3A%22%7C%22params%22%3A%22.*%22contentPlaybackContext%22%3A%7B%22)%2F)
 ! www.youtube.com##+js(trusted-replace-outbound-text, JSON.stringify, %22contentCheckOk%22%3Afalse, %22params%22%3A%22yAEB%22%2C%22contentCheckOk%22%3Afalse, condition, %2F%5E(%3F%3D.*%22contentPlaybackContext%22%3A%7B%22)(%3F!.*%22params%22%3A%22).*%24%2F)
 ! https://github.com/uBlockOrigin/uBOL-home/discussions/153#discussioncomment-14056823
-/\.googlevideo\.com\/videoplayback\?expire=(?:[02-9]+|1[1-68-9]\d+|17[1-48-9]\d+)&/$xhr,3p,method=get,domain=www.youtube.com
+/\.googlevideo\.com\/videoplayback\?expire=(?:[02-9]\d+|1[1-68-9]\d+|17[1-7]\d+)&/$xhr,3p,method=get,domain=www.youtube.com
 ! https://github.com/uBlockOrigin/uAssets/issues/27415#issuecomment-3276882899
 ||youtube.com/api/stats/atr?ns=*&ver=2&cmt=1.*&fs=0&*&euri&lact=$xhr,method=post,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/3367
@@ -101,7 +101,7 @@ web.facebook.com,www.facebook.com##+js(json-edit, ..data.viewer..nodes.*%5B%3F._
 web.facebook.com,www.facebook.com##+js(set, Env.nxghljssj, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-3060431385
 web.facebook.com,www.facebook.com##div[role="complementary"] a[rel="nofollow noreferrer external"][attributionsrc^="/privacy_sandbox/comet/register/"][attributionsrc*="?eid="]
-web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcompletion="ignore-dynamic"] a[aria-label][attributionsrc="_blank"][href*="utm_medium"][href*="utm_source"][href*="utm_id"][href*="utm_content"][href*="utm_term"][href*="utm_campaign"]
+web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcompletion="ignore-dynamic"] a[href*="fbclid"][href*="utm_medium"][href*="utm_source"][href*="utm_id"][href*="utm_content"][href*="utm_term"][href*="utm_campaign"]
 web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcompletion="ignore-dynamic"] a[rel="nofollow noreferrer tag"][aria-labelledby^="_R_"]
 web.facebook.com,www.facebook.com##div[role="complementary"] a[attributionsrc][href^="http"][target="_blank"][role="link"][rel*="noreferrer"]:has(img[src])
 web.facebook.com,www.facebook.com##div[role="complementary"] h3 span[style^="-webkit-box-orient:vertical"]:has-text(/^Sponsored$/)
@@ -113,12 +113,12 @@ web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.new
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, JSON.parse)
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=vickisaveworker.com,important
-vickisaveworker.com##+js(nowoif)
-vickisaveworker.com##+js(set, console.clear, undefined)
-vickisaveworker.com##+js(acs, globalThis, break%3Bcase)
-vickisaveworker.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||vickisaveworker.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=rebeccacostthousand.com,important
+rebeccacostthousand.com##+js(nowoif)
+rebeccacostthousand.com##+js(set, console.clear, undefined)
+rebeccacostthousand.com##+js(acs, globalThis, break%3Bcase)
+rebeccacostthousand.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||rebeccacostthousand.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -375,16 +375,16 @@ embed.wcostream.com##+js(rmnt, script, %2Fgoogle_jobrunner%7CAdBlock%7Cpubadx%7C
 ! https://github.com/uBlockOrigin/uAssets/issues/18260
 !#if ext_ubol
 @@||cdn.snigelweb.com/adengine/falixnodes.net/loader.js$script,domain=client.falixnodes.net
-@@||amazon-adsystem.com/bao-csm/aps-comm/aps_csm.js$script,domain=client.falixnodes.net
 @@||adengine.snigelweb.com/falixnodes.net/$script,domain=client.falixnodes.net
+@@||c.amazon-adsystem.com/aax2/apstag.js$script,domain=client.falixnodes.net
+@@||c.amazon-adsystem.com/bao-csm/aps-comm/aps_csm.js$xhr,domain=client.falixnodes.net
 !#else
 client.falixnodes.net##+js(rpnt, script, %2Fwindow%5C.googletag.*%3FenableServices%5C(%5C)%5C%3B%2Fs)
 client.falixnodes.net##+js(rpnt, script, %2Fgoogletag%5C.pubads%5C(%5C)%5C.addEventListener.*rewardedSlot%5C)%5C%3B%5Cs%2B%5C%7D%5C)%3B%5Cs%2B%5C%7D%2Fs)
-client.falixnodes.net##+js(rpnt, script, %2Fwindow%5C.location%5C.href%20%5C%3D%20('%7C%22)%5C%2F(please-disable%7Cneptune%7Cdisableadblock%7Cyeahblock%7Cyupblock%7Cverypleasedisable)('%7C%22)%5C%3B%2F)
-client.falixnodes.net##+js(aeld, error, function, elements, %5Bsrc%5D)
 client.falixnodes.net##+js(nosiif, %2Flovelylovely%7Cveryveryplease%7Cclick%5C(%5C)%7CMouseEvent%7CdispatchEvent%2F)
 client.falixnodes.net##+js(nostif, %2Flovelylovely%7Cveryveryplease%7Cclick%5C(%5C)%7CMouseEvent%7CdispatchEvent%2F)
-*$script,redirect-rule=none:5,domain=client.falixnodes.net
+client.falixnodes.net##+js(nostif, %5D%5D%3Bif(typeof)
+client.falixnodes.net##+js(nostif, )%7D%7D%2C5e3)%7D%7D%7D%7D)
 !#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/23131
 cimanow.cc,freex2line.online##+js(norafif, %2B%2B)
@@ -437,3 +437,12 @@ getthispdf.com##+js(rmnt, script, %2F'onerror'%7C'offsetHe%7C'offsetWi%2F)
 gumtree.com#@#+js(trusted-set, experimentOverrides, json%3A%22%255B%257B%2520defaultValue%253A%2520%2522OFF%2522%257D%255D%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/31664
 bus-location.1507t.xyz##+js(nostif, %2F%5E%5Cs*%5C(%5Cs*%5C)%5Cs*%3D%3E%5Cs*%5C%7B%5Cs*%5B-%240-9A-Z_a-z%5D%2B%5Cs*%5C(%5Cs*%5B-%240-9A-Z_a-z%5D*%5Cs*%5C)%5Cs*%5C%7D%5Cs*%24%2F)
+! https://github.com/AdguardTeam/AdguardFilters/commit/ce1d4e31d1996113215f6a6b902c4fced233f1e3
+gamewith.jp##+js(set-cookie-reload, discarded-search-interstitial-cta-banner, true)
+gamewith.jp##.gdb-cta-banner-outer
+! https://github.com/uBlockOrigin/uAssets/issues/33097
+||cloudfront.net/?$script,redirect=noopjs,domain=meuplayeronlinehd.com|multicanaistt.space
+meuplayeronlinehd.com##+js(rmnt, script, _0x, excludes, %2Fsource%7CURLSearchParams%2F)
+meuplayeronlinehd.com###player:style(display: block !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33144
+@@/jsi18n/|$script,1p

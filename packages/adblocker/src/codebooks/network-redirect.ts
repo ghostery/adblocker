@@ -38,7 +38,6 @@ export default [
   ".com/",
   ".js:5",
   "noopv",
-  "none",
   ":10",
   ".js",
   "ads",
