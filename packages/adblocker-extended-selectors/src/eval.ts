@@ -445,7 +445,7 @@ function isDelegatedPseudoClass(selector: PseudoClass): boolean {
   );
 }
 
-export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): boolean {
+export function isExtendedSelector(selector: AST, insideHasSelector = false): boolean {
   if (
     selector.type === 'id' ||
     selector.type === 'class' ||
@@ -457,7 +457,7 @@ export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): bo
 
   if (selector.type === 'list') {
     for (const item of selector.list) {
-      if (isExtendedSelector(item, isUnderHasSubtree)) {
+      if (isExtendedSelector(item, insideHasSelector)) {
         return true;
       }
     }
@@ -466,7 +466,7 @@ export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): bo
 
   if (selector.type === 'compound') {
     for (const item of selector.compound) {
-      if (isExtendedSelector(item, isUnderHasSubtree)) {
+      if (isExtendedSelector(item, insideHasSelector)) {
         return true;
       }
     }
@@ -474,11 +474,11 @@ export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): bo
   }
 
   if (selector.type === 'complex') {
-    if (isExtendedSelector(selector.right, isUnderHasSubtree)) {
+    if (isExtendedSelector(selector.right, insideHasSelector)) {
       return true;
     } else if (
       selector.left !== undefined &&
-      isExtendedSelector(selector.left, isUnderHasSubtree)
+      isExtendedSelector(selector.left, insideHasSelector)
     ) {
       return true;
     }
@@ -494,7 +494,7 @@ export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): bo
       if (selector.subtree === undefined) {
         // invalid selector
         return false;
-      } else if (isUnderHasSubtree) {
+      } else if (insideHasSelector) {
         return true; // since native CSS forbids :has inside :has
       }
 
@@ -503,7 +503,7 @@ export function isExtendedSelector(selector: AST, isUnderHasSubtree = false): bo
 
     return (
       EXTENDED_PSEUDO_CLASSES.has(selector.name) ||
-      (selector.subtree !== undefined && isExtendedSelector(selector.subtree, isUnderHasSubtree))
+      (selector.subtree !== undefined && isExtendedSelector(selector.subtree, insideHasSelector))
     );
   }
 
