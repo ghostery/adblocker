@@ -18,13 +18,13 @@ import { allLists } from './utils.js';
 
 async function run(cwd: string, cmd: string, args: string[]) {
   return new Promise<string>((resolve, reject) => {
-    const process = spawn(cmd, args, {
+    const child = spawn(cmd, args, {
       cwd,
     });
     const chunks: string[] = [];
-    process.stdout.on('data', (chunk) => chunks.push(chunk));
-    process.once('error', (error) => reject(error));
-    process.once('close', (code) => {
+    child.stdout.on('data', (chunk) => chunks.push(chunk));
+    child.once('error', (error) => reject(error));
+    child.once('close', (code) => {
       if (code === null) {
         reject(new Error('Child process terminated!'));
         return;
@@ -79,7 +79,10 @@ async function builder() {
 
 async function createBuilder(version: string = 'latest') {
   // Create working dir
-  const dir = join(import.meta.dirname, '.migration-test');
+  // This has to be outside of test/ directory as mocha tries to
+  // scann all file to find actual test files and it will try to
+  // import wrong files (such as d.ts).
+  const dir = join(import.meta.dirname, '../.migration-test');
   if (!existsSync(dir)) {
     await mkdir(dir);
   }
