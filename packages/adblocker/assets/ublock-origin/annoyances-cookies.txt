@@ -57,6 +57,8 @@ groupeapocom.com###website_cookies_bar
 ! https://github.com/AdguardTeam/AdguardFilters/issues/231768
 ! [badfilter] @@||cdn.privacy-mgmt.com/unified/wrappermessagingwithoutdetection.js$domain=businessinsider.com,badfilter
 businessinsider.com##.related-posts
+! https://github.com/uBlockOrigin/uAssets/issues/16581#issuecomment-4650988602
+/wrapperMessagingWithoutDetection.js$domain=autosport.com
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -616,6 +618,12 @@ clubic.com##+js(trusted-click-element, .didomi-continue-without-agreeing)
 ! https://github.com/uBlockOrigin/uAssets/issues/33142
 garuda-indonesia.com##+js(trusted-set-cookie, consent%3Acookie, %7B%22essentialCookies%22%3Atrue%2C%22marketingCookies%22%3Afalse%2C%22analyticCookies%22%3Afalse%2C%22consentStatus%22%3A%22Rejected%22%2C%22id%22%3A%22%22%7D, , , domain, .garuda-indonesia.com)
 garuda-indonesia.com##+js(set-local-storage-item, cookies, agree)
+! https://github.com/uBlockOrigin/uAssets/issues/33161
+voelkner.de##+js(trusted-click-element, .js_cookie_content%20button%5Bdata-cookie_consent%3D%220%22%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/33183
+schroders.com##+js(trusted-click-element, div%5Baria-labelledby%3D%22modal-title-cookieDisclaimerModal%22%5D%20button%5Bclass*%3D%22SecondaryButton%22%5D)
+! https://www.82-0.com/
+82-0.com##+js(trusted-set-local-storage-item, 82-consent-v1, %7B%22analytics_storage%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalization%22%3A%22denied%22%2C%22decided%22%3Atrue%7D)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -989,9 +997,13 @@ tredz.co.uk##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0
 getdigitalradio.com##+js(trusted-set-cookie, dsm-cookie-preferences, %7B%25221%2522%3Atrue%252C%25222%2522%3Atrue%7D)
 ! e24.no,vg.no https://github.com/uBlockOrigin/uAssets/issues/22295
 cmpv2.finn.no##+js(trusted-click-element, button%5Btitle%3D%22Godta%20alle%22%5D, , 1000)
-tek.no,e24.no,minmote.no,vg.no##div[id^="sp_message_container_"]
-cmp.tek.no,cmp.e24.no,minmote.no,cmp.vg.no##+js(trusted-click-element, .btns-container%20%3E%20button%5Btitle%3D%22Tilpass%20cookies%22%5D)
-cmp.tek.no,cmp.e24.no,minmote.no,cmp.vg.no##+js(trusted-click-element, .message-row%20%3E%20button%5Btitle%3D%22Avvis%20alle%22%5D, , 2000)
+! tek.no,e24.no,minmote.no,vg.no##div[id^="sp_message_container_"]
+e24.no,minmote.no,tek.no,vg.no##div[id^="sp_message_container_"]:style(z-index: -1 !important;)
+cmp.e24.no,cmp.minmote.no,cmp.tek.no,cmp.vg.no##.tcfv2-stack .pur-buttons-container > button:style(display: inline-block !important;)
+cmp.e24.no,cmp.minmote.no,cmp.tek.no,cmp.vg.no##button.sp_choice_type_SAVE_AND_EXIT:remove-attr(/^(aria-)?disabled$/)
+cmp.e24.no,cmp.minmote.no,cmp.tek.no,cmp.vg.no##+js(trusted-click-element, .btns-container%20%3E%20button%5Btitle%3D%22Tilpass%20cookies%22%5D, , 1000)
+! cmp.tek.no,cmp.e24.no,minmote.no,cmp.vg.no##+js(trusted-click-element, .message-row%20%3E%20button%5Btitle%3D%22Avvis%20alle%22%5D, , 2000)
+cmp.e24.no,cmp.minmote.no,cmp.tek.no,cmp.vg.no##+js(trusted-click-element, 2000%2C.pm-main%20%3E%20.type-box%3Anth-of-type(1)%20.tcfv2-stack%20.pur-buttons-container%20%3E%20button%3Anth-of-type(2)%2C100%2C.pm-main%20%3E%20.type-box%3Anth-of-type(2)%20.tcfv2-stack%20.pur-buttons-container%20%3E%20button%3Anth-of-type(2)%2C100%2C.pm-main%20%3E%20.type-box%3Anth-of-type(3)%20.tcfv2-stack%20.pur-buttons-container%20%3E%20button%3Anth-of-type(2)%2C100%2C.pm-main%20%3E%20.type-box%3Anth-of-type(4)%20.tcfv2-stack%20.pur-buttons-container%20%3E%20button%3Anth-of-type(2)%2C100%2Cbutton.sp_choice_type_SAVE_AND_EXIT)
 @@||cmp.*.no^$domain=e24.no|minmote.no|vg.no|tek.no
 @@||privacy-mgmt.com/mms^$domain=e24.no|minmote.no|vg.no|tek.no
 /wrappermessagingwithoutdetection.js$script,domain=finn.no
@@ -1603,9 +1615,13 @@ nytimes.com##+js(trusted-click-element, button%5Bdata-tpl-type%3D%22Button%22%5D
 ! opt-out (mobile)
 uber.com,ubereats.com##+js(trusted-click-element, button%5Bdata-tracking-name%3D%22cookie-preferences-sloo-opt-out%22%5D, , 1000)
 ! Accept cookie-wall (UK IP)
-privacy.crash.net,cmpv2.likehifi.de##+js(trusted-click-element, button%5Btitle%3D%22ACCEPT%22%5D, , 1000)
+cmpv2.likehifi.de##+js(trusted-click-element, button%5Btitle%3D%22ACCEPT%22%5D, , 1000)
 ! Save and exit  (UK IP)
 the-independent.com##+js(trusted-click-element, button%5Btitle%3D%22SAVE%20AND%20EXIT%22%5D)
+! https://github.com/uBlockOrigin/uAssets/issues/28602#issuecomment-4623554163
+privacy.crash.net##+js(trusted-click-element, %23notice%20button%5Btitle%5E%3D%22ACCEPT%22i%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/93#issuecomment-4631674339
+privacy.auto-motor-und-sport.de##+js(trusted-click-element, %23notice%20button%5Btitle%3D%22Akzeptieren%20und%20weiter%22%5D, , 1000)
 ! reject
 prospre.io##+js(trusted-set-cookie, cookieConsent, %7B%22adConsentGranted%22%3Afalse%2C%22adUserDataConsentGranted%22%3Afalse%2C%22adPersonalizationConsentGranted%22%3Afalse%2C%22analyticsConsentGranted%22%3Afalse%2C%22personalizationConsentGranted%22%3Afalse%7D, , , reload, 1)
 ! required
@@ -4159,3 +4175,8 @@ eventim.ro##+js(trusted-click-element, %23cmpwrapper%20%3E%3E%3E%20.cmpboxbtnyes
 lequipe.fr##+js(trusted-click-element, .CmpUnsubscriber%20.Cmp__action--yes, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/33124
 cmp.travelbook.de##+js(trusted-click-element, .cmp-banner%20button.accept-all)
+! https://www.antena3.ro/emisiuni/subiectiv/cum-s-a-razbunat-traian-basescu-pe-razvan-dumitrescu-pentru-un-interviu-ce-vrea-sorin-blejnar-de-la-188976.html - video breakage
+antena3.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/33207
+shop.a1.by##+js(trusted-set-cookie-reload, cookie_agreement_level, IlJFUVVJUkVEIg%3D%3D)
+~internet.a1.by,~myaccount.a1.by,~shop.a1.by,~support.a1.by,a1.by##+js(trusted-set-cookie-reload, cookie_agreement_level, FUNCTIONAL)

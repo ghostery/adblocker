@@ -29,7 +29,7 @@ sharer.pw###overlay
 filecrypt.*##div:has(> [href*=".html"])
 filecrypt.*##+js(ra, onclick, button%5Bid%5D%5Bonclick*%3D%22.html%22%5D)
 filecrypt.*##+js(rmnt, script, localStorage.setItem)
-filecrypt.*###jh34[onmousedown^="var lsj = this;loc.href="]
+filecrypt.*##button[onclick*=".href="]
 ! https://github.com/uBlockOrigin/uAssets/issues/32537
 filecrypt.*##div[class^="fiIItheadblock"]
 filecrypt.*##button[onclick*="duckier.com"]
@@ -505,6 +505,13 @@ read.amazon.*##+js(trusted-click-element, .kw-ads-pagination-button%3Afirst-chil
 9gag.com##[id^="sidebar-stream-"] > h4:has-text(Advertisement)
 9gag.com##.billboard-top-wrapper
 9gag.com###top-navb:style(top: 0 !important;)
+! https://www.reddit.com/r/uBlockOrigin/comments/1typysa/block_add_in_9gag/
+9gag.com##+js(acs, document.createElement, moa_id)
+||com/p.js?uid=$script,3p
+||gresrv.com^
+||dclsrv.com^
+||dtasrvr.com^
+||srvgl.com^
 ! https://github.com/NanoMeow/QuickReports/issues/125
 nfl.com##[class$="adblock"]
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213076
@@ -1555,10 +1562,14 @@ seelen.io##+js(trusted-prevent-fetch, googlesyndication, google-ca-pub-445962230
 ! https://github.com/uBlockOrigin/uAssets/pull/28192
 ||physicsandmathstutor.com/pdf-pages/?pdf=http$doc,urlskip=?pdf
 ! https://github.com/uBlockOrigin/uAssets/issues/28195
-||hornyhill.se/uploads/assets/js/pload.php
-hornyhill.se###adblock-dialog
-hornyhill.se##.card:has(> center:only-child > .adContainer)
-hornyhill.se##div[class="col-6 col-md-4 col-lg-3 col-xl-2 px-5"]:has([data-zoneid])
+! https://github.com/uBlockOrigin/uAssets/issues/33258
+||hornyhill.*/uploads/assets/js/pload.php
+hornyhill.*###adblock-dialog
+hornyhill.*##.card:has(> center:only-child > .adContainer)
+hornyhill.*##div[class="col-6 col-md-4 col-lg-3 col-xl-2 px-5 mb-4"]:has([data-zoneid])
+hornyhill.*##+js(set, HTMLImageElement.prototype.onerror, undefined)
+hornyhill.*##+js(nowoif)
+hornyhill.*###telegram-card
 ! https://github.com/uBlockOrigin/uAssets/issues/28201
 latinluchas.com##+js(no-xhr-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/28209
@@ -1633,7 +1644,7 @@ freestreams-live.*>>,~chatango.com,~twitter.com,~youtube.com##+js(rmnt, script, 
 natomanga.com##.ads-contain
 ||natomanga.com/js/cat_
 ||natomanga.com/js/pu_
-/\/js\/(?:[a-z]+\/)?[a-z]+_[a-f0-9]{32}\.js\b/$script,1p,match-case,domain=mangakakalot.gg|natomanga.com|nelomanga.net
+/\/js\/(?:[a-z]+\/)?[a-z]+_[a-f0-9]{32}\.js\b/$script,1p,match-case,domain=mangabats.com|mangakakalot.gg|natomanga.com|nelomanga.net
 ! https://github.com/uBlockOrigin/uAssets/issues/32176
 ! https://github.com/uBlockOrigin/uAssets/issues/32220
 /js/ads/main-popunder.js$script,domain=mangakakalot.gg|manganato.gg|natomanga.com|nelomanga.net
@@ -1840,7 +1851,8 @@ condorsoft.co##+js(no-xhr-if, googlesyndication)
 /\.gsmarena\.com\/[0-9]+\.php3/$xhr,1p,domain=gsmarena.com
 /\.gsmarena\.com\/[0-9]+\.[a-z]+\?s?Search=/$xhr,1p,domain=gsmarena.com
 ! https://github.com/uBlockOrigin/uAssets/issues/32679
-gsmarena.com##+js(aeld, DOMContentLoaded, %2Fdoubleclick%7CoffsetHeight%2F)
+! https://github.com/uBlockOrigin/uAssets/issues/33197
+gsmarena.com##+js(aeld, DOMContentLoaded, %2Fdoubleclick%7Catob%2F)
 gsmarena.com##+js(remove-cookie, DeviceID)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207864
 remotejobzone.online##+js(no-fetch-if, adsbygoogle)
@@ -2668,8 +2680,6 @@ thessdreview.com##body:style(background-image: none !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/30783
 @@||manhuarmmtl.com^$ghide
 manhuarmmtl.com##+js(no-fetch-if, mode%3Ano-cors)
-/^https?:\/\/[a-z0-9]{5,15}\.(?:com|net)\/tag\.min\.js/$xhr,3p,redirect=nooptext,to=com|net
-/^https?:\/\/[a-z0-9]{5,15}\.(?:com|net)\/tag\.min\.js/$script,3p,redirect=noopjs,to=com|net
 ! https://github.com/uBlockOrigin/uAssets/issues/30757
 doubtnut.com##+js(set-local-storage-item, student_id, %24remove%24)
 ! https://github.com/uBlockOrigin/uAssets/issues/30763
@@ -2836,7 +2846,7 @@ iptvpulse.top##+js(rpnt, script, %2FadWindow%20%3D%20window.open.*%3F%3B%2F, adW
 premium-unlock.rajababucox.workers.dev###final-btn:style(display: block !important;)
 premium-unlock.rajababucox.workers.dev###action-btn
 ! https://github.com/uBlockOrigin/uAssets/issues/31282
-chess.com##body.with-und:remove-class(with-und)
+chess.com##body.with-und:style(--adWidth: 0rem !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/31255
 aether.mom##+js(trusted-replace-argument, String.prototype.split, this, , condition, null%2Chttp)
 ! https://github.com/uBlockOrigin/uAssets/issues/27684#issuecomment-3684460117
