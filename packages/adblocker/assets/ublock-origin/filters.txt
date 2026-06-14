@@ -372,6 +372,7 @@ gmx.*##.main [data-ac]:empty
 ! https://github.com/uBlockOrigin/uAssets/issues/9083
 web.de##.iba-acceptable:has-text(/Anzeige|Info/)
 ! https://github.com/uBlockOrigin/uAssets/issues/15422
+||js.ui-portal.de/uim/abd/live/abd.min.js
 *$image,redirect-rule=1x1.gif,domain=web.de
 @@*$ghide,domain=web.de|gmx.*
 web.de#@#.ad
@@ -602,6 +603,9 @@ kbb.com##[id^="kbbAds"], [id^="kbbAds"] + p
 dfiles.eu,downsub.com,j.gs,macserial.com,microify.com,minecraft-forum.net,onmovies.*,pirateproxy.*,psarips.*,solidfiles.com,thepiratebay.org,uptobox.com##+js(aopw, Fingerprint2)
 solidfiles.com##.remove
 thepiratebay.org##[href^="http://www.coiwqe.site/"]
+! https://github.com/uBlockOrigin/uAssets/issues/33206
+downsub.com##div[data-type="_mgwidget"]
+downsub.com##[href^="https://www.aiarty.com/ai-denoise-image/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/331
 ! https://github.com/uBlockOrigin/uAssets/issues/10133
 handelsblatt.com##+js(no-xhr-if, request%3Dadb)
@@ -1178,6 +1182,7 @@ mangoporn.net##+js(aopw, pURL)
 mangoporn.net##+js(nowoif)
 bigshare.io##+js(rmnt, script, window.open)
 bigshare.io##+js(nowoif)
+bigshare.io##+js(rpnt, script, art.on('video%3Aplay'%2C%20setUpAds)%3B, art.on('video%3Aplay')%3B)
 ! https://github.com/uBlockOrigin/uAssets/issues/1020
 frprn.com##+js(nosiif, readyState)
 frprn.com##.spot
@@ -1952,20 +1957,6 @@ streamcdn.*##+js(aopr, AaDetector)
 streamcdn.*##+js(aopr, open)
 wizhdsports.fi##+js(nowebrtc)
 ||stream2watch.*/sw.js$script,1p
-! https://github.com/uBlockOrigin/uAssets/issues/1618
-cnnamador.com##+js(nostif, backRedirect)
-cnnamador.com##+js(aeld, , pop)
-cnnamador.com##+js(noeval)
-cnnamador.com##.banner
-||cnnamador.com/player/float.php
-cnnamador.com##.is-ad-visible
-cnnamador.com##+js(aopw, adv_pre_duration)
-cnnamador.com##+js(aopw, adv_post_duration)
-cnnamador.com##+js(aeld, %2F%5E(click%7Cmousedown%7Cmousemove%7Ctouchstart%7Ctouchend%7Ctouchmove)%2F, system.popunder)
-cnnamador.com##.cards__item:has([href*="loboclick"])
-||cnnamador.com/sw.js$script,1p
-||adsloboclick.com^
-@@||cnnamador.com/player/stats.php$image,1p
 ! https://github.com/uBlockOrigin/uAssets/pull/1623
 dirpy.com##a[href*="bit.ly"]
 dirpy.com##a[href*="out.dirpy.com"]
@@ -6203,12 +6194,12 @@ gdtot.*##+js(aopr, open)
 ! https://github.com/uBlockOrigin/uAssets/issues/5945
 lirik3satu.blogspot.com##+js(aeld, load, 2000)
 ! mangovideo's sites
-adultdvdparadise.com,freeomovie.info,fullxxxmovies.me,mangoporn.co,netflixporno.net,pandamovie.*,pandamovies.me,pornkino.cc,pornwatch.ws,speedporn.*,watchfreexxx.pw,watchpornfree.*,watchxxxfree.pw,xtapes.me,xxxparodyhd.net,xxxscenes.net,xxxstream.me,youwatchporn.com##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
-adultdvdparadise.com,freeomovie.info,fullxxxmovies.me,mangoporn.co,netflixporno.net,pandamovie.*,pandamovies.me,pornkino.cc,pornwatch.ws,speedporn.*,watchfreexxx.pw,watchpornfree.*,watchxxxfree.pw,xtapes.me,xxxparodyhd.net,xxxscenes.net,xxxstream.me,youwatchporn.com##+js(nowoif)
-pandamovie.*,pandamovies.me,pornkino.cc,speedporn.*,youwatchporn.com###tracking-url
+adultdvdparadise.com,freeomovie.info,fullxxxmovies.me,mangoporn.co,netflixporno.net,pandamovie.*,pandamovies.me,pornkino.cc,pornwatch.ws,speedporn.*,watchfreexxx.pw,watchpornfree.*,watchxxxfree.pw,xtapes.me,xxxparodyhd.net,xxxscenes.net,xxxstream.me##+js(aopr, exoNoExternalUI38djdkjDDJsio96)
+adultdvdparadise.com,freeomovie.info,fullxxxmovies.me,mangoporn.co,netflixporno.net,pandamovie.*,pandamovies.me,pornkino.cc,pornwatch.ws,speedporn.*,watchfreexxx.pw,watchpornfree.*,watchxxxfree.pw,xtapes.me,xxxparodyhd.net,xxxscenes.net,xxxstream.me##+js(nowoif)
+pandamovie.*,pandamovies.me,pornkino.cc,speedporn.*###tracking-url
 pornwatch.ws,xxxparodyhd.net,xxxstream.me##.btn-lg.btn-block.btn
-pandamovie.*,pandamovies.me,pornkino.cc,speedporn.*,xxxscenes.net,youwatchporn.com##.video-block-happy-absolute:upward(.order-1)
-pandamovie.*,pandamovies.me,pornkino.cc,speedporn.*,xxxscenes.net,youwatchporn.com##.happy-player-beside, .happy-section, .widget_execphp:has-text(/Advertisement|ExoLoader/)
+pandamovie.*,pandamovies.me,pornkino.cc,speedporn.*,xxxscenes.net##.video-block-happy-absolute:upward(.order-1)
+pandamovie.*,pandamovies.me,pornkino.cc,speedporn.*,xxxscenes.net##.happy-player-beside, .happy-section, .widget_execphp:has-text(/Advertisement|ExoLoader/)
 ! https://github.com/uBlockOrigin/uAssets/issues/5946
 gamefront.com##+js(acs, %24, AdBlock)
 gamefront.com##+js(nano-stb, , 10000)
