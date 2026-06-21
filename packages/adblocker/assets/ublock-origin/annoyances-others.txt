@@ -1515,8 +1515,6 @@ reddit.com#@#body:style(pointer-events: auto !important; overflow: auto !importa
 reddit.com##body:style(overflow: auto !important;)
 sh.reddit.com,www.reddit.com##+js(trusted-set-local-storage-item, xpromo-consolidation, %24currentDate%24)
 !#endif
-! https://github.com/AdguardTeam/AdguardFilters/issues/42495#issuecomment-574761083
-@@||metropoles.com^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/6833
 fotor.com##+js(nostif, offsetHeight)
 fotor.com##._1Pece
@@ -6009,7 +6007,7 @@ docs.paloaltonetworks.com##+js(nostif, ad-block)
 ! https://everythingmoe.com/post/anikotodomains.html
 anikaitv.to##+js(set, console.log, trueFunc)
 anikaitv.to##+js(set, console.clear, trueFunc)
-megaplay.buzz##+js(set, devtoolsDetector.launch, noopFunc)
+megaplay.buzz,vidtube.site##+js(set, devtoolsDetector.launch, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/1545
 elektroda.pl##+js(nostif, typeof%20loadElement)
 ! https://github.com/uBlockOrigin/uAssets/issues/33018
@@ -6023,3 +6021,12 @@ estadao.com.br##+js(set-local-storage-item, TUTORIAL_VIEWED_SNACKS_HOME, true)
 freemagazines.top##+js(trusted-rpnt, script, timeLeft%20%3E%200, timeLeft%20%3D%200, includes, clearInterval)
 ! https://github.com/uBlockOrigin/uAssets/issues/33214
 zocbo.com###festivalPop
+! https://github.com/uBlockOrigin/uAssets/issues/11256
+!#if env_safari
+simplywall.st###root ~ #action-menu ~ #modal-container
+simplywall.st###root:style(filter: none !important;)
+simplywall.st##+js(spoof-css, %23root, filter, blur(6px))
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/33337
+homegymreview.co.uk##+js(rmnt, script, nocontextmenu)
+homegymreview.co.uk##body * :not(input):not(textarea):style(user-select: text !important; -webkit-touch-callout: text !important; -webkit-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -ms-user-select: text !important)

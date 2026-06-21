@@ -439,10 +439,6 @@ kat.*,katbay.*,kickass.*,kickasshydra.*,kickasskat.*,kickass2.*,kickasstorrents.
 *$script,1p,domain=torrentproject2.*
 *$csp=script-src *,domain=torrentproject2.*
 *$frame,domain=torrentproject2.*
-! https://github.com/uBlockOrigin/uAssets/issues/8498
-uproxy.*##+js(aeld, , Pop)
-uproxy.*##+js(set, String.fromCharCode, trueFunc)
-uproxy.*##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/72849
 /istripper.js
 ! https://github.com/uBlockOrigin/uAssets/issues/8507
@@ -929,6 +925,7 @@ xnxx.com##.videoad-title
 xnxx.*,xvideos.*##+js(aeld, DOMContentLoaded, %2Fdyn%5C.ads%7CloadAdsDelayed%2F)
 xnxx.*,xvideos.*##+js(set, xv.sda.pp.init, noopFunc)
 xnxx.*,xvideos.*##+js(set, xv.conf.dyn.ads, undefined)
+xnxx.*,xvideos.*##+js(set, xv.conf.dyn.excld, undefined)
 ! https://forums.lanik.us/viewtopic.php?p=159178#p159178
 @@||cache.marieclaire.fr/media/videojs/videojs.ads.min.js$script,domain=marieclaire.fr
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=marieclaire.fr
@@ -3120,8 +3117,6 @@ freehostbox.net,hatenablog.com,puzzle-ch.com#@##adframe:not(frameset):not([style
 ###ads-1:not([style^="position: absolute; left: -5000px"])
 ###ads-banner:not([style^="position: absolute; left: -5000px"])
 ###ads-footer:not([style^="position: absolute; left: -5000px"])
-###adspace:not([style^="position: absolute; left: -5000px"])
-ma-bank.net,rxlife.net,video.tv-tokyo.co.jp#@##adspace:not([style^="position: absolute; left: -5000px"])
 ###adsquare:not([style^="position: absolute; left: -5000px"])
 ###banner468:not([style^="position: absolute; left: -5000px"])
 ###banner728x90:not([style^="position: absolute; left: -5000px"])

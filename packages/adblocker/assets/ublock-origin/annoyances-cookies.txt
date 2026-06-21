@@ -59,6 +59,9 @@ groupeapocom.com###website_cookies_bar
 businessinsider.com##.related-posts
 ! https://github.com/uBlockOrigin/uAssets/issues/16581#issuecomment-4650988602
 /wrapperMessagingWithoutDetection.js$domain=autosport.com
+! https://github.com/uBlockOrigin/uAssets/issues/32524#issuecomment-4712732765
+pinterest.com###__PWS_ROOT__ ~ div[class][style="z-index: 1000;"]:not([id])
+pinterest.com##body[style]:style(overflow: auto !important;)
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -624,6 +627,14 @@ voelkner.de##+js(trusted-click-element, .js_cookie_content%20button%5Bdata-cooki
 schroders.com##+js(trusted-click-element, div%5Baria-labelledby%3D%22modal-title-cookieDisclaimerModal%22%5D%20button%5Bclass*%3D%22SecondaryButton%22%5D)
 ! https://www.82-0.com/
 82-0.com##+js(trusted-set-local-storage-item, 82-consent-v1, %7B%22analytics_storage%22%3A%22denied%22%2C%22ad_storage%22%3A%22denied%22%2C%22ad_user_data%22%3A%22denied%22%2C%22ad_personalization%22%3A%22denied%22%2C%22decided%22%3Atrue%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/27720
+filen.io,~app.filen.io##+js(trusted-set-cookie-reload, cookieConsent, onlyNeeded)
+! https://github.com/AdguardTeam/AdguardFilters/issues/233599
+app.filen.io##+js(trusted-set-local-storage-item, cookieConsent, %22needed%22)
+! https://github.com/uBlockOrigin/uAssets/issues/33342
+ing.be##+js(trusted-set-cookie, cookiesOptin, false, , , domain, .ing.be)
+! https://github.com/uBlockOrigin/uAssets/issues/33377
+web.magentatv.de##+js(trusted-set-local-storage-item, DTAG_GUEST_PRIVACY_FLAGS, %7B%22infoService%22%3Anull%2C%22infoToBroadcasters%22%3Afalse%2C%22infoToThirdParty%22%3Anull%2C%22marketing%22%3Afalse%2C%22personalAdvertising%22%3Afalse%2C%22personalizedUi%22%3Afalse%2C%22productImprovements%22%3Afalse%2C%22thirdParty%22%3Afalse%7D)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -1842,7 +1853,8 @@ e-pribory.cz##+js(trusted-set-cookie, cookiesRules, %7B%22analytics%22%3Afalse%2
 elisa.ee##+js(trusted-click-element, cds-button%5Bid%3D%22cookie-allow-necessary-et%22%5D, , 1000)
 ! accept (consent wall)
 ! cdn.privacy-mgmt.com / rockhard.de
-baseendpoint.brigitte.de,baseendpoint.gala.de,baseendpoint.haeuser.de,baseendpoint.stern.de,baseendpoint.urbia.de,cmp.tag24.de,cmp-sp.handelsblatt.com,cmpv2.berliner-zeitung.de,golem.de,gamestar.de,rockhard.de>>,consent.t-online.de,cmp-sp.handelsblatt.com##+js(trusted-click-element, button%5Btitle*%3D%22Zustimmen%22%20i%5D, , 1000)
+baseendpoint.brigitte.de,baseendpoint.gala.de,baseendpoint.haeuser.de,baseendpoint.stern.de,baseendpoint.urbia.de,cmp.tag24.de,cmp-sp.handelsblatt.com,cmpv2.berliner-zeitung.de,golem.de,gamestar.de,consent.t-online.de,cmp-sp.handelsblatt.com,consent2.express.de##+js(trusted-click-element, button%5Btitle*%3D%22Zustimmen%22%20i%5D, , 1000)
+rockhard.de>>##+js(trusted-click-element, button%5Btitle*%3D%22Zustimmen%22%20i%5D, , 1000)
 ! I agree (consent wall)
 ! cdn.privacy-mgmt.com = www.btc-echo.de
 sp-consent.stuttgarter-nachrichten.de,btc-echo.de>>,sp-consent.stuttgarter-zeitung.de##+js(trusted-click-element, button%5Btitle%3D%22Ich%20bin%20einverstanden%22%5D, , , 1000)
@@ -3850,8 +3862,6 @@ www.drk-hannover.de##+js(set-cookie, cc_external, allow)
 ! Necessary + Social media embeds
 lahella.fi##+js(trusted-set-local-storage-item, cookieOptions, %7B%22essential%22%3Atrue%2C%22analytics%22%3Afalse%2C%22socialMedia%22%3Atrue%7D)
 lahella.fi##+js(set-local-storage-item, cookieConsentGiven, 1)
-! https://github.com/uBlockOrigin/uAssets/issues/27720
-filen.io,~app.filen.io##+js(trusted-set-cookie-reload, cookieConsent, onlyNeeded)
 ! https://github.com/uBlockOrigin/uAssets/issues/27748
 altibox.dk,altibox.no##+js(trusted-click-element, %5Bid%3D%22CybotCookiebotDialogBodyButtonDecline%22%5D, , 2000)
 @@||consent.cookiebot.com/uc.js^$domain=altibox.dk|altibox.no
@@ -4092,7 +4102,8 @@ itavisen.no##+js(trusted-click-element, %5Bid%3D%22qc-cmp2-ui%22%5D%20button%5Bc
 ! https://github.com/uBlockOrigin/uAssets/issues/31960
 camaramar.com##+js(trusted-click-element, button.button.accept, , 2000)
 ! https://github.com/uBlockOrigin/uAssets/issues/32054
-maxjeune-tgvinoui.sncf##+js(trusted-click-element, %23didomi-notice-agree-button)
+! https://github.com/uBlockOrigin/uAssets/issues/33279
+futurezone.at,maxjeune-tgvinoui.sncf##+js(trusted-click-element, %23didomi-notice-agree-button)
 ! https://github.com/uBlockOrigin/uAssets/issues/32077
 gold.ac.uk##+js(trusted-click-element, button.ccc-accept-button)
 ! Functional
@@ -4180,3 +4191,8 @@ antena3.ro##+js(trusted-click-element, %23onetrust-accept-btn-handler, , 1000)
 ! https://github.com/uBlockOrigin/uAssets/issues/33207
 shop.a1.by##+js(trusted-set-cookie-reload, cookie_agreement_level, IlJFUVVJUkVEIg%3D%3D)
 ~internet.a1.by,~myaccount.a1.by,~shop.a1.by,~support.a1.by,a1.by##+js(trusted-set-cookie-reload, cookie_agreement_level, FUNCTIONAL)
+! https://github.com/uBlockOrigin/uAssets/issues/25804#issuecomment-4702599333
+@@||consentmanager.net^$script,domain=hrt.hr
+hrt.hr##+js(trusted-click-element, a%5Bdata-cmp-purpose%5D%5Baria-label%3D%22Svrha%3A%20Dru%C5%A1tvene%20mre%C5%BEe%22%5D%2C200%2Ca%5Bdata-cmp-purpose%5D%5Baria-label%3D%22Svrha%3A%20Ostalo%22%5D%2C200%2Ca.cmpboxbtnsave)
+! Necessary + functional
+megateh.fi##+js(trusted-set-cookie, cookie_consent, %257B%2522functional%2522%253A1%252C%2522analytics%2522%253A0%252C%2522ads%2522%253A0%257D, 1day, , reload, 1)
