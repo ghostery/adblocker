@@ -13,6 +13,7 @@ const FILTER_LISTS = [
   ['ublock-filters-2023', 'ublock-origin', 'filters-2023.txt'],
   ['ublock-filters-2024', 'ublock-origin', 'filters-2024.txt'],
   ['ublock-filters-2025', 'ublock-origin', 'filters-2025.txt'],
+  ['ublock-filters-2026', 'ublock-origin', 'filters-2026.txt'],
   ['ublock-badware', 'ublock-origin', 'badware.txt'],
   ['ublock-abuse', 'ublock-origin', 'resource-abuse.txt'],
   ['ublock-annoyances-others', 'ublock-origin', 'annoyances-others.txt'],
