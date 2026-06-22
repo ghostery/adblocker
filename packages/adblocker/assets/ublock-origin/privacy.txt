@@ -910,16 +910,21 @@ www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26
 ! https://github.com/uBlockOrigin/uAssets/issues/33220
 ! https://github.com/uBlockOrigin/uAssets/issues/33237
 ! https://github.com/uBlockOrigin/uAssets/issues/33276
-/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,8}\/?$/$script,1p,match-case,domain=~bizzabo.com|~leagueoflegends.com|~pavior.com
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4}\/$/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/(?:analyticsdata|metrics)\/?$/$script,1p,match-case
 ! https://github.com/uBlockOrigin/uAssets/issues/33144
-! [dup] from ublock-origin/quick-fixes.txt
 ! @@/jsi18n/|$script,1p
 ! https://github.com/uBlockOrigin/uAssets/commit/58b2cf2dd92adf8eff2ad0a4d98a127cd650eca0
-@@/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/config\/?$/$script,1p
+! @@/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/config\/?$/$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/33157
 ||zoom.us/*/app-telemetry.
 ||zoom.us/*/fingerprintjs-
 ||zoom.us/user/anonymous/telemetry
+! https://github.com/uBlockOrigin/uAssets/issues/33267
+! https://github.com/uBlockOrigin/uAssets/issues/33328
+! https://github.com/AdguardTeam/AdguardFilters/issues/233800
+||observe.runpod.io/static/web-vitals.js
+/e/*^ip=*^beacon=
 ! petametrics
 ||petametrics.com^$~script
 !#endif
@@ -2652,6 +2657,7 @@ lnk.to,smarturl.it##+js(set, linkfire.tracking, %7B%7D)
 ||garryslist.org/device_fingerprints
 ! https://github.com/uBlockOrigin/uAssets/issues/32604
 ||fileditchfiles.me/api/plausible
+fileditchfiles.me##+js(no-fetch-if, method%3APOST%20body%3A%2Fpageview%7Cengagement%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/21372#issuecomment-4275264452
 ||pik.opendesktop.org/pik.js
 ! https://github.com/uBlockOrigin/uAssets/issues/23472
@@ -2680,5 +2686,18 @@ webex.com##+js(no-xhr-if, svc.webex.com%2Fmetrics)
 ||users.videasy.to^
 ! https://github.com/uBlockOrigin/uAssets/issues/33245
 ||acapellas.eu/track.php
+! https://github.com/uBlockOrigin/uBlock-discussions/discussions/913#discussioncomment-17283112
+||tracking.cds.dmm.co.jp/v1/tracking/click?ic_key=$urlskip=/\?ic_key=ey[^.]+\.(ey[^.]+)\./ -base64 /"link_url":"([^"]+)"/
+||tracking.cds.dmm.com/v1/tracking/click?ic_key=$urlskip=/\?ic_key=ey[^.]+\.(ey[^.]+)\./ -base64 /"link_url":"([^"]+)"/
+! https://github.com/uBlockOrigin/uAssets/issues/33336
+||awin1.com/cread.php?awinmid=*&awinaffid=*&ued=$urlskip=?ued -blocked
+! https://doujin.koe-koe.com/voice/rj01295635
+||dlsite.com/maniax/dlaf/=/aid/*/url/$urlskip=/\/url\/(http.+)/ -uricomponent
+! https://gravure.mantan-web.jp/article/20260616dog00m200101000a.html
+||af.moshimo.com/af/c/click?*&url=$doc,urlskip=?url
+! https://github.com/uBlockOrigin/uAssets/issues/33385
+||analytics.dawg.network^
+! https://github.com/uBlockOrigin/uAssets/issues/33390
+||media.storiesig.info/get?__sig=*&uri=$urlskip=?uri,doc
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

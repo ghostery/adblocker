@@ -1062,11 +1062,6 @@ gadgets.es##+js(set, DHAntiAdBlocker, true)
 gadgets.es##+js(set, isAdBlockActive, false)
 ! https://www.reddit.com/r/uBlockOrigin/comments/12g5jyb/
 rackusreads.com##+js(set, DHAntiAdBlocker, true)
-! https://github.com/uBlockOrigin/uAssets/issues/17522
-elamigosgamez.net##+js(nostif, checkAdblockUser)
-elamigosgamez.net##.content_store
-elamigosgamez.net##h3.my-4:has-text(/^Advertising/)
-elamigosgamez.net##.iframeDiv
 ! https://github.com/uBlockOrigin/uAssets/issues/12214
 *$script,domain=wp.pl|money.pl|o2.pl|parenting.pl|pudelek.pl|autokult.pl|gadzetomania.pl|fotoblogia.pl|komorkomania.pl|polygamia.pl|abczdrowie.pl|benchmark.pl|kafeteria.pl|pysznosci.pl|dobreprogramy.pl|genialne.pl|autocentrum.pl|jastrzabpost.pl|deliciousmagazine.pl,redirect-rule=noopjs
 ||imasdk.googleapis.com/js/sdkloader/ima3_debug.js$script,domain=o2.pl,redirect=google-ima.js:10
@@ -3038,10 +3033,9 @@ smarthomebeginner.com##body > .fb-inst[data-type="popup"]
 ! https://github.com/uBlockOrigin/uAssets/issues/20061
 @@||streamnoads.com^$ghide
 ! https://www.reddit.com/r/uBlockOrigin/comments/176cyms/dzapk_detect_ublock_origin/
-dzapk.com##^script:has-text(/innerHTML.*appendChild/)
-!#if !cap_html_filtering
-dzapk.com##+js(rmnt, script, %2FinnerHTML.*appendChild%2F)
-!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/33357
+dzapk.com##+js(nowoif, _blank)
+dzapk.com##+js(rmnt, script, %2FoffsetHeight%7Cpopup%2Fi)
 ! https://github.com/uBlockOrigin/uAssets/issues/20006
 ! https://github.com/uBlockOrigin/uAssets/issues/21494
 foxtel.com.au##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C'adease')%5D%5D), %5Bmedia%5E%3D%22A_D%2F%22%5D, .mpd)
@@ -3167,7 +3161,7 @@ sshkit.com,fastssh.com,howdy.id##+js(no-fetch-if, %2Fadsbygoogle%7Cdoubleclick%2
 @@*$ghide,domain=sshkit.com|fastssh.com|howdy.id
 ! https://github.com/uBlockOrigin/uAssets/issues/9764#issuecomment-1779676540
 pluto.tv##+js(json-prune-fetch-response, adBreaks.%5B%5D.startingOffset%20adBreaks.%5B%5D.adBreakDuration%20adBreaks.%5B%5D.ads%20adBreaks.%5B%5D.startTime%20adBreak%20adBreakLocations, , propsToMatch, %2Fsession.json)
-pluto.tv##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5Bnot(contains(%40id%2C%22subclip%22))%5D%20%7C%20%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), , %2F%5C%2Fepisode%5C%2F.%2B%3F%5C.mpd%5C%3F%2F)
+pluto.tv##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22_ad%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), , %2F%5C%2Fepisode%5C%2F.%2B%3F%5C.mpd%5C%3F%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/9764#issuecomment-2398597866
 @@||a-fds.youborafds01.com/data?$xhr,domain=pluto.tv
 ! https://github.com/uBlockOrigin/uAssets/issues/18592
@@ -3698,7 +3692,7 @@ pkbiosfix.com##+js(nostif, show)
 pkbiosfix.com##+js(rmnt, script, AdBlock)
 ! https://www.reddit.com/r/uBlockOrigin/comments/18ot1ak/unblockable_ads_on_this_site/ - Ad-reinsertion
 ! https://github.com/uBlockOrigin/uAssets/issues/21564
-autoscout24.*##+js(nostif, %2FDetect%7Cadblock%7Cstyle%5C.display%7C%5C%5Bnative%20code%5D%7C%5C.call%5C(null%5C)%2F)
+autoscout24.*##+js(nostif, %2FDetect%7Cadblock%7Cstyle%5C.display%7C%5C.call%5C(null%5C)%2F)
 autoscout24.*##div[class^="AdContentBanner"]
 ! scsport .live anti-adb
 scsport.live###ads-back

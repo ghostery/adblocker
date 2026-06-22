@@ -116,12 +116,12 @@ web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototyp
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jeanprofessorcentral.com,important
-jeanprofessorcentral.com##+js(nowoif)
-jeanprofessorcentral.com##+js(set, console.clear, undefined)
-jeanprofessorcentral.com##+js(acs, globalThis, break%3Bcase)
-jeanprofessorcentral.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||jeanprofessorcentral.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=garylargeavailable.com,important
+garylargeavailable.com##+js(nowoif)
+garylargeavailable.com##+js(set, console.clear, undefined)
+garylargeavailable.com##+js(acs, globalThis, break%3Bcase)
+garylargeavailable.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||garylargeavailable.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -255,6 +255,7 @@ smsonline.cloud##html[data-theme][lang] [id^="img_"][style]:has(iframe[framebord
 ~bing.com,~dogdrip.net,~smsonline.cloud##div[id][class][style^="display"][style*="hidden"][style*="width:   "]
 ~bing.com,~dogdrip.net,~smsonline.cloud##ins[id][style*="--gn-ov-ad-height"]
 content-loader.com,css-load.com,html-load.com,img-load.com##html:not(:has(> head > style:only-child:has-text(width:399px;height:411px))):style(filter: opacity(0) !important; pointer-events: none !important;)
+~bing.com,~dogdrip.net,~smsonline.cloud,*##iframe[id][height^="  "]:style(visibility: hidden !important;)
 /^https:\/\/(?:[a-z]{3,4}\.)?[0-9a-z-]{6,}\.(?:com|xyz)\/script\/(?:[-.0-9A-Za-z]+\.)?[-0-9A-Za-z]{2,30}\.js$/$script,3p,match-case,header=x-length
 ||html-load.com^$image,1p
 ||html-load.com/l/$xhr
@@ -277,8 +278,8 @@ smsonline.cloud##aside[class^="css-"]:has(> p:has-text(Advertisement) + ins.adsb
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
 ! https://github.com/uBlockOrigin/uAssets/issues/26623
 bing.com##+js(no-xhr-if, %2Ffd%2Fls%2Flsp.aspx)
-bing.com##+js(rpnt, script, function%20processEmbImg, window.addEventListener(%22load%22%2C(()%3D%3E%7Bwindow.setTimeout((()%3D%3E%7Bfor(const%20t%20of%20Object.keys(window).sort())%7Bif(t.startsWith(%22b%22))break%3Bif(t.startsWith(%22ad_%22)%26%26!t.includes(%22top%22)%26%26%2F%5Ead_%5Cd%2B%24%2F.test(t))%7Bconst%20s%3Dwindow%5Bt%5D%3F.toString%3F.()%3Bif(%22string%22%3D%3Dtypeof%20s)%7Bconst%20t%3Ds.split('%22Sponsored%22%2C%22')%3F.%5B1%5D%3F.split%3F.('%22%2C%22')%3F.%5B0%5D%3Bt%26%26document.getElementsByClassName(t)%5B0%5D.setAttribute(%22ads%22%2C%22%22)%7D%7D%7D%7D)%2C1e3)%7D))%3Bfunction%20processEmbImg, sedCount, 1)
-bing.com##ol#b_results > li.b_algo:has(> .b_caption > p[ads])
+bing.com##+js(rpnt, script, function%20processEmbImg, (()%3D%3E%7Bif(!location.pathname.startsWith(%22%2Fsearch%22))return%3Bif(document.querySelector(%22ol%23b_results%20%3E%20li.b_algo%20%3E%20.b_title%20%3E%20h2%20%3E%20a%5Bid%5D%5Bads%5D%22))return%3Bwindow.addEventListener(%22scroll%22%2C(()%3D%3E%7Bfor(const%20t%20of%20Object.keys(window).sort())if(t.endsWith(%22_lnk%22))%7Bif(t.length%3C4)continue%3Bdocument.querySelectorAll(%22ol%23b_results%20%3E%20li.b_algo%20%3E%20.b_title%20%3E%20h2%20%3E%20a%23%22%2Bt.split(%22_lnk%22)%5B0%5D).forEach((t%3D%3E%7Bt.setAttribute(%22ads%22%2C%22%22)%7D))%7D%7D))%7D)()%3Bfunction%20processEmbImg, sedCount, 1)
+bing.com##ol#b_results > li.b_algo:has(> .b_title > h2 > a[id][ads])
 bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
 bing.com##ol#b_results > li.b_algo:has(.b_lineclamp3:matches-css-before(content:/^url\(\Sdata:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD.AAAA/))
 ! https://www.reddit.com/r/uBlockOrigin/comments/1j76tpa/adblock_detected_site_gledaitvlive/
@@ -427,7 +428,8 @@ getthispdf.com##+js(rmnt, script, %2F'onerror'%7C'offsetHe%7C'offsetWi%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/32865
 gumtree.com#@#+js(trusted-set, experimentOverrides, json%3A%22%255B%257B%2520defaultValue%253A%2520%2522OFF%2522%257D%255D%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/31664
-bus-location.1507t.xyz##+js(nostif, %2F%5E%5Cs*%5C(%5Cs*%5C)%5Cs*%3D%3E%5Cs*%5C%7B%5Cs*%5B-%240-9A-Z_a-z%5D%2B%5Cs*%5C(%5Cs*%5B-%240-9A-Z_a-z%5D*%5Cs*%5C)%5Cs*%5C%7D%5Cs*%24%2F)
+bus-location.1507t.xyz#@#.ad-area:not(.text-ad)
+bus-location.1507t.xyz##.ad-area:not(.text-ad):style(height: 1px !important; width 1px !important; position: fixed !important; z-index: 2147483647 !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/33097
 ||cloudfront.net/?$script,redirect=noopjs,domain=meuplayeronlinehd.com|multicanaistt.space
 meuplayeronlinehd.com##+js(rmnt, script, _0x, excludes, %2Fsource%7CURLSearchParams%2F)
@@ -437,9 +439,8 @@ meuplayeronlinehd.com###player:style(display: block !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/22295#issuecomment-4603289429
 tek.no,e24.no,minmote.no,vg.no#@#div[id^="sp_message_container_"]
 cmp.tek.no,cmp.e24.no,minmote.no,cmp.vg.no#@#+js(trusted-click-element, .message-row%20%3E%20button%5Btitle%3D%22Avvis%20alle%22%5D, , 2000)
-! https://github.com/uBlockOrigin/uAssets/issues/33157
-! [badfilter] ||zoom.us/*/telemetry$badfilter
-! https://github.com/AdguardTeam/AdguardFilters/commit/0a14a91f32b2b371c07fd72821044e562d66b5cd
-plus.fm-p.jp#@#.ad_overlay
-! https://github.com/AdguardTeam/AdguardFilters/commit/c73ba9cf9f50bfbc542cafae3dbbc02b80d04ebe
-news.mynavi.jp##+js(aeld, DOMContentLoaded, registration_guide_modal)
+! https://openchat-review.me/ anti-adb
+openchat-review.me##+js(set-local-storage-item, BLOCKED_FLAG_KEY, %24remove%24)
+openchat-review.me##+js(aost, document.querySelectorAll, security.js)
+! https://github.com/AdguardTeam/AdguardFilters/commit/49959401f2553b5a0b7d0f20060091a443077473
+game8.jp#@#.track_mario
