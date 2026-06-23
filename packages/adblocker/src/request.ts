@@ -368,7 +368,6 @@ export default class Request<T = any | undefined> {
     this.type = type;
 
     this.url = url;
-    this.normalizedUrl = url.toLowerCase();
     this.hostname = hostname;
     this.domain = domain;
 
@@ -413,6 +412,8 @@ export default class Request<T = any | undefined> {
       this.isHttps = false;
       this.isSupported = false;
     }
+
+    this.normalizedUrl = url.toLowerCase();
   }
 
   public getHostnameHashes(): Uint32Array {
