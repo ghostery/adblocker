@@ -413,7 +413,7 @@ export default class Request<T = any | undefined> {
       this.isSupported = false;
     }
 
-    this.normalizedUrl = url.toLowerCase();
+    this.normalizedUrl = this.url.toLowerCase();
   }
 
   public getHostnameHashes(): Uint32Array {
