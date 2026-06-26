@@ -302,6 +302,9 @@ describe('#NetworkFilter.match', () => {
       type: 'script',
       url: 'https://qwertyuiopas1234567890.com/bar',
     });
+    // Data URIs and case-sensitivity
+    expect(f`/Ok/`).not.to.matchRequest({ url: 'data:text/plain,Ok' });
+    expect(f`/Ok/$match-case`).not.to.matchRequest({ url: 'data:text/plain,Ok' });
   });
 
   it('options', () => {
