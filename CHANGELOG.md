@@ -1,3 +1,39 @@
+# v2.18.1 (Wed Jul 01 2026)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: normalizedUrl is set too early [#5743](https://github.com/ghostery/adblocker/pull/5743) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - internal: housekeeping with 2026 asset registration [#5740](https://github.com/ghostery/adblocker/pull/5740) ([@seia-soto](https://github.com/seia-soto))
+- `@ghostery/adblocker`
+  - Update local assets [#5733](https://github.com/ghostery/adblocker/pull/5733) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - fix(test): migration test [#5725](https://github.com/ghostery/adblocker/pull/5725) ([@seia-soto](https://github.com/seia-soto))
+  - Update local assets [#5726](https://github.com/ghostery/adblocker/pull/5726) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 7.4.3 to 7.4.4 in the tldts group across 1 directory [#5744](https://github.com/ghostery/adblocker/pull/5744) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump the playwright group across 1 directory with 2 updates [#5745](https://github.com/ghostery/adblocker/pull/5745) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @sigstore/core from 3.1.0 to 3.2.1 [#5749](https://github.com/ghostery/adblocker/pull/5749) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump undici from 7.25.0 to 7.28.0 [#5737](https://github.com/ghostery/adblocker/pull/5737) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump form-data from 4.0.5 to 4.0.6 [#5738](https://github.com/ghostery/adblocker/pull/5738) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump @types/chrome from 0.1.42 to 0.1.43 in the webextension group [#5727](https://github.com/ghostery/adblocker/pull/5727) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5747](https://github.com/ghostery/adblocker/pull/5747) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.0 (Thu Jun 04 2026)
 
 #### :running_woman: Performance

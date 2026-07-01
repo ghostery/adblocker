@@ -1,3 +1,15 @@
+# v2.18.1 (Wed Jul 01 2026)
+
+#### :house: Internal
+
+- internal: housekeeping with 2026 asset registration [#5740](https://github.com/ghostery/adblocker/pull/5740) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.0 (Thu Jun 04 2026)
 
 #### :house: Internal

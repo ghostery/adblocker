@@ -1,3 +1,20 @@
+# v2.18.1 (Wed Jul 01 2026)
+
+#### :house: Internal
+
+- internal: housekeeping with 2026 asset registration [#5740](https://github.com/ghostery/adblocker/pull/5740) ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5747](https://github.com/ghostery/adblocker/pull/5747) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.0 (Thu Jun 04 2026)
 
 #### :house: Internal

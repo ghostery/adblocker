@@ -1,3 +1,24 @@
+# v2.18.1 (Wed Jul 01 2026)
+
+#### :bug: Bug Fix
+
+- fix: normalizedUrl is set too early [#5743](https://github.com/ghostery/adblocker/pull/5743) ([@seia-soto](https://github.com/seia-soto))
+
+#### :house: Internal
+
+- internal: housekeeping with 2026 asset registration [#5740](https://github.com/ghostery/adblocker/pull/5740) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#5733](https://github.com/ghostery/adblocker/pull/5733) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- fix(test): migration test [#5725](https://github.com/ghostery/adblocker/pull/5725) ([@seia-soto](https://github.com/seia-soto))
+- Update local assets [#5726](https://github.com/ghostery/adblocker/pull/5726) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### Authors: 3
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.0 (Thu Jun 04 2026)
 
 #### :house: Internal
