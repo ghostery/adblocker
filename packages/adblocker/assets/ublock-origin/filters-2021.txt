@@ -920,12 +920,15 @@ uploadshare.net##.advert-wrapper
 ! https://github.com/uBlockOrigin/uAssets/issues/14822
 /js/static/header/sda/ppsuma*.js$script
 /vast.php?*&idzone=
+/vast.php?*exo*
 xnxx.com##.videoad-title
 ! https://github.com/uBlockOrigin/uAssets/issues/26374
 xnxx.*,xvideos.*##+js(aeld, DOMContentLoaded, %2Fdyn%5C.ads%7CloadAdsDelayed%2F)
 xnxx.*,xvideos.*##+js(set, xv.sda.pp.init, noopFunc)
 xnxx.*,xvideos.*##+js(set, xv.conf.dyn.ads, undefined)
 xnxx.*,xvideos.*##+js(set, xv.conf.dyn.excld, undefined)
+xnxx.*,xvideos.*##+js(rmnt, script, html5player.enableVideoPreRollAds)
+xnxx.*,xvideos.*##+js(rpnt, script, if%20(typeof%20html5player.setupVideo%20%3D%3D%3D%20'function'), if%20(false))
 ! https://forums.lanik.us/viewtopic.php?p=159178#p159178
 @@||cache.marieclaire.fr/media/videojs/videojs.ads.min.js$script,domain=marieclaire.fr
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=marieclaire.fr
@@ -3088,7 +3091,6 @@ latinohentai.com##+js(acs, document.createElement, __htas)
 #@##ad_728
 #@##ad_area
 #@##ad_big
-#@##ad_box
 #@##ad_footer
 #@##ad_slot
 #@##ad_space
@@ -3105,8 +3107,6 @@ latinohentai.com##+js(acs, document.createElement, __htas)
 ###ad_728:not([style^="position: absolute; left: -5000px"])
 ###ad_area:not([style^="position: absolute; left: -5000px"])
 ###ad_big:not([style^="position: absolute; left: -5000px"])
-###ad_box:not([style^="position: absolute; left: -5000px"])
-zunda.site#@##ad_box:not([style^="position: absolute; left: -5000px"])
 ###ad_footer:not([style^="position: absolute; left: -5000px"])
 ###ad_slot:not([style^="position: absolute; left: -5000px"])
 ###ad_space:not([style^="position: absolute; left: -5000px"])

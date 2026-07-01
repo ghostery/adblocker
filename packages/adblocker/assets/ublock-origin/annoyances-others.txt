@@ -250,6 +250,9 @@ flamecomics.xyz##+js(trusted-set-local-storage-item, adBlockedModal%3AlastDismis
 anizone.to##.h-\[90px\].w-\[728px\]:has(iframe[src^="//ad.a-ads.com/"])
 ! https://soundcloudmp3.org/ anti-adb
 scmp3.org,soundcloudmp3.org##+js(set, detectAdBlock, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/33408
+vaughn.live##.wrapper_content ~ .vs_modal_v9:style(opacity: 0 !important;)
+vaughn.live##.wrapper_content ~ .vs_modal_v9_background
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -4099,6 +4102,7 @@ coinsparty.com##+js(aeld, contextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/15598
 ! https://github.com/uBlockOrigin/uAssets/issues/32278
 startpage.com###main > .support-banner
+startpage.com###main > div[class^="css-"]:has(> div:first-child + div > button:first-child + div[aria-label]:last-child > svg[aria-label="x-icon"])
 ! https://github.com/uBlockOrigin/uAssets/issues/15654
 postype.com##+js(aeld, contextmenu)
 postype.com##+js(rc, disable-selection, body)
@@ -4232,6 +4236,8 @@ thailandopen.org,theaircurrent.com,freereadnovel.online,piklodz.pl,secondlifetra
 ! https://github.com/uBlockOrigin/uAssets/issues/16224
 studyflix.de##.reminder-modal
 studyflix.de##html:style(overflow: auto !important;)
+! https://studyflix.de/deutsch/lizenziert-oder-lizensiert-7999 anti adblock annoyance
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=studyflix.de
 ! https://github.com/uBlockOrigin/uAssets/issues/16227
 espn.com##+js(aeld, contextmenu)
 ! walkthrough-indo.blogspot. com anti select
@@ -4855,7 +4861,7 @@ thejakartapost.com##+js(rmnt, script, %2F%24.*ready.*setInterval%2F)
 oreilly.com##+js(aeld, mouseout, cookie)
 ! https://github.com/uBlockOrigin/uAssets/issues/4747#issuecomment-1691485028
 ! https://github.com/uBlockOrigin/uAssets/issues/26838
-colourxh.site,fullxh.com,galleryxh.site,megaxh.com,movingxh.world,seexh.com,unlockxh4.com,valuexh.life,xhaccess.com,xhadult4.com,xhamster.*,xhamster1.*,xhamster10.*,xhamster11.*,xhamster12.*,xhamster13.*,xhamster14.*,xhamster15.*,xhamster16.*,xhamster17.*,xhamster18.*,xhamster19.*,xhamster20.*,xhamster2.*,xhamster3.*,xhamster4.*,xhamster42.*,xhamster46.com,xhamster5.*,xhamster7.*,xhamster8.*,xhbig.com,xhbranch5.com,xhchannel.com,xhdate.world,xhmoon5.com,xhofficial.com,xhopen.com,xhplanet1.com,xhplanet2.com,xhreal2.com,xhspot.com,xhtotal.com,xhvictory.com,xhwebsite5.com,xhwide5.com##+js(set, initials.layout.layoutPromoProps.promoMessagesWrapperProps.shouldDisplayAdblockMessage, false)
+colourxh.site,fullxh.com,galleryxh.site,megaxh.com,movingxh.world,seexh.com,unlockxh4.com,valuexh.life,xhaccess.com,xhadult4.com,xhamster.*,xhamster1.*,xhamster10.*,xhamster11.*,xhamster12.*,xhamster13.*,xhamster14.*,xhamster15.*,xhamster16.*,xhamster17.*,xhamster18.*,xhamster19.*,xhamster20.*,xhamster2.*,xhamster3.*,xhamster4.*,xhamster42.*,xhamster46.*,xhamster5.*,xhamster7.*,xhamster8.*,xhbig.com,xhbranch5.com,xhchannel.com,xhdate.world,xhmoon5.com,xhofficial.com,xhopen.com,xhplanet1.com,xhplanet2.com,xhreal2.com,xhspot.com,xhtotal.com,xhvictory.com,xhwebsite5.com,xhwide5.com##+js(set, initials.layout.layoutPromoProps.promoMessagesWrapperProps.shouldDisplayAdblockMessage, false)
 ! https://github.com/uBlockOrigin/uAssets/issues/20084
 270towin.com##+js(set-session-storage-item, fs.adb.dis, 1)
 ! https://github.com/easylist/easylist/issues/15515
@@ -5717,13 +5723,6 @@ astoryofmasasstruggles.com##style:has-text(@media print):remove()
 lemon8-app.com##+js(trusted-click-element, .seo-landing-modal-cancel-btn%20.design-system-button-container, , 500)
 ! https://github.com/uBlockOrigin/uAssets/issues/30225
 lemon8-app.com##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important;)
-! https://www.reddit.com/r/uBlockOrigin/comments/1lpy21u/animekai_anti_dev_tools/
-anikai.to,animekai.*,anigo.to,flixzone.co,hianime.ws,moontv.to,yflix.to##+js(nostif, %7C%7C!!)
-1moviesz.to,bflix.la,flixtor.mov,myflixer.bz,myflixer.fi,hurawatch.la,sflix.fi,watchseries.st##+js(nostif, %7C%7C%20!!_)
-~challenges.cloudflare.com,1moviesz.to,anikai.to,animekai.*,anigo.to,bflix.la,flixtor.mov,flixzone.co,hianime.ws,hurawatch.la,moontv.to,myflixer.bz,myflixer.fi,sflix.fi,watchseries.st,yflix.to,1moviesz.to>>,anikai.to>>,animekai.*>>,anigo.to>>,bflix.la>>,flixtor.mov>>,flixzone.co>>,hianime.ws>>,hurawatch.la>>,moontv.to>>,myflixer.bz>>,myflixer.fi>>,sflix.fi>>,watchseries.st>>,yflix.to>>##+js(aeld, keydown, %2F%5Efunction%5C(.*%5C%7C%5C%7C.*%7D%24%2F)
-~challenges.cloudflare.com,1moviesz.to,anikai.to,animekai.*,anigo.to,bflix.la,flixtor.mov,flixzone.co,hianime.ws,hurawatch.la,moontv.to,myflixer.bz,myflixer.fi,sflix.fi,watchseries.st,yflix.to,1moviesz.to>>,anikai.to>>,animekai.*>>,anigo.to>>,bflix.la>>,flixtor.mov>>,flixzone.co>>,hianime.ws>>,hurawatch.la>>,moontv.to>>,myflixer.bz>>,myflixer.fi>>,sflix.fi>>,watchseries.st>>,yflix.to>>##+js(set, console.clear, trueFunc)
-~challenges.cloudflare.com,1moviesz.to,anikai.to,animekai.*,anigo.to,bflix.la,flixtor.mov,flixzone.co,hianime.ws,hurawatch.la,moontv.to,myflixer.bz,myflixer.fi,sflix.fi,watchseries.st,yflix.to,1moviesz.to>>,anikai.to>>,animekai.*>>,anigo.to>>,bflix.la>>,flixtor.mov>>,flixzone.co>>,hianime.ws>>,hurawatch.la>>,moontv.to>>,myflixer.bz>>,myflixer.fi>>,sflix.fi>>,watchseries.st>>,yflix.to>>##+js(set, console.table, trueFunc)
-~challenges.cloudflare.com,1moviesz.to,anikai.to,animekai.*,anigo.to,bflix.la,flixtor.mov,flixzone.co,hianime.ws,hurawatch.la,moontv.to,myflixer.bz,myflixer.fi,sflix.fi,watchseries.st,yflix.to,1moviesz.to>>,anikai.to>>,animekai.*>>,anigo.to>>,bflix.la>>,flixtor.mov>>,flixzone.co>>,hianime.ws>>,hurawatch.la>>,moontv.to>>,myflixer.bz>>,myflixer.fi>>,sflix.fi>>,watchseries.st>>,yflix.to>>##+js(set, console.log, trueFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/27010
 loverslab.com##+js(nano-sib)
 ! https://github.com/uBlockOrigin/uAssets/issues/16606
@@ -6005,8 +6004,8 @@ fontsquirrel.com###bottom_banner_ad_container
 ! https://github.com/uBlockOrigin/uAssets/issues/32827
 docs.paloaltonetworks.com##+js(nostif, ad-block)
 ! https://everythingmoe.com/post/anikotodomains.html
-anikaitv.to##+js(set, console.log, trueFunc)
-anikaitv.to##+js(set, console.clear, trueFunc)
+anikaitv.to,anikototv.to##+js(set, console.log, trueFunc)
+anikaitv.to,anikototv.to##+js(set, console.clear, trueFunc)
 megaplay.buzz,vidtube.site##+js(set, devtoolsDetector.launch, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/1545
 elektroda.pl##+js(nostif, typeof%20loadElement)
@@ -6030,3 +6029,8 @@ simplywall.st##+js(spoof-css, %23root, filter, blur(6px))
 ! https://github.com/uBlockOrigin/uAssets/issues/33337
 homegymreview.co.uk##+js(rmnt, script, nocontextmenu)
 homegymreview.co.uk##body * :not(input):not(textarea):style(user-select: text !important; -webkit-touch-callout: text !important; -webkit-user-select: text !important; -moz-user-select: text !important; -khtml-user-select: text !important; -ms-user-select: text !important)
+! https://old.reddit.com/r/uBlockOrigin/comments/1ug4jiw/the_sun_adblock_nag/
+thesun.co.uk##dialog:remove()
+thesun.co.uk##:is(html,body):style(overflow: unset !important)
+! https://github.com/uBlockOrigin/uAssets/issues/33479
+alphacoders.com##+js(trusted-rpnt, script, countdown%20%3C%3D%200, countdown%20%3D%3E%200)
