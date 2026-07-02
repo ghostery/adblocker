@@ -1789,9 +1789,11 @@ komputerswiat.pl##+js(acs, %24onet, adblock)
 ! https://vebo1.com popup
 vebo1.com##+js(aopr, adsRedirectPopups)
 ! https://github.com/uBlockOrigin/uAssets/issues/14226
+! https://github.com/uBlockOrigin/uAssets/issues/26736
 ewrc-results.com##+js(set, canGetAds, true)
 ewrc-results.com##+js(no-fetch-if, method%3A%2Fhead%2Fi)
-ewrc-results.com##+js(trusted-replace-argument, Array.prototype.includes, 0, json%3A%22none%22, condition, %2Fbrave-api%7Cscript-content%7Cbait%7Creal%2F)
+ewrc-results.com##+js(set-local-storage-item, ewrc_ad_signal, %24remove%24)
+ewrc-results.com##+js(trusted-replace-argument, Storage.prototype.setItem, 1, , condition, bannerDismissed)
 ! @@||pagead2.googlesyndication.com/pagead/js/adsbygoogle.js$script,xhr,domain=ewrc-results.com
 ||media.ewrc-results.com/banners/
 ewrc-results.com##.rounded-lg.items-center.justify-center.h-full.w-full.flex:has(.adsbygoogle)

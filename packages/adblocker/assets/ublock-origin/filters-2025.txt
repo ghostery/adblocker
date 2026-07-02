@@ -2195,9 +2195,12 @@ online-smss.com##+js(no-fetch-if, widgets.outbrain.com)
 online-smss.com##+js(no-fetch-if, mode%3Ano-cors)
 ! https://github.com/uBlockOrigin/uAssets/issues/29576
 porn4fans.com##+js(rmnt, script, adblock_popup)
+porn4fans.com##+js(nostif, innerText, 2000)
 porn4fans.com##.fp-brand
 porn4fans.com##.top-links
 porn4fans.com##.bottom-links
+porn4fans.com##a.ID_live_cam_inner
+porn4fans.com###spot_player
 ||go.*.com/smartpop/$all
 ||go.*.com/easy?$all
 ! https://github.com/uBlockOrigin/uAssets/issues/18846#issuecomment-3172977584
@@ -2491,7 +2494,7 @@ webtoon.xyz##+js(rmnt, script, %2Fpopunder%2Fi)
 webtoon.xyz##+js(nowoif, _blank)
 ||largeboyfriend.com^$all
 ! manwaclub.net popunder
-manhwaclub.net##+js(rmnt, script, adConfig)
+manhwaclub.net##+js(rmnt, script, %2FadConfig%7C'ph'%2F)
 manhwaclub.net##+js(nowoif, _blank)
 manhwaclub.net##.adult-content.censored .main-col .c-page__content:style(opacity:1 !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/30211
@@ -2520,13 +2523,6 @@ app.simracing.gp##+js(nostif, .getComputedStyle)
 ||audiocircuit.dk/wp-content/plugins/awiftysw/
 ! fake download buttons, frequently changed domain
 blogspot.com,web.app##img[onclick="kemana()"]
-! https://github.com/uBlockOrigin/uAssets/issues/30374
-animekai.*,anikai.to##+js(nowoif, _blank)
-animekai.*,anikai.to,flixtor.mov,myflixer.bz,sflix.fi,yflix.to##+js(nosiif, %2F%3Bif%5C(!%5C(%7C%3Dnull%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/29557
-/sw.js^$script,domain=animekai.*|anikai.*|animekai.to|anikai.to|animekai.pw|animekai.fi|animekai.fo|animekai.gs|animekai.la
-! https://github.com/uBlockOrigin/uAssets/issues/29438
-1moviesz.to,myflixer.bz,flixzone.co,moontv.to,sflix.fi##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/30385
 filesq.net##+js(nowoif, _blank)
 filesq.net##._button-now

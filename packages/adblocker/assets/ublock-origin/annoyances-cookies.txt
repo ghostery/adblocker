@@ -635,6 +635,16 @@ app.filen.io##+js(trusted-set-local-storage-item, cookieConsent, %22needed%22)
 ing.be##+js(trusted-set-cookie, cookiesOptin, false, , , domain, .ing.be)
 ! https://github.com/uBlockOrigin/uAssets/issues/33377
 web.magentatv.de##+js(trusted-set-local-storage-item, DTAG_GUEST_PRIVACY_FLAGS, %7B%22infoService%22%3Anull%2C%22infoToBroadcasters%22%3Afalse%2C%22infoToThirdParty%22%3Anull%2C%22marketing%22%3Afalse%2C%22personalAdvertising%22%3Afalse%2C%22personalizedUi%22%3Afalse%2C%22productImprovements%22%3Afalse%2C%22thirdParty%22%3Afalse%7D)
+! https://github.com/uBlockOrigin/uAssets/pull/33439 - id=0
+bahn.de##+js(trusted-set-cookie, CONSENTMGR, c1%3A1%7Cc2%3A0%7Cc3%3A0%7Cc4%3A0%7Cc5%3A0%7Cc6%3A0%7Cc7%3A0%7Cc8%3A0%7Cc9%3A0%7Cc10%3A0%7Cc11%3A0%7Cc12%3A0%7Cc13%3A0%7Cc14%3A0%7Cc15%3A0%7Cc16%3A0%7Cts%3A%24now%24%7Cconsent%3Atrue%7Cid%3A0, , , domain, .bahn.de)
+! https://insights.assetmanagement.hsbc.com/
+insights.assetmanagement.hsbc.com##+js(trusted-click-element, .reject-all%20%3E%20button)
+! https://github.com/uBlockOrigin/uAssets/pull/33501
+asket.com##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A''%2Cnecessary%3Atrue%2Cpreferences%3Afalse%2Cstatistics%3Afalse%2Cmarketing%3Afalse%2Cmethod%3A'explicit'%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/33504
+redact.dev##+js(trusted-set-cookie, tracking-consent, %257B%2522version%2522%253A1%252C%2522consent%2522%253A%257B%2522essential%2522%253Atrue%252C%2522tracking%2522%253Afalse%252C%2522marketing%2522%253Afalse%257D%252C%2522timestamp%2522%253A%24now%24%257D, , , reload, 1, dontOverwrite, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/33511
+coolblue.de##+js(trusted-set-cookie, cookie-preferences, eyJ2ZXJzaW9uIjoiMjAyNTA1MDciLCJmdW5jdGlvbmFsIjp7ImNhIjp0cnVlfSwiYW5hbHl0aWNhbCI6eyJhdyI6ZmFsc2UsImNlIjpmYWxzZSwiZGQiOmZhbHNlLCJnYSI6ZmFsc2UsIm9wIjpmYWxzZSwidHAiOmZhbHNlfSwibWFya2V0aW5nIjp7ImZiIjpmYWxzZSwiZ21wIjpmYWxzZSwiaW4iOmZhbHNlLCJqcyI6ZmFsc2UsImtrIjpmYWxzZSwibGkiOmZhbHNlLCJtYSI6ZmFsc2UsInJkIjpmYWxzZSwic2MiOmZhbHNlLCJzdCI6ZmFsc2UsInR0IjpmYWxzZX19, , , domain, .coolblue.de, reload, 1)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -1232,6 +1242,8 @@ eurobaustoff.com##+js(trusted-set-local-storage-item, ccm_consent, %7B%22%2F%22%
 s-pankki.fi,srf.ch,alternate.de,bayer04.de,douglas.de,dr-beckmann.com,falke.com,fitnessfirst.de,flaschenpost.de,gloeckle.de,hornbach.nl,hypofriend.de,lactostop.de,neumann.com,post.ch,postbank.de,rts.ch,zalando.*##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-deny-all-button%22%5D, , 1000)
 ! accept (no other option)
 immowelt.de,joyn.*,morenutrition.de##+js(trusted-click-element, %23usercentrics-root%20%3E%3E%3E%20button%5Bdata-testid%3D%22uc-accept-all-button%22%5D, , 1000)
+! https://github.com/uBlockOrigin/uAssets/issues/33509
+alternate.de###usercentrics-cmp-ui
 ! https://github.com/uBlockOrigin/uAssets/issues/23499 - Necessary and marketing
 @@||cookiebot.com^$~image,3p,domain=fastnedcharging.com
 fastnedcharging.com##+js(trusted-set-cookie, CookieConsent, %7Bnecessary%3Atrue%252Cpreferences%3Afalse%252Cstatistics%3Afalse%252Cmarketing%3Atrue%7D)
@@ -2111,8 +2123,6 @@ lafi.fr##+js(trusted-click-element, button%5Bonclick%3D%22SelectNone()%22%5D, , 
 erli.pl##+js(trusted-set-local-storage-item, COOKIES_CONSENTS, %7B%22marketingAndStatistics%22%3Afalse%2C%22personalization%22%3Afalse%2C%22at%22%3A1%7D)
 ! essential
 skyscanner.*##+js(trusted-click-element, button%5Bdata-tracking-element-id%3D%22cookie_banner_essential_only%22%5D, , 1600)
-! decline
-coolblue.*##+js(trusted-click-element, button%5Bname%3D%22decline_cookie%22%5D, , 1000)
 ! reject
 chipotle.com##+js(trusted-click-element, button%5Bid%3D%22ketch-banner-button-secondary%22%5D, , 1000)
 ! continue without accepting
@@ -4196,3 +4206,5 @@ shop.a1.by##+js(trusted-set-cookie-reload, cookie_agreement_level, IlJFUVVJUkVEI
 hrt.hr##+js(trusted-click-element, a%5Bdata-cmp-purpose%5D%5Baria-label%3D%22Svrha%3A%20Dru%C5%A1tvene%20mre%C5%BEe%22%5D%2C200%2Ca%5Bdata-cmp-purpose%5D%5Baria-label%3D%22Svrha%3A%20Ostalo%22%5D%2C200%2Ca.cmpboxbtnsave)
 ! Necessary + functional
 megateh.fi##+js(trusted-set-cookie, cookie_consent, %257B%2522functional%2522%253A1%252C%2522analytics%2522%253A0%252C%2522ads%2522%253A0%257D, 1day, , reload, 1)
+! https://forums.lanik.us/viewtopic.php?p=169877-visualcrossing-com#p169877
+visualcrossing.com##+js(trusted-set-local-storage-item, vcstate, %7B%22required%22%3A%7B%22necessary%22%3Atrue%2C%22functional%22%3Afalse%2C%22analysis%22%3Afalse%2C%22ads%22%3Afalse%2C%22hasSetCookies%22%3A1%7D%7D)

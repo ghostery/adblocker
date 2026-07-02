@@ -731,6 +731,8 @@ myanimelist.net##[class*="-malside"]
 myanimelist.net##[class*="-pdatla"]
 myanimelist.net##.bookstore-detail-right
 myanimelist.net##div[class*="bookstores-recommend-plugin-"]:has(span[class="sponsored"])
+myanimelist.net##.ad-sas
+myanimelist.net##.js-scrollfix-bottom-rel.rightside > div[style]:has(.ad-sas)
 ! winknews.com anti adblock
 ! homepage live video breakage
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=winknews.com
@@ -1467,19 +1469,20 @@ reshare.pm##+js(nowoif)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/149922
 ||googlesyndication.com^$script,redirect=noopjs,domain=flysas.com
 ! https://github.com/uBlockOrigin/uAssets/issues/21553
-gamedrive.org##.code-block a[href][target="_blank"] > img[data-recalc-dims]
-gamedrive.org##a[href][target="_blank"][rel="noopener noreferrer"] > img
-gamedrive.org##.netflix-banner
-gamedrive.org##.hbo-banner
-gamedrive.org##[id^="gridlove-module-"] > .gridlove-text-module-content > div:is(:has([data-format]), [onclick*='window.open'])
-gamedrive.org##+js(aost, document.querySelector, %2FshowModal%7CchooseAction%7CdoAction%7CcallbackAdsBlocked%2F)
-gamedrive.org##+js(acs, String.fromCharCode, fetch)
-gamedrive.org##+js(acs, eval, replace)
-gamedrive.org##+js(aopr, b2a)
-!gamedrive.org##+js(rmnt, script, isOwner)
-gamedrive.org##+js(aeld, DOMContentLoaded, window.open)
-gamedrive.org##+js(aeld, click, _shouldProcessLink)
-gamedrive.org##+js(aeld, click, preventDefault)
+gamedrive.*##.code-block a[href][target="_blank"] > img[data-recalc-dims]
+gamedrive.*##a[href][target="_blank"][rel="noopener noreferrer"] > img
+gamedrive.*##.netflix-banner
+gamedrive.*##.hbu-banner
+gamedrive.*##[id^="gridlove-module-"] > .gridlove-text-module-content > div:is(:has([data-format]), [onclick*='window.open'])
+gamedrive.*##div[class*="banner"][onclick]
+gamedrive.*##+js(aost, document.querySelector, %2FshowModal%7CchooseAction%7CdoAction%7CcallbackAdsBlocked%2F)
+gamedrive.*##+js(acs, String.fromCharCode, fetch)
+gamedrive.*##+js(acs, eval, replace)
+gamedrive.*##+js(aopr, b2a)
+!gamedrive.*##+js(rmnt, script, isOwner)
+gamedrive.*##+js(aeld, DOMContentLoaded, window.open)
+gamedrive.*##+js(aeld, click, _shouldProcessLink)
+gamedrive.*##+js(aeld, click, preventDefault)
 ! https://github.com/uBlockOrigin/uAssets/issues/31131
 cybar.xyz,cybar.to##+js(aeld, click, open)
 cybar.xyz,cybar.to##+js(nowoif, cpmecs)
@@ -3159,9 +3162,9 @@ web1s.asia##+js(nano-sib, wait)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1kr7d8s/cant_access_this_site_with_ublock_enabled/
 sshkit.com,fastssh.com,howdy.id##+js(no-fetch-if, %2Fadsbygoogle%7Cdoubleclick%2F)
 @@*$ghide,domain=sshkit.com|fastssh.com|howdy.id
-! https://github.com/uBlockOrigin/uAssets/issues/9764#issuecomment-1779676540
+! https://github.com/uBlockOrigin/uAssets/issues/9764
 pluto.tv##+js(json-prune-fetch-response, adBreaks.%5B%5D.startingOffset%20adBreaks.%5B%5D.adBreakDuration%20adBreaks.%5B%5D.ads%20adBreaks.%5B%5D.startTime%20adBreak%20adBreakLocations, , propsToMatch, %2Fsession.json)
-pluto.tv##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22_ad%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), , %2F%5C%2Fepisode%5C%2F.%2B%3F%5C.mpd%5C%3F%2F)
+pluto.tv##+js(xml-prune, xpath(%2F%2F*%5Bname()%3D%22Period%22%5D%5B.%2F%2F*%5Bname()%3D%22BaseURL%22%20and%20contains(text()%2C%22_ad%22)%20and%20contains(text()%2C%22creative%22)%5D%5D%20%7C%20%2F%2F*%5Bname()%3D%22MPD%22%5D%2F%40mediaPresentationDuration%20%7C%20%2F%2F*%5Bname()%3D%22Period%22%5D%2F%40start), , %2F%5C%2Fepisode%5C%2F.%2B%3F%5C.mpd%5C%3F%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/9764#issuecomment-2398597866
 @@||a-fds.youborafds01.com/data?$xhr,domain=pluto.tv
 ! https://github.com/uBlockOrigin/uAssets/issues/18592

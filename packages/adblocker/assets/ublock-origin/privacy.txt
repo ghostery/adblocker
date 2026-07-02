@@ -892,6 +892,9 @@ dogdrip.net##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2Flink.php%3Furl%3Dhtt
 ! https://forum.donanimhaber.com/hepsiburada-ve-firsatlari-ana-konu--150987015-1787#161998768
 ||donanimhaber.com/ExternalLinkRedirect?*^url=http$doc,urlskip=?url
 donanimhaber.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2FExternalLinkRedirect%3F%22%5D%5Bhref*%3D%22url%3Dhttp%22%5D, %3Furl)
+! https://www.f6s.com/company/zomato
+f6s.com##+js(aeld, , redirect)
+||f6s.com/redirect?url=http*$doc,urlskip=?url
 ! https://github.com/uBlockOrigin/uAssets/issues/24675 - click tracking
 ||cdn.digg.com/fragments/homepage/static/view-frontpage.js
 ! https://github.com/uBlockOrigin/uAssets/issues/29572
@@ -925,6 +928,7 @@ www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26
 ! https://github.com/AdguardTeam/AdguardFilters/issues/233800
 ||observe.runpod.io/static/web-vitals.js
 /e/*^ip=*^beacon=
+/e/*^ip=*^compression=
 ! petametrics
 ||petametrics.com^$~script
 !#endif
@@ -2379,7 +2383,8 @@ evropa2.cz##+js(set-local-storage-item, %2Fcnc_alien_invasion_code%7CpixelsLastF
 ! https://github.com/uBlockOrigin/uAssets/issues/28150
 ||buttondown.com/ladybird/subscribers/*/archive/$doc,uritransform=/\/subscribers\/[-0-9a-f]+\/archive\//\/archive\//
 ! https://github.com/uBlockOrigin/uAssets/issues/25757
-myanimelist.net##+js(no-fetch-if, method%3APOST%20body%3Apage_view)
+myanimelist.net##+js(no-fetch-if, method%3APOST%20body%3A%2Fcontent_view%7Cimpression%7Cpage_view%2F)
+||myanimelist.net/ux/
 ! https://www.tvguide.com/listings/
 ! https://www.reddit.com/r/Adguard/comments/1keorq3/trouble_with_metacriticcom_no_trailers_play/
 ! https://www.reddit.com/r/uBlockOrigin/comments/1kox81x/video_and_picture_viewer_blocked_on_gamespotcom/
@@ -2639,7 +2644,7 @@ itmedia.co.jp##+js(set-local-storage-item, %2F%5E_cX_%2F, %24remove%24)
 ! NXDOMAIN
 ||detect-ccd.creativecloud.adobe.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/32424
-lnk.to,smarturl.it##+js(set, linkfire.tracking, %7B%7D)
+smarturl.it##+js(set, linkfire.tracking, %7B%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/32431
 /^https:\/\/www\.[a-z0-9]{8}\.com\/i\/[A-Z0-9]{5}\/[A-Z0-9]{6}\/$/$image,3p,match-case,to=com
 ||dq8i9djm.com^$3p
@@ -2699,5 +2704,21 @@ webex.com##+js(no-xhr-if, svc.webex.com%2Fmetrics)
 ||analytics.dawg.network^
 ! https://github.com/uBlockOrigin/uAssets/issues/33390
 ||media.storiesig.info/get?__sig=*&uri=$urlskip=?uri,doc
+! https://github.com/uBlockOrigin/uBlock-issues/issues/4035
+||click.convertkit-mail4.com/$doc,urlskip=/([^/]+$)/ -base64
+! https://github.com/uBlockOrigin/uAssets/issues/33280
+||streamcash.to/embed/$ping
+! https://github.com/uBlockOrigin/uAssets/issues/33457
+||tm.jsuol.com.br^
+! https://github.com/easylist/easylist/issues/24516
+||directg.jp/js/fingerprint2.js$script,redirect=fingerprint2.js,important
+/fingerprint2.js$script,redirect=fingerprint2.js
+/fingerprint2.min.js$script,redirect=fingerprint2.js
+! https://github.com/uBlockOrigin/uAssets/issues/26362
+||curiosity.sheepesports.com^
+! https://github.com/AdguardTeam/AdguardFilters/issues/234519
+mashable.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fzdcs.link%2F%22%5D, %3Fu)
+! https://github.com/uBlockOrigin/uAssets/issues/33502
+||prydwen.gg/api/v1/ping/
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
