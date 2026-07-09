@@ -130,6 +130,26 @@ straemplay.org,stre4mpay.one,stre4mplay.*##+js(nowoif)
 straemplay.org,stre4mpay.one,stre4mplay.*##+js(aopr, puOverlay)
 straemplay.org,stre4mpay.one,stre4mplay.*##div[style*="z-index: 1000"][style*="background: transparent"]
 ||btent.stre4mpay.one^$popup
+! https://github.com/uBlockOrigin/uAssets/issues/6761
+! https://github.com/uBlockOrigin/uAssets/issues/7190
+! https://github.com/uBlockOrigin/uAssets/issues/8842
+fandom.com##+js(set, wgAffiliateEnabled, false)
+kenshi.fandom.com##+js(set, ads, null)
+fandom.com##[id^="siderail_"][id*="_gamepedia"]
+fandom.com###bodyContent:style(width:100% !important)
+fandom.com##.instant-suggestion
+fandom.com##.top-ads-container
+fandom.com###rail-boxad-wrapper
+fandom.com###mid_boxad
+fandom.com###incontent_boxad
+||45tu1c0.com^
+!#if env_mobile
+fandom.com##.ad-slot-wrapper
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/18777
+fandom.com##li.top-results__item span:has-text(Sponsored):upward(li)
+! https://github.com/uBlockOrigin/uAssets/issues/33587
+##.fandom-ad-sticky-container
 ! END: Rules from filters.txt
 ! hostserverz detection
 hostserverz.com##+js(no-xhr-if, googlesyndication)
@@ -169,7 +189,8 @@ primewire.*##+js(aost, Math.floor, onClick)
 primewire.*##+js(nowoif, _blank)
 ||rtouchingthewaterw.com^$all
 ! https://www.reddit.com/r/uBlockOrigin/comments/1s2q133/aggressive_adgate_behavior_on_primewireprimevid/
-primewire.*##a.splash[href]:remove-attr(href)
+primewire.*##a.spla[href]:remove-attr(href)
+primewire.*##.embed-player > a[href][target="blank"]:remove-attr(href)
 primewire.*##+js(rpnt, script, window.csrf_token%20%3D, window.userID%20%3D%201%3Bwindow.csrf_token%20%3D, excludes, window.userID)
 ! https://github.com/uBlockOrigin/uAssets/issues/31541
 movix.blog##+js(nowoif)
@@ -474,7 +495,7 @@ mathongo.com##+js(rpnt, script, if%20(bait), if%20(false))
 pokopow.com##+js(rmnt, script, var%20Data)
 ! https://github.com/uBlockOrigin/uAssets/issues/32315
 beta.plus.rtl.de##+js(no-xhr-if, ad-ipd)
-! rtl.de##+js(no-xhr-if, smartclip)
+plus.rtl.de##+js(no-xhr-if, smartclip)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/227774
 mrexcel.com###bc-advert-top-wrapper
 mrexcel.com###adn-sticky
@@ -620,9 +641,10 @@ guessthemovie.name,guessthephrase.xyz##.fallback-side-ad
 /ads/*$domain=guessthemovie.name|guessthephrase.xyz
 ! https://github.com/uBlockOrigin/uAssets/issues/32630
 @@||cdn-media.brightline.tv/config/v*.json$domain=adultswim.com
-||adultswim-vodlive.cdn.turner.com/csmp/live/$xhr,removeparam=caid,domain=adultswim.com
-||adultswim-vodlive.cdn.turner.com/csm/extlive/$xhr,removeparam=yo.po,domain=adultswim.com
-||adultswim-vodlive.cdn.turner.com/csm/extlive/$xhr,removeparam=yo.asd,domain=adultswim.com
+||adultswim-vodlive.cdn.turner.com^$removeparam=caid
+||adultswim-vodlive.cdn.turner.com^$removeparam=yo.po
+||adultswim-vodlive.cdn.turner.com^$removeparam=yo.asd
+||adultswim-vodlive.cdn.turner.com^$removeparam=yo.ap
 ||medium.ngtv.io/v2/media/$removeparam=ssaiProfile,domain=adultswim.com
 !#if !ext_ubol
 @@||medium.ngtv.io/v2/media/live*$removeparam=ssaiProfile,domain=adultswim.com
@@ -674,10 +696,13 @@ arakpop.net,koreaboo.net##a[href*="?key="][onclick^="window.open"]
 ||ratiogodlessirrigate.com^$all
 ||windscompassdenial.com^$all
 ! https://www.reddit.com/r/uBlockOrigin/comments/1swtkuj/entirely_blocking_filtered_websites_no_site_has/
-###wrapper ~ a[target="_blank"][href="#"][style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index: 9999999;cursor: auto"]
+###wrapper ~ a[href][target="_blank"][style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index: 9999999;cursor: auto"]
 ! https://github.com/uBlockOrigin/uAssets/issues/32558
-###app-root ~ a[target="_blank"][href="#"][style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index: 9999999;cursor: auto"]
-comix.to,ymix.to##a[target="_blank"][href="#"]
+! https://github.com/uBlockOrigin/uAssets/issues/33585
+###app-root ~ a[href][target="_blank"][style="position: fixed;top: 0;left: 0;width: 100%;height: 100%;display: block;z-index: 9999999;cursor: auto"]
+comix.to,mangafire.to,ymix.to##a[href][target="_blank"][style*="z-index: 99999"]
+comix.to,mangafire.to,ymix.to##+js(nostif, ._%24, 2000)
+comix.to,mangafire.to,ymix.to##+js(nosiif, ._%24, 3000)
 ! https://github.com/uBlockOrigin/uAssets/issues/32737
 kingjav.biz##+js(rpnt, script, if%20(!prerollPlayed), if(!prerollPlayed)%7BprerollPlayed%3Dtrue%3BprerollActive%3Dtrue%3BstartMainVideo()%3B%7Dif%20(false))
 kingjav.biz##+js(rpnt, script, video.onclick%20%3D%20null%3B)
@@ -1029,3 +1054,24 @@ apps2app.com##+js(nowoif, _blank)
 apps2app.com##.ads
 ! https://github.com/uBlockOrigin/uAssets/issues/33522
 ilforumdeibrutti.is##+js(rmnt, script, hidden'%3B)
+! https://github.com/uBlockOrigin/uAssets/issues/33555
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=i24news.tv
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=i24news.tv
+! https://github.com/uBlockOrigin/uAssets/issues/33566
+aninami.site##+js(trusted-set-local-storage-item, aninami-smartlink-last, %24now%24)
+aninami.site##+js(nowoif, _blank)
+! https://github.com/uBlockOrigin/uAssets/issues/33568
+kawaii-anime.com##+js(nostif, getComputedStyle)
+kawaii-anime.com##+js(nowoif, _blank)
+kawaii-anime.com##+js(set-session-storage-item, kw_ad_shown, 5)
+kawaii-anime.com##+js(set-session-storage-item, kw_ad_clicks, 2)
+kawaii-anime.com##+js(trusted-set-session-storage-item, kw_ad_last, %24now%24)
+! https://github.com/uBlockOrigin/uAssets/issues/33571
+phototrans.de,phototrans.eu,phototrans.hu,phototrans.pl##+js(rmnt, script, !adsbygoogle.loaded)
+phototrans.de,phototrans.eu,phototrans.hu,phototrans.pl##div.bus_content:first-child:has(.adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/33583
+boote-magazin.de##+js(set, HTMLScriptElement.prototype.onerror, undefined)
+boote-magazin.de##+js(no-fetch-if, bf-ad.net)
+$script,redirect-rule=noopjs,to=~googletagmanager.com,from=boote-magazin.de
+||upscore.com^$script,redirect=noopjs,domain=boote-magazin.de
+||bf-ad.net^$script,redirect=noopjs,domain=boote-magazin.de
