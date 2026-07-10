@@ -150,6 +150,16 @@ fandom.com##.ad-slot-wrapper
 fandom.com##li.top-results__item span:has-text(Sponsored):upward(li)
 ! https://github.com/uBlockOrigin/uAssets/issues/33587
 ##.fandom-ad-sticky-container
+! https://github.com/uBlockOrigin/uAssets/issues/5441
+sendvid.com##+js(nowoif, !%2F%5Ehttps%3A%5C%2F%5C%2Fsendvid%5C.com%5C%2F%5B0-9a-z%5D%2B%24%2F)
+sendvid.com##[href*=".php"]
+sendvid.com###video-js-video > [href^="javascript:"]
+sendvid.com###vjs-logo-top-bar
+sendvid.com###ftr
+sendvid.com##a[href^="https://go.gsrv.dev/"]
+sendvid.com##a[href][target="_blank"][style^="display: block;position: fixed;"][style*="z-index:"]
+! https://github.com/uBlockOrigin/uAssets/issues/32411
+sendvid.com##+js(rmnt, script, shouldPop)
 ! END: Rules from filters.txt
 ! hostserverz detection
 hostserverz.com##+js(no-xhr-if, googlesyndication)
@@ -984,7 +994,9 @@ openlua.cloud##+js(set, HTMLScriptElement.prototype.onerror, undefined)
 openlua.cloud##+js(json-prune-fetch-response, sponsor%20ad_provider, , propsToMatch, api.openlua.cloud)
 @@||openlua.cloud^$ghide
 @@||openlua.cloud/*.js?_=$1p
-! ads popups/antiadb luciferdonghua.in & watch-v2.autoembed.app
+! https://github.com/uBlockOrigin/uAssets/issues/20438
+@@||luciferdonghua.in^$ghide
+luciferdonghua.in##div[data-afuhost]
 luciferdonghua.in##.afu-ab
 luciferdonghua.in##.afu-banner
 luciferdonghua.in##.kln
@@ -1075,3 +1087,5 @@ boote-magazin.de##+js(no-fetch-if, bf-ad.net)
 $script,redirect-rule=noopjs,to=~googletagmanager.com,from=boote-magazin.de
 ||upscore.com^$script,redirect=noopjs,domain=boote-magazin.de
 ||bf-ad.net^$script,redirect=noopjs,domain=boote-magazin.de
+! https://github.com/uBlockOrigin/uAssets/issues/33617
+peachify.top##+js(aeld, click, atob)
