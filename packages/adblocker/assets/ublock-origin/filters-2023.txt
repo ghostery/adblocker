@@ -583,6 +583,7 @@ javmix.app##+js(set, puShown, true)
 ||cdn-static3.com/cdn/push.min.js
 ://creative.*/widgets/Spot/lib.js$3p
 ://creative.*/widgets/v4/Universal?$frame,3p
+://creative.*/widgets/v4/MobileSlider?$frame,3p
 ! xtremetop100.com ads
 xtremetop100.com###sidebanner
 xtremetop100.com###sidebannerleft
@@ -1409,11 +1410,13 @@ linkshub.to##[href="https://crack-status.com/"]
 bellesa.co##[href*="preroll"]:upward(2)
 ||res.cloudinary.com/$image,domain=bellesa.co
 ! https://github.com/uBlockOrigin/uAssets/issues/17859
+! https://github.com/uBlockOrigin/uAssets/issues/18051
 satkurier.pl##+js(no-fetch-if, ads)
 satkurier.pl##+js(nostif, %2FgetComputedStyle%7Cbait%2F)
 satkurier.pl##+js(set, AController_3, noopFunc)
 satkurier.pl##+js(trusted-replace-argument, document.createElement, 0, json%3A%22div%22, condition, ins)
 satkurier.pl##+js(rpnt, script, if%20(isBlocked), if%20(false))
+satkurier.pl##+js(rmnt, script, assets%2Fcheck)
 satkurier.pl###billboard1
 satkurier.pl###m_top_1_mainpage
 satkurier.pl###navbarMenu + div[style*="text-align:center;"]
@@ -2167,7 +2170,9 @@ jovemnerd.com.br###ad-wallpaper
 rgb.vn##+js(nostif, siteAccessPopup)
 ! https://www.reddit.com/r/uBlockOrigin/comments/14pu01w/
 ! https://www.reddit.com/r/uBlockOrigin/comments/14qeaz4/
+! https://github.com/uBlockOrigin/uAssets/issues/7960#issuecomment-4818981509
 www.google.com##div[aria-label="Why this ad?"]:upward([data-pla="1"])
+www.google.com##div[data-snf][data-snm]:has(> div[class] > div[data-hb="isv"])
 ! https://github.com/uBlockOrigin/uAssets/issues/18816
 totalcsgo.com##+js(rmnt, script, %2Fadconfig%2Fi)
 totalcsgo.com##.body-container:style(background-image: unset !important; cursor: auto !important;)
@@ -2619,7 +2624,7 @@ eu-proxy.startpage.com##+js(set, ytInitialPlayerResponse.adPlacements, undefined
 eu-proxy.startpage.com##+js(set, playerResponse.adPlacements, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/26030
 startpage.com###main > div[style]:not([class]):has(path)
-startpage.com##+js(trusted-replace-argument, Array.prototype.find, 0, undefined, condition, affinity-qi)
+startpage.com##.search-form-relative-container + div[class^="css-"]:has(div[data-identifier])
 ! https://x2download.com/ ad caller
 x2download.com##+js(aopr, GeneratorAds)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/159335
@@ -3557,6 +3562,7 @@ sonixgvn.net##.su-note:style(display: block !important;)
 ||sonixgvn.net/wp-content/plugins/adrotate/$script,1p,important
 ||sonixgvn.net/cdn-cgi/apps/head/$script,1p,important
 ||vlitag.com^$script,xhr,domain=sonixgvn.net,redirect=noopjs
+||sonixgvn.net/dark/?aHR0c*$doc,urlskip=&1 -base64
 ! basketballbuzz .ca anti-adb
 basketballbuzz.ca##+js(rmnt, script, deblocker)
 ! dribbblegraphics .com anti-adb

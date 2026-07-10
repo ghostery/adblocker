@@ -970,6 +970,8 @@ as.com,caracol.com.co,los40.com##+js(set, DTM.trackAsyncPV, noopFunc)
 @@||sourcepoint.vice.com^$script,xhr,domain=video.vice.com
 ! https://github.com/uBlockOrigin/uAssets/issues/7910
 @@||metacritic.com/js/omniture/uuid.js$script,1p
+! https://github.com/uBlockOrigin/uAssets/issues/33587
+metacritic.com##+js(rpnt, script, appName%3A%22metacritic%22, appName%3A%22etacritic%22)
 ! https://github.com/uBlockOrigin/uAssets/issues/6539
 @@||pinpng.com^$css,1p
 @@||pngfind.com^$css,1p
@@ -4418,3 +4420,8 @@ proxyorb.com##+js(aeld, load, dataset.ready, elements, script%5Bsrc%5E%3D%22http
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=root.cz
 ! https://www.reddit.com/r/uBlockOrigin/comments/1ugk6yu/gocomics_site_update_comments_no_longer_visible/
 gocomics.com##+js(rpnt, script, document.querySelectorAll, window.addEventListener(%22load%22%2C()%3D%3E%7Bif(!document.querySelector(%22section%5Bclass%5E%3D'ShowComicViewer-module-scss-module'%5D%22))%7Breturn%3B%7Dconst%20script%3Ddocument.createElement(%22script%22)%3Bscript.src%3D%22https%3A%2F%2Fcdn.viafoura.net%2Fentry%2Findex.js%22%3Bdocument.head.appendChild(script)%7D)%3Bdocument.querySelectorAll)
+! https://github.com/uBlockOrigin/uAssets/issues/33565
+account.bhvr.com##+js(set, Osano, %7B%7D)
+account.bhvr.com##+js(set, Osano.cm, %7B%7D)
+account.bhvr.com##+js(set, Osano.cm.addEventListener, noopFunc)
+account.bhvr.com##+js(set, Osano.cm.removeEventListener, noopFunc)

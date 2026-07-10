@@ -60,8 +60,7 @@ businessinsider.com##.related-posts
 ! https://github.com/uBlockOrigin/uAssets/issues/16581#issuecomment-4650988602
 /wrapperMessagingWithoutDetection.js$domain=autosport.com
 ! https://github.com/uBlockOrigin/uAssets/issues/32524#issuecomment-4712732765
-pinterest.com###__PWS_ROOT__ ~ div[class][style="z-index: 1000;"]:not([id])
-pinterest.com##body[style]:style(overflow: auto !important;)
+pinterest.com##+js(trusted-click-element, xpath%3A%2F%2Fdiv%5B%40id%3D%22__PWS_ROOT__%22%5D%2Ffollowing-sibling%3A%3Adiv%5B%40style%3D%22z-index%3A%201000%3B%22%5D%2F%2Fdiv%5B%40name%3D%22trap-focus%22%5D%2Fdiv%5B%40role%3D%22dialog%22%5D%2F%2Fbutton%5B.%2F%2Fdiv%5Btext()%3D%22Reject%20all%22%5D%5D)
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -645,6 +644,10 @@ asket.com##+js(trusted-set-cookie, CookieConsent, %7Bstamp%3A''%2Cnecessary%3Atr
 redact.dev##+js(trusted-set-cookie, tracking-consent, %257B%2522version%2522%253A1%252C%2522consent%2522%253A%257B%2522essential%2522%253Atrue%252C%2522tracking%2522%253Afalse%252C%2522marketing%2522%253Afalse%257D%252C%2522timestamp%2522%253A%24now%24%257D, , , reload, 1, dontOverwrite, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/33511
 coolblue.de##+js(trusted-set-cookie, cookie-preferences, eyJ2ZXJzaW9uIjoiMjAyNTA1MDciLCJmdW5jdGlvbmFsIjp7ImNhIjp0cnVlfSwiYW5hbHl0aWNhbCI6eyJhdyI6ZmFsc2UsImNlIjpmYWxzZSwiZGQiOmZhbHNlLCJnYSI6ZmFsc2UsIm9wIjpmYWxzZSwidHAiOmZhbHNlfSwibWFya2V0aW5nIjp7ImZiIjpmYWxzZSwiZ21wIjpmYWxzZSwiaW4iOmZhbHNlLCJqcyI6ZmFsc2UsImtrIjpmYWxzZSwibGkiOmZhbHNlLCJtYSI6ZmFsc2UsInJkIjpmYWxzZSwic2MiOmZhbHNlLCJzdCI6ZmFsc2UsInR0IjpmYWxzZX19, , , domain, .coolblue.de, reload, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/33526
+indonesiabusinesspost.com##+js(trusted-set-local-storage-item, cookieConsent, %7B%22performance%22%3Afalse%2C%22functionality%22%3Afalse%2C%22advertising%22%3Afalse%7D)
+! https://github.com/uBlockOrigin/uAssets/pull/33552
+tfw.wales##+js(trusted-set-cookie, cookiesjsr, %7B%22base%22%3Afalse%2C%22functional%22%3Afalse%2C%22google_tag_ads%22%3Afalse%2C%22recaptcha%22%3Afalse%2C%22gtag%22%3Afalse%7D)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -893,8 +896,6 @@ chrono24.*##dialog.gdpr-layer
 ! https://github.com/uBlockOrigin/uAssets/issues/20744
 ! .cmp-info[style] fixes endless reload
 wetter.com##+js(trusted-click-element, .cmp-scroll-padding%20.cmp-info%5Bstyle%5D%20%23cmp-paywall%20%23cmp-consent%20%23cmp-btn-accept, , 2000)
-wetter.com###cmp-style-reset
-wetter.com##body:style(overflow: auto !important; position: unset !important;)
 ! sj.se cookies
 sj.se##+js(trusted-set-cookie, sj_consent_v1, %257B%2522consent%2522%253A%257B%2522PERSONALIZATION%2522%253Afalse%252C%2522MARKETING%2522%253Afalse%257D%252C%2522uuid%2522%253A%2522d599dc64-52b7-4dc7-bff3-1e18d5cebc1a%2522%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20763
@@ -1816,7 +1817,7 @@ austrian.com,lufthansa.com##+js(trusted-click-element, button%5Bid%3D%22cm-accep
 erneuerbare-energien-aktuell.de,tcm-whieda.de,iphone-ticker.de,oloid.de,kampfkunst-herz.de,glow25.de,h-f.at,hornetsecurity.com,kayzen.io,wasserkunst-hamburg.de,zahnspange-oelde.de###BorlabsCookieBox
 erneuerbare-energien-aktuell.de,tcm-whieda.de,iphone-ticker.de,oloid.de,kampfkunst-herz.de,glow25.de,h-f.at,hoerbert.com,hornetsecurity.com,ifun.de,kayzen.io,straschu-ev.de,wasserkunst-hamburg.de,zahnspange-oelde.de##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
 ! save
-kontinenzzentrum.ch,happyland.cc,ticket-plus.app,xinedome.de##+js(trusted-click-element, button.brlbs-btn-save, , 1000)
+kontinenzzentrum.ch,happyland.cc,ticket-plus.app,xinedome.de,youcat.org##+js(trusted-click-element, button.brlbs-btn-save, , 1000)
 ! disagree
 flightradar24.com,tijd.be,ewmagazine.nl,pathe.nl,bnc.ca,decathlon.fr,edreams.it,egora.fr,engelvoelkers.com,estrategiasdeinversion.com,festo.com,francebleu.fr,francemediasmonde.com,geny.com,giphy.com,idealista.com,infolibre.es,inpost.pl,information.tv5monde.com,ing.es,knipex.de,laprovence.com,lemondeinformatique.fr,libertaddigital.com,mappy.com,marianne.net,orf.at,philibertnet.com,researchgate.net,rtbf.be,rtl.be,standaard.be,stroilioro.com,taxfix.de,telecinco.es,vistaalegre.com,wsp.com,zimbra.free.fr##+js(trusted-click-element, button%5Bid%3D%22didomi-notice-disagree-button%22%5D, , 1000)
 ! disagree (ahref)
