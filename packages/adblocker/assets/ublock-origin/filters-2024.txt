@@ -181,7 +181,7 @@ work.ink##img[alt="Buff Banner"]:style(visibility: collapse !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/2628
 ! https://github.com/NanoMeow/QuickReports/issues/2035
 ! https://github.com/uBlockOrigin/uAssets/issues/522
-hollaforums.com,powforums.com,supforums.com##+js(no-xhr-if, googlesyndication)
+powforums.com,supforums.com##+js(no-xhr-if, googlesyndication)
 ! https://www.reuters.com/
 reuters.com##[class^="leaderboard-space"]
 reuters.com##[class^="workspace-article-banner"]
@@ -1787,8 +1787,6 @@ wetter3.de##+js(set, karte3, 18)
 ! https://github.com/uBlockOrigin/uAssets/issues/3657
 @@||emailregex.com^$ghide
 emailregex.com##.adsbygoogle
-! arahdrive.com anti adblock
-arahdrive.com##+js(set, protection, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/23774
 watchserie.online##.row:has(> [style="text-align: center;"] > a[rel="external nofollow ugc"])
 ! https://github.com/uBlockOrigin/uAssets/issues/23786
@@ -2151,8 +2149,6 @@ questloops.com##+js(noeval-if, %2Fchp_%3Fad%2F)
 questloops.com##+js(aopr, b2a)
 ! https://github.com/uBlockOrigin/uAssets/issues/24355
 ||instacart.ca/graphql?operationName=DisplayAdPlacement^$xhr,1p
-! https://www.reddit.com/r/uBlockOrigin/comments/1dutw99/onlybabes_detects_ubo/
-onlybabes.site##+js(acs, %24, btoa)
 ! https://github.com/uBlockOrigin/uAssets/issues/24381
 audiobookbay.lu##:matches-path(/^\/($|abss\/)/) .postContent a[href^="/"]:not([href*="/forum/"]):matches-attr(href=/^\/[-a-z]+\?[a-z]{2,}=/)
 audiobookbay.lu##:matches-path(/^\/($|abss\/)/) a:is([href^="/"],[href*="audiobookbay.lu/"]):matches-attr(href=/(^|audiobookbay\.lu)\/[-a-z0-9]+$/) img
