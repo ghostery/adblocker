@@ -972,6 +972,10 @@ as.com,caracol.com.co,los40.com##+js(set, DTM.trackAsyncPV, noopFunc)
 @@||metacritic.com/js/omniture/uuid.js$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/33587
 metacritic.com##+js(rpnt, script, appName%3A%22metacritic%22, appName%3A%22etacritic%22)
+/etacritic/*$xhr,uritransform=/\/etacritic\//\/metacritic\//,domain=metacritic.com
+!#if ext_ubol
+/(.*)\/etacritic\/(.*)/$xhr,uritransform=//$1\/metacritic\/$2/,domain=metacritic.com
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/6539
 @@||pinpng.com^$css,1p
 @@||pngfind.com^$css,1p

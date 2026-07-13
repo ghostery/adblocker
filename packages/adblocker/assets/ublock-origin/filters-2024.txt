@@ -291,8 +291,8 @@ xhamster20.*##.player-add-overlay
 ||xhamster*/api/*/vast
 ! https://github.com/uBlockOrigin/uAssets/issues/23749
 ! https://github.com/uBlockOrigin/uAssets/issues/25611
-play.nova.bg##+js(no-xhr-if, %2Fgooglesyndication%7Cgoogima%5C.js%2F)
-play.nova.bg##+js(no-fetch-if, %2Fgooglesyndication%7Cgoogima%5C.js%2F)
+play.nova.bg##+js(prevent-xhr, %2Fgooglesyndication%7Cgoogima%5C.js%7Cimasdk%2F)
+play.nova.bg##+js(prevent-fetch, %2Fgooglesyndication%7Cgoogima%5C.js%7Cimasdk%2F)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=cdn.bg
 ! https://github.com/NanoMeow/QuickReports/issues/3256
 @@||thehouseofportable.com^$ghide
@@ -2517,6 +2517,8 @@ androidpolice.com,babygaga.com,backyardboss.net,carbuzz.com,cbr.com,collider.com
 /promo/next/adb/*
 ! Miscellaneous
 ||adsninja.ca^$removeparam=url
+! https://github.com/uBlockOrigin/uAssets/issues/33669
+/next/mural/*$xhr,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/25071
 kaas.ro##+js(aopr, aclib)
 kaas.ro##+js(aopr, Adcash)
