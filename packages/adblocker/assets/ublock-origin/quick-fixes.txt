@@ -114,18 +114,20 @@ web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, ..node%5B%3F.*._
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data.viewer.news_feed.edges.*%5B%3F.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, JSON.parse)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.appendChild, Function.prototype.toString)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.insertBefore, JSON.parse)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.insertBefore, Function.prototype.toString)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.insertAdjacentElement, JSON.parse)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.insertAdjacentElement, Function.prototype.toString)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-4635090748
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=pamelachangemission.com,important
-pamelachangemission.com##+js(nowoif)
-pamelachangemission.com##+js(set, console.clear, undefined)
-pamelachangemission.com##+js(acs, globalThis, break%3Bcase)
-pamelachangemission.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||pamelachangemission.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=ellenpoliticalfollow.com,important
+ellenpoliticalfollow.com##+js(nowoif)
+ellenpoliticalfollow.com##+js(set, console.clear, undefined)
+ellenpoliticalfollow.com##+js(acs, globalThis, break%3Bcase)
+ellenpoliticalfollow.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||ellenpoliticalfollow.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -461,3 +463,16 @@ zeilink.net#@#+js(remove-node-text, script, %2F%22%5C%5C%7C%5C%5C%5Bux%5D%7C%5C%
 ! [badfilter] ||detour.padovia.it^$badfilter
 ! https://github.com/AdguardTeam/AdguardFilters/commit/213cb423245bc6dc51ef0cd10b2b615d84ae8f75
 vk.sportsbull.jp##+js(rc, hidden-by-ima, %23vid1_html5_api)
+! https://github.com/uBlockOrigin/uAssets/issues/33639
+! [badfilter] @@||mail-ads.google.com/mail/*/adsfe/main_jspb?$xhr,from=mail.google.com,badfilter
+! https://github.com/AdguardTeam/AdguardFilters/commit/1267121d79d376a23d06a78f306767573017c31a
+! https://github.com/AdguardTeam/AdguardFilters/commit/3f1ba60715da29502b0a686fed38c5bb72948677
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=sp.nicovideo.jp,important
+nicovideo.jp#@#a[href$="_tagrelatedbanner"]
+! https://github.com/uBlockOrigin/uAssets/issues/33651
+! [badfilter] ||roblox.com.$all,badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/33072#issuecomment-4945020836
+x.com#@#+js(no-xhr-if, %2Fi%2Fapi%2F1.1%2Fflow%2Fviewer.json)
+! https://github.com/easylist/easylist/commit/1ec982848559cd61d9a462a23af788223979315c
+! [badfilter] ||ads-twitter.com^$badfilter
+||static.ads-twitter.com^

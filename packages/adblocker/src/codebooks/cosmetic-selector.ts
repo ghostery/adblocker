@@ -10,6 +10,7 @@ export default [
   ", document.createElement, ",
   ", document.getElementById,",
   "%5Bhref%5E%3D%22https%3A%2",
+  "%2522%253Afalse%252C%2522",
   ", document.oncontextmenu",
   "%22%3A%22denied%22%2C%22",
   "aeld, DOMContentLoaded, ",
@@ -85,6 +86,7 @@ export default [
   "nostif",
   "notice",
   "nowoif",
+  "Object",
   "policy",
   "Policy",
   "script",
@@ -230,7 +232,6 @@ export default [
   "i",
   "I",
   "j",
-  "J",
   "k",
   "l",
   "L",
@@ -259,6 +260,5 @@ export default [
   "x",
   "y",
   "Y",
-  "z",
-  "Z"
+  "z"
 ];
