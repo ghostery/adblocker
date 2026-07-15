@@ -39,7 +39,15 @@ async function createWindow() {
     },
   );
 
-  blocker.enableBlockingInSession(mainWindow.webContents.session);
+  blocker.enableBlockingInSession(mainWindow.webContents.session, false);
+  mainWindow.webContents.session.webRequest.onHeadersReceived(
+    { urls: ['<all_urls>'] },
+    blocker.onHeadersReceived,
+  );
+  mainWindow.webContents.session.webRequest.onBeforeRequest(
+    { urls: ['<all_urls>'] },
+    blocker.onBeforeRequest,
+  );
 
   blocker.on('request-blocked', (request: Request) => {
     console.log('blocked', request.tabId, request.url);
