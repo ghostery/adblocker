@@ -914,9 +914,10 @@ www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26
 ! https://github.com/uBlockOrigin/uAssets/issues/33237
 ! https://github.com/uBlockOrigin/uAssets/issues/33276
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4}\/$/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,9}\/\?id=$/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,6}\/\?id=G-[A-Z0-9]+/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,6}\/\?id=AW-\d+/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
-/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/(?:analyticsdata|gemets|metrics)\/?$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/(?:analyticsdata|gemets|metrics|securegtm)\/?$/$script,1p,match-case
 ! https://github.com/uBlockOrigin/uAssets/issues/33144
 ! @@/jsi18n/|$script,1p
 ! https://github.com/uBlockOrigin/uAssets/commit/58b2cf2dd92adf8eff2ad0a4d98a127cd650eca0
@@ -1206,6 +1207,7 @@ $removeparam=fbadid
 ! https://www.facebook.com/share/p/19oiH7iTxz/
 ||facebook.com^$removeparam=share_url
 ! Yandex Metrika
+$removeparam=clckid
 ! https://github.com/brave/brave-browser/issues/33216
 $removeparam=ymclid
 $removeparam=ysclid
@@ -2712,6 +2714,7 @@ webex.com##+js(no-xhr-if, svc.webex.com%2Fmetrics)
 ||click.convertkit-mail4.com/$doc,urlskip=/([^/]+$)/ -base64
 ! https://github.com/uBlockOrigin/uAssets/issues/33280
 ||streamcash.to/embed/$ping
+||streamcash.to/embed/$xhr,method=post
 ! https://github.com/uBlockOrigin/uAssets/issues/33457
 ||tm.jsuol.com.br^
 ! https://github.com/easylist/easylist/issues/24516
@@ -2728,7 +2731,8 @@ mashable.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fzdcs.link%2F%22
 vaughn.live##+js(no-fetch-if, method%3APOST%20body%3Azaraz)
 ||vaughn.live/vsz/
 ! https://github.com/uBlockOrigin/uAssets/issues/33072#issuecomment-4937969164
-!||x.com/i/api/1.1/flow/*.json
-!x.com##+js(no-xhr-if, %2Fi%2Fapi%2F1.1%2Fflow%2Fviewer.json)
+!x.com##+js(trusted-edit-inbound-object, Object.entries, 0, .log%3D%22%5B%7B%5C%22_category_%5C%22%3A%5C%22client_event%5C%22%2C%5C%22format_version%5C%22%3A2%2C%5C%22triggered_on%5C%22%3A0%2C%5C%22event_info%5C%22%3A%5C%22%5C%22%2C%5C%22message%5C%22%3A%5C%22%5C%22%2C%5C%22items%5C%22%3A%5B%5D%2C%5C%22event_namespace%5C%22%3A%7B%5C%22page%5C%22%3A%5C%22%5C%22%2C%5C%22component%5C%22%3A%5C%22%5C%22%2C%5C%22action%5C%22%3A%5C%22%5C%22%2C%5C%22client%5C%22%3A%5C%22m5%5C%22%7D%2C%5C%22client_event_sequence_start_timestamp%5C%22%3A0%2C%5C%22client_event_sequence_number%5C%22%3A0%2C%5C%22client_app_id%5C%22%3A%5C%22%5C%22%7D%5D%22)
+! https://github.com/uBlockOrigin/uAssets/issues/12635#issuecomment-4982050273
+telegraph.co.uk##.onward-journey
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

@@ -160,6 +160,37 @@ sendvid.com##a[href^="https://go.gsrv.dev/"]
 sendvid.com##a[href][target="_blank"][style^="display: block;position: fixed;"][style*="z-index:"]
 ! https://github.com/uBlockOrigin/uAssets/issues/32411
 sendvid.com##+js(rmnt, script, shouldPop)
+! https://github.com/uBlockOrigin/uAssets/issues/6223
+hqq.*##+js(aopr, adBlockDetected)
+hqq.*##+js(set, sadbl, false)
+hqq.*##+js(nowoif)
+||hqq.*/cdn-cgi/trace$xhr,1p,important
+@@||hqq.*^$ghide
+@@||hqq.*^$script,xhr,1p
+@@||cdn.jsdelivr.net/npm/videojs-contrib-ads/$domain=hqq.*
+@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=hqq.*
+!#if env_firefox
+@@||hqq.*/sec/player/*$csp
+!#endif
+hqq.*##[href="https://t.me/Russia_Vs_Ukraine_War3"]
+hqq.*##a[onclick="openAuc();"]
+||vkcdnservice.com^$script,redirect-rule=noopjs,3p
+! https://github.com/uBlockOrigin/uAssets/issues/10039
+||ebd.cda-hd.cc^
+! https://www.reddit.com/r/uBlockOrigin/comments/14r6074/
+! https://www.reddit.com/r/uBlockOrigin/comments/14r6074/adblock_blocked_netutvhqqto_site/jqv92vj/
+hqq.*,waaw.*##+js(set, adblockcheck, false)
+! Redirecting
+hqq.*,waaw.*##^script:has-text(self == top)
+!#if !cap_html_filtering
+hqq.*,waaw.*##+js(rmnt, script, self%20%3D%3D%20top)
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/14001
+*$script,3p,denyallow=google.com|gstatic.com|polyfill.io,domain=playdede.us
+waaw.*##+js(aopr, doSecondPop)
+! https://github.com/uBlockOrigin/uAssets/issues/20599
+waaw.*##+js(nowoif)
+waaw.*##+js(set, arrvast, %5B%5D)
 ! END: Rules from filters.txt
 ! hostserverz detection
 hostserverz.com##+js(no-xhr-if, googlesyndication)
@@ -199,8 +230,8 @@ primewire.*##+js(aost, Math.floor, onClick)
 primewire.*##+js(nowoif, _blank)
 ||rtouchingthewaterw.com^$all
 ! https://www.reddit.com/r/uBlockOrigin/comments/1s2q133/aggressive_adgate_behavior_on_primewireprimevid/
-primewire.*##a.spla[href]:remove-attr(href)
-primewire.*##.embed-player > a[href][target="blank"]:remove-attr(href)
+primewire.*##a[href][class^="spla"]:remove-attr(href)
+primewire.*##.embed-player > a[href][target$="blank"]:remove-attr(href)
 primewire.*##+js(rpnt, script, window.csrf_token%20%3D, window.userID%20%3D%201%3Bwindow.csrf_token%20%3D, excludes, window.userID)
 ! https://github.com/uBlockOrigin/uAssets/issues/31541
 movix.blog##+js(nowoif)
@@ -546,13 +577,6 @@ dstat.space##+js(aeld, DOMContentLoaded, checkBanners)
 dstat.space##.p-4:has(> div[id^="banner-list-"])
 ! https://github.com/uBlockOrigin/uAssets/issues/32440
 weebcentral.com##div[class][style]:has(> div.notranslate > iframe[sandbox*="allow-popups"])
-! https://github.com/uBlockOrigin/uAssets/issues/32452
-getthispdf.com##+js(rmnt, script, %2Fpopunder%2Fi)
-getthispdf.com##+js(nostif, %2Fdetect%7Cbait%2Fi)
-getthispdf.com##+js(rpnt, script, loadAdPlacements()%3B)
-getthispdf.com##+js(rmnt, script, checkBait)
-getthispdf.com##+js(nostif, %2B%2B%3Bbreak%3B%7D%7D%7D%7D%7D)
-getthispdf.com##+js(set, __adBlockState, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/30024#issuecomment-4193302125
 forum.ixbt.com##+js(trusted-set-cookie-reload, s, 180%2C%2C4%2C%2Ca)
 ! https://github.com/List-KR/List-KR/issues/1030
@@ -888,7 +912,7 @@ ondebola.com##+js(nostif, utilAds)
 ondebola.com##.adslot_horizontal_big_desktop_extra
 ondebola.com##.solverde-affiliate-banner
 ! https://github.com/uBlockOrigin/uAssets/issues/33280
-streamcash.to##+js(rmnt, script, %2F%5C.onerror%7CoffsetHeight%7CBait%7CgetComputedStyle%7CdimCheck%7CgetBoundingClientRect%7Cx69%7Cheight%3D%3D%3D0%7Cwidth%3D%3D%3D0%7Ceval%7Cbanner-zone%7Cno-store%7C%5C'flex%5C'%7CString%5C.fromCharCode%7Cmedia-slot-bottom%7CString%5C.fromCodePoint%7Cjoin%5C(''%5C)%7C%5C%5BdecodeURIComponent%5C(%7Cstyle%5C.setProperty%7Cjoin%5C('-'%5C)%7Ccache%3A%7C%5C.then%7C'%5C%2B'%7Cfl%5C%24%7B''%7Dex%7CcontentWindow%5C.document%7Cublock%7Cwall-trigger%7Cabp%7Cadguard%7C'style'%7C'setProperty'%2F)
+streamcash.to##+js(rmnt, script, %2F%5C.onerror%7CoffsetHeight%7CBait%7CgetComputedStyle%7CdimCheck%7CgetBoundingClientRect%7Cx69%7Cheight%3D%3D%3D0%7Cwidth%3D%3D%3D0%7Ceval%7Cbanner-zone%7Cno-store%7C%5C'flex%5C'%7CString%5C.fromCharCode%7Cmedia-slot-bottom%7CString%5C.fromCodePoint%7Cjoin%5C(''%5C)%7C%5C%5BdecodeURIComponent%5C(%7Cstyle%5C.setProperty%7Cjoin%5C('-'%5C)%7Ccache%3A%7C%5C.then%7C'%5C%2B'%7Cfl%5C%24%7B''%7Dex%7CcontentWindow%5C.document%7Cublock%7Cwall-trigger%7Cabp%7Cadguard%7C'style'%7C'setProperty'%7Cdocument%5C.currentScript%5C.previousElementSibling%2F)
 streamcash.to##+js(nowoif)
 streamcash.to##+js(trusted-replace-argument, document.createElement, 0, json%3A%22div%22, condition, %2F%5Ea%24%2F)
 streamcash.to##+js(rpnt, script, player.pause()%3B)
@@ -898,6 +922,7 @@ streamcash.to##div.banner-zone
 streamcash.to##.media-slot-bottom
 streamcash.to###main-video ~ [style="position: absolute; inset: 0px; z-index: 99; cursor: pointer;"]
 streamcash.to##a[href^="https://jerknut.com"]
+streamcash.to##a[rel*="sponsored"]
 @@||streamcash.to^$ghide
 ! https://github.com/uBlockOrigin/uAssets/issues/33085
 indoav.com##+js(nowoif)
@@ -1094,3 +1119,25 @@ peachify.top##+js(aeld, click, atob)
 ! https://github.com/uBlockOrigin/uAssets/issues/33647
 216.219.94.112##+js(rmnt, script, .offsetParent)
 216.219.94.112###myDiv
+! https://github.com/uBlockOrigin/uAssets/issues/33564
+picnob.com##.slimlay
+! https://github.com/AdguardTeam/AdguardFilters/issues/235702
+/assets/js/anti-adblock.js|$script,1p
+! https://github.com/AdguardTeam/AdguardFilters/issues/235753
+7daystodie-servers.com#@##ad-banner-top
+7daystodie-servers.com#@#.ad-sidebar
+7daystodie-servers.com#@#.ad-slot:not(.adsbox):not(.adsbygoogle)
+! https://github.com/uBlockOrigin/uAssets/issues/33716
+net77.cc##+js(rmnt, script, .getComputedStyle)
+net77.cc##+js(nowoif, _blank)
+! https://github.com/uBlockOrigin/uAssets/issues/33728
+/zvrk/?n=$frame
+thisvid.com##+js(acs, document.write)
+##.container a[title="AI Jerk OFF"][href][target="_blank"]
+! https://github.com/uBlockOrigin/uAssets/issues/22398
+cwtv.com##+js(json-prune-xhr-response, cue_points, , propsToMatch, %2Fplayback)
+cwtv.com##+js(trusted-json-edit-xhr-response, ..ads_enabled%3D%220%22, propsToMatch, %2Fplayback)
+! https://github.com/uBlockOrigin/uAssets/issues/33072
+||abs.twimg.com/responsive-web/client-web/loader.HomeTimelineAdblockNotice
+! https://github.com/uBlockOrigin/uAssets/issues/33749
+printables.com##+js(json-prune-fetch-response, data.promotions, , propsToMatch, %2Fgraphql)

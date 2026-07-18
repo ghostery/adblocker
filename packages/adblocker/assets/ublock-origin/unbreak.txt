@@ -2921,14 +2921,19 @@ app.kultivi.com,hollywoodreporter.com,huffpost.com,kultivi.com,sacbee.com,sport-
 @@||vid.connatix.com^$3p,media,xhr
 @@||cds.connatix.com/p/*/elements.ui.$3p,script
 @@||cds.connatix.com/*/hls$script,3p
+@@||assets.connatix.com/Elements/*-player-$script
 ! https://www.reddit.com/r/uBlockOrigin/comments/1837a7a/video_not_playing_on_kansascom/
-@@||cds.connatix.com/p/*/cSyncRemoteEntry.js^$3p,script
+! @@||cds.connatix.com/p/*/cSyncRemoteEntry.js^$3p,script
 #@#.wps-player-wrap
 ! https://www.thestate.com/sports/college/university-of-south-carolina/usc-baseball/article276291411.html no need connatix
 bellinghamherald.com,bnd.com,bradenton.com,centredaily.com,charlotteobserver.com,flkeysnews.com,fresnobee.com,heraldonline.com,heraldsun.com,idahostatesman.com,islandpacket.com,kansas.com,kansascity.com,kentucky.com,ledger-enquirer.com,macon.com,mahoningmatters.com,mcclatchydc.com,mercedsunstar.com,miamiherald.com,modbee.com,myrtlebeachonline.com,newsobserver.com,sacbee.com,sanluisobispo.com,star-telegram.com,sunherald.com##^html:not(:has(video)) > head > script:has-text(connatix.com)
 loot.tv##^html:not(:has(#connatixPlayerID)) > head > script[src*="connatix"]
 thestate.com##^html > head > script:has-text(connatix.id):upward(1) > script:has-text(window.cnx)
 variety.com##^html > head > link[rel="canonical"]:not([href*="/video/"]):upward(1) > script[src*="connatix"]
+! https://github.com/uBlockOrigin/uAssets/issues/33707
+@@||connatix.com/player.js$3p,script,domain=decider.com|nypost.com|pagesix.com
+@@||connatix.com/*connatix.player.$3p,script,domain=decider.com|nypost.com|pagesix.com
+decider.com,nypost.com,pagesix.com#@#.cnx-player-wrapper
 ! connatix.com recommended articles/videos
 ! https://github.com/uBlockOrigin/uAssets/issues/10867
 @@||cd.connatix.com/connatix.playspace.js^$script,3p,domain=adweek.com
@@ -3611,6 +3616,7 @@ socket.pearsoned.com##+js(set, initializeNewRelic, noopFunc)
 @@||jssdkcdns.mparticle.com/js/*/mparticle.js$script,domain=cwtv.com
 @@||googleadservices.com/pagead/conversion_async.js^$script,domain=cwtv.com
 @@||googletagmanager.com/gtm.js^$script,domain=cwtv.com
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=cwtv.com
 ! https://github.com/uBlockOrigin/uAssets/issues/22423
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,redirect=google-ima.js,domain=memurlar.net
 ! https://github.com/uBlockOrigin/uAssets/issues/22419
@@ -4360,7 +4366,7 @@ mdjonline.com###article-body > .subscriber-only:style(display: block !important;
 @@||googletagmanager.com/gtm.js$script,redirect-rule,domain=oxylabs.io
 ||googletagmanager.com/gtm.js$script,domain=oxylabs.io,important
 ! https://github.com/AdguardTeam/AdguardFilters/issues/223378
-daily.co.jp##+js(trusted-rpnt, script, %2F(window%5C.AdObserverManager%5C.register%5C('ds%5Bps%5D%5Bcp%5D-bottomRecommend'%5C)%3B)%2F, (()%3D%3E%7Bwindow.addEventListener(%22load%22%2C(()%3D%3E%7Bconst%20t%3Ddocument.querySelector(%22%23openwebSection%22)%2Ce%3Ddocument.querySelector(%22div%5Bdata-spot-id%5D%22)%3Bif(!e%7C%7C!t)return%3Bconst%20d%3De.getAttribute(%22data-spot-id%22)%3Bif(!d)return%3Bvar%20o%3B((t%2Ce%2Cd)%3D%3E%7Bconst%20o%3Ddocument.createElement(%22div%22)%3Bo.setAttribute(%22data-spotim-module%22%2C%22conversation%22)%2Co.setAttribute(%22data-spot-id%22%2Ct)%2Co.setAttribute(%22data-post-id%22%2Ce)%2Cd.appendChild(o)%7D)(d%2CMath.abs((o%3Ddocument.title%2C%5B...o%5D.reduce(((t%2Ce)%3D%3EMath.imul(31%2Ct)%2Be.charCodeAt(0)%7C0)%2C0)))%2Ct)%3Bconst%20a%3Ddocument.createElement(%22script%22)%3Ba.setAttribute(%22src%22%2C%60https%3A%2F%2Flauncher.spot.im%2Fspot%2F%24%7Bd%7D%60)%2Ca.setAttribute(%22async%22%2C%22%22)%2Cdocument.head.appendChild(a)%7D))%3B%7D)()%3B%241, sedCount, 1)
+daily.co.jp##+js(trusted-rpnt, script, %2F(window%5C.AdObserverManager%5C.register%5C('ds%5Bps%5D%5Bcp%5D-footer_%3Fr%3F'%5C)%3B)%2F, (()%3D%3E%7Bwindow.addEventListener(%22load%22%2C(()%3D%3E%7Bconst%20t%3Ddocument.querySelector(%22%23openwebSection%22)%2Ce%3Ddocument.querySelector(%22div%5Bdata-spot-id%5D%22)%3Bif(!e%7C%7C!t)return%3Bconst%20d%3De.getAttribute(%22data-spot-id%22)%3Bif(!d)return%3Bvar%20o%3B((t%2Ce%2Cd)%3D%3E%7Bconst%20o%3Ddocument.createElement(%22div%22)%3Bo.setAttribute(%22data-spotim-module%22%2C%22conversation%22)%2Co.setAttribute(%22data-spot-id%22%2Ct)%2Co.dataset.postId%3De%2Cd.appendChild(o)%7D)(d%2CMath.abs((o%3Ddocument.title%2C%5B...o%5D.reduce(((t%2Ce)%3D%3EMath.imul(31%2Ct)%2Be.charCodeAt(0)%7C0)%2C0)))%2Ct)%3Bconst%20a%3Ddocument.createElement(%22script%22)%3Ba.setAttribute(%22src%22%2C%60https%3A%2F%2Flauncher.spot.im%2Fspot%2F%24%7Bd%7D%60)%2Ca.setAttribute(%22async%22%2C%22%22)%2Cdocument.head.appendChild(a)%7D))%3B%7D)()%3B%241, sedCount, 1)
 ! https://github.com/uBlockOrigin/uAssets/issues/31851
 @@||trafico.prensaiberica.es/adm/min/pb_wrapper/pbwrapper.js$script,domain=elperiodicodearagon.com
 ! https://github.com/uBlockOrigin/uAssets/issues/31936
@@ -4429,3 +4435,15 @@ account.bhvr.com##+js(set, Osano, %7B%7D)
 account.bhvr.com##+js(set, Osano.cm, %7B%7D)
 account.bhvr.com##+js(set, Osano.cm.addEventListener, noopFunc)
 account.bhvr.com##+js(set, Osano.cm.removeEventListener, noopFunc)
+! https://github.com/uBlockOrigin/uAssets/issues/33692
+progressionmbj.ca##.et-waypoint:not(.et_pb_counters):style(opacity: 1 !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/10186
+!#if cap_html_filtering
+visualstudio.microsoft.com##^script:has-text(oneDS.ApplicationInsights)
+!#else
+@@||js.monitor.azure.com/scripts/c/ms.analytics-web-4.min.js$domain=visualstudio.microsoft.com
+!#endif
+! https://github.com/uBlockOrigin/uAssets/issues/33735
+hikvision.com##+js(set, pa, %7B%7D)
+hikvision.com##+js(set, pa.getVisitorId, noopFunc)
+hikvision.com##+js(set, pa.sendEvent, noopFunc)
