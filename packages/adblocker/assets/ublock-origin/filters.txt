@@ -899,38 +899,6 @@ imgtaxi.com###image_details:style(margin-top: 30px !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/1197
 lacuevadeguns.com##+js(aost, onload, inlineScript)
 ||cdn.jsdelivr.net/npm/@rimiti/abm@latest/dist/$script,css,3p
-! https://github.com/uBlockOrigin/uAssets/issues/6223
-hqq.*##+js(aopr, adBlockDetected)
-hqq.*##+js(set, sadbl, false)
-hqq.*##+js(nowoif)
-||hqq.*/cdn-cgi/trace$xhr,1p,important
-||googletagmanager.com/ns.html$redirect=noop.js
-@@||hqq.*^$ghide
-@@||hqq.*^$script,xhr,1p
-@@||cdn.jsdelivr.net/npm/videojs-contrib-ads/$domain=hqq.*
-@@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=hqq.*
-!#if env_firefox
-@@||hqq.*/sec/player/*$csp
-!#endif
-hqq.*##[href="https://t.me/Russia_Vs_Ukraine_War3"]
-hqq.*##a[onclick="openAuc();"]
-||vkcdnservice.com^$script,redirect-rule=noopjs,3p
-! https://github.com/uBlockOrigin/uAssets/issues/10039
-||ebd.cda-hd.cc^
-! https://www.reddit.com/r/uBlockOrigin/comments/14r6074/
-! https://www.reddit.com/r/uBlockOrigin/comments/14r6074/adblock_blocked_netutvhqqto_site/jqv92vj/
-hqq.*,waaw.*##+js(set, adblockcheck, false)
-! Redirecting
-hqq.*,waaw.*##^script:has-text(self == top)
-!#if !cap_html_filtering
-hqq.*,waaw.*##+js(rmnt, script, self%20%3D%3D%20top)
-!#endif
-! https://github.com/uBlockOrigin/uAssets/issues/14001
-*$script,3p,denyallow=google.com|gstatic.com|polyfill.io,domain=playdede.us
-waaw.*##+js(aopr, doSecondPop)
-! https://github.com/uBlockOrigin/uAssets/issues/20599
-waaw.*##+js(nowoif)
-waaw.*##+js(set, arrvast, %5B%5D)
 ! https://forums.lanik.us/viewtopic.php?f=62&t=39244
 filescdn.com##+js(nowoif)
 ! URL Shortener
@@ -4223,14 +4191,7 @@ dl.gamecopyworld.*##td:nth-of-type(2)
 dl.gamecopyworld.*##tr:nth-of-type(6) > td
 consoletarget.com##+js(aopr, loadTool)
 ||gamecopyworld.com/!_$frame
-! https://github.com/NanoAdblocker/NanoFilters/issues/220
 ! https://github.com/AdguardTeam/AdguardFilters/issues/114751
-@@||asianclub.*^$ghide
-asianclub.*##+js(set, clientSide.adbDetect, noopFunc)
-asianclub.*##+js(aopr, AaDetector)
-asianclub.*##+js(aopr, jwplayer.utils.Timer)
-asianclub.*##+js(nowoif)
-asianclub.*##+js(aopr, __Y)
 javmost.*##center > div[style^="width:100%; height: 100px"]
 ! https://github.com/uBlockOrigin/uAssets/issues/13833
 ! vidmoly . me | .to popups
@@ -5542,7 +5503,7 @@ duden.de##.tabloid__side-column
 duden.de##body:style(margin-top: 0px !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/25788
 @@||duden.de^$ghide
-duden.de##+js(aeld, , adsbygoogle)
+duden.de##+js(aeld, , %2Fadsbygoogle%7CinitDetection%2F)
 ! https://www.reddit.com/r/uBlockOrigin/comments/bhr1sj/adblocker_detected/
 faresgame.com##+js(aopr, adBlockDetected)
 ! https://github.com/uBlockOrigin/uAssets/issues/5305#issuecomment-487240463
@@ -6798,7 +6759,6 @@ filedown.*##+js(nowoif)
 mexa.*##+js(acs, document.getElementById, adblockinfo)
 mexa.*##+js(nowoif)
 ||p23hxejm1.com^
-*$script,3p,denyallow=google.com|gstatic.com|hcaptcha.com|recaptcha.net,domain=mexa.sh
 ! https://github.com/NanoMeow/QuickReports/issues/1792
 ||googlesyndication.com/pagead/js/adsbygoogle.js$script,redirect=noopjs:10,domain=spieleklassiker.com
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=spieleklassiker.com
@@ -7036,8 +6996,6 @@ guiamuriae.com.br##.e3lan-top
 ! https://forums.lanik.us/viewtopic.php?p=150260#p150260
 ffmovies.*##+js(acs, String.fromCharCode, break%3B)
 ffmovies.*##+js(nowoif)
-! https://github.com/NanoMeow/QuickReports/issues/1993
-thisvid.com##+js(aeld, %2F%5E(%3F%3Aload%7Cclick)%24%2F, popMagic)
 ! https://github.com/uBlockOrigin/uAssets/issues/21821
 hl-live.de##+js(nostif, nextFunction)
 hl-live.de###swlad
