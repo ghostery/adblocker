@@ -118,16 +118,18 @@ web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototyp
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Node.prototype.insertBefore, Function.prototype.toString)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.insertAdjacentElement, JSON.parse)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.insertAdjacentElement, Function.prototype.toString)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.append, JSON.parse)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.append, Function.prototype.toString)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-4635090748
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=ellenpoliticalfollow.com,important
-ellenpoliticalfollow.com##+js(nowoif)
-ellenpoliticalfollow.com##+js(set, console.clear, undefined)
-ellenpoliticalfollow.com##+js(acs, globalThis, break%3Bcase)
-ellenpoliticalfollow.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||ellenpoliticalfollow.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=caseyimpactstation.com,important
+caseyimpactstation.com##+js(nowoif)
+caseyimpactstation.com##+js(set, console.clear, undefined)
+caseyimpactstation.com##+js(acs, globalThis, break%3Bcase)
+caseyimpactstation.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||caseyimpactstation.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -466,15 +468,18 @@ nicovideo.jp#@#a[href$="_tagrelatedbanner"]
 ! https://github.com/uBlockOrigin/uAssets/issues/33651
 ! [badfilter] ||roblox.com.$all,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/33072#issuecomment-4945020836
-!||x.com/i/api/1.1/flow/viewer.json$badfilter
+! [badfilter] ||x.com/i/api/1.1/flow/viewer.json$badfilter
 ! https://github.com/easylist/easylist/commit/1ec982848559cd61d9a462a23af788223979315c
 ! [badfilter] ||ads-twitter.com^$badfilter
 ||static.ads-twitter.com^
 ! https://github.com/uBlockOrigin/uAssets/issues/24714
 decompiler.com##+js(set, OffscreenCanvas.prototype.getContext, undefined)
 decompiler.com##+js(nosiif, %3D%3D%3D%20false)
-! decompiler.com##+js(trusted-replace-argument, Element.prototype.removeChild, 0, json%3A%22adblockWarning%22, condition, %2F%5Ba-z%5D%7B2%7D%2F)
+decompiler.com##+js(aost, Element.prototype.removeChild, %2Fblocked%7Ctick%2F)
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/986
 !#if env_firefox
 javmix.*#@#+js(acs, addEventListener, style.display)
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/5184
+twitch.tv##.stream-display-ad__wrapper + div > div[style^="position:"] > div[class^="Layout-sc-"]:has(video[src^="https://m.media-amazon.com"])
+twitch.tv##.chat-shell > div[class^="Layout-sc-"]  > div[style^="transition:"]:has(video[src^="https://m.media-amazon.com"])

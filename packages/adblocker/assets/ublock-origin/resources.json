@@ -25,7 +25,7 @@
     {
       "name": "trap-property-access.fn",
       "aliases": [],
-      "body": "function trapPropertyFn(t,e,r={}){if(t===\"\")return;let n=self;let o=t;for(;;){const t=o.indexOf(\".\");if(t===-1)break;n=n[o.slice(0,t)];if(n instanceof Object===false)return;o=o.slice(t+1)}const s=safeSelf();if(trapPropertyFn.db===void 0){trapPropertyFn.db=new WeakMap;trapPropertyFn.entryFromContext=(t,e)=>{const r=trapPropertyFn.db.get(t);return r?.get(e)};trapPropertyFn.getter=(t,e)=>{const r=trapPropertyFn.entryFromContext(t,e);if(r===void 0)return;let n=r.value;for(const t of r.stack)try{n=t.get()}catch(t){if(r.canThrow)throw t}return n};trapPropertyFn.setter=(t,e,r)=>{const n=trapPropertyFn.entryFromContext(t,e);if(n===void 0)return;n.value=r;for(const t of n.stack)try{t.set(r)}catch(t){if(n.canThrow)throw t}}}const{db:a}=trapPropertyFn;const c=a.get(n)||new Map;if(c.size===0)a.set(n,c);const p=c.get(o)||{value:n[o],stack:[]};p.stack.push(e);if(p.stack.length>1)return p.value;Object.assign(p,r);c.set(o,p);const i=s.Object_getOwnPropertyDescriptor(n,o);if(i instanceof s.Object)if(i.get||i.set)p.stack.push(i);try{s.Object_defineProperty(n,o,{get(){return trapPropertyFn.getter(this,o)},set(t){trapPropertyFn.setter(this,o,t)}})}catch{}return p.value}",
+      "body": "function trapPropertyFn(t,e,r={}){if(t===\"\")return;let n=self;let o=t;for(;;){const t=o.indexOf(\".\");if(t===-1)break;n=n[o.slice(0,t)];if(n instanceof Object===false)return;o=o.slice(t+1)}const a=safeSelf();if(trapPropertyFn.db===void 0){trapPropertyFn.db=new WeakMap;trapPropertyFn.entryFromContext=(t,e)=>{const r=trapPropertyFn.db.get(t);return r?.get(e)};trapPropertyFn.getter=(t,e)=>{const r=trapPropertyFn.entryFromContext(t,e);if(r===void 0)return;let n=r.value;for(const t of r.stack)try{n=t.get()}catch(t){if(r.canThrow)throw t}return n};trapPropertyFn.setter=(t,e,r)=>{const n=trapPropertyFn.entryFromContext(t,e);if(n===void 0)return;n.value=r;for(const t of n.stack)try{t.set(r)}catch(t){if(n.canThrow)throw t}}}const{db:s}=trapPropertyFn;const c=s.get(n)||new Map;if(c.size===0)s.set(n,c);const p=c.get(o)||{value:n[o],stack:[]};p.stack.push(e);if(p.stack.length>1)return p.value;Object.assign(p,r);c.set(o,p);const f=a.Object_getOwnPropertyDescriptor(n,o);if(f instanceof a.Object)if(f.get||f.set)p.stack.push(f);try{a.Object_defineProperty(n,o,{get(){return trapPropertyFn.getter(n,o)},set(t){trapPropertyFn.setter(n,o,t)}})}catch{}return p.value}",
       "dependencies": [
         "safe-self.fn"
       ]
@@ -215,8 +215,16 @@
     {
       "name": "proxy-apply.fn",
       "aliases": [],
-      "body": "function proxyApplyFn(t=\"\",p=\"\"){let o=globalThis;let n=t;for(;;){const t=n.indexOf(\".\");if(t===-1)break;o=o[n.slice(0,t)];if(o instanceof Object===false)return;n=n.slice(t+1)}const r=o[n];if(typeof r!==\"function\")return;if(proxyApplyFn.CtorContext===void 0){proxyApplyFn.ctorContexts=[];proxyApplyFn.CtorContext=class{constructor(...t){this.init(...t)}init(t,p){this.callFn=t;this.callArgs=p;return this}reflect(){const t=Reflect.construct(this.callFn,this.callArgs);this.callFn=this.callArgs=this.private=void 0;proxyApplyFn.ctorContexts.push(this);return t}static factory(...t){return proxyApplyFn.ctorContexts.length!==0?proxyApplyFn.ctorContexts.pop().init(...t):new proxyApplyFn.CtorContext(...t)}};proxyApplyFn.applyContexts=[];proxyApplyFn.ApplyContext=class{constructor(...t){this.init(...t)}init(t,p,o){this.callFn=t;this.thisArg=p;this.callArgs=o;return this}reflect(){const t=Reflect.apply(this.callFn,this.thisArg,this.callArgs);this.callFn=this.thisArg=this.callArgs=this.private=void 0;proxyApplyFn.applyContexts.push(this);return t}static factory(...t){return proxyApplyFn.applyContexts.length!==0?proxyApplyFn.applyContexts.pop().init(...t):new proxyApplyFn.ApplyContext(...t)}};proxyApplyFn.isCtor=new Map;proxyApplyFn.proxies=new WeakMap;proxyApplyFn.nativeToString=Function.prototype.toString;const t=new Proxy(Function.prototype.toString,{apply(t,p){let o=p;for(;;){const t=proxyApplyFn.proxies.get(o);if(t===void 0)break;o=t}return proxyApplyFn.nativeToString.call(o)}});proxyApplyFn.proxies.set(t,proxyApplyFn.nativeToString);Function.prototype.toString=t}if(proxyApplyFn.isCtor.has(t)===false)proxyApplyFn.isCtor.set(t,r.prototype?.constructor===r);const i={apply(t,o,n){return p(proxyApplyFn.ApplyContext.factory(t,o,n))}};if(proxyApplyFn.isCtor.get(t))i.construct=function(t,o){return p(proxyApplyFn.CtorContext.factory(t,o))};const l=new Proxy(r,i);proxyApplyFn.proxies.set(l,r);o[n]=l}",
+      "body": "function proxyApplyFn(t=\"\",p=\"\"){let o=globalThis;let n=t;for(;;){const t=n.indexOf(\".\");if(t===-1)break;o=o[n.slice(0,t)];if(o instanceof Object===false)return;n=n.slice(t+1)}const r=o[n];if(typeof r!==\"function\")return;if(proxyApplyFn.CtorContext===void 0){proxyApplyFn.ctorContexts=[];proxyApplyFn.CtorContext=class{constructor(...t){this.init(...t)}init(t,p){this.callFn=t;this.callArgs=p;return this}reflect(){const t=Reflect.construct(this.callFn,this.callArgs);this.callFn=this.callArgs=this.private=void 0;proxyApplyFn.ctorContexts.push(this);return t}static factory(...t){return proxyApplyFn.ctorContexts.length!==0?proxyApplyFn.ctorContexts.pop().init(...t):new proxyApplyFn.CtorContext(...t)}};proxyApplyFn.applyContexts=[];proxyApplyFn.ApplyContext=class{constructor(...t){this.init(...t)}init(t,p,o){this.callFn=t;this.thisArg=p;this.callArgs=o;return this}reflect(){const t=Reflect.apply(this.callFn,this.thisArg,this.callArgs);this.callFn=this.thisArg=this.callArgs=this.private=void 0;proxyApplyFn.applyContexts.push(this);return t}static factory(...t){return proxyApplyFn.applyContexts.length!==0?proxyApplyFn.applyContexts.pop().init(...t):new proxyApplyFn.ApplyContext(...t)}};proxyApplyFn.isCtor=new Map;proxyApplyFn.proxies=new WeakMap;if(proxyApplyFn.skipToString!==true){proxyApplyFn.nativeToString=Function.prototype.toString;const t=new Proxy(Function.prototype.toString,{apply(t,p){let o=p;for(;;){const t=proxyApplyFn.proxies.get(o);if(t===void 0)break;o=t}return proxyApplyFn.nativeToString.call(o)}});proxyApplyFn.proxies.set(t,proxyApplyFn.nativeToString);Function.prototype.toString=t}}if(proxyApplyFn.isCtor.has(t)===false)proxyApplyFn.isCtor.set(t,r.prototype?.constructor===r);const i={apply(t,o,n){return p(proxyApplyFn.ApplyContext.factory(t,o,n))}};if(proxyApplyFn.isCtor.get(t))i.construct=function(t,o){return p(proxyApplyFn.CtorContext.factory(t,o))};const l=new Proxy(r,i);proxyApplyFn.proxies.set(l,r);o[n]=l}",
       "dependencies": []
+    },
+    {
+      "name": "proxy-apply-config.js",
+      "aliases": [],
+      "body": "function proxyApplyConfig(p=\"\"){try{p=JSON.parse(p)}catch{}if(typeof p!==\"object\")return;Object.assign(proxyApplyFn,p)}",
+      "dependencies": [
+        "proxy-apply.fn"
+      ]
     },
     {
       "name": "edit-outbound-object.fn",
@@ -725,7 +733,7 @@
     {
       "name": "prevent-clipboard-write.js",
       "aliases": [],
-      "body": "function preventClipboardWrite(e=\"\"){const t=safeSelf();const n=t.makeLogPrefix(\"prevent-clipboard-write\");const r=t.initPattern(e);const o=t.getExtraArgs(Array.from(arguments),1);const c=e=>{const t=/^([^|]+)\\s*\\|\\s*(.+)/.exec(o.domAlert);if(Boolean(t)===false)return;const n=document.querySelector(t[1]);if(n===null)return;const r=document.createElement(\"div\");const c=/\\$\\{text\\}/.exec(t[2]);if(c){const n=document.createElement(\"code\");n.style=\"background-color:#ddc;padding:0.25em;user-select:none;word-break:break-all\";n.textContent=e;r.append(t[2].slice(0,c.index),n,t[2].slice(c.index+c[0].length))}else r.append(t[2]);r.style=\"background-color:beige;color:black;border:1px solid black;font-size:medium;padding:0.5em;position:absolute;text-align:center;top:0;width:100%;z-index:2147483647\";n.append(r);if(i)i.remove();i=r};let i=null;const l=e=>{if(typeof e!==\"string\")return;e=e.trim();if(t.testPattern(r,e)!==true)return;if(o.domAlert)c(e);t.uboLog(n,\"Prevented:\\n\\t\",e);return true};proxyApplyFn(\"navigator.clipboard.writeText\",(function(e){const t=`${e.callArgs[0]}`;if(l(t))return;return e.reflect()}));proxyApplyFn(\"document.execCommand\",(function(e){const{callArgs:t}=e;if(t[0]===\"copy\"||t[0]===\"cut\"){const e=document.getSelection()?.toString();if(e&&l(e))return}return e.reflect()}))}",
+      "body": "function preventClipboardWrite(e=\"\"){const t=safeSelf();const n=t.makeLogPrefix(\"prevent-clipboard-write\");const r=t.initPattern(e);const o=t.getExtraArgs(Array.from(arguments),1);const c=e=>{const t=document;const n=t.createElement(\"div\");const r=t.createElement(\"span\");r.style=\"flex-grow:1;padding:0.5em 0 0.5em 0.5em;\";const{domAlert:c}=o;const i=/\\$\\{text\\}/.exec(c);if(i){const n=t.createElement(\"code\");n.style=\"background-color:#ddc;font-family:monospace;padding:0.25em;user-select:none;word-break:break-all\";n.textContent=e;r.append(c.slice(0,i.index),n,c.slice(i.index+i[0].length))}else r.append(c);const d=t.createElement(\"button\");d.style=\"padding:1em\";d.textContent=\"\\xd7\";d.addEventListener(\"click\",(()=>{if(l===null)return;l.remove();l=null}));n.append(r,d);n.style=\"background-color:beige;color:black;border:1px solid black;display:flex;font-size:medium;position:fixed;text-align:center;top:0;width:100%;z-index:2147483647\";t.documentElement.append(n);if(l)l.remove();l=n};let l=null;const i=e=>{if(typeof e!==\"string\")return;e=e.trim();if(t.testPattern(r,e)!==true)return;if(o.domAlert)c(e);t.uboLog(n,\"Prevented:\\n\\t\",e);return true};proxyApplyFn(\"navigator.clipboard.writeText\",(function(e){const t=`${e.callArgs[0]}`;if(i(t))return;return e.reflect()}));proxyApplyFn(\"document.execCommand\",(function(e){const{callArgs:t}=e;if(t[0]===\"copy\"||t[0]===\"cut\"){const e=document.getSelection()?.toString();if(e&&i(e))return}return e.reflect()}))}",
       "dependencies": [
         "proxy-apply.fn",
         "safe-self.fn"
@@ -861,7 +869,7 @@
       "aliases": [
         "no-xhr-if.js"
       ],
-      "body": "function preventXhr(...e){return preventXhrFn(false,...e)}",
+      "body": "function preventXhr(...e){preventXhrFn(false,...e)}",
       "dependencies": [
         "prevent-xhr.fn"
       ]
@@ -869,7 +877,7 @@
     {
       "name": "trusted-prevent-xhr.js",
       "aliases": [],
-      "body": "function trustedPreventXhr(...r){return preventXhrFn(true,...r)}",
+      "body": "function trustedPreventXhr(...e){preventXhrFn(true,...e)}",
       "dependencies": [
         "prevent-xhr.fn"
       ]

@@ -160,6 +160,17 @@ stifler.ro##+js(rmnt, script, contextmenu)
 stifler.ro##style:has-text(user-select: none):remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/33730
 apps.apple.com##.body-container > .app-container main.page-container > .default-page-container a, blockquote, body, code, dd, div, dl, dt, embed, fieldset, footer, form, h1, h2, h3, h4, h5, h6, header, html, img, legend, li, ol, p, pre, section, table, td, th, ul:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-user-drag: auto !important; user-drag: auto !important; cursor: revert !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33764
+universalproductionmusic.com##.works-results__item div[draggable="true"]:remove-attr(draggable)
+universalproductionmusic.com##.works-results__item .simple-work--disable-action:remove-class(simple-work--disable-action)
+! https://github.com/uBlockOrigin/uAssets/issues/32634#issuecomment-5015280720
+videohelper.com##body:style(-webkit-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33769
+megatrax.com##.collection-tracks:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-user-drag: auto !important; user-drag: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33770
+fpmmusic.com##+js(aeld, mousedown, , elements, .trackContainer)
+! https://github.com/uBlockOrigin/uAssets/issues/33771
+milesofmusik.com##+js(aeld, mousedown, , elements, .fancybox-container)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -6048,3 +6059,5 @@ zhuanlan.zhihu.com##.Modal-backdrop
 zhuanlan.zhihu.com##.MobileModal-wrapper
 zhuanlan.zhihu.com##body.WhiteBg-body:style(overflow: auto !important; position: initial !important;)
 zhuanlan.zhihu.com##html:style(overflow: auto !important; padding-right: 0 !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33772
+civitai.com##.dark\:bg-dark-9.dark\:border-dark-4:has([aria-label="Close ad"])
