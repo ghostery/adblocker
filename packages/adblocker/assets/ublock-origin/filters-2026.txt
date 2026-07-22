@@ -398,6 +398,7 @@ prime4you.de##+js(nostif, ad_blocker_detector)
 ! https://github.com/uBlockOrigin/uAssets/issues/26191
 ||files.upscore.com/site_script/$script,redirect=noopjs,domain=bike-magazin.de|yacht.de
 ||a.bf-ad.net/adengine/$script,redirect=noopjs,domain=bike-magazin.de|yacht.de
+bike-magazin.de,yacht.de##+js(set, HTMLScriptElement.prototype.onerror, undefined)
 ! https://github.com/uBlockOrigin/uAssets/issues/31907
 japannews.yomiuri.co.jp##+js(rmnt, script, piano)
 ! https://github.com/uBlockOrigin/uAssets/issues/31918
@@ -660,9 +661,9 @@ ottplay.com##div[class^="MastHead_ad"]
 fileditchfiles.me##+js(rmnt, script, offsetHeight)
 @@||fileditchfiles.me/*.js|$script,1p
 ! https://github.com/uBlockOrigin/uAssets/issues/32608
-ntv.cx##+js(set, initializeNtvxSheet, noopFunc)
-ntv.cx##+js(nowoif)
-ntv.cx##.watch-ad-banner
+ntv.cx,ntvs.cx##+js(set, initializeNtvxSheet, noopFunc)
+ntv.cx,ntvs.cx##+js(nowoif)
+ntv.cx,ntvs.cx##.watch-ad-banner
 ! https://github.com/uBlockOrigin/uAssets/issues/32612
 livetv.moviebite.cc##+js(nostif, getComputedStyle)
 livetv.moviebite.cc##+js(nosiif, getComputedStyle)
@@ -1128,7 +1129,8 @@ picnob.com##.slimlay
 7daystodie-servers.com#@#.ad-sidebar
 7daystodie-servers.com#@#.ad-slot:not(.adsbox):not(.adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/33716
-net77.cc##+js(rmnt, script, .getComputedStyle)
+net77.cc##+js(rmnt, script, .removeClass, includes, data-hash)
+net77.cc##+js(set, HTMLImageElement.prototype.onerror, undefined)
 net77.cc##+js(nowoif, _blank)
 ! https://github.com/uBlockOrigin/uAssets/issues/33728
 /zvrk/?n=$frame
@@ -1141,3 +1143,16 @@ cwtv.com##+js(trusted-json-edit-xhr-response, ..ads_enabled%3D%220%22, propsToMa
 ||abs.twimg.com/responsive-web/client-web/loader.HomeTimelineAdblockNotice
 ! https://github.com/uBlockOrigin/uAssets/issues/33749
 printables.com##+js(json-prune-fetch-response, data.promotions, , propsToMatch, %2Fgraphql)
+! https://github.com/uBlockOrigin/uAssets/issues/33756
+||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$redirect=noopjs,domain=beond.tv
+||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=google-ima.js,domain=beond.tv
+! https://github.com/uBlockOrigin/uAssets/issues/33760
+trustnet.com###header:style(top: 0 !important;)
+trustnet.com##.fe_cmp_presetadvert
+trustnet.com##.header-fe-ad
+! https://www.reddit.com/r/uBlockOrigin/comments/1uzx8zm/nsfw_voyeurhouseorg_opens_new_tabs_to_other_sites/
+voyeur-house.org##+js(rmnt, script, window.open)
+voyeur-house.org##+js(nowoif)
+! https://github.com/uBlockOrigin/uAssets/issues/33779
+kickbd.org##+js(set, HTMLScriptElement.prototype.onerror, undefined)
+kickbd.org##+js(set, __kbAdBait, true)
