@@ -5353,8 +5353,8 @@ bbc.com##+js(nano-stb, viewClickAttributeId)
 patreon.com##+js(trusted-set-local-storage-item, halfSheetAppBannerDismissed, %7B%22halfSheetAppBannerDismissed%22%3A%7B%22expiration%22%3A2000000000000%2C%22data%22%3Atrue%7D%7D)
 ! anti web proxy (google translator) which force redirect users back to the original page
 www-liverpoolecho-co-uk.translate.goog,www-themirror-com.translate.goog,www-football-london.translate.goog,www-devonlive-com.translate.goog,www-cornwalllive-com.translate.goog,www-glasgowlive-co-uk.translate.goog,www-kentlive-news.translate.goog,www-essexlive-news.translate.goog,www-lincolnshirelive-co-uk.translate.goog,www-leeds--live-co-uk.translate.goog,www-insider-co-uk.translate.goog##+js(rmnt, script, loc.hostname)
-! techcrunch.com anti proxy (google translator)
 techcrunch-com.translate.goog##.loading-text:remove-class(loading-text)
+economictimes-indiatimes-com.translate.goog##+js(rmnt, script, var%20lh%20%3D%20location.host%3B)
 ! https://github.com/uBlockOrigin/uAssets/pull/23279
 !#if cap_html_filtering
 xanimu.com,cosxplay.com##^script:has-text(adblock)
@@ -6061,3 +6061,7 @@ zhuanlan.zhihu.com##body.WhiteBg-body:style(overflow: auto !important; position:
 zhuanlan.zhihu.com##html:style(overflow: auto !important; padding-right: 0 !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/33772
 civitai.com##.dark\:bg-dark-9.dark\:border-dark-4:has([aria-label="Close ad"])
+! dejure.org anti adblock annoyance when "adblock_counter" reaches 10
+dejure.org##+js(set, ad_allowed, true)
+dejure.org#@##AdsDiv
+dejure.org##+js(remove-cookie, adblock_counter)
