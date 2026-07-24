@@ -1,4 +1,4 @@
-<h1 align="center">Adblocker</h2>
+<h1 align="center">Adblocker</h1>
 
 <p align="center">
   <em>
@@ -77,7 +77,7 @@ This project makes use of [lerna](https://github.com/lerna/lerna) and [yarn work
 2. Enable corepack: `corepack enable`,
 3. Install dependencies: `yarn install --immutable`,
 4. Build: `yarn build`,
-5. Test: `yarn test`,
+5. Test: `yarn test`.
 
 For any question, feel free to [open an issue](https://github.com/ghostery/adblocker/issues/new) or a pull request to get some help!
 
@@ -87,7 +87,7 @@ This library is the building block technology used to power the adblockers from 
 
   * Mobile-friendly adblocker in react-native, WebExtension, or custom JavaScript context: [Ghostery for iOS](https://github.com/ghostery/user-agent-ios).
   * Ads and trackers blocker in [Electron](https://github.com/wexond/desktop) applications, [Puppeteer](https://github.com/Kikobeats/browserless) headless browsers, Cliqz browser, [ghostery](https://github.com/ghostery/ghostery-extension/) and [standalone](https://github.com/remusao/blockrz)).
-  * Batch requests processing in Node.js, HTML fuzzy keywork matcher, and more.
+  * Batch requests processing in Node.js, HTML fuzzy keyword matcher, and more.
 
 The innovative algorithms and architecture designed and implemented in this project have been shown to be among the [most efficient](https://whotracks.me/blog/adblockers_performance_study.html) ways to implement ad-blockers and have been used in other projects to implement highly performant adblockers such as [Brave](https://github.com/brave/adblock-rust).
 
