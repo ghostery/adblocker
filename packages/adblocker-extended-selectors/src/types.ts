@@ -71,14 +71,7 @@ export type Attribute = Base & {
 };
 
 export type Atom =
-  | Attribute
-  | Id
-  | Class
-  | Comma
-  | Combinator
-  | PseudoClass
-  | PseudoElement
-  | Type;
+  Attribute | Id | Class | Comma | Combinator | PseudoClass | PseudoElement | Type;
 
 export type Atoms = Atom[];
 
@@ -111,15 +104,7 @@ export interface List {
 }
 
 export type AST =
-  | Attribute
-  | Id
-  | Class
-  | PseudoClass
-  | PseudoElement
-  | Type
-  | Complex
-  | Compound
-  | List;
+  Attribute | Id | Class | PseudoClass | PseudoElement | Type | Complex | Compound | List;
 
 export interface ParserOptions {
   recursive?: boolean;

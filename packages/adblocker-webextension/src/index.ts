@@ -327,8 +327,7 @@ export class BlockingContext {
   ) => Promise<IMessageFromBackground | object>;
 
   private readonly onCommittedHandler:
-    | ((details: WebNavigation.OnCommittedDetailsType) => void)
-    | undefined;
+    ((details: WebNavigation.OnCommittedDetailsType) => void) | undefined;
 
   constructor(
     private readonly browser: Browser,

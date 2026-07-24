@@ -119,10 +119,7 @@ export type WebRequestType = WebRequestTypeChrome | WebRequestTypeFirefox;
 
 // The set of supported types is the union of WebRequest
 export type RequestType =
-  | WebRequestType
-  | ElectronRequestType
-  | PuppeteerRequestType
-  | PlaywrightRequestType;
+  WebRequestType | ElectronRequestType | PuppeteerRequestType | PlaywrightRequestType;
 
 export const NORMALIZED_TYPE_TOKEN: { [s in RequestType]: number } = {
   beacon: fastHash('type:beacon'),
