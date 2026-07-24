@@ -50,7 +50,10 @@ jobs:
         run: yarn lint
 
       - name: Install Playwright browsers
-        run: npx playwright install
+        run: yarn dlx playwright install
+
+      - name: Install Puppeteer browsers
+        run: yarn dlx puppeteer browsers install
 
       - name: Test
         run: yarn test
