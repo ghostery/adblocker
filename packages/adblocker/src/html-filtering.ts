@@ -13,8 +13,7 @@
 export type HTMLModifier = readonly [RegExp, string];
 
 export type HTMLSelector =
-  | readonly ['script', readonly string[]]
-  | readonly ['replace', HTMLModifier];
+  readonly ['script', readonly string[]] | readonly ['replace', HTMLModifier];
 
 export function extractHTMLSelectorFromRule(rule: string): HTMLSelector | undefined {
   if (rule.startsWith('^script') === false) {
