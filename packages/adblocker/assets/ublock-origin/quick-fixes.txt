@@ -105,7 +105,7 @@ web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcomp
 web.facebook.com,www.facebook.com##div[role="complementary"] div[data-visualcompletion="ignore-dynamic"] a[rel="nofollow noreferrer tag"][aria-labelledby^="_R_"]
 web.facebook.com,www.facebook.com##div[role="complementary"] a[attributionsrc][href^="http"][target="_blank"][role="link"][rel*="noreferrer"]:has(img[src])
 web.facebook.com,www.facebook.com##div[role="complementary"] h3 span[style^="-webkit-box-orient:vertical"]:has-text(/^Sponsored$/)
-web.facebook.com,www.facebook.com##+js(rpnt, script, %22x3m9kf2n%22%3Atrue%2C, , condition, compat_iframe_token)
+! web.facebook.com,www.facebook.com##+js(rpnt, script, %22x3m9kf2n%22%3Atrue%2C, , condition, compat_iframe_token)
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
 web.facebook.com,www.facebook.com##+js(json-edit, ..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D)
 web.facebook.com,www.facebook.com##+js(json-edit, ..nodes.*%5B%3F.sponsored_data%5D)
@@ -124,12 +124,12 @@ web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.proto
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=caseyimpactstation.com,important
-caseyimpactstation.com##+js(nowoif)
-caseyimpactstation.com##+js(set, console.clear, undefined)
-caseyimpactstation.com##+js(acs, globalThis, break%3Bcase)
-caseyimpactstation.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||caseyimpactstation.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=matthewhotelscience.com,important
+matthewhotelscience.com##+js(nowoif)
+matthewhotelscience.com##+js(set, console.clear, undefined)
+matthewhotelscience.com##+js(acs, globalThis, break%3Bcase)
+matthewhotelscience.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||matthewhotelscience.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -390,9 +390,6 @@ client.falixnodes.net##+js(nostif, %7D%2F*)
 client.falixnodes.net##^script:has-text(/\=arguments\;if\(typeof /)
 client.falixnodes.net##+js(rmnt, script, %2F%5C%3Darguments%5C%3Bif%5C(typeof%20%2F)
 !#endif
-! https://github.com/uBlockOrigin/uAssets/issues/23131
-cimanow.cc,freex2line.online##+js(norafif, %2B%2B)
-||rm.freex2line.online/*.js|$domain=cimanow.cc
 ! https://www.reddit.com/r/uBlockOrigin/comments/1mehur0/ad_block_detection_globalnovelpiacom/
 ||global.novelpia.com/_nuxt/*.js|$script,replace=/if\(\w\.check_is_ad_free\(\)\)/if(true)/
 @@||global.novelpia.com^$ghide
@@ -476,3 +473,5 @@ javmix.*#@#+js(acs, addEventListener, style.display)
 ! https://github.com/uBlockOrigin/uAssets/issues/5184
 twitch.tv##.stream-display-ad__wrapper + div > div[style^="position:"] > div[class^="Layout-sc-"]:has(video[src^="https://m.media-amazon.com"])
 twitch.tv##.chat-shell > div[class^="Layout-sc-"]  > div[style^="transition:"]:has(video[src^="https://m.media-amazon.com"])
+! https://github.com/uBlockOrigin/uAssets/issues/33817
+! [badfilter] ||vk.com/images/$third-party,badfilter
