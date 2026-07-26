@@ -1,4 +1,4 @@
-<h1 align="center">@ghostery/adblocker-extended-selectors</h2>
+<h1 align="center">@ghostery/adblocker-extended-selectors</h1>
 
 <p align="center">
   <em>

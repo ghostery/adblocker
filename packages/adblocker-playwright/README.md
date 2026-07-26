@@ -1,4 +1,4 @@
-<h1 align="center">Playwright Adblocker</h2>
+<h1 align="center">Playwright Adblocker</h1>
 
 <p align="center">
   <em>

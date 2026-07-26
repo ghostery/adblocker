@@ -1,4 +1,4 @@
-<h1 align="center">@ghostery/adblocker-electron-preload</h2>
+<h1 align="center">@ghostery/adblocker-electron-preload</h1>
 
 <p align="center">
   <em>

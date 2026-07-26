@@ -1,4 +1,4 @@
-<h1 align="center">@ghostery/adblocker-content</h2>
+<h1 align="center">@ghostery/adblocker-content</h1>
 
 <p align="center">
   <em>

@@ -1,4 +1,4 @@
-<h1 align="center">Electron Adblocker</h2>
+<h1 align="center">Electron Adblocker</h1>
 
 <p align="center">
   <em>
