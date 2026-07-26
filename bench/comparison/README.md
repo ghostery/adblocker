@@ -1,4 +1,4 @@
-<h1 align="center">Adblocker Benchmarks</h2>
+<h1 align="center">Adblocker Benchmarks</h1>
 
 <p align="center">
   <em>
