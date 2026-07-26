@@ -1,4 +1,4 @@
-<h1 align="center">Pupeteer Adblocker</h2>
+<h1 align="center">Puppeteer Adblocker</h1>
 
 <p align="center">
   <em>

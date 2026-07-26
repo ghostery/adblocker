@@ -1,4 +1,4 @@
-<h1 align="center">Adblocker</h2>
+<h1 align="center">Adblocker</h1>
 
 <p align="center">
   <em>
@@ -87,7 +87,7 @@ const { match } = engine.match(Request.fromRawDetails({
 ### Request Abstraction
 
 To abstract over network requests independently from platforms (Node.js,
-WebExtension, etc.), the `Request` provides a unified APIs and helpers functions
+WebExtension, etc.), `Request` provides unified APIs and helper functions
 for initialization on different platforms:
 
 ```javascript
