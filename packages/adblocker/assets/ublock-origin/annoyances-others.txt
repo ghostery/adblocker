@@ -171,6 +171,15 @@ megatrax.com##.collection-tracks:style(-webkit-touch-callout: default !important
 fpmmusic.com##+js(aeld, mousedown, , elements, .trackContainer)
 ! https://github.com/uBlockOrigin/uAssets/issues/33771
 milesofmusik.com##+js(aeld, mousedown, , elements, .fancybox-container)
+! https://github.com/uBlockOrigin/uAssets/issues/33809
+javx357.com##+js(rmnt, script, disableRightClick)
+! https://github.com/uBlockOrigin/uAssets/issues/33794
+ing-sat.hu##+js(set, document.oncontextmenu, null)
+ing-sat.hu##+js(set, document.onmousedown, null)
+! https://github.com/uBlockOrigin/uAssets/issues/33820
+primariasector2.ro##+js(rmnt, script, .blockContextMenu)
+! https://github.com/uBlockOrigin/uAssets/issues/33819
+posturi.gov.ro##:root:style(user-select: unset !important)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -268,9 +277,13 @@ anizone.to##.h-\[90px\].w-\[728px\]:has(iframe[src^="//ad.a-ads.com/"])
 scmp3.org,soundcloudmp3.org##+js(set, detectAdBlock, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/33408
 vaughn.live##+js(trusted-click-element, button%23vs_modal_v9_notice_dismiss)
-! https://www.reddit.com/r/uBlockOrigin/comments/1uvsbhd/civitaired_has_annoying_pop_up_ads_for_me_out_of/
-civitai.red##a[href="/pricing"] img
-civitai.red##div.relative.flex[style="min-height:90px"]:has(> button[aria-label="Close ad"])
+! https://github.com/uBlockOrigin/uAssets/issues/22203
+civitai.com,civitai.red##a[href="/pricing"] img
+civitai.com,civitai.red##div.relative.flex[style="min-height:90px"]:has(> button[aria-label="Close ad"])
+civitai.com,civitai.red##+js(trusted-replace-argument, String.prototype.endsWith, 0, , condition, %2Fedit)
+! https://github.com/uBlockOrigin/uAssets/issues/29426#issuecomment-5078806861
+jelonka.com##+js(trusted-set-local-storage-item, jelonka_news_ad_access_gate_first_detected_at, %24now%24)
+jelonka.com##+js(trusted-set-local-storage-item, jelonka_news_ad_access_gate_soft_dismissed_at, %24now%24)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -6066,12 +6079,5 @@ civitai.com##.dark\:bg-dark-9.dark\:border-dark-4:has([aria-label="Close ad"])
 dejure.org##+js(set, ad_allowed, true)
 dejure.org#@##AdsDiv
 dejure.org##+js(remove-cookie, adblock_counter)
-! https://github.com/uBlockOrigin/uAssets/issues/33794
-ing-sat.hu##+js(set, document.oncontextmenu, null)
-ing-sat.hu##+js(set, document.onmousedown, null)
-! https://github.com/uBlockOrigin/uAssets/issues/33809
-javx357.com##+js(rmnt, script, disableRightClick)
-! https://github.com/uBlockOrigin/uAssets/issues/33820
-primariasector2.ro##+js(rmnt, script, .blockContextMenu)
-! https://github.com/uBlockOrigin/uAssets/issues/33819
-posturi.gov.ro##:root:style(user-select:unset!important)
+! https://github.com/uBlockOrigin/uAssets/issues/33845
+canale-tv.net,cool-tv.net##+js(rmnt, script, .preventDefault(), includes, contextmenu)
