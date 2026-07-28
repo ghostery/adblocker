@@ -819,6 +819,7 @@ stereogum.com##+js(trusted-json-edit, .props.pageProps.globalData.publisherFeatu
 hyperosthemes.org##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/230494
 scloud.ws##article > div[class][style^="text-align:"] > a[href]:not([href*="/"])
+scloud.ws##a[href^="javascript:"]
 ! https://www.purediablo.com/
 purediablo.com##+js(set, nitroAds.abp, true)
 ! https://cinewatch.top/ - anti-adb
@@ -1159,3 +1160,7 @@ kickbd.org##+js(set, HTMLScriptElement.prototype.onerror, undefined)
 kickbd.org##+js(set, __kbAdBait, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/33815
 thelabyrinth.co.kr##+js(no-fetch-if, method%3AHEAD)
+! https://github.com/uBlockOrigin/uAssets/issues/29226#issuecomment-5048049042
+vinted.*##div[class^="_ads-module"]
+! https://github.com/uBlockOrigin/uAssets/issues/33851
+nosubapp.com##+js(nostif, detectAdBlock)
