@@ -122,6 +122,8 @@ web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.proto
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.append, Function.prototype.toString)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.prepend, JSON.parse)
 web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.prepend, Function.prototype.toString)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.before, JSON.parse)
+web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.prototype.before, Function.prototype.toString)
 ! https://github.com/uBlockOrigin/uAssets/issues/3367#issuecomment-4635090748
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
@@ -458,12 +460,6 @@ streamcash.to##div[id]:has(button[onclick*="location.reload()"])
 akirabox.com,akirabox.to,bowfile.com,buzzheavier.com,bzzhr.co,bzzhr.to,datavaults.co,fuckingfast.*,multiup.io,rootz.so,usersdrive.com,vik1ngfile.site,zpaste.net#@#+js(set, Document.prototype.createElement.call, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/33490
 zeilink.net#@#+js(remove-node-text, script, %2F%22%5C%5C%7C%5C%5C%5Bux%5D%7C%5C%2B%5C%5B%5C%5D%2F)
-! https://github.com/uBlockOrigin/uAssets/issues/33549
-! [badfilter] ||detour.padovia.it^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/33651
-! [badfilter] ||roblox.com.$all,badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/33072#issuecomment-4945020836
-! [badfilter] ||x.com/i/api/1.1/flow/viewer.json$badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/24714
 decompiler.com##+js(set, OffscreenCanvas.prototype.getContext, undefined)
 decompiler.com##+js(nosiif, %3D%3D%3D%20false)
@@ -477,3 +473,5 @@ twitch.tv##.stream-display-ad__wrapper + div > div[style^="position:"] > div[cla
 twitch.tv##.chat-shell > div[class^="Layout-sc-"]  > div[style^="transition:"]:has(video[src^="https://m.media-amazon.com"])
 ! https://github.com/uBlockOrigin/uAssets/issues/33817
 ! [badfilter] ||vk.com/images/$third-party,badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/33873
+! [badfilter] ||yastatic.net^$badfilter

@@ -917,7 +917,7 @@ www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,9}\/\?id=$/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,6}\/\?id=AW-\d+/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{3,6}\/\?id=G(TM)?-[A-Z0-9]+/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
-/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/(?:analyticsdata|gemets|gtm|metrics|securegtm)\/?$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/(?:analyticsdata|gemets|gtm[a-z]+|metrics|securegtm)\/?$/$script,1p,match-case
 ! https://github.com/uBlockOrigin/uAssets/issues/33144
 ! @@/jsi18n/|$script,1p
 ! https://github.com/uBlockOrigin/uAssets/commit/58b2cf2dd92adf8eff2ad0a4d98a127cd650eca0
@@ -2679,6 +2679,7 @@ fileditchfiles.me##+js(no-fetch-if, method%3APOST%20body%3A%2Fpageview%7Cengagem
 ||fubuki-umami.space^
 ! https://github.com/uBlockOrigin/uAssets/issues/24154
 ||cza.crazygames.com^
+||web-platform.bytebrew.io/api/game/logs/
 ! https://github.com/uBlockOrigin/uAssets/issues/7164
 ||pornhub.*/redirect/$doc,urlskip=/(https%253A%252F%252F[^?#]+)/ -uricomponent -uricomponent
 ! https://github.com/uBlockOrigin/uAssets/issues/31536
