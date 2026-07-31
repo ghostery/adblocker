@@ -105,11 +105,10 @@ export const evaluate = (expression: string, env: Env): boolean => {
     return false;
   }
 
+  // Fast path: a bare identifier (no operators/parens). Note that `!` is not
+  // part of the identifier charset, so negated identifiers are handled by the
+  // generic path below.
   if (isIdentifier(expression)) {
-    if (expression[0] === '!') {
-      return !testIdentifier(expression.slice(1), env);
-    }
-
     return testIdentifier(expression, env);
   }
 
@@ -131,8 +130,22 @@ export const evaluate = (expression: string, env: Env): boolean => {
   const output: (boolean | string)[] = [];
   const stack: (boolean | string)[] = [];
 
-  for (const token of tokens) {
+  // Lookahead loop: we inspect the next token (tokens[i + 1]) at exactly two
+  // points to reject inputs the postfix/arity checks below would otherwise let
+  // through — an empty `()` and a postfix `!` (e.g. `a!`). Everything else
+  // malformed is already caught by the paren-balance, arity and single-value
+  // checks, so no carried state is needed.
+  for (
+    let i: number = 0, token: string = tokens[0], next: string = tokens[1];
+    i < tokens.length;
+    i++, token = tokens[i], next = tokens[i + 1]
+  ) {
     if (token === '(') {
+      // Empty parentheses `()` (and `(())`) contain no operand.
+      if (next === ')') {
+        return false;
+      }
+
       stack.push(token);
     } else if (token === ')') {
       while (stack.length !== 0 && stack[stack.length - 1] !== '(') {
@@ -146,10 +159,31 @@ export const evaluate = (expression: string, env: Env): boolean => {
 
       stack.pop();
     } else if (isOperator(token)) {
+      // `!` is a unary prefix operator: it is only valid when the next token
+      // can start an operand (an identifier, '(' or another '!'). Otherwise
+      // it is a postfix `!` (e.g. `a!`) and is rejected — i.e. when `next` is
+      // the end of input, a ')', or a binary operator (`&&`/`||`; the
+      // `next !== '!'` term keeps chained `!!a` valid).
+      if (
+        token === '!' &&
+        (next === undefined || next === ')' || (next !== '!' && isOperator(next)))
+      ) {
+        return false;
+      }
+
+      // Shunting-yard pop rule using strict `<`. We pop only operators of
+      // strictly higher precedence, never equal. This treats every operator
+      // as right-associative, which is correct here:
+      //   - `!` is genuinely right-associative, so `!!a` does not collapse the
+      //     first `!` onto the second (the original `<=` rule did, evaluating
+      //     `!!false` to `true`).
+      //   - `&&` and `||` are associative, so their grouping (`a && (b && c)`
+      //     vs `(a && b) && c`) is irrelevant and the boolean result is the
+      //     same as with the left-associative `<=` rule.
       while (
-        stack.length &&
+        stack.length !== 0 &&
         isOperator(stack[stack.length - 1] as string) &&
-        precedence[token] <= precedence[stack[stack.length - 1] as string]
+        precedence[token] < precedence[stack[stack.length - 1] as string]
       ) {
         output.push(stack.pop()!);
       }
@@ -160,7 +194,7 @@ export const evaluate = (expression: string, env: Env): boolean => {
     }
   }
 
-  // If there is incomplete parenthesis
+  // If there is an unbalanced '('
   if (stack.includes('(')) {
     return false;
   }
@@ -169,24 +203,30 @@ export const evaluate = (expression: string, env: Env): boolean => {
     output.push(stack.pop()!);
   }
 
+  // Evaluate the postfix expression, reusing `stack` (now empty) as the
+  // value stack. Each operator checks it has enough operands (exits early on
+  // underflow), and the final single-value check rejects malformed expressions
+  // such as `a(b)` or `(a)b` that left extra operands.
   for (const token of output) {
     if (token === true || token === false) {
       stack.push(token);
     } else if (token === '!') {
-      stack.push(!stack.pop());
-    } else if (isOperator(token)) {
-      const right = stack.pop()!;
-      const left = stack.pop()!;
-
-      if (token === '&&') {
-        stack.push(left && right);
-      } else {
-        stack.push(left || right);
+      stack.push(!stack.pop()!);
+    } else if (token === '&&' || token === '||') {
+      if (stack.length < 2) {
+        return false;
       }
+
+      const right = stack.pop()! as boolean;
+      const left = stack.pop()! as boolean;
+      stack.push(token === '&&' ? left && right : left || right);
     }
   }
 
-  return stack[0] === true;
+  // The expression is only valid if exactly one value remains: the last value
+  // popped must be `true` and the stack must be empty afterwards (a leftover
+  // value means a malformed expression such as `a(b)` or `(a)b`).
+  return stack.pop() === true && stack.length === 0;
 };
 
 export const joinConditions = (expressions: string[]): string => {
