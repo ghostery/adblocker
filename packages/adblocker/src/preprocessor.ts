@@ -217,8 +217,8 @@ export const evaluate = (expression: string, env: Env): boolean => {
         return false;
       }
 
-      const right = stack.pop()! as boolean;
-      const left = stack.pop()! as boolean;
+      const right = stack.pop()!;
+      const left = stack.pop()!;
       stack.push(token === '&&' ? left && right : left || right);
     }
   }
