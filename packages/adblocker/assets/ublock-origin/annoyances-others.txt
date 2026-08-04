@@ -286,6 +286,8 @@ civitai.com,civitai.red##+js(trusted-replace-argument, String.prototype.endsWith
 ! https://github.com/uBlockOrigin/uAssets/issues/29426#issuecomment-5078806861
 jelonka.com##+js(trusted-set-local-storage-item, jelonka_news_ad_access_gate_first_detected_at, %24now%24)
 jelonka.com##+js(trusted-set-local-storage-item, jelonka_news_ad_access_gate_soft_dismissed_at, %24now%24)
+! https://www.reddit.com/r/uBlockOrigin/comments/1vcb1va/metacritic_adblock_nag/
+metacritic.com##+js(trusted-set-session-storage-item, BT_AM_SOFTWALL_DISMISSED, %7B%22element%22%3A%22continue-to-site%22%7D)
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -6083,3 +6085,9 @@ dejure.org#@##AdsDiv
 dejure.org##+js(remove-cookie, adblock_counter)
 ! https://readcomicsonline.lol/comic/The-Boys/70 - popup annoyance
 readcomicsonline.lol##+js(nano-stb, e%3D%3Ee-1)
+! https://github.com/uBlockOrigin/uAssets/issues/31800#issuecomment-4779894304
+!#if env_mobile
+mail.yahoo.com##+js(trusted-click-element, %23landshark%20.skip-link)
+!#endif
+! t3.chat anti adblock annoyance
+t3.chat##+js(nostif, .abort()%3B, 1000)

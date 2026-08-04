@@ -107,7 +107,7 @@ web.facebook.com,www.facebook.com##div[role="complementary"] a[attributionsrc][h
 web.facebook.com,www.facebook.com##div[role="complementary"] h3 span[style^="-webkit-box-orient:vertical"]:has-text(/^Sponsored$/)
 ! web.facebook.com,www.facebook.com##+js(rpnt, script, %22x3m9kf2n%22%3Atrue%2C, , condition, compat_iframe_token)
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
-web.facebook.com,www.facebook.com##+js(json-edit, ..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D)
+web.facebook.com,www.facebook.com##+js(json-edit, .require..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D)
 web.facebook.com,www.facebook.com##+js(json-edit, ..nodes.*%5B%3F.sponsored_data%5D)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, ..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D, propsToMatch, %2Fgraphql)
@@ -130,12 +130,12 @@ web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.proto
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=matthewhotelscience.com,important
-matthewhotelscience.com##+js(nowoif)
-matthewhotelscience.com##+js(set, console.clear, undefined)
-matthewhotelscience.com##+js(acs, globalThis, break%3Bcase)
-matthewhotelscience.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||matthewhotelscience.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=jessicachoosemake.com,important
+jessicachoosemake.com##+js(nowoif)
+jessicachoosemake.com##+js(set, console.clear, undefined)
+jessicachoosemake.com##+js(acs, globalThis, break%3Bcase)
+jessicachoosemake.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||jessicachoosemake.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -292,7 +292,7 @@ smsonline.cloud##aside[class^="css-"]:has(> p:has-text(Advertisement) + ins.adsb
 ! https://github.com/uBlockOrigin/uAssets/issues/26393
 ! https://github.com/uBlockOrigin/uAssets/issues/26623
 bing.com##+js(no-xhr-if, %2Ffd%2Fls%2Flsp.aspx)
-bing.com##+js(rpnt, script, function%20processEmbImg, (()%3D%3E%7Bif(!location.pathname.startsWith(%22%2Fsearch%22))return%3Bif(document.querySelector(%22ol%23b_results%20%3E%20li.b_algo%20%3E%20.b_title%20%3E%20h2%20%3E%20a%5Bid%5D%5Bads%5D%22))return%3Bwindow.addEventListener(%22scroll%22%2C(()%3D%3E%7Bfor(const%20t%20of%20Object.keys(window).sort())if(t.endsWith(%22_lnk%22))%7Bif(t.length%3C4)continue%3Bdocument.querySelectorAll(%22ol%23b_results%20%3E%20li.b_algo%20%3E%20.b_title%20%3E%20h2%20%3E%20a%23%22%2Bt.split(%22_lnk%22)%5B0%5D).forEach((t%3D%3E%7Bt.setAttribute(%22ads%22%2C%22%22)%7D))%7D%7D))%7D)()%3Bfunction%20processEmbImg, sedCount, 1)
+bing.com##+js(trusted-replace-node-text, script, function%20processEmbImg, location.pathname.startsWith(%22%2Fsearch%22)%26%26(document.querySelector(%22ol%23b_results%20%3E%20li.b_algo%20%3E%20.b_title%20%3E%20h2%20%3E%20a%5Bid%5D%5Bads%5D%22)%7C%7Cwindow.addEventListener(%22scroll%22%2C(()%3D%3E%7Bfor(const%20t%20of%20Object.keys(window).sort())%22function%22%3D%3Dtypeof%20window%5Bt%5D%26%26%2F%5E%5Ba-z%5D%2B%24%2F.test(t)%26%26document.querySelector(%22ol%23b_results%20%3E%20li.b_algo%20%3E%20.b_title%20%3E%20h2%20%3E%20a%23%22%2Bt)%3F.setAttribute%3F.(%22ads%22%2C%22%22)%7D)))%3Bfunction%20processEmbImg, sedCount, 1)
 bing.com##ol#b_results > li.b_algo:has(> .b_title > h2 > a[id][ads])
 bing.com##ol#b_results > li:has(> :is(.b_tpcn, .b_title, h2) a[href^="https://www.bing.com/aclk?"])
 bing.com##ol#b_results > li.b_algo:has(.b_lineclamp3:matches-css-before(content:/^url\(\Sdata:image\/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD.AAAA/))
@@ -477,3 +477,10 @@ twitch.tv##.chat-shell > div[class^="Layout-sc-"]  > div[style^="transition:"]:h
 ! [badfilter] ||vk.com/images/$third-party,badfilter
 ! https://github.com/uBlockOrigin/uAssets/issues/33873
 ! [badfilter] ||yastatic.net^$badfilter
+! https://github.com/uBlockOrigin/uAssets/issues/33905
+@@/uxab/ui-core-analytics-bundle.jsdbx$1p
+! https://github.com/AdguardTeam/AdguardFilters/issues/233737
+fo76db.com#@#+js(aeld, DOMContentLoaded, %2Fads%7CAmazonCarousel%2F)
+fo76db.com###fo-ad-modal
+fo76db.com##body.swiper:style(overflow: auto !important; position: static !important;)
+fo76db.com##+js(trusted-rpnt, script, %2F%20ads%5C.map%5B%5CS%5Cs%5Cn%5D%2B%3Fjoin%5C(''%5C)%2F)

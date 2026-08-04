@@ -41,8 +41,10 @@ ondemandkorea.com##.player_overlay.banner
 ||ondemandkorea.com/*/*sponsor*300x250.jpg$image,redirect=32x32.png
 ||google-analytics.com/collect$image,redirect=1x1.gif,domain=ondemandkorea.com
 ! https://github.com/uBlockOrigin/uAssets/issues/32346
-ondemandkorea.com##+js(no-fetch-if, %2Fdoubleclick%7Cgooglesyndication%2F)
 ||amazon-adsystem.com^$script,redirect=noopjs,domain=ondemandkorea.com
+ondemandkorea.com##+js(no-fetch-if, %2Fdoubleclick%7Cgooglesyndication%2F)
+ondemandkorea.com##+js(trusted-json-edit-xhr-response, .features.pv%3Dfalse, propsToMatch, %2FplayerConfig)
+ondemandkorea.com###pauseAd
 ondemandkorea.com##.css-lvdiua
 ! https://github.com/uBlockOrigin/uAssets/issues/5579
 glodls.*##+js(nowebrtc)
@@ -191,6 +193,12 @@ waaw.*##+js(aopr, doSecondPop)
 ! https://github.com/uBlockOrigin/uAssets/issues/20599
 waaw.*##+js(nowoif)
 waaw.*##+js(set, arrvast, %5B%5D)
+! https://github.com/AdguardTeam/AdguardFilters/issues/52866
+javxxx.me###player_3x2_container_inner
+/player/plugins/vast-*.js$script
+! https://github.com/uBlockOrigin/uAssets/issues/33891
+/wp-content/themes/spacex/assets/js/funx.js
+||contentsprinter.xyz^
 ! END: Rules from filters.txt
 ! hostserverz detection
 hostserverz.com##+js(no-xhr-if, googlesyndication)
@@ -512,6 +520,7 @@ borntobefuck.com##.ads-overlay
 borntobefuck.com##.vast-container
 ! https://github.com/uBlockOrigin/uAssets/issues/32224
 chatgpt.com##+js(trusted-json-edit, %5B%3F.type%3D%3D%22ads%22%5D.visibility.status%3D%22hidden%22)
+chatgpt.com##+js(trusted-json-edit, ..suppress_ads%3Dtrue)
 ! https://github.com/uBlockOrigin/uAssets/issues/32235
 ourcoincash.xyz,softdevelopp.com##+js(noeval-if, Adblock)
 ! https://github.com/uBlockOrigin/uAssets/issues/32264
@@ -1163,6 +1172,8 @@ kickbd.org##+js(set, HTMLScriptElement.prototype.onerror, undefined)
 kickbd.org##+js(set, __kbAdBait, true)
 ! https://github.com/uBlockOrigin/uAssets/issues/29226#issuecomment-5048049042
 vinted.*##div[class^="_ads-module"]
+! https://github.com/uBlockOrigin/uAssets/issues/33830
+ozbargain.com.au##+js(nostif, OzB.adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/33851
 nosubapp.com##+js(nostif, detectAdBlock)
 ||nosubapp.com/ad/push
@@ -1180,3 +1191,20 @@ walftech.com##[href^="https://walftech.com/walftechnoads/"]
 plattformj.ch##+js(trusted-replace-argument, String.prototype.indexOf, 0, json%3A%22x%22, condition, %2F%5Ew%24%2F)
 ! https://readcomicsonline.lol/comic/The-Boys/70 - anti-adb
 readcomicsonline.lol##+js(nostif, getComputedStyle)
+! interstitial ad between comic pages
+readcomicsonline.lol##+js(trusted-create-html, html, %3Cimg%20hidden%20src%3D%22data%3Aimage%2Fgif%3Bbase64%2CR0lGODlhAQABAIAAAAAAAP%2F%2F%2FywAAAAAAQABAAACAUwAOw%3D%3D%22%20onload%3D%22this.onload%3Dnull%3Bthis.remove()%3B(()%3D%26gt%3B%7Bconst%20W%3Dwindow%2CtoSource%3DFunction.prototype.toString%2CcomicKey%3D()%3D%26gt%3Blocation.pathname.startsWith('%2Fcomic%2F')%3Flocation.pathname.slice(7).replace(%2F%5C%2F%2B%24%2F%2C'')%3Anull%3Blet%20currentKey%3DcomicKey()%2Cactive%3Dfalse%2Cvalue%3DW.TURBOPACK%2CpropertyHooked%3Dfalse%2CstopTimer%3D0%2CoriginalDescriptor%2Chooks%3D%5B%5D%3Bconst%20restoreProperty%3D()%3D%26gt%3B%7Bif(!propertyHooked)return%3Btry%7Bif(originalDescriptor)%7Bif(Object.prototype.hasOwnProperty.call(originalDescriptor%2C'value'))Object.defineProperty(W%2C'TURBOPACK'%2C%7B...originalDescriptor%2Cvalue%7D)%3Belse%20Object.defineProperty(W%2C'TURBOPACK'%2CoriginalDescriptor)%7Delse%20Object.defineProperty(W%2C'TURBOPACK'%2C%7Bvalue%2Cwritable%3Atrue%2Cconfigurable%3Atrue%2Cenumerable%3Atrue%7D)%7Dcatch%7B%7DpropertyHooked%3Dfalse%7D%3Bconst%20cleanup%3D()%3D%26gt%3B%7BclearTimeout(stopTimer)%3BstopTimer%3D0%3Bfor(const%20%5Btarget%2CoriginalPush%2CwrappedPush%5D%20of%20hooks)%7Bif(target.push%3D%3D%3DwrappedPush)try%7Btarget.push%3DoriginalPush%7Dcatch%7B%7D%7Dhooks%3D%5B%5D%3BrestoreProperty()%3Bactive%3Dfalse%7D%3Bconst%20scan%3Dchunk%3D%26gt%3B%7Bif(!active%7C%7C!Array.isArray(chunk))return%20false%3Bfor(let%20i%3D1%3Bi%26lt%3Bchunk.length%3Bi%2B%2B)%7Bconst%20factory%3Dchunk%5Bi%5D%3Bif(typeof%20factory!%3D%3D'function')continue%3Blet%20source%3D''%3Btry%7Bsource%3DtoSource.call(factory)%7Dcatch%7Bcontinue%7Dif(!source.includes('rco-reader-opens')%7C%7C!source.includes('Keeping%20Comics%20Free'))continue%3Bconst%20hookMatch%3Dsource.match(%2F%5C(0%2C(%5B%5Cw%24%5D%2B)%5C.useAdFree%5C)%5C(%5C)%2F)%3Bif(!hookMatch)continue%3Bconst%20importName%3DhookMatch%5B1%5D.replace(%2F%5B%24%5D%2Fg%2C'%5C%5C%24%26amp%3B')%3Bconst%20importMatch%3Dsource.match(new%20RegExp(importName%2B'%5C%5Cs*%3D%5C%5Cs*%5B%5C%5Cw%24%5D%2B%5C%5C.i%5C%5C((%5C%5Cd%2B)%5C%5C)'))%3Bif(!importMatch)continue%3Bconst%20adFreeModuleId%3DNumber(importMatch%5B1%5D)%3Bchunk%5Bi%5D%3Dfunction(runtime%2C...args)%7Bif(!runtime%7C%7Ctypeof%20runtime.i!%3D%3D'function')return%20factory.call(this%2Cruntime%2C...args)%3Bconst%20originalImport%3Druntime.i%3Bconst%20patchedImport%3Dfunction(moduleId)%7Bconst%20moduleExports%3DoriginalImport.call(this%2CmoduleId)%3Bif(moduleId!%3D%3DadFreeModuleId%7C%7CmoduleExports%3D%3Dnull%7C%7C(typeof%20moduleExports!%3D%3D'object'%26amp%3B%26amp%3Btypeof%20moduleExports!%3D%3D'function')%7C%7Ctypeof%20moduleExports.useAdFree!%3D%3D'function')return%20moduleExports%3Breturn%7B...moduleExports%2CuseAdFree%3A()%3D%26gt%3B(%7BadFree%3Atrue%2CadFreeUntil%3Anull%2Cloading%3Afalse%7D)%7D%7D%3Bruntime.i%3DpatchedImport%3Btry%7Breturn%20factory.call(this%2Cruntime%2C...args)%7Dfinally%7Bif(runtime.i%3D%3D%3DpatchedImport)runtime.i%3DoriginalImport%7D%7D%3Bcleanup()%3Breturn%20true%7Dreturn%20false%7D%3Bconst%20hookTarget%3Dtarget%3D%26gt%3B%7Bif(!active%7C%7C!target)return%3Bif(Array.isArray(target))%7Bfor(const%20chunk%20of%20target)%7Bif(scan(chunk))return%7D%7Dif(!active)return%3Bconst%20originalPush%3Dtarget.push%3Bif(typeof%20originalPush!%3D%3D'function'%7C%7Chooks.some((%5BseenTarget%5D)%3D%26gt%3BseenTarget%3D%3D%3Dtarget))return%3Bconst%20wrappedPush%3Dfunction(...chunks)%7Bfor(const%20chunk%20of%20chunks)%7Bif(scan(chunk))break%7Dreturn%20originalPush.apply(this%2Cchunks)%7D%3Btry%7Btarget.push%3DwrappedPush%3Bif(target.push%3D%3D%3DwrappedPush)hooks.push(%5Btarget%2CoriginalPush%2CwrappedPush%5D)%7Dcatch%7B%7D%7D%3Bconst%20arm%3D()%3D%26gt%3B%7Bcleanup()%3Bactive%3Dtrue%3Bvalue%3DW.TURBOPACK%3BoriginalDescriptor%3DObject.getOwnPropertyDescriptor(W%2C'TURBOPACK')%3BstopTimer%3DsetTimeout(cleanup%2C10000)%3Bconst%20canHookProperty%3D!originalDescriptor%7C%7C(originalDescriptor.configurable%3D%3D%3Dtrue%26amp%3B%26amp%3BObject.prototype.hasOwnProperty.call(originalDescriptor%2C'value'))%3Bif(canHookProperty)%7Btry%7BObject.defineProperty(W%2C'TURBOPACK'%2C%7Bconfigurable%3Atrue%2Cenumerable%3AoriginalDescriptor%3ForiginalDescriptor.enumerable%3Atrue%2Cget()%7Breturn%20value%7D%2Cset(next)%7Bvalue%3Dnext%3BhookTarget(next)%7D%7D)%3BpropertyHooked%3Dtrue%7Dcatch%7B%7D%7DhookTarget(value)%7D%3Bconst%20checkRoute%3D()%3D%26gt%3B%7Bconst%20nextKey%3DcomicKey()%3Bif(nextKey%3D%3D%3DcurrentKey)return%3BcurrentKey%3DnextKey%3Bif(nextKey%3D%3D%3Dnull)%7Bcleanup()%3Breturn%7Darm()%7D%3Bfor(const%20methodName%20of%20%5B'pushState'%2C'replaceState'%5D)%7Bconst%20originalMethod%3Dhistory%5BmethodName%5D%3Bif(typeof%20originalMethod!%3D%3D'function')continue%3Bconst%20wrappedMethod%3Dfunction(...args)%7Bconst%20result%3DoriginalMethod.apply(this%2Cargs)%3BqueueMicrotask(checkRoute)%3Breturn%20result%7D%3Btry%7Bhistory%5BmethodName%5D%3DwrappedMethod%7Dcatch%7B%7D%7DaddEventListener('popstate'%2C()%3D%26gt%3BqueueMicrotask(checkRoute))%3Bif(currentKey!%3D%3Dnull)arm()%7D)()%3B%22%3E)
+! https://github.com/uBlockOrigin/uAssets/issues/33896
+igniteseurope.com###ad-header:style(min-height: 0px !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33908
+animationxpress.com##.fa-sticky-unit
+animationxpress.com##body.fa-has-header:style(padding-top: 0 !important;)
+animationxpress.com##body.fa-has-footer:style(padding-bottom: 0 !important;)
+! https://www.reddit.com/r/uBlockOrigin/comments/1vcbwnt/showing_vastadmov_ads_in_firefox/
+anime.nexus##div[data-vast-preroll]
+! https://github.com/uBlockOrigin/uAssets/issues/33919
+mycima.pink##+js(rmnt, script, adoptout)
+! https://github.com/uBlockOrigin/uAssets/issues/33925
+uhdwalls.com##+js(set, foxizParams.adDetectorMethod, )
+! https://github.com/uBlockOrigin/uAssets/issues/33917
+simkl.com##.blockplace
+simkl.com##.SimklTVDetailEpisodeTableWrapTr table > tbody > tr:has(> td[class^="SimklTVDetailEpisodeDescSearch"])
