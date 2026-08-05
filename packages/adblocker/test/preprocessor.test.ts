@@ -68,6 +68,77 @@ describe('conditions', () => {
     expect(evaluate('true((true)', env)).to.be.false;
     expect(evaluate('true&&(false||true', env)).to.be.false;
   });
+
+  it('resolves consecutive negations', () => {
+    // `!` is a unary prefix operator and right-associative; chaining it must
+    // not collapse the operand (regression: `!!false` used to return `true`).
+    expect(evaluate('!!ext_ublock', env)).to.be.true;
+    expect(evaluate('!!false', env)).to.be.false;
+    expect(evaluate('!!ext_unknown', env)).to.be.false;
+    expect(evaluate('!!!ext_ublock', env)).to.be.false;
+    expect(evaluate('!!!ext_unknown', env)).to.be.true;
+    expect(evaluate('!(!!ext_ublock)', env)).to.be.false;
+    expect(evaluate('!(!!false)', env)).to.be.true;
+    expect(evaluate('ext_ublock&&!!ext_unknown', env)).to.be.false;
+    expect(evaluate('!!ext_unknown||ext_ublock', env)).to.be.true;
+  });
+
+  it('rejects malformed conditions with adjacent operands', () => {
+    // Expressions where two operands sit next to each other without an
+    // operator (e.g. function-call-like `a(b)` or `(a)b`) are invalid and
+    // must be dropped instead of silently returning the first operand.
+    expect(evaluate('ext_ublock(ext_unknown)', env)).to.be.false;
+    expect(evaluate('(ext_ublock)ext_unknown', env)).to.be.false;
+    expect(evaluate('(ext_ublock)(ext_unknown)', env)).to.be.false;
+    expect(evaluate('ext_ublock ext_unknown', env)).to.be.false;
+  });
+
+  it('rejects misplaced operators and operands generically', () => {
+    // Doubled / misplaced binary operators (rejected by arity underflow).
+    expect(evaluate('ext_ublock&&&&ext_ghostery', env)).to.be.false;
+    expect(evaluate('!(ext_ublock)&&', env)).to.be.false;
+    // Two operands with no operator between them (rejected by the final
+    // single-value check; the second operand leaves an extra value).
+    expect(evaluate('ext_ublock!!ext_ghostery', env)).to.be.false;
+    // Unbalanced parentheses and stray operators.
+    expect(evaluate('!(ext_ublock', env)).to.be.false;
+    expect(evaluate('ext_ublock))', env)).to.be.false;
+    expect(evaluate('!(ext_ublock)&&ext_ghostery)', env)).to.be.false;
+  });
+
+  it('evaluates nested negations and parentheses generically', () => {
+    expect(evaluate('!(ext_ublock&&ext_ghostery)', env)).to.be.false;
+    expect(evaluate('!ext_ublock||ext_ghostery', env)).to.be.true;
+    expect(evaluate('((!ext_ublock))', env)).to.be.false;
+    expect(evaluate('!ext_ublock||!ext_ghostery', env)).to.be.false;
+    expect(evaluate('!(ext_ublock||ext_ghostery)&&ext_ublock', env)).to.be.false;
+  });
+
+  it('rejects postfix negation and empty parentheses', () => {
+    // Postfix `!` is not valid syntax; it must be rejected rather than
+    // silently reinterpreted as prefix negation (e.g. `unknown!` used to
+    // evaluate to `!false` === `true`, enabling a malformed block).
+    expect(evaluate('ext_unknown!', env)).to.be.false;
+    expect(evaluate('ext_ublock!', env)).to.be.false;
+    expect(evaluate('(ext_unknown)!', env)).to.be.false;
+    expect(evaluate('ext_unknown!&&ext_ublock', env)).to.be.false;
+    expect(evaluate('ext_ublock&&ext_unknown!', env)).to.be.false;
+
+    // Empty `()` contributes no operand and must not vanish next to one.
+    expect(evaluate('()', env)).to.be.false;
+    expect(evaluate('()ext_ublock', env)).to.be.false;
+    expect(evaluate('ext_ublock()', env)).to.be.false;
+    expect(evaluate('(ext_ublock)()', env)).to.be.false;
+    expect(evaluate('()()ext_ublock', env)).to.be.false;
+    expect(evaluate('()ext_ublock()', env)).to.be.false;
+    expect(evaluate('()!ext_unknown', env)).to.be.false;
+
+    // Valid forms that must NOT be rejected by the above checks.
+    expect(evaluate('!ext_unknown', env)).to.be.true;
+    expect(evaluate('!!ext_unknown', env)).to.be.false;
+    expect(evaluate('((ext_ublock))', env)).to.be.true;
+    expect(evaluate('(!(ext_ublock))', env)).to.be.false;
+  });
 });
 
 describe('preprocessors', () => {
