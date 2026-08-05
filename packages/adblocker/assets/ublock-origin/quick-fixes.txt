@@ -108,6 +108,7 @@ web.facebook.com,www.facebook.com##div[role="complementary"] h3 span[style^="-we
 ! web.facebook.com,www.facebook.com##+js(rpnt, script, %22x3m9kf2n%22%3Atrue%2C, , condition, compat_iframe_token)
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.serpResponse.results.edges.%5B-%5D.rendering_strategy.view_model.story.sponsored_data.ad_id)
 web.facebook.com,www.facebook.com##+js(json-edit, .require..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D)
+web.facebook.com,www.facebook.com##+js(json-edit, ..edges..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D)
 web.facebook.com,www.facebook.com##+js(json-edit, ..nodes.*%5B%3F.sponsored_data%5D)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, .data%5B%3F.category%3D%3D%22SPONSORED%22%5D.node, propsToMatch, %2Fgraphql)
 web.facebook.com,www.facebook.com##+js(jsonl-edit-xhr-response, ..node%5B%3F.*.__typename%3D%3D%22SponsoredData%22%5D, propsToMatch, %2Fgraphql)
@@ -443,6 +444,7 @@ gumtree.com#@#+js(trusted-set, experimentOverrides, json%3A%22%255B%257B%2520def
 bus-location.1507t.xyz#@#.ad-area:not(.text-ad)
 bus-location.1507t.xyz##div[id]:empty:style(height: 1px !important; width 1px !important; position: fixed !important; z-index: 2147483647 !important;)
 bus-location.1507t.xyz##div[id]:has(> script[src^="https://adm.shinobi.jp"]):style(height: 1px !important; width 1px !important; position: fixed !important; z-index: 2147483647 !important;)
+||adm.shinobi.jp^$script,redirect=noop.js,domain=bus-location.1507t.xyz
 ! https://github.com/uBlockOrigin/uAssets/issues/33097
 ||cloudfront.net/?$script,redirect=noopjs,domain=meuplayeronlinehd.com|multicanaistt.space
 meuplayeronlinehd.com##+js(rmnt, script, _0x, excludes, %2Fsource%7CURLSearchParams%2F)
