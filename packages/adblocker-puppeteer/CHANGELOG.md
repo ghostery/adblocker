@@ -1,3 +1,28 @@
+# v2.18.2 (Wed Aug 05 2026)
+
+#### :bug: Bug Fix
+
+- Upgrade dependencies ([@seia-soto](https://github.com/seia-soto))
+
+#### :memo: Documentation
+
+- docs(adblocker-puppeteer): fix typos [#5780](https://github.com/ghostery/adblocker/pull/5780) ([@ferkans-amir](https://github.com/ferkans-amir) [@amir-rezaei](https://github.com/amir-rezaei))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump puppeteer from 25.3.0 to 25.4.0 in the production-dependencies group across 1 directory [#5790](https://github.com/ghostery/adblocker/pull/5790) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Upgrade dependencies [#5776](https://github.com/ghostery/adblocker/pull/5776) ([@seia-soto](https://github.com/seia-soto))
+- Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5756](https://github.com/ghostery/adblocker/pull/5756) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 4
+
+- [@amir-rezaei](https://github.com/amir-rezaei)
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ferkans-amir](https://github.com/ferkans-amir)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.1 (Wed Jul 01 2026)
 
 #### :house: Internal

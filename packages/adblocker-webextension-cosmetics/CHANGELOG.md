@@ -1,3 +1,19 @@
+# v2.18.2 (Wed Aug 05 2026)
+
+#### :bug: Bug Fix
+
+- Upgrade dependencies ([@seia-soto](https://github.com/seia-soto))
+
+#### :nut_and_bolt: Dependencies
+
+- Upgrade dependencies [#5776](https://github.com/ghostery/adblocker/pull/5776) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.1 (Wed Jul 01 2026)
 
 #### :house: Internal
