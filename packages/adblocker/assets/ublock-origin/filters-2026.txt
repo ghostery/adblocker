@@ -491,6 +491,7 @@ manhuarmtl.com##.da-container-wrapper
 y8.com###request-play-game-ad:remove()
 ! https://github.com/uBlockOrigin/uAssets/issues/32133
 simpmusic.org##+js(no-xhr-if, googlesyndication)
+simpmusic.org##+js(set, HTMLImageElement.prototype.onerror, undefined)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1rphb84/adblock_detection_on_httpsmyaewcom/
 myaew.com##+js(no-fetch-if, imasdk)
 ! https://github.com/uBlockOrigin/uAssets/issues/32143
@@ -1217,3 +1218,8 @@ simkl.com##.SimklTVDetailEpisodeTableWrapTr table > tbody > tr:has(> td[class^="
 jeechallenger.com##+js(trusted-replace-argument, String.prototype.startsWith, 0, json%3A%22%2F%22, condition, %2F%5E%5C%2Fcontact-us%5C%2F%24%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/33955
 u.co.uk##+js(trusted-rpnt, script, %2F%5C%5C%22ad_block%5C%5C%22%3Atrue%2F, %5C%22ad_block%5C%22%3Afalse, includes, FeatureSwitchManager, sedCount, 1)
+! https://github.com/uBlockOrigin/uAssets/issues/33976
+balbums.st##+js(prevent-window-open)
+balbums.st##[id^="__clb-spot_"]
+! https://github.com/uBlockOrigin/uAssets/issues/33989
+octavestreaming.com##+js(norafif, ()%3D%3Ee())
