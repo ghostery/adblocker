@@ -312,10 +312,12 @@ web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.
 ||facebook.com/api/graphql/$xhr,replace=/\{"node":\{"role":"SEARCH_ADS"[^\n]+?cursor":[^}]+\}/{}/g,domain=web.facebook.com|www.facebook.com
 ||facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}/{}/g,domain=web.facebook.com|www.facebook.com
 ||facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"VideoHomeFeedUnitSectionComponent"[^\n]+?"sponsored_data":\{"ad_id"[^\n]+?"cursor":null\}/{}/,domain=web.facebook.com|www.facebook.com
+||static.xx.fbcdn.net/rsrc.php/*.js$script,replace=/"__typename":"SponsoredData"/"__typename":"SponsorData"/g
 !#else
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22role%22%3A%22SEARCH_ADS%22%5B%5E%5Cn%5D%2B%3Fcursor%22%3A%5B%5E%7D%5D%2B%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22__typename%22%3A%22MarketplaceFeedAdStory%22%5B%5E%5Cn%5D%2B%3F%22cursor%22%3A(%3F%3Anull%7C%22%5C%7B%5B%5E%5Cn%5D%2B%3F%5C%7D%22%7C%5B%5E%5Cn%5D%2B%3FMarketplaceSearchFeedStoriesEdge%22)%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22__typename%22%3A%22VideoHomeFeedUnitSectionComponent%22%5B%5E%5Cn%5D%2B%3F%22sponsored_data%22%3A%5C%7B%22ad_id%22%5B%5E%5Cn%5D%2B%3F%22cursor%22%3Anull%5C%7D%2F, %7B%7D, %2Fapi%2Fgraphql)
+web.facebook.com,www.facebook.com##+js(rpnt, script, %2F%22%5Ba-z0-9%5D%7B8%7D%22%3Atrue%2C%2Fg, , condition, compat_iframe_token)
 !#endif
 web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node, require.0.3.0.__bbox.require.%5B%5D.3.1.__bbox.result.data.node.story.sponsored_data.ad_id)
 ! https://www.facebook.com/marketplace/category/home/
@@ -7215,8 +7217,8 @@ ligainsider.de##+js(acs, %24, MutationObserver)
 @@||ligainsider.de^$ghide
 ligainsider.de##.new_add
 ligainsider.de##.mb-md.float-start:has(#ad-rectangle2)
-||ligainsider.de/public/desktop/js/li-probe
-||ligainsider.de/public/desktop/js/li-wall
+||ligainsider.de/public/*/js/li-probe
+||ligainsider.de/public/*/js/li-wall
 ||ligainsider.de/li-probe
 ! https://github.com/NanoAdblocker/NanoFilters/issues/417
 drrtyr.mx##+js(aeld, , adb)
@@ -8864,10 +8866,6 @@ supervideo.*##+js(aopr, AaDetector)
 /tag*.js$script,domain=supervideo.tv|supervideo.one|supervideo.cc
 ! nsfw thisav .com popups
 ||intellipopup.com^$script,redirect=noopjs
-! https://github.com/AdguardTeam/AdguardFilters/issues/53153
-@@||enterinit.com^$ghide
-enterinit.com##.bs-wrap-gdpr-law
-enterinit.com##*::selection:style(background-color:#338FFF!important)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/78143
 ||cdn.jsdelivr.net/*/dist/js/wgd-core.min.js$script
 ! https://github.com/uBlockOrigin/uAssets/issues/11113
