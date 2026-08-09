@@ -182,6 +182,12 @@ primariasector2.ro##+js(rmnt, script, .blockContextMenu)
 posturi.gov.ro##:root:style(user-select: unset !important)
 ! https://github.com/uBlockOrigin/uAssets/issues/33845
 canale-tv.net,cool-tv.net##+js(rmnt, script, .preventDefault(), includes, contextmenu)
+! https://github.com/uBlockOrigin/uAssets/issues/33999
+!#if env_firefox
+bandwagon.asia##.article[oncontextmenu]:remove-attr(/onmousedown|onselectstart|oncontextmenu/)
+!#else
+bandwagon.asia##+js(ra, onmousedown%7Conselectstart%7Concontextmenu, .article, complete)
+!#endif
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -3427,13 +3433,6 @@ uemeds.cn##+js(ra, oncontextmenu%7Condragstart%7Conselect)
 uemeds.cn##*:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important;)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/84411
 secondlifetranslations.com##+js(aost, encodeURIComponent, inlineScript)
-! https://github.com/uBlockOrigin/uAssets/issues/10460#issuecomment-976250003
-miraculous.to##+js(aopr, debugchange)
-miraculous.to##+js(ra, oncontextmenu, body)
-miraculous.to##+js(aeld, contextmenu, preventDefault)
-miraculous.to##+js(aeld, %2F%5E(%3F%3Akeyup%7Ckeydown)%24%2F)
-miraculous.to##+js(set, console.clear, noopFunc)
-miraculous.to##+js(set, console.log, noopFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/10559
 criticalthinking.org##+js(nostif, donation-modal)
 ! https://github.com/uBlockOrigin/uAssets/issues/2380

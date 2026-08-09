@@ -1604,6 +1604,8 @@ cool--web-de.translate.goog,gps--cache-de.translate.goog,web--spiele-de.translat
 @@||servedby.flashtalking.com/imp/$xhr,domain=safeframe.googlesyndication.com
 ||cdn.flashtalking.com^$media,redirect=noop-1s.mp4,domain=safeframe.googlesyndication.com
 safeframe.googlesyndication.com##+js(nano-sib, ()%3D%3E%7Bvar%20c%3DKb, 1000, 0.2)
+! https://github.com/AdguardTeam/AdguardFilters/issues/237273
+safeframe.googlesyndication.com###mys-wrapper
 ! https://github.com/uBlockOrigin/uAssets/issues/3221#issuecomment-2867062763
 vide-greniers.org##+js(no-fetch-if, ads)
 vide-greniers.org###mnfDetail_adSenseHead
@@ -2005,6 +2007,7 @@ jsfiddle.net##+js(set, _bsa, %7B%7D)
 ||speechma.com/anti-adblocker.js
 ! https://fastpic.org/view/125/2025/0702/_1e5443f0df53345ab069adb631c48c93.png.html
 fastpic.org##+js(trusted-set-cookie, k3a9q, %24now%24%257C1)
+fastpic.org##+js(trusted-set-local-storage-item, _fpu5664332, 9999%2C2147483647)
 ! nobledicion.yoveo.xyz detection
 nobledicion.yoveo.xyz##+js(noeval-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/29110
@@ -2201,14 +2204,6 @@ premierfantasytools.com##+js(aopw, checkForAdBlocker)
 ! https://github.com/uBlockOrigin/uAssets/issues/29546
 pogdesign.co.uk##div[data-ad-slot]:has(ins.adsbygoogle)
 pogdesign.co.uk##.box728
-! https://olamovies.mom/generate/?id=8395 - anti-adb and browser
-olamovies.*##+js(aeld, DOMContentLoaded, %2Fnavigator%7Clocation%5C.href%2F)
-olamovies.*##+js(no-xhr-if, googlesyndication)
-olamovies.*##+js(no-fetch-if, mode%3Acors)
-!olamovies.*##+js(no-fetch-if, %2F%5C%2F%5C%2F.%7B1%2C5%7D%5C..*%5C..%7B2%2C7%7D%5C%2F.%7B1%2C20%7D%5C%2F%5Cd%2B%24%2F)
-!olamovies.*##+js(rpnt, script, showAdBlockMessage, hideAdBlockMessage)
-olamovies.*##+js(nowoif, !self)
-olamovies.*##*[style="display: flex;"]
 ! https://github.com/uBlockOrigin/uAssets/issues/29569
 online-smss.com##+js(no-fetch-if, widgets.outbrain.com)
 online-smss.com##+js(no-fetch-if, mode%3Ano-cors)
@@ -2635,8 +2630,6 @@ playertv24.com##+js(nowoif)
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=irtv365.com,redirect=google-ima.js
 ! https://www.reddit.com/r/uBlockOrigin/comments/1oko10j/ubo_started_being_detected_on_elamigosgamez_this/
 elamigosgamez.com##+js(nostif, checkAdblockUser, 1000)
-! https://github.com/AdguardTeam/AdguardFilters/issues/215765
-spedostream2.shop##+js(set, adblock_detect, noopFunc)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/216094
 seoschmiede.at##+js(rmnt, script, %2Fpirate%2Fi)
 ! https://ico3c.com/bkg/hn9q5h6ijs47
