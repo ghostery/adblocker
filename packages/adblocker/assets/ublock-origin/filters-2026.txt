@@ -789,10 +789,11 @@ urbandictionary.com###ud-root > div[class]:has(div[class*="leaderboard"])
 ! https://github.com/uBlockOrigin/uAssets/issues/32780
 /adserver.$script,redirect=noop.js,from=ameede.net
 ! https://github.com/uBlockOrigin/uAssets/issues/32782
-vidbox.dev##+js(nostif, getComputedStyle)
-vidbox.dev##+js(no-fetch-if, method%3AHEAD)
-vidbox.dev##section[aria-label="Sponsored content"]
-vidbox.dev##.dark\:bg-black.pt-20.bg-white.w-full.z-10.relative > .lg\:px-8.md\:px-6.px-4.max-w-\[1440px\].mx-auto:has(#ad-container)
+! https://github.com/uBlockOrigin/uAssets/issues/34038
+vidbox.dev,vidbox.vc##+js(nostif, getComputedStyle)
+vidbox.dev,vidbox.vc##+js(no-fetch-if, method%3AHEAD)
+vidbox.dev,vidbox.vc##section[aria-label="Sponsored content"]
+vidbox.dev,vidbox.vc##.dark\:bg-black.pt-20.bg-white.w-full.z-10.relative > .lg\:px-8.md\:px-6.px-4.max-w-\[1440px\].mx-auto:has(#ad-container)
 ! https://github.com/uBlockOrigin/uAssets/issues/32783
 world-iptv.club##+js(acs, setTimeout, %2Feeea5e31%7Cnew%5Cs%2BFunction%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/32785
@@ -1225,3 +1226,7 @@ balbums.st##[id^="__clb-spot_"]
 octavestreaming.com##+js(norafif, ()%3D%3Ee())
 ! https://github.com/uBlockOrigin/uAssets/issues/33039
 /^https:\/\/nekostream\.site\/[a-f0-9]{32}\.js(?:$|\?)/$script,third-party
+! https://github.com/uBlockOrigin/uAssets/issues/34019
+xprivo.com##+js(json-prune, sponsored_ads)
+! https://github.com/uBlockOrigin/uAssets/issues/34037
+mangakuri.online##+js(rpnt, script, anti_adblock_enabled%3Atrue, anti_adblock_enabled%3Afalse)
