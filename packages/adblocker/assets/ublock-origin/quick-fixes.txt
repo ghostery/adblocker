@@ -147,12 +147,12 @@ web.facebook.com,www.facebook.com##+js(trusted-prevent-dom-bypass, Element.proto
 ||static.xx.fbcdn.net/rsrc.php/$script,domain=web.facebook.com|www.facebook.com,replace=/return r instanceof ArrayBuffer/return r.constructor.name==="ArrayBuffer"/
 ! https://github.com/uBlockOrigin/uAssets/issues/24745 - https://voe.sx/e/2z9smej3tebe
 ! VOE sites
-||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=stevenfamilyedge.com,important
-stevenfamilyedge.com##+js(nowoif)
-stevenfamilyedge.com##+js(set, console.clear, undefined)
-stevenfamilyedge.com##+js(acs, globalThis, break%3Bcase)
-stevenfamilyedge.com##+js(acs, WebAssembly, atob)
-! [badfilter] ||stevenfamilyedge.com^$badfilter
+||imasdk.googleapis.com/js/sdkloader/ima3.js$script,3p,redirect=google-ima.js,domain=nicolehappyoutside.com,important
+nicolehappyoutside.com##+js(nowoif)
+nicolehappyoutside.com##+js(set, console.clear, undefined)
+nicolehappyoutside.com##+js(acs, globalThis, break%3Bcase)
+nicolehappyoutside.com##+js(acs, WebAssembly, atob)
+! [badfilter] ||nicolehappyoutside.com^$badfilter
 ! next-episode .net
 !next-episode.net##+js(rmnt, script, %2F%5B%5Cs%5CS%5D%7B0%2C%7Dhead%5B%5Cs%5CS%5D%7B1900%2C%7D%2F)
 !next-episode.net##+js(rpnt, script, %2F.then%5B%5Cs%5CS%5D%7B0%2C%7D%3F%3B%2Fg)
@@ -479,19 +479,9 @@ zeilink.net#@#+js(remove-node-text, script, %2F%22%5C%5C%7C%5C%5C%5Bux%5D%7C%5C%
 decompiler.com##+js(set, OffscreenCanvas.prototype.getContext, undefined)
 decompiler.com##+js(nosiif, %3D%3D%3D%20false)
 decompiler.com##+js(aost, Element.prototype.removeChild, %2Fblocked%7Ctick%2F)
-! https://github.com/uBlockOrigin/uBlock-discussions/discussions/986
-!#if env_firefox
-javmix.*#@#+js(acs, addEventListener, style.display)
-!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/5184
 twitch.tv##.stream-display-ad__wrapper + div > div[style^="position:"] > div[class^="Layout-sc-"]:has(video[src^="https://m.media-amazon.com"])
 twitch.tv##.chat-shell > div[class^="Layout-sc-"]  > div[style^="transition:"]:has(video[src^="https://m.media-amazon.com"])
-! https://github.com/uBlockOrigin/uAssets/issues/33817
-! [badfilter] ||vk.com/images/$third-party,badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/33873
-! [badfilter] ||yastatic.net^$badfilter
-! https://github.com/uBlockOrigin/uAssets/issues/33905
-@@/uxab/ui-core-analytics-bundle.jsdbx$1p
 ! https://github.com/AdguardTeam/AdguardFilters/issues/233737
 fo76db.com#@#+js(aeld, DOMContentLoaded, %2Fads%7CAmazonCarousel%2F)
 fo76db.com###fo-ad-modal
@@ -499,3 +489,9 @@ fo76db.com##body.swiper:style(overflow: auto !important; position: static !impor
 fo76db.com##+js(trusted-rpnt, script, %2F%20ads%5C.map%5B%5CS%5Cs%5Cn%5D%2B%3Fjoin%5C(''%5C)%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/33996
 flipkart.com#@#div[data-id][style]:has([width][height][fill])
+! https://github.com/uBlockOrigin/uAssets/issues/34009
+pdftoshokan.com##+js(aeld, %2Fclick%7Cload%2F, %2Fdocument%5C.location%7Cpop%5C.%7Cexo%7Ccookie%7C%5C.php%2F)
+pdftoshokan.com##+js(nowoif, ok_)
+!#if cap_html_filtering
+pdftoshokan.com##^script:has-text(/ad.?Config|prepare.?Pop|\/popunder|ads_host/)
+!#endif

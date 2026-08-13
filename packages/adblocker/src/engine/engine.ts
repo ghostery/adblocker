@@ -36,7 +36,7 @@ import PreprocessorBucket from './bucket/preprocessor.js';
 import IFilter from '../filters/interface.js';
 import { binaryMerge, legacyMerge, MergeOptions } from './merger.js';
 
-export const ENGINE_VERSION = 898;
+export const ENGINE_VERSION = 899;
 
 function findApplicableHideException(filters: NetworkFilter[]): NetworkFilter | undefined {
   if (filters.length === 0) {

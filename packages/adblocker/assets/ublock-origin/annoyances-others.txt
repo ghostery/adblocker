@@ -188,6 +188,16 @@ bandwagon.asia##.article[oncontextmenu]:remove-attr(/onmousedown|onselectstart|o
 !#else
 bandwagon.asia##+js(ra, onmousedown%7Conselectstart%7Concontextmenu, .article, complete)
 !#endif
+! https://github.com/uBlockOrigin/uAssets/issues/14233
+zgbk.com##+js(acs, document.oncontextmenu)
+zgbk.com##+js(aeld, , blockEvent)
+zgbk.com##+js(rpnt, script, %2F%5Cbe(vent)%3F%5C.preventDefault%5C(%5C)%3B%3F%2Fg)
+zgbk.com###words-box:style(user-select: text !important;)
+zgbk.com##.detail .detail-con:not(.copycontent) .art-content p:style(pointer-events: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/34030
+hk01.com##+js(trusted-replace-argument, String.prototype.includes, 0, , condition, preview-cms)
+! https://github.com/uBlockOrigin/uAssets/issues/34089
+||tvzonehd.com/anti-copy.js
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -3942,8 +3952,6 @@ awebstories.com##+js(set, stopPrntScr, noopFunc)
 awebstories.com##+js(set, disableSelection, noopFunc)
 ||awebstories.com/wp-content/plugins/secure-copy-content-protection^$all
 awebstories.com##*::selection:style(background-color:#338FFF !important;)
-! https://github.com/uBlockOrigin/uAssets/issues/14233
-zgbk.com##+js(acs, document.oncontextmenu)
 ! https://github.com/uBlockOrigin/uAssets/issues/14241
 cataz.net##.premodal-share
 cataz.net##.modal-backdrop
@@ -6092,3 +6100,10 @@ mail.yahoo.com##+js(trusted-click-element, %23landshark%20.skip-link)
 t3.chat##+js(nostif, .abort()%3B, 1000)
 ! allow selecting text
 vitsienvitsit.fi##.vitsiUnselectable:style(user-select: text !important)
+! anti devtools
+popcornmovies.io##+js(set, console.clear, trueFunc)
+popcornmovies.io##+js(set, console.log, trueFunc)
+popcornmovies.io##+js(set, console.table, trueFunc)
+popcornmovies.io##+js(aeld, keydown, 123%3D%3D%3Di)
+! https://github.com/uBlockOrigin/uAssets/issues/34096
+parsatv.com##+js(rmnt, script, .offsetHeight)

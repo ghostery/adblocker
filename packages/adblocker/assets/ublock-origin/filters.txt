@@ -86,8 +86,7 @@ tvtoday.de##+js(nosiif, fireEvent, 500)
 ! https://forums.lanik.us/viewtopic.php?p=129561#p129561
 @@||a.bf-ad.net/makabo/ads_fol_init.js$script,domain=chip.de
 ! https://github.com/uBlockOrigin/uAssets/issues/6587
-||chip.de/*&$script,1p
-chip.de##.js_download_button:has(> a.Download-Button--Free[href*="withinstaller"][href*="lastchanged"])
+chip.de##.DownloadPageWidget-Cta > .RUC-DownloadButton-Wrap:has(> div > a.aff-link[href*="&deliver=installer&from=dl_button"])
 ! https://github.com/uBlockOrigin/uAssets/issues/7589
 chip.de##+js(json-prune, enabled, force_disabled)
 ##[href*="/afu.php"]
@@ -312,7 +311,8 @@ web.facebook.com,www.facebook.com##+js(json-prune, require.0.3.0.__bbox.require.
 ||facebook.com/api/graphql/$xhr,replace=/\{"node":\{"role":"SEARCH_ADS"[^\n]+?cursor":[^}]+\}/{}/g,domain=web.facebook.com|www.facebook.com
 ||facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"MarketplaceFeedAdStory"[^\n]+?"cursor":(?:null|"\{[^\n]+?\}"|[^\n]+?MarketplaceSearchFeedStoriesEdge")\}/{}/g,domain=web.facebook.com|www.facebook.com
 ||facebook.com/api/graphql/$xhr,replace=/\{"node":\{"__typename":"VideoHomeFeedUnitSectionComponent"[^\n]+?"sponsored_data":\{"ad_id"[^\n]+?"cursor":null\}/{}/,domain=web.facebook.com|www.facebook.com
-||static.xx.fbcdn.net/rsrc.php/*.js$script,replace=/"__typename":"SponsoredData"/"__typename":"SponsorData"/g
+||static.xx.fbcdn.net/rsrc.php/v*.js$script,replace=/"__typename":"SponsoredData"/"__typename":"SponsorData"/g
+||static.xx.fbcdn.net/rsrc.php/v*.js$script,replace=/if\(i\)\{var C=document\.createRange\(\)/if(false){var C=document.createRange()/
 !#else
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22role%22%3A%22SEARCH_ADS%22%5B%5E%5Cn%5D%2B%3Fcursor%22%3A%5B%5E%7D%5D%2B%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
 web.facebook.com,www.facebook.com##+js(trusted-replace-xhr-response, %2F%5C%7B%22node%22%3A%5C%7B%22__typename%22%3A%22MarketplaceFeedAdStory%22%5B%5E%5Cn%5D%2B%3F%22cursor%22%3A(%3F%3Anull%7C%22%5C%7B%5B%5E%5Cn%5D%2B%3F%5C%7D%22%7C%5B%5E%5Cn%5D%2B%3FMarketplaceSearchFeedStoriesEdge%22)%5C%7D%2Fg, %7B%7D, %2Fapi%2Fgraphql)
@@ -2838,7 +2838,6 @@ cartoonporno.xxx##+js(aopr, prPuShown)
 cartoonporno.xxx##+js(nowoif)
 ! https://github.com/uBlockOrigin/uAssets/issues/2482
 ! https://github.com/uBlockOrigin/uAssets/issues/4779
-! https://github.com/uBlockOrigin/uAssets/issues/10052
 you-porn.com,youporn.*,youporngay.com##+js(set, page_params.holiday_promo, true)
 you-porn.com,youporn.*,youporngay.com##.ad-bottom-text
 you-porn.com,youporn.*,youporngay.com##.adLinkText
@@ -2847,6 +2846,8 @@ you-porn.com,youporn.*##.e8-column
 you-porn.com,youporn.*##[data-removelink="removeLink"]
 you-porn.com,youporngay.com###pb_template
 you-porn.com##[id^="adblock"]
+you-porn.com##.pc.video-box:has(.adsbytrafficjunky)
+you-porn.com##li.paidTab.js_paidTab.menu-item:has(.js_tracking-link)
 ##.trafficjunky-float-right
 ! https://github.com/uBlockOrigin/uAssets/issues/2482#issuecomment-395244585
 redtube.*##+js(acs, Object.defineProperty, trafficjunky)
@@ -5924,6 +5925,7 @@ pornhub.*###pb_block
 pornhub.*##.menuLinkDiv:has(a[href^="https://www.spicevids.com/"])
 pornhub.*##div.halfWidth.menuLink:has(a[href^="https://fancentro.com/"])
 pornhub.*##a[href^="https://fancentro.com"]
+pornhub.*##.emptyBlockSpace
 ! https://github.com/uBlockOrigin/uAssets/issues/11753
 pornhub.*##+js(set, page_params.holiday_promo, true)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/132379
