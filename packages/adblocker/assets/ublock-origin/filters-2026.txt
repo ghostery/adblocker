@@ -789,10 +789,11 @@ urbandictionary.com###ud-root > div[class]:has(div[class*="leaderboard"])
 ! https://github.com/uBlockOrigin/uAssets/issues/32780
 /adserver.$script,redirect=noop.js,from=ameede.net
 ! https://github.com/uBlockOrigin/uAssets/issues/32782
-vidbox.dev##+js(nostif, getComputedStyle)
-vidbox.dev##+js(no-fetch-if, method%3AHEAD)
-vidbox.dev##section[aria-label="Sponsored content"]
-vidbox.dev##.dark\:bg-black.pt-20.bg-white.w-full.z-10.relative > .lg\:px-8.md\:px-6.px-4.max-w-\[1440px\].mx-auto:has(#ad-container)
+! https://github.com/uBlockOrigin/uAssets/issues/34038
+vidbox.dev,vidbox.vc##+js(nostif, getComputedStyle)
+vidbox.dev,vidbox.vc##+js(no-fetch-if, method%3AHEAD)
+vidbox.dev,vidbox.vc##section[aria-label="Sponsored content"]
+vidbox.dev,vidbox.vc##.dark\:bg-black.pt-20.bg-white.w-full.z-10.relative > .lg\:px-8.md\:px-6.px-4.max-w-\[1440px\].mx-auto:has(#ad-container)
 ! https://github.com/uBlockOrigin/uAssets/issues/32783
 world-iptv.club##+js(acs, setTimeout, %2Feeea5e31%7Cnew%5Cs%2BFunction%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/32785
@@ -1225,3 +1226,20 @@ balbums.st##[id^="__clb-spot_"]
 octavestreaming.com##+js(norafif, ()%3D%3Ee())
 ! https://github.com/uBlockOrigin/uAssets/issues/33039
 /^https:\/\/nekostream\.site\/[a-f0-9]{32}\.js(?:$|\?)/$script,third-party
+! https://github.com/uBlockOrigin/uAssets/issues/34019
+xprivo.com##+js(json-prune, sponsored_ads)
+! https://github.com/uBlockOrigin/uAssets/issues/34037
+mangakuri.online##+js(rpnt, script, anti_adblock_enabled%3Atrue, anti_adblock_enabled%3Afalse)
+! https://github.com/uBlockOrigin/uAssets/issues/34043
+nuviatoon.com##+js(no-fetch-if, tag.min.js)
+! https://github.com/uBlockOrigin/uAssets/issues/34044
+puzzleshq.com##[class^="article_adContainer"]
+! https://github.com/uBlockOrigin/uAssets/issues/34052
+pemersatu.top##+js(rmnt, script, .offsetParent)
+! ad popups hollywoodhinditracks2.blogspot.com
+hollywoodhinditracks2.blogspot.com##+js(acs, atob, decodeURIComponent)
+||go.mobisla.com^$3p
+||go.mobtrks.com^$3p
+! https://github.com/AdguardTeam/AdguardFilters/issues/237852
+! https://github.com/List-KR/List-KR/commit/b032cd640ed51fcdd59b5639b11cceac3b9a25f2
+cokcok.stream##+js(trusted-replace-node-text, script, %2Fconst%20*_%5Ba-z0-9%5D%2B%20*%3D%20*%7B%20*%22media_file%22%20*%3A%20*%22%20*https%3A%5C%5C%5C%2F%5C%5C%5C%2Fcdn%5B0-9%5D%2B%5C.cokcok%5C.%5Ba-z0-9%5D%2B%5C%5C%5C%2Fassets%5C%5C%5C%2Fvideos%5C%5C%5C%2F.%2B%22click_through%22%20*%3A.%2B%7D%3B%2F, media_file, )

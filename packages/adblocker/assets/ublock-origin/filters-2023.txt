@@ -1179,6 +1179,7 @@ wp.pl,abczdrowie.pl,parenting.pl,o2.pl,kurierostrowiecki.pl,ostrowiec24.info,pan
 money.pl##body > div:has(> div:only-child:empty)
 wp.pl,o2.pl##.wp-comments-adv-wrapper:not(:has(> .wp-comments-moth-teaser-container)):has(> .wp-comments-adv[data-testid^="ad-slot-"])
 kurierostrowiecki.pl,ostrowiec24.info,panoramaplock.pl,7dni.pila.pl###bottom-sticky-ads-container
+gamingmode.pl,kociakolyska.pl,metropoliatorunska.pl,spotbox.pl,terazwloclawek.pl,xcook.pl##div[class]:has(> div > a + a[href^="https://adinfo.wp.pl/"])
 ! https://github.com/uBlockOrigin/uAssets/issues/16909
 @@||googletagmanager.com/gtm.js$script,domain=abczdrowie.pl
 ! https://github.com/uBlockOrigin/uAssets/issues/12214#issuecomment-2299131571
@@ -1926,7 +1927,7 @@ peakpx.com,pxfuel.com##.list_ads:style(height: 0px !important;)
 pikist.com##.lst_ads:style(height: 0px !important;)
 ! https://www.reddit.com/r/uBlockOrigin/comments/16d9c4a/help_how_to_block_seemingly_random_element_in/
 ! https://github.com/uBlockOrigin/uAssets/issues/29910
-||androidauth.wpengine.com/wp-json/api/advanced_placement/
+/wp-json/api/advanced_placement/*
 androidauthority.com##main > div:last-child > div:has(> .ad)
 androidauthority.com##main > div > div:empty:matches-css(min-height: 250px):matches-css(min-width: 80%)
 androidauthority.com##main > div:last-child > div:has(> div:only-child:empty)
@@ -1934,6 +1935,8 @@ androidauthority.com##main > script + div:has(> div:only-child:empty)
 androidauthority.com##div:has(> div:only-child > .pw-incontent)
 androidauthority.com##aside > div > div > div > div > div:has(> div:only-child:empty)
 androidauthority.com##aside > div > div:empty
+! https://github.com/uBlockOrigin/uAssets/issues/29838
+androidauthority.com##+js(json-edit, .props.pageProps.page.blocks.*%5B%3F..resource%5E%3D%22nc-ad%22%5D)
 ! https://github.com/uBlockOrigin/uAssets/issues/18422
 ||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=paramountnetwork.com,redirect=noopjs
 ! https://github.com/uBlockOrigin/uAssets/issues/18423

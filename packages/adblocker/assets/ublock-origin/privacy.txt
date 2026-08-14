@@ -659,10 +659,12 @@ threads.com,threads.net##+js(json-prune, require.0.3.0.__bbox.define.%5B%5D.2.is
 ||search.app^*link=http$doc,urlskip=?link
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3206#issuecomment-2487392846
 bing.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2Frebates%2Fwelcome%3Furl%3Dhttp%22%5D, %3Furl)
-||bing.com/ck/a*^u=a1aHR0c$doc,urlskip=/[?&]u=a1(aHR0c[^&#]+)/ -safebase64
 ||bing.com/rebates/welcome?url=http$doc,urlskip=?url
 ||bing.com/alink/link?url=http$doc,urlskip=?url
 ||bing.com/web/xlsc.aspx
+! https://github.com/uBlockOrigin/uAssets/issues/25344#issuecomment-5256727918
+bing.com##+js(href-sanitizer, a%5Bhref*%3D%22bing.com%2Fck%2Fa%22%5D, %3Fu%20%2F%5Ea1(.*)%24%2F%20-base64)
+||bing.com/ck/a*u=a1$doc,urlskip=?u /^a1(.*)$/ -safebase64
 ! https://www.avforums.com/threads/philips-oled908-remote.2478922/
 ||ds1.nl/redirect/*^dai_url=http$doc,urlskip=?dai_url
 ! https://www.dealnews.com/
@@ -783,6 +785,13 @@ lit.link##+js(href-sanitizer, a%5Bhref%5E%3D%22%2Fredirects%2Flink-ad%3Fredirect
 ||www.amazon.*/gp/*.html?*&U=http$doc,urlskip=?U
 ! https://github.com/uBlockOrigin/uAssets/issues/32641
 ||zsp1.ah.nl/*/URhttp*$doc,urlskip=/\/UR(http.+)/
+! https://github.com/uBlockOrigin/uAssets/issues/34036
+! tencent click trackers
+! https://c.pc.qq.com/ios.html?level=14&url=https://shitjournal.org/article/8ce50955-a676-4de5-b626-2b1f73e73f8c%2F&sublevel=293
+||c.pc.qq.com^$urlskip=?url
+||c.pc.qq.com^$urlskip=?pfurl
+! https://github.com/DandelionSprout/adfilt/discussions/163#discussioncomment-17978685
+/^https:\/\/link\.theverge\.com\/click\/[0-9]+\.[0-9]+\/aHR0c/$doc,urlskip=/(aHR0c[a-zA-Z0-9%_-]+)/ -base64
 ! Click Trackers
 ! https://reddit.com/r/uBlockOrigin/comments/14t3y1d/
 html.duckduckgo.com,lite.duckduckgo.com##+js(href-sanitizer, a%5Bhref%5E%3D%22%2F%2Fduckduckgo.com%2Fl%2F%3Fuddg%3D%22%5D, %3Fuddg)
@@ -895,6 +904,26 @@ donanimhaber.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2FExternalLinkRed
 ! https://www.f6s.com/company/zomato
 f6s.com##+js(aeld, , redirect)
 ||f6s.com/redirect?url=http*$doc,urlskip=?url
+! https://github.com/uBlockOrigin/uAssets/pull/34040
+||douban.com/link2/?url=http$doc,urlskip=?url
+douban.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.douban.com%2Flink2%2F%3Furl%3Dhttp%22%5D, %3Furl)
+! https://github.com/uBlockOrigin/uAssets/pull/34041
+||ref.gamer.com.tw/redir.php?url=http$doc,urlskip=?url
+gamer.com.tw##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fref.gamer.com.tw%2Fredir.php%3Furl%3Dhttp%22%5D, %3Furl)
+! https://github.com/uBlockOrigin/uAssets/pull/34042
+||landian.news/go?url=http$doc,urlskip=?url
+landian.news##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fwww.landian.news%2Fgo%3Furl%3Dhttp%22%5D, %3Furl)
+! https://github.com/uBlockOrigin/uAssets/pull/34049
+||link.zhihu.com/?target=http$doc,urlskip=?target
+zhihu.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Flink.zhihu.com%2F%3Ftarget%3Dhttp%22%5D, %3Ftarget)
+! https://github.com/uBlockOrigin/uAssets/pull/34057
+||touchgal.ink/redirect?url=http$doc,urlskip=?url
+touchgal.ink##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22%2Fredirect%3Furl%3Dhttp%22%5D, %3Furl)
+! https://github.com/uBlockOrigin/uAssets/pull/34060
+||sspai.com/link?target=http$doc,urlskip=?target
+sspai.com##+js(href-sanitizer, body%20a%5Bhref%5E%3D%22https%3A%2F%2Fsspai.com%2Flink%3Ftarget%3Dhttp%22%5D, %3Ftarget)
+! https://github.com/uBlockOrigin/uAssets/pull/34090
+||link.csdn.net^$urlskip=?target
 ! https://github.com/uBlockOrigin/uAssets/issues/24675 - click tracking
 ||cdn.digg.com/fragments/homepage/static/view-frontpage.js
 ! https://github.com/uBlockOrigin/uAssets/issues/29572
@@ -2737,10 +2766,8 @@ mashable.com##+js(href-sanitizer, a%5Bhref%5E%3D%22https%3A%2F%2Fzdcs.link%2F%22
 vaughn.live##+js(no-fetch-if, method%3APOST%20body%3Azaraz)
 ||vaughn.live/vsz/
 ! https://github.com/uBlockOrigin/uAssets/issues/33072#issuecomment-4937969164
-!#if ext_devbuild
 x.com##+js(prevent-xhr, %2Fi%2Fapi%2F1.1%2Fflow%2Fviewer.json)
-x.com##+js(proxy-apply-config, %7B%22dontProxyToString%22%3Atrue%7D)
-!#endif
+x.com##+js(proxy-apply-config, %7B%22skipToString%22%3Atrue%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/12635#issuecomment-4982050273
 telegraph.co.uk##.onward-journey
 ! https://github.com/uBlockOrigin/uAssets/issues/33772
@@ -2761,5 +2788,9 @@ $uritransform=/#Echobox=[\d]{10}$//,to=iltalehti.fi|hs.fi
 ||igniteseurope.com/stats/
 ! https://github.com/uBlockOrigin/uAssets/issues/33997
 ||rollercoin.com/static/img/referral_160-600.png$image,redirect=1x1.gif,important
+! https://github.com/uBlockOrigin/uAssets/pull/34031
+||s1.hdslb.com/bfs/static/jinkela/video/video.$script,replace=/vd_source:this\.vdSource/vd_source:undefined/,domain=bilibili.com
+! https://github.com/uBlockOrigin/uAssets/issues/34043
+||nuviatoon.com/nuvia-api/analytics/
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt
