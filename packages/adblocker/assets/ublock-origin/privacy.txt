@@ -80,6 +80,7 @@ www.reddit.com##+js(json-prune, data.children.%5B%5D.data.outbound_link)
 ||reddit.com^$doc,removeparam=ref_campaign
 ||reddit.com^$doc,removeparam=ref_source
 ||reddit.com^$doc,removeparam=utm_content
+||pi.reddit.com^
 ! https://github.com/uBlockOrigin/uBlock-issues/issues/3206#issuecomment-2406041484
 ||click.redditmail.com/CL0/$urlskip=/\/CL0\/(http.*?)\/\d\/[a-f0-9-]+\// -uricomponent
 ! remove.bg
@@ -938,6 +939,32 @@ arstechnica.com,dermnetnz.org##.gsc-webResult a[data-cturl]:remove-attr(/^data-c
 !#if !ext_ubol
 ! Block Attribution reporting
 www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26rt%3D%5Cd%2B%5C.%5Cd%2B.%2B%3F%26volume%3D%5Cd%2B%26cbr%3D.%2B%3F%26fexp%3Dv1%25%5B-%250-9C%5D%7B300%2C%7D%26.%2B%3F%26muted%3D%5Cd(%26vis%3D3)%3F%26docid%3D%2F%20method%3APOST)
+! https://github.com/uBlockOrigin/uAssets/issues/33267
+! https://github.com/uBlockOrigin/uAssets/issues/33328
+! https://github.com/AdguardTeam/AdguardFilters/issues/233800
+||observe.runpod.io/static/web-vitals.js
+/e/*^ip=*^compression=
+! https://github.com/uBlockOrigin/uAssets/issues/33914
+/wp-content/plugins/google-site-kit/dist/assets/js/googlesitekit-consent-mode-
+/wp-content/plugins/google-site-kit/dist/assets/js/googlesitekit-events-provider-
+! https://www.rd.com/
+/wp-content/plugins/tmbi-assertive-yield/*
+/wp-content/plugins/tmbi-data-analytics
+/wp-content/plugins/tmbi-brandmetrics
+/wp-content/plugins/tmbi-ad-density
+/wp-content/plugins/tmbi-permutive
+/wp-content/plugins/tmbi*-affiliate
+!#endif
+/e/*^ip=*^beacon=
+! petametrics
+||petametrics.com^$~script
+||petametrics.com/*/__activity.
+||paytr.com/securemetric/
+||youtube.com/youtubei/v1/log_event
+! https://github.com/uBlockOrigin/uAssets/issues/33157
+||zoom.us/*/app-telemetry.
+||zoom.us/*/fingerprintjs-
+||zoom.us/user/anonymous/telemetry
 ! 1st-party google tag manager script
 ! https://github.com/uBlockOrigin/uAssets/issues/33220
 ! https://github.com/uBlockOrigin/uAssets/issues/33237
@@ -947,29 +974,21 @@ www.youtube.com##+js(no-xhr-if, %2F%5C%2Fapi%5C%2Fstats%5C%2Fatr%5C%3F.%2B%3F%26
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{4,6}\/\?id=AW-\d+/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9]{3,6}\/\?id=G(TM)?-[A-Z0-9]+/$script,1p,match-case,to=~xsso.leagueoflegends.com|~xsso.lolesports.com|~xsso.playvalorant.com|~xsso.riotgames.com|~xsso.valorantesports.com
 /^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/(?:analyticsdata|gemets|gtm[a-z]+|metrics|securegtm)\/?$/$script,1p,match-case
+!#if env_safari
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9][a-z0-9][a-z0-9][a-z0-9]\/$/$script,1p,match-case,domain=~leagueoflegends.com|~lolesports.com|~playvalorant.com|~riotgames.com|~valorantesports.com
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9]?[a-z0-9]?[a-z0-9]?[a-z0-9]?[a-z0-9]?\/\?id=$/$script,1p,match-case,domain=~leagueoflegends.com|~lolesports.com|~playvalorant.com|~riotgames.com|~valorantesports.com
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9][a-z0-9][a-z0-9][a-z0-9][a-z0-9]?[a-z0-9]?\/\?id=AW-[0-9]+/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/[a-z0-9][a-z0-9][a-z0-9][a-z0-9]?[a-z0-9]?[a-z0-9]?\/\?id=G(TM)?-[A-Z0-9]+/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/analyticsdata\/?$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/gemets\/?$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/gtm[a-z]+\/?$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/metrics\/?$/$script,1p,match-case
+/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/securegtm\/?$/$script,1p,match-case
+!#endif
 ! https://github.com/uBlockOrigin/uAssets/issues/33144
 ! @@/jsi18n/|$script,1p
 ! https://github.com/uBlockOrigin/uAssets/commit/58b2cf2dd92adf8eff2ad0a4d98a127cd650eca0
 ! @@/^https:\/\/(www\.)?[a-z0-9]+\.[a-z]+(\.[a-z]+)?\/config\/?$/$script,1p
-! https://github.com/uBlockOrigin/uAssets/issues/33157
-||zoom.us/*/app-telemetry.
-||zoom.us/*/fingerprintjs-
-||zoom.us/user/anonymous/telemetry
-! https://github.com/uBlockOrigin/uAssets/issues/33267
-! https://github.com/uBlockOrigin/uAssets/issues/33328
-! https://github.com/AdguardTeam/AdguardFilters/issues/233800
-||observe.runpod.io/static/web-vitals.js
-/e/*^ip=*^beacon=
-/e/*^ip=*^compression=
-! petametrics
-||petametrics.com^$~script
-! https://github.com/uBlockOrigin/uAssets/issues/33914
-/wp-content/plugins/google-site-kit/dist/assets/js/googlesitekit-consent-mode-
-/wp-content/plugins/google-site-kit/dist/assets/js/googlesitekit-events-provider-
-!#endif
-||petametrics.com/*/__activity.
-||paytr.com/securemetric/
-||youtube.com/youtubei/v1/log_event
 ! https://github.com/AdguardTeam/AdguardFilters/issues/213240
 ||bdvmetricas.banvenez.com.ve^
 ! https://www.bilet.com/ido
@@ -2792,5 +2811,11 @@ $uritransform=/#Echobox=[\d]{10}$//,to=iltalehti.fi|hs.fi
 ||s1.hdslb.com/bfs/static/jinkela/video/video.$script,replace=/vd_source:this\.vdSource/vd_source:undefined/,domain=bilibili.com
 ! https://github.com/uBlockOrigin/uAssets/issues/34043
 ||nuviatoon.com/nuvia-api/analytics/
+! https://github.com/uBlockOrigin/uAssets/issues/32911
+||stats.index.hr^
+||index.hr/tracking-beacon
+||index.hr/api/Stats/
+! https://github.com/uBlockOrigin/uAssets/issues/34145
+||sms24.me/numbers/pixel
 ! Merge in resource-abuse.txt
 !#include resource-abuse.txt

@@ -12,8 +12,6 @@ pelispedia.*##+js(aopw, document.oncontextmenu)
 pelispedia.*##+js(ra, oncontextmenu)
 cine.to##+js(aopr, oncontextmenu)
 desbloqueador.*##+js(aopr, document.oncontextmenu)
-megapastes.com##+js(aopr, document.oncontextmenu)
-megapastes.com##+js(aopr, document.onselectstart)
 ! https://github.com/uBlockOrigin/uAssets/issues/1453
 s0urce.io##+js(aeld, %2F%5E(contextmenu%7Ccopy)%24%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/3620
@@ -147,12 +145,15 @@ straitstimes.com##.select-none:style(-webkit-touch-callout: default !important; 
 ! https://github.com/uBlockOrigin/uAssets/issues/33136
 bookto09.com##+js(rmnt, script, ctrlKey)
 bookto09.com##body:style(-webkit-touch-callout: default !important; -webkit-user-select: text !important; -khtml-user-select: text !important; -moz-user-select: text !important; -ms-user-select: text !important; user-select: text !important; -webkit-tap-highlight-color: revert !important; cursor: revert !important; -webkit-user-drag: auto !important; user-drag: auto !important;)
+! https://github.com/uBlockOrigin/uAssets/issues/33146
+canale-tv.net##+js(rmnt, script, preventDefault)
+||canale-tv.net/channel/disy.js^
 ! https://github.com/uBlockOrigin/uAssets/issues/33163
 hoyolab.com##+js(aeld, contextmenu, , elements, img%5Bno-copy%3D%22true%22%5D)
 hoyolab.com##+js(aeld, contextmenu, preventDefault, elements, .viewer-container)
 hoyolab.com##img.viewer-move:style(pointer-events: auto !important; z-index: 100 !important;)
 ! https://github.com/uBlockOrigin/uAssets/issues/32608#issuecomment-4621674836
-jimpenopisonline.online##+js(aeld, contextmenu, preventDefault)
+ntv.cx>>,ntvs.cx>>##+js(aeld, contextmenu, preventDefault)
 ! https://github.com/uBlockOrigin/uAssets/issues/33246
 prpm.dbp.gov.my##+js(set, document.onmousedown, trueFunc)
 ! https://github.com/uBlockOrigin/uAssets/issues/33664
@@ -198,6 +199,12 @@ zgbk.com##.detail .detail-con:not(.copycontent) .art-content p:style(pointer-eve
 hk01.com##+js(trusted-replace-argument, String.prototype.includes, 0, , condition, preview-cms)
 ! https://github.com/uBlockOrigin/uAssets/issues/34089
 ||tvzonehd.com/anti-copy.js
+! https://github.com/uBlockOrigin/uAssets/pull/34124
+camere-live.ro##+js(rmnt, script, 'contextmenu')
+! https://github.com/uBlockOrigin/uAssets/pull/34161/
+dlstreams.st,dollardescent.net,hamis.romponalis.st##+js(rmnt, script, 'contextmenu')
+! https://github.com/uBlockOrigin/uAssets/issues/34181
+trucoon.com.br##*:style(-webkit-touch-callout: auto !important; -moz-touch-callout: auto !important; -ms-touch-callout: auto !important; -o-touch-callout: auto !important; touch-callout: auto !important; -webkit-user-select: auto !important; -moz-user-select: auto !important; -ms-user-select: auto !important; -o-user-select: auto !important; user-select: auto !important; -ms-touch-action: auto)
 ! END: Anti copy, right-click etc.
 ! START: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/2185
@@ -304,6 +311,8 @@ jelonka.com##+js(trusted-set-local-storage-item, jelonka_news_ad_access_gate_fir
 jelonka.com##+js(trusted-set-local-storage-item, jelonka_news_ad_access_gate_soft_dismissed_at, %24now%24)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1vcb1va/metacritic_adblock_nag/
 metacritic.com##+js(trusted-set-session-storage-item, BT_AM_SOFTWALL_DISMISSED, %7B%22element%22%3A%22continue-to-site%22%7D)
+! https://github.com/uBlockOrigin/uAssets/pull/34169
+hymnary.org##div#blockbanner
 ! END: Anti-adblock
 ! https://github.com/uBlockOrigin/uAssets/issues/933
 ! https://github.com/easylist/EasyListHebrew/issues/332
@@ -6047,6 +6056,8 @@ camereliveromania.ro##+js(rmnt, script, %2Fwpcp%7Ccontextmenu%2F)
 dozaanimata.net##+js(trusted-create-html, html, %3Cdetails%20open%20style%3D'display%3Anone'%20ontoggle%3D'(function()%7B%20%20%20%20%20window.addEventListener(%22contextmenu%22%2C%20(e)%20%3D%3E%20%7B%20e.stopImmediatePropagation()%3B%20return%20true%3B%20%7D%2C%20true)%3B%20%20%20%20%20const%20allow%20%3D%20(e)%20%3D%3E%20%7B%20e.stopImmediatePropagation()%3B%20return%20true%3B%20%7D%3B%20%20%20%20%20document.addEventListener(%22selectstart%22%2C%20allow%2C%20true)%3B%20%20%20%20%20document.addEventListener(%22copy%22%2C%20allow%2C%20true)%3B%20%20%20%20%20window.addEventListener(%22keydown%22%2C%20(e)%20%3D%3E%20%7B%20%20%20%20%20%20%20%20%20if%20((e.ctrlKey%20%7C%7C%20e.metaKey)%20%26%26%20(e.key%20%3D%3D%3D%20%22c%22%20%7C%7C%20e.key%20%3D%3D%3D%20%22a%22))%20%7B%20%20%20%20%20%20%20%20%20%20%20%20%20e.stopImmediatePropagation()%3B%20%20%20%20%20%20%20%20%20%7D%20%20%20%20%20%7D%2C%20true)%3B%20%20%20%20%20document.querySelectorAll(%22*%22).forEach(el%20%3D%3E%20%7B%20%20%20%20%20%20%20%20%20el.oncontextmenu%20%3D%20null%3B%20%20%20%20%20%20%20%20%20el.onselectstart%20%3D%20null%3B%20%20%20%20%20%20%20%20%20el.oncopy%20%3D%20null%3B%20%20%20%20%20%20%20%20%20el.onkeydown%20%3D%20null%3B%20%20%20%20%20%20%20%20%20el.style.userSelect%20%3D%20%22auto%22%3B%20%20%20%20%20%7D)%3B%20%7D)()%3B'%3E%3C%2Fdetails%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/32731
 fontsquirrel.com###bottom_banner_ad_container
+! https://github.com/uBlockOrigin/uAssets/issues/32767
+aha-music.com##+js(adjust-setInterval, j.value--, 1000, 0.001)
 ! https://github.com/uBlockOrigin/uAssets/issues/32827
 docs.paloaltonetworks.com##+js(nostif, ad-block)
 ! https://everythingmoe.com/post/anikotodomains.html

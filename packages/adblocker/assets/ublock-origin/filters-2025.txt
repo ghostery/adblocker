@@ -1982,6 +1982,8 @@ sextb.*#@#.ad-placeholder:not(#detect, #detect_ad_empire, #filter_ads_by_classna
 ! https://github.com/uBlockOrigin/uAssets/issues/33542
 audinifer.com,vibuxer.com##+js(rmnt, script, window.open)
 audinifer.com,vibuxer.com##body > div[style*="2147483647"]
+! https://github.com/uBlockOrigin/uAssets/issues/32347
+avtub.cx>>##+js(json-prune-fetch-response, custom_ads, , propsToMatch, %2Fsettings)
 ! https://github.com/uBlockOrigin/uAssets/issues/29030
 rockmods.net##.download-btn-group > a[href*="/4/"].simple-btn
 ! https://vegamoviese.blog/ - popups
@@ -2617,7 +2619,7 @@ moviehax.biz###clickfakeplayer[href]:remove-attr(href)
 ! https://github.com/uBlockOrigin/uAssets/issues/30606
 snopes.com##+js(nostif, %3D%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/29001
-mtv.fi##+js(trusted-json-edit-fetch-response, .metadata.hideAds%3Dtrue, propsToMatch, a2d.tv%2Fplay%2F)
+mtv.fi,mtvuutiset.fi##+js(trusted-json-edit-fetch-response, .metadata.hideAds%3Dtrue, propsToMatch, a2d.tv%2Fplay%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/30611
 narviks.nl##+js(rmnt, script, adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/30622
@@ -2879,7 +2881,7 @@ captown.capcom.com##+js(trusted-set, googletag.enums, json%3A%7B%22OutOfPageForm
 ! https://github.com/AdguardTeam/AdguardFilters/issues/221153
 thetemp.email##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/32951
-adhs-zentrum.de##+js(rmnt, script, adImage)
+adhs-zentrum.de##+js(rmnt, script, .onerror)
 @@||adhs-zentrum.de^$ghide
 adhs-zentrum.de##.adsbygoogle
 adhs-zentrum.de##div.box:has(.adsbygoogle)
