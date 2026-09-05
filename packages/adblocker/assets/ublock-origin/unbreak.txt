@@ -2827,7 +2827,8 @@ riteaid.com##^html > body:not(.catalogsearch-result-index):upward(1) > head > sc
 @@/signup.php?mode=async&action=show_security_code$image,1p
 ! https://github.com/easylist/easylist/issues/14805
 ! https://github.com/uBlockOrigin/uAssets/issues/16606
-@@/akam/13/*$script,xhr,1p,domain=easyjet.com|ing.nl
+! https://github.com/uBlockOrigin/uAssets/issues/34317
+@@/akam/13/*$script,xhr,1p,domain=aw-lab.com|easyjet.com|ing.nl
 ! https://github.com/uBlockOrigin/uAssets/issues/16071#issuecomment-1418675044
 @@/init.js|$script,xhr,1p,domain=crunchbase.com
 @@||collector-*.px-cloud.net/b/$xhr,domain=crunchbase.com
@@ -4459,3 +4460,13 @@ book.trivago.com##+js(set, RISKX.go, noopFunc)
 book.trivago.com##+js(set, RISKX.setSid, noopFunc)
 ! https://www.reddit.com/r/uBlockOrigin/comments/1vkodxb/adblock_detection_on_minishortcom/
 ||imasdk.googleapis.com/js/sdkloader/ima3.js$redirect=noopjs,domain=minishort.com
+! https://github.com/uBlockOrigin/uAssets/issues/34112
+@@||googletagmanager.com/gtm.js$script,redirect-rule,domain=lyssna.com
+! https://github.com/uBlockOrigin/uAssets/issues/34142
+ds.163.com##+js(set, Sentry, %7B%7D)
+ds.163.com##+js(set, Sentry.init, noopFunc)
+ds.163.com##+js(set, Sentry.configureScope, noopFunc)
+! https://github.com/AdguardTeam/AdguardFilters/issues/238706
+@@||imasdk.googleapis.com/js/sdkloader/ima3_dai.js$script,domain=airtelxstream.in
+! https://github.com/uBlockOrigin/uAssets/issues/34251
+@@||googletagmanager.com/gtag/js$script,redirect-rule,domain=alltron.ch

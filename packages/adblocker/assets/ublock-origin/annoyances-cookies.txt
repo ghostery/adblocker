@@ -88,6 +88,9 @@ willi-food.co.il##.scm-banner
 91fm.co.il##.dkd-banner
 checkid.co.il###approval-popup
 beitberl.ac.il,shimur.org###MavilixCookiesBox
+! https://github.com/uBlockOrigin/uAssets/issues/34183
+! https://github.com/uBlockOrigin/uAssets/discussions/34184
+||rcommoncf.entrata.com/privacy_controller/
 !!! Trusted scriptlets------------------------------------------------------------
 !! Accept mandatory cookies / reject all additional cookies
 ! Do not use trusted-set-cookie for Google - it will cause captcha prompts for many users (maybe Google's antibot systems don't like the same cookie value being shared?) The issue doesn't appear in every region though
@@ -570,8 +573,6 @@ kleinanzeigen.de##+js(trusted-click-element, %23gdpr-banner-cmp-button, , 1000)
 kleinanzeigen.de##+js(trusted-click-element, button%5Baria-label%3D%22Datenschutzbestimmungen%20und%20Einstellungen%20ablehnen%22%5D, , 1200)
 ! alehinta.fi
 alehinta.fi##+js(trusted-set-cookie, cookie-consent, %7B%22categories%22%3A%5B%22analytics%22%5D%2C%22level%22%3A%5B%22analytics%22%5D%2C%22revision%22%3A0%2C%22data%22%3Anull%2C%22rfc_cookie%22%3Afalse%2C%22consent_date%22%3A%22%24currentISODate%24%22%2C%22consent_uuid%22%3A%22738928d9-c950-46d2-a732-700c986cf81a%22%2C%22last_consent_update%22%3A%22%24currentISODate%24%22%7D, 1year)
-! fyndiq.*
-fyndiq.dk,fyndiq.fi,fyndiq.no,fyndiq.se##+js(trusted-set-cookie, euconsent-v2, CQXekwAQcAnQAAHABBENCHFgAAAAAAAAACQgAAAAAAAA.YAAAAAAAAAAA)
 ! https://github.com/uBlockOrigin/uAssets/issues/30042
 ai.google.dev##+js(trusted-set-local-storage-item, glue.CookieNotificationBar, %5B%7B%22category%22%3A%222A%22%2C%22date%22%3A%22%24currentISODate%24%22%2C%22eea%22%3Atrue%2C%22siteId%22%3A%22ai.google.dev%22%2C%22status%22%3A%22ACCEPTED%22%7D%5D)
 16100.fi##+js(trusted-set-cookie, cookie_consent, eyJpdiI6ImwwWXVzYitiUmpWSDJmMWtkdHMvanc9PSIsInZhbHVlIjoicERPYnN6akRVbCttQVBaSHhMTzd3TW4xZGJTVWxqK2JwTlNYWjhlZ29JanVXOWdQU2x5RVhaRVpuR0l3QjBYOSIsIm1hYyI6ImM4YmU4OTYzZjYwODEyMmRlMmFmZjU1ZmE0YjcyZDA0ZmQ2MmEyOWZhNjA5NzA4ZGQwOWY2NzgyNjEwOTBhMDAiLCJ0YWciOiIifQ%253D%253D, 1year, , reload, 1)
@@ -609,7 +610,8 @@ iteraplay.com##+js(trusted-set-local-storage-item, itera_cookie_consent, %7B%22s
 ! https://github.com/AdguardTeam/AdguardFilters/issues/227341
 cinemark.com.br##+js(set-cookie, cookies_config, deny)
 ! https://github.com/uBlockOrigin/uAssets/pull/32262
-theweathernetwork.com##+js(trusted-click-element, %23didomi-notice-disagree-button)
+! https://github.com/uBlockOrigin/uAssets/issues/31800#issuecomment-5504882756
+guce.yahoo.com,theweathernetwork.com##+js(trusted-click-element, %23didomi-notice-disagree-button)
 ! https://github.com/uBlockOrigin/uAssets/pull/32538
 craftelier.com##+js(trusted-set-cookie, pr-cookie-consent, %5B%5D, , , domain, .craftelier.com)
 ! https://github.com/uBlockOrigin/uAssets/pull/32556
@@ -700,6 +702,16 @@ hailo-windsystems.com##+js(trusted-set-cookie, cookie_consent, %7B%22method%22%3
 otakuthon.com##+js(trusted-set-cookie, otakuthon_cookie_consent, %7B%22choice%22%3A%22denied%22%2C%22analytics%22%3Afalse%2C%22updatedAt%22%3A%22%24currentISODate%24%22%7D)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/238013
 aistudio.xiaomimimo.com##+js(trusted-set-local-storage-item, cookieConsent, %7B%22value%22%3A%7B%22analytical%22%3Afalse%2C%22functional%22%3Afalse%2C%22lastConsentTime%22%3A%22%24currentISODate%24%22%7D%2C%22createdTime%22%3A%22%24currentISODate%24%22%2C%22updateTime%22%3A%22%24currentISODate%24%22%2C%22version%22%3A1%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/34140
+happy-420.de##+js(set-cookie, cookieconsent_status, deny)
+happy-420.de##+js(trusted-set-cookie, cookieconsent_preferences_disabled, analytics%2Cmarketing%2Cfunctionality)
+! Just Essential
+erneuerbare-energien-aktuell.de,gearnews.com,glow25.de,h-f.at,hornetsecurity.com,iphone-ticker.de,kampfkunst-herz.de,kayzen.io,oloid.de,tcm-whieda.de,wasserkunst-hamburg.de,zahnspange-oelde.de###BorlabsCookieBox
+erneuerbare-energien-aktuell.de,gearnews.com,glow25.de,h-f.at,hoerbert.com,hornetsecurity.com,ifun.de,iphone-ticker.de,kampfkunst-herz.de,kayzen.io,oloid.de,straschu-ev.de,tcm-whieda.de,wasserkunst-hamburg.de,zahnspange-oelde.de##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
+! https://www.globus.ru/
+globus.ru##+js(trusted-set-local-storage-item, notifications-ls, %7B%22state%22%3A%7B%22isCookieNotified%22%3Atrue%7D%2C%22version%22%3A0%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/34353
+linsenplatz.de##+js(aeld, DOMContentLoaded, cookieConsent)
 !! Needs additional cookies
 ! Aceepting most cookies are required to view the content without payment
 ! https://github.com/AdguardTeam/AdguardFilters/issues/210256
@@ -895,8 +907,6 @@ coinbase.com##+js(trusted-set-cookie, cm_default_preferences, %7B%2522consent%25
 coinbase.com##+js(trusted-set-cookie, cm_eu_preferences, %7B%2522consent%2522%3A%5B%2522necessary%2522%252C%2522functional%2522%5D%252C%2522region%2522%3A%2522EU%2522%7D)
 ! https://go-e.com/en/ - Functional
 go-e.com##+js(trusted-set-cookie, gdpr, %7B%2522version%2522%3A%25221.0_tracking%2522%252C%2522options%2522%3A%7B%2522typo3%2522%3Atrue%252C%2522gdpr%2522%3Atrue%252C%2522openstreetmap%2522%3Atrue%252C%2522vimeo%2522%3Atrue%252C%2522youtube%2522%3Atrue%252C%2522recaptcha%2522%3Atrue%252C%2522googlemaps%2522%3Atrue%252C%2522tracking%2522%3Afalse%7D%7D)
-! https://github.com/uBlockOrigin/uAssets/issues/2054
-f1racing.pl##+js(trusted-click-element, %5Bhref%3D%22%2Fx-set-cookie%2F%22%5D)
 ! https://www.starcar.de/ - External media
 starcar.de##+js(trusted-set-cookie, privacy_consent, %257B%2522essentials%2522%253Atrue%252C%2522statistics%2522%253Afalse%252C%2522marketing%2522%253Afalse%252C%2522maps%2522%253Atrue%252C%2522youtube%2522%253Atrue%257D)
 ! https://github.com/uBlockOrigin/uAssets/issues/20344
@@ -1835,7 +1845,7 @@ pons.com##+js(trusted-set-cookie, pons-pure, consent-given, , , domain, .pons.co
 cnn.com##+js(trusted-set-local-storage-item, wbdLTP, 687f8fa8)
 ncaa.com##+js(trusted-set-local-storage-item, wbdLTP, 6934f2b8)
 ! reject
-adidas.*##+js(trusted-click-element, button%5Bdata-auto-id%3D%22glass-gdpr-default-consent-reject-button-central%22%5D, , 1000)
+adidas.*##+js(trusted-click-element, div.button-wrapper%20%3E%20button.reject-all, , 1500)
 ! non-essential
 crumblcookies.com##+js(trusted-set-local-storage-item, userTrackingConsent, %7B%22necessary%22%3Atrue%2C%22marketing%22%3Afalse%7D)
 ! accept https://www.topreality.sk/
@@ -1863,9 +1873,6 @@ online.no,telenor.no##+js(trusted-click-element, a%5Bid%3D%22consent_prompt_decl
 redcare.it##+js(trusted-set-cookie, usercentrics_consent, %7B%22ad_storage%22%3A0%2C%22analytics_storage%22%3A0%2C%22functional%22%3A0%7D)
 ! I do not agree
 austrian.com,lufthansa.com##+js(trusted-click-element, button%5Bid%3D%22cm-acceptNone%22%5D, , 1000)
-! Just Essential
-erneuerbare-energien-aktuell.de,tcm-whieda.de,iphone-ticker.de,oloid.de,kampfkunst-herz.de,glow25.de,h-f.at,hornetsecurity.com,kayzen.io,wasserkunst-hamburg.de,zahnspange-oelde.de###BorlabsCookieBox
-erneuerbare-energien-aktuell.de,tcm-whieda.de,iphone-ticker.de,oloid.de,kampfkunst-herz.de,glow25.de,h-f.at,hoerbert.com,hornetsecurity.com,ifun.de,kayzen.io,straschu-ev.de,wasserkunst-hamburg.de,zahnspange-oelde.de##+js(trusted-click-element, button.brlbs-btn-accept-only-essential, , 1000)
 ! save
 kontinenzzentrum.ch,happyland.cc,ticket-plus.app,xinedome.de,youcat.org##+js(trusted-click-element, button.brlbs-btn-save, , 1000)
 ! disagree
@@ -2199,8 +2206,6 @@ eurofirms.com,clairejoster.com,eurofirmsgroup.com##+js(trusted-set-cookie, ett_c
 ! consent-wall
 buienradar.nl##+js(trusted-click-element, label%5Bfor%3D%22ok%22%5D, , 500)
 buienradar.nl##+js(trusted-click-element, button.payok__submit, , 750)
-! necessary
-linsenplatz.de##+js(trusted-click-element, button.btn-outline-secondary, , 1000)
 ! reject
 turvakauppa.com,badgeland.no,stickerland.dk##+js(trusted-set-cookie, pr-cookie-consent, %5B%5D)
 ! necessary (option 2)
@@ -4095,9 +4100,6 @@ fireflies.ai##+js(trusted-set-cookie, consentMode, %7B%22ad_storage%22%3A%22deni
 codewars.com##+js(trusted-click-element, a%5Bfs-consent-element%3D%22deny%22%5D, , 2000)
 ! cookies formazionepro.it
 formazionepro.it##+js(trusted-click-element, button.c_link, , 1000)
-! Accept, needed for embedded content
-! https://kotimikro.fi/kuva/video/video-testaa-koneen-kaynnistys-ennen-siivousta-ja-sen-jalkeen
-kotimikro.fi##+js(trusted-click-element, %23didomi-notice-agree-button)
 ! https://github.com/uBlockOrigin/uAssets/issues/30867
 memegenqc.app##+js(trusted-set-local-storage-item, memegenqc-cookie-consent, %7B%22analytics%22%3Afalse%2C%22advertising%22%3Afalse%2C%22timestamp%22%3A%24now%24%7D)
 ! https://github.com/uBlockOrigin/uAssets/issues/30808
@@ -4161,7 +4163,9 @@ itavisen.no##+js(trusted-click-element, %5Bid%3D%22qc-cmp2-ui%22%5D%20button%5Bc
 camaramar.com##+js(trusted-click-element, button.button.accept, , 2000)
 ! https://github.com/uBlockOrigin/uAssets/issues/32054
 ! https://github.com/uBlockOrigin/uAssets/issues/33279
-futurezone.at,maxjeune-tgvinoui.sncf##+js(trusted-click-element, %23didomi-notice-agree-button)
+! https://kotimikro.fi/kuva/video/video-testaa-koneen-kaynnistys-ennen-siivousta-ja-sen-jalkeen - embed
+! https://github.com/uBlockOrigin/uAssets/issues/34242
+clubic.com,futurezone.at,kotimikro.fi,maxjeune-tgvinoui.sncf##+js(trusted-click-element, %23didomi-notice-agree-button)
 ! https://github.com/uBlockOrigin/uAssets/issues/32077
 gold.ac.uk##+js(trusted-click-element, button.ccc-accept-button)
 ! Functional
@@ -4270,3 +4274,12 @@ offers-exchange.com##+js(trusted-set-local-storage-item, cookieConsent_1004, %7B
 duck.ai##+js(trusted-set-local-storage-item, duckaiRetentionBrowserPromo, %7B%22dismissed%22%3Atrue%2C%22firstShown%22%3Atrue%2C%22newChatsSinceShown%22%3A0%2C%22learnMoreChatId%22%3Anull%7D)
 ! necessary + functional
 groupsumi.fi##+js(trusted-set-local-storage-item, %40sumi%2Fconsent, %7B%22essential%22%3Atrue%5C%2C%22performance%22%3Afalse%5C%2C%22functional%22%3Atrue%5C%2C%22advertising%22%3Afalse%7D)
+! https://github.com/uBlockOrigin/uAssets/issues/34163 - media
+nv-allesbestens.de##+js(trusted-click-element, %23BorlabsCookieBox%20input%23checkbox-external-media%2C100%2C%23BorlabsCookieBox%20a%23CookieBoxSaveButton)
+! Accept
+glowfestival.fi##+js(trusted-click-element, .cky-btn-accept)
+! https://github.com/uBlockOrigin/uAssets/issues/34283 - functional
+gamescom.global##+js(trusted-set-cookie, OptanonConsent, groups%3DC0001%253A1%252CC0002%253A1%252CC0003%253A0%252CC0004%253A0%252CC0005%253A0, , , domain, gamescom.global)
+gamescom.global##+js(trusted-set-cookie, OptanonAlertBoxClosed, %24currentDate%24)
+! https://github.com/AdguardTeam/AdguardFilters/issues/239843
+zonerai.com##+js(trusted-set-local-storage-item, cookie_consent, %7B%22necessary%22%3Atrue%2C%22analytics%22%3Afalse%2C%22marketing%22%3Afalse%7D)
