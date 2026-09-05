@@ -1046,7 +1046,7 @@ photopea.com##div[style]:has(> a[href*="photopea.com"][href*="ads"])
 ! https://github.com/jared-schwalbe/remove-ads-from-photopea/blob/main/app.js
 ! https://github.com/uBlockOrigin/uAssets/issues/19697
 !#if cap_html_filtering
-||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
+! ||photopea.com^$doc,replace=/<head>/<script>if (localStorage.length === 0 || typeof JSON.parse(localStorage._ppp)['0_uid'] === 'undefined') {Object.defineProperty(window\, 'innerWidth'\, {get() { return document.documentElement.offsetWidth + 320 }\,});}<\/script><head>/
 !#else
 photopea.com##+js(trusted-create-html, head, %3Cimg%20src%3D'%2Fad-choices.png'%20onerror%3D'if%20(localStorage.length%20!%3D%3D%200%20%7C%7C%20typeof%20JSON.parse(localStorage._ppp)%5B%220_uid%22%5D%20!%3D%3D%20%22undefined%22)%20%7BObject.defineProperty(window%2C%20%22innerWidth%22%2C%20%7Bget()%20%7B%20return%20document.documentElement.offsetWidth%20%2B%20315%20%7D%7D)%3B%7D'%3E%3C%2Fimg%3E)
 photopea.com##+js(set, __osw, undefined)
@@ -2710,10 +2710,8 @@ jiocinema.com##+js(set, navigator.brave, undefined)
 kpkuang.org##+js(nostif, _0x)
 kpkuang.org###sterra-ad-onmid
 ! https://github.com/easylist/easylistgermany/issues/216
+www.chip.de###M1:has(.page--has-billboard):style(top: 0px !important;)
 www.chip.de##.DownloadCharts-List > li:has(> a > article > .RUC-DownloadChartsBlock-AdLabel)
-chip.de###R1C3[role="complementary"]
-chip.de###R1C2[role="complementary"]:not(:has(> .Hero))
-chip.de###R1C1[role="complementary"]
 chip.de##.ButtonAuswahl + div > div[class]:has(> a[class][style="display:flex;"][href^="https://www.chip.de/downloads/"][href$=".html"])
 chip.de###aabhor
 chip.de##.ob-ad-carousel-layout
@@ -2723,15 +2721,16 @@ chip.de##.FC__Container.min-height-250px-mu:style(max-height: 0.1px !important; 
 chip.de##.app_nexus_banners_common
 chip.de###banner_top_table
 chip.de##.Ad
+chip.de##.ad
 chip.de###contentad-top-adsense-1
 chip.de##.Ad-Slot
-chip.de##.ad-slot
+chip.de##div[class*="ad-slot"]
 chip.de##.ad-listing
 chip.de##div[id*="AdSlot"]
 chip.de##.ae-banner
 chip.de##.ae-skyscraper
+chip.de##.product__top-aside
 chip.de##.RUC-DownloadButton-Wrap:has(> span:has-text(/^ANZEIGE$/))
-chip.de##.product__top-aside > section.mt-md:has(> h3:empty:first-child + table:last-child img[src*="screen13.com"])
 ! restore speed (the anti adblock script causing lag spikes)
 !#if cap_html_filtering
 www.chip.de##^script:has-text(/\'\, [0-9]{3}\)\]\; \}  \}/)
