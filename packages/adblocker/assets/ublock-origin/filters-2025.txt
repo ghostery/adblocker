@@ -1820,6 +1820,9 @@ yt1s.com.co>>##+js(no-fetch-if, googlesyndication.com)
 yt1s.com.co>>##+js(trusted-replace-argument, window.open, 1, repl%3A%2Fblank%2Fself%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/28817
 cerberusapp.com##+js(set, stoCazzo, true)
+! https://www.reddit.com/r/uBlockOrigin/comments/1w5bgk8/strict_antiadblock_at_cerberus_antitheft/
+cerberusapp.com##^template:content(script):has-text(fetchAdsScript)
+cerberusapp.com##+js(acs, eval, fetchAdsScript)
 ! https://github.com/uBlockOrigin/uAssets/issues/28827
 videq.cloud##+js(no-fetch-if, googlesyndication)
 ! https://github.com/uBlockOrigin/uAssets/issues/28829
@@ -1859,6 +1862,8 @@ leeapk.com##+js(acs, document.querySelectorAll, localStorage)
 leeapk.com##+js(rmnt, script, %2Fadblock%7Cabd%2Fi)
 ! https://github.com/uBlockOrigin/uAssets/issues/32427
 leeapk.com##+js(aeld, click, window.open)
+leeapk.com##+js(aeld, scroll, start)
+leeapk.com##+js(nostif, start)
 leeapk.com###ad-link
 ###zdn-adblock-overlay
 ! detection https://condorsoft.co/post/china-lidera-revolucion-seguridad-digital-criptografia-cuantica/9ZssEh9S
@@ -1871,8 +1876,13 @@ condorsoft.co##+js(no-xhr-if, googlesyndication)
 /\.gsmarena\.com\/[0-9]+\.[a-z]+\?s?Search=/$xhr,1p,domain=gsmarena.com
 ! https://github.com/uBlockOrigin/uAssets/issues/32679
 ! https://github.com/uBlockOrigin/uAssets/issues/33197
-gsmarena.com##+js(aeld, DOMContentLoaded, %2Fdoubleclick%7Catob%7CofffsetHeight%2F)
+@@||gsmarena.com^$ghide
+gsmarena.com##div.align-center.justify-center.flex-column.d-flex:has(.ad-c-label)
+gsmarena.com###opt300x250
+gsmarena.com##.ad-label
+gsmarena.com##+js(aeld, DOMContentLoaded, %2Fdoubleclick%7Catob%7Creturn%20new%20Promise%7CaHR0c%2F)
 gsmarena.com##+js(remove-cookie, %2FDeviceID%7Clpe%2F)
+gsmarena.com##+js(no-fetch-if, doubleclick)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207864
 remotejobzone.online##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/AdguardTeam/AdguardFilters/issues/207736
@@ -1982,6 +1992,8 @@ sextb.*#@#.ad-placeholder:not(#detect, #detect_ad_empire, #filter_ads_by_classna
 ! https://github.com/uBlockOrigin/uAssets/issues/33542
 audinifer.com,vibuxer.com##+js(rmnt, script, window.open)
 audinifer.com,vibuxer.com##body > div[style*="2147483647"]
+! https://github.com/uBlockOrigin/uAssets/issues/32347
+avtub.cx>>##+js(json-prune-fetch-response, custom_ads, , propsToMatch, %2Fsettings)
 ! https://github.com/uBlockOrigin/uAssets/issues/29030
 rockmods.net##.download-btn-group > a[href*="/4/"].simple-btn
 ! https://vegamoviese.blog/ - popups
@@ -2305,8 +2317,6 @@ musicbusinessworldwide.com##.mb-advert__incontent
 musicbusinessworldwide.com##+js(set, uberad_mode)
 ! https://github.com/uBlockOrigin/uAssets/issues/23169
 dailyboulder.com##+js(no-fetch-if, googlesyndication)
-! https://github.com/uBlockOrigin/uAssets/issues/29799
-justwatch.com##+js(json-prune, data.getFinalClickoutUrl%20data.sendSraBid)
 ! https://github.com/uBlockOrigin/uAssets/issues/29836
 ##.menu-item a[href^="https://go.rmhfrtnd.com"]
 ##a.tdn[href^="https://landing.brazzersnetwork.com/"]
@@ -2617,7 +2627,7 @@ moviehax.biz###clickfakeplayer[href]:remove-attr(href)
 ! https://github.com/uBlockOrigin/uAssets/issues/30606
 snopes.com##+js(nostif, %3D%3E)
 ! https://github.com/uBlockOrigin/uAssets/issues/29001
-mtv.fi##+js(trusted-json-edit-fetch-response, .metadata.hideAds%3Dtrue, propsToMatch, a2d.tv%2Fplay%2F)
+mtv.fi,mtvuutiset.fi##+js(trusted-json-edit-fetch-response, .metadata.hideAds%3Dtrue, propsToMatch, a2d.tv%2Fplay%2F)
 ! https://github.com/uBlockOrigin/uAssets/issues/30611
 narviks.nl##+js(rmnt, script, adb)
 ! https://github.com/uBlockOrigin/uAssets/issues/30622
@@ -2734,6 +2744,7 @@ v2movies.click,v2movies.me##+js(nowoif)
 ||serving.adserver.live^
 v2movies.click,v2movies.me##[href^="https://refpa58144.com/"]
 ! https://github.com/uBlockOrigin/uAssets/issues/30946
+@@||goplay.su^$ghide
 goplay.su##+js(nowoif, !addons.mozilla.org)
 goplay.ml,goplay.su##+js(json-prune, *, rot_url)
 ! goplay.ml,goplay.su##+js(json-prune, *, pop_type)
@@ -2879,7 +2890,9 @@ captown.capcom.com##+js(trusted-set, googletag.enums, json%3A%7B%22OutOfPageForm
 ! https://github.com/AdguardTeam/AdguardFilters/issues/221153
 thetemp.email##+js(no-fetch-if, adsbygoogle)
 ! https://github.com/uBlockOrigin/uAssets/issues/32951
-adhs-zentrum.de##+js(rmnt, script, adImage)
+adhs-zentrum.de##+js(nostif, %2FWerbeblocker%7Crefresh%5C%5C%2F)
+adhs-zentrum.de##+js(prevent-navigation, %2Fwerbeblocker%2Fi)
+adhs-zentrum.de##+js(set, cwAdblockDisabled, true)
 @@||adhs-zentrum.de^$ghide
 adhs-zentrum.de##.adsbygoogle
 adhs-zentrum.de##div.box:has(.adsbygoogle)
