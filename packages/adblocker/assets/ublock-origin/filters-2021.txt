@@ -915,6 +915,10 @@ xnxx.*,xvideos.*##+js(set, xv.conf.dyn.ads, undefined)
 xnxx.*,xvideos.*##+js(set, xv.conf.dyn.excld, undefined)
 xnxx.*,xvideos.*##+js(rmnt, script, html5player.enableVideoPreRollAds)
 xnxx.*,xvideos.*##+js(rpnt, script, if%20(typeof%20html5player.setupVideo%20%3D%3D%3D%20'function'), if%20(false))
+! https://github.com/uBlockOrigin/uAssets/pull/34293
+xnxx.*###mobile-menu > ul > li:not([class]):has(> a[href^="http"]:not([href*="xnxx"]))
+xvideos.*##ul.head__menu-line__main-menu > li:not([class]):has(> a:is(.live-cams, .ignore-popunder, .nutaku-games))
+##.home a[href^="https://s.zline0.com/"]
 ! https://forums.lanik.us/viewtopic.php?p=159178#p159178
 @@||cache.marieclaire.fr/media/videojs/videojs.ads.min.js$script,domain=marieclaire.fr
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=marieclaire.fr
