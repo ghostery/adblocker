@@ -915,6 +915,10 @@ xnxx.*,xvideos.*##+js(set, xv.conf.dyn.ads, undefined)
 xnxx.*,xvideos.*##+js(set, xv.conf.dyn.excld, undefined)
 xnxx.*,xvideos.*##+js(rmnt, script, html5player.enableVideoPreRollAds)
 xnxx.*,xvideos.*##+js(rpnt, script, if%20(typeof%20html5player.setupVideo%20%3D%3D%3D%20'function'), if%20(false))
+! https://github.com/uBlockOrigin/uAssets/pull/34293
+xnxx.*###mobile-menu > ul > li:not([class]):has(> a[href^="http"]:not([href*="xnxx"]))
+xvideos.*##ul.head__menu-line__main-menu > li:not([class]):has(> a:is(.live-cams, .ignore-popunder, .nutaku-games))
+##.home a[href^="https://s.zline0.com/"]
 ! https://forums.lanik.us/viewtopic.php?p=159178#p159178
 @@||cache.marieclaire.fr/media/videojs/videojs.ads.min.js$script,domain=marieclaire.fr
 @@||imasdk.googleapis.com/js/sdkloader/ima3.js$script,domain=marieclaire.fr
@@ -2562,8 +2566,8 @@ rp5.*##.adsbygoogle:upward(1)
 ! https://github.com/uBlockOrigin/uAssets/issues/20028
 ! https://github.com/uBlockOrigin/uAssets/issues/27723
 mydramalist.com##.is-desktop-ads
-mydramalist.com##.ad-removal-info:has-text(ads):upward([class])
 mydramalist.com##.app-body > div[class]:not([data-component]):has(.htlad-header_top)
+mydramalist.com##div.fqmr_right_2639:has(.ad-removal-info)
 ! https://www.reddit.com/r/uBlockOrigin/comments/qeo409/antiadblock_stardeos/
 stardeos.com##+js(no-xhr-if, url%3Agooglesyndication)
 ! https://www.reddit.com/r/uBlockOrigin/comments/qeo32a/stooqpl_stooqcom_stopped_working_yesterday/
@@ -2987,6 +2991,8 @@ pinterest.*##a[href*="&epik="]:upward([data-grid-item])
 ! pinterest.*##[data-grid-item]:has([data-test-pin-id] [data-test-id^="one-tap-desktop"] > a[href^="http"][rel="nofollow"])
 !#else
 pinterest.*##[data-grid-item]:has([data-test-pin-id] a[href^="http"][rel] [data-test-id="pincard-oneTap-with-link"])
+pinterest.*##div[role="listitem"]:has(div[data-test-id="related-pins-name"] > div[role="button"] > div + div > div[style="-webkit-line-clamp: 1;"]):not(:has(a[href*="/pin/"]))
+pinterest.*##+js(trusted-replace-fetch-response, %2F%5C%7B%22node%22%3A%5C%7B%22__typename%22%3A%22Pin%22%5B%5E%7D%5D%2B%22board%22%3A%5C%7B%5B%5E%7D%5D%2B%22owner%22%3A%5C%7B%5B%5E%7D%5D%2B%5C%7D%5B%5E%7D%5D%2B%5C%7D%5B%5E%7D%5D%2B%22isPromoted%22%3Atrue.%2B%3F%22cursor%22%3Anull%5C%7D%2C%2Fg, , %2Fstream)
 !#endif
 ! https://github.com/uBlockOrigin/uBlock-discussions/discussions/887
 pinterest.*##+js(json-prune, resource_response.data.%5B-%5D.pin_promotion_id%20resource_response.data.results.%5B-%5D.pin_promotion_id)
@@ -3099,7 +3105,7 @@ xnxx.*,xvideos.*###ad-footer
 ! https://github.com/uBlockOrigin/uAssets/issues/14191
 #@#.google-ad
 ##.google-ad:not(.testAd)
-mmiyue.com#@#.google-ad:not(.testAd)
+genshin-soku.com,monhan-soku.com,xn--gckdevd5myivf.site,yamiisoku.com,mmiyue.com#@#.google-ad:not(.testAd)
 ! https://github.com/AdguardTeam/Scriptlets/issues/190
 /ads-prebid.js$script,redirect=prebid-ads.js
 /prebid-ads.js$script,redirect=prebid-ads.js,domain=~exey.io
