@@ -73,6 +73,28 @@ use((chai, utils) => {
       );
     },
   );
+
+  utils.addMethod(
+    chai.Assertion.prototype,
+    'matchHostnameWithAncestors',
+    function (
+      this: Chai.ChaiStatic & { _obj: CosmeticFilter },
+      hostname: string,
+      ancestors: string[],
+    ) {
+      const filter = this._obj;
+      new chai.Assertion(filter).not.to.be.null;
+
+      this.assert(
+        filter.match(
+          hostname,
+          getDomain(hostname) || '',
+          ancestors.map((ancestor) => ({ hostname: ancestor, domain: getDomain(ancestor) || '' })),
+        ),
+        `expected #{this} to match ${hostname} with ancestors ${ancestors.join(',')}`,
+      );
+    },
+  );
 });
 
 declare global {
@@ -82,6 +104,7 @@ declare global {
       matchRequest(req: Partial<RequestInitialization>): Assertion;
       matchHostname(hostname: string): Assertion;
       matchAncestorHostname(hostname: string): Assertion;
+      matchHostnameWithAncestors(hostname: string, ancestors: string[]): Assertion;
     }
   }
 }
@@ -506,6 +529,53 @@ describe('#CosmeticFilter.match', () => {
       .to.matchAncestorHostname('foo.net')
       .but.not.to.matchHostname('foo.com')
       .but.not.to.matchHostname('foo.net');
+  });
+
+  it('negated hostnames with parent domains', () => {
+    // `~bar.com` excludes the frame itself, also below `foo.com`
+    expect(f`foo.com>>,~bar.com##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .to.matchHostnameWithAncestors('baz.com', ['foo.com'])
+      .but.not.to.matchHostnameWithAncestors('bar.com', ['foo.com'])
+      .not.to.matchHostnameWithAncestors('sub.bar.com', ['foo.com'])
+      .not.to.matchHostname('foo.com')
+      .not.to.matchHostname('bar.com')
+      .not.to.matchHostname('baz.com');
+    expect(f`foo.com,~bar.com,baz.com>>##+js(foo)`)
+      .to.matchHostname('foo.com')
+      .to.matchAncestorHostname('baz.com')
+      .to.matchHostnameWithAncestors('foo.com', ['baz.com'])
+      .but.not.to.matchHostnameWithAncestors('bar.com', ['baz.com'])
+      .not.to.matchHostnameWithAncestors('bar.com', ['foo.com'])
+      .not.to.matchHostname('bar.com')
+      .not.to.matchAncestorHostname('foo.com');
+    expect(f`foo.*>>,~bar.com##+js(foo)`)
+      .to.matchHostnameWithAncestors('baz.com', ['foo.net'])
+      .but.not.to.matchHostnameWithAncestors('bar.com', ['foo.net'])
+      .not.to.matchHostname('foo.com');
+
+    // `~bar.com>>` excludes all frames below `bar.com`
+    expect(f`foo.com>>,~bar.com>>##+js(foo)`)
+      .to.matchAncestorHostname('foo.com')
+      .to.matchHostnameWithAncestors('baz.com', ['foo.com', 'qux.com'])
+      .but.not.to.matchAncestorHostname('bar.com')
+      .not.to.matchHostnameWithAncestors('baz.com', ['foo.com', 'bar.com'])
+      .not.to.matchHostnameWithAncestors('baz.com', ['bar.com', 'foo.com'])
+      .not.to.matchHostnameWithAncestors('baz.com', ['foo.com', 'sub.bar.com']);
+    expect(f`foo.com,~bar.com>>##+js(foo)`)
+      .to.matchHostname('foo.com')
+      .to.matchHostnameWithAncestors('foo.com', ['baz.com'])
+      .but.not.to.matchHostnameWithAncestors('foo.com', ['bar.com'])
+      .not.to.matchHostname('bar.com');
+
+    // Only negated entries: generic without `>>`, never a match with `>>`
+    expect(f`~foo.com#@#+js(foo)`)
+      .to.matchHostname('bar.com')
+      .but.not.to.matchHostname('foo.com');
+    expect(f`~foo.com>>#@#+js(foo)`)
+      .not.to.matchHostname('bar.com')
+      .not.to.matchHostnameWithAncestors('bar.com', ['baz.com'])
+      .not.to.matchHostnameWithAncestors('bar.com', ['foo.com']);
   });
 
   it('entity', () => {

@@ -11,6 +11,18 @@ import { toASCII } from '../punycode.js';
 import { StaticDataView, sizeOfUint32Array, sizeOfUTF8 } from '../data-view.js';
 import { binLookup, hasUnicode, HASH_INTERNAL_MULT } from '../utils.js';
 
+function includesAny(sorted: Uint32Array | undefined, hashes: Uint32Array): boolean {
+  if (sorted !== undefined) {
+    for (const hash of hashes) {
+      if (binLookup(sorted, hash)) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
 export class Domains {
   public static parse(
     value: string | Set<string>,
@@ -226,44 +238,41 @@ export class Domains {
     return estimate;
   }
 
+  /**
+   * Check if the list has at least one non-negated hostname or entity.
+   *
+   * Specific: `foo.com,~sub.foo.com` (applies on foo.com, except on sub.foo.com)
+   * Generic:  `~foo.com` (applies everywhere, except on foo.com)
+   */
+  public isSpecific(): boolean {
+    return this.hostnames !== undefined || this.entities !== undefined;
+  }
+
+  /**
+   * Check if `hostname` matches a negated hostname or entity (e.g. `~foo.com`).
+   */
+  public matchNegated(hostnameHashes: Uint32Array, entityHashes: Uint32Array): boolean {
+    return (
+      includesAny(this.notHostnames, hostnameHashes) || includesAny(this.notEntities, entityHashes)
+    );
+  }
+
+  /**
+   * Check if `hostname` matches a non-negated hostname or entity (e.g. `foo.com`).
+   */
+  public matchPositive(hostnameHashes: Uint32Array, entityHashes: Uint32Array): boolean {
+    return includesAny(this.hostnames, hostnameHashes) || includesAny(this.entities, entityHashes);
+  }
+
   public match(hostnameHashes: Uint32Array, entityHashes: Uint32Array): boolean {
     // Check if `hostname` is blacklisted
-    if (this.notHostnames !== undefined) {
-      for (const hash of hostnameHashes) {
-        if (binLookup(this.notHostnames, hash)) {
-          return false;
-        }
-      }
-    }
-
-    // Check if `hostname` is blacklisted by *entity*
-    if (this.notEntities !== undefined) {
-      for (const hash of entityHashes) {
-        if (binLookup(this.notEntities, hash)) {
-          return false;
-        }
-      }
-    }
-
-    // Check if `hostname` is allowed
-    if (this.hostnames !== undefined || this.entities !== undefined) {
-      if (this.hostnames !== undefined) {
-        for (const hash of hostnameHashes) {
-          if (binLookup(this.hostnames, hash)) {
-            return true;
-          }
-        }
-      }
-
-      if (this.entities !== undefined) {
-        for (const hash of entityHashes) {
-          if (binLookup(this.entities, hash)) {
-            return true;
-          }
-        }
-      }
-
+    if (this.matchNegated(hostnameHashes, entityHashes)) {
       return false;
+    }
+
+    // Check if `hostname` is allowed. A generic list allows all other hostnames.
+    if (this.isSpecific()) {
+      return this.matchPositive(hostnameHashes, entityHashes);
     }
 
     return true;

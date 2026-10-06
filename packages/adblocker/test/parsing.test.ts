@@ -2028,6 +2028,26 @@ describe('Cosmetic filters', () => {
         parts: undefined,
       },
     });
+    cosmetic('foo.com>>,~bar.com##+js(scriptlet)', {
+      ...DEFAULT_COSMETIC_FILTER,
+      selector: 'scriptlet',
+      isScriptInject: true,
+      hasSubFrameScriptInject: true,
+      domains: {
+        entities: undefined,
+        hostnames: undefined,
+        notEntities: undefined,
+        notHostnames: h(['bar.com']),
+        parts: undefined,
+      },
+      parentDomains: {
+        entities: undefined,
+        hostnames: h(['foo.com']),
+        notEntities: undefined,
+        notHostnames: undefined,
+        parts: undefined,
+      },
+    });
     cosmetic('foo.*>>##+js(scriptlet)', {
       ...DEFAULT_COSMETIC_FILTER,
       selector: 'scriptlet',

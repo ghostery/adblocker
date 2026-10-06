@@ -1022,6 +1022,40 @@ $csp=baz,domain=bar.com
           expect(match.filter?.rawLine).to.be.eql(filter);
           expect(match.exception?.rawLine).to.be.eql(exception);
         });
+
+        it('handles negated hostnames', () => {
+          const filter = 'foo.com>>,~bar.com##+js(script.js,arg1)';
+          const engine = Engine.parse(filter, { debug: true });
+          engine.resources = new Resources({
+            scriptlets: [
+              {
+                name: 'script.js',
+                aliases: [],
+                body: 'function script() {}',
+                dependencies: [],
+                executionWorld: 'MAIN',
+                requiresTrust: false,
+              },
+            ],
+          });
+          const match = (hostname: string, parentDomains: string[]) =>
+            engine.matchCosmeticFilters({
+              domain: getDomain(hostname) || hostname,
+              hostname,
+              ancestors: parentDomains.map((domain) => ({ domain, hostname: domain })),
+              url: `https://${hostname}/`,
+            }).matches;
+
+          // main frame
+          expect(match('foo.com', [])).to.have.lengthOf(0);
+          // negated subframe
+          expect(match('bar.com', ['foo.com'])).to.have.lengthOf(0);
+          expect(match('sub.bar.com', ['foo.com'])).to.have.lengthOf(0);
+          // other subframe
+          const [subFrameMatch] = match('baz.com', ['foo.com']);
+          expect(subFrameMatch?.filter?.rawLine).to.be.eql(filter);
+          expect(subFrameMatch?.exception).to.be.undefined;
+        });
       });
     });
 
