@@ -8,6 +8,7 @@
 
 import { expect } from 'chai';
 import sinon from 'sinon';
+import * as vm from 'node:vm';
 import 'mocha';
 
 import { loadResources } from './utils.js';
@@ -279,6 +280,43 @@ describe('#Resources', function () {
 
     it('includes setup for scritplet globals', function () {
       expect(resources.getScriptlet('a')).to.include('var scriptletGlobals = {};');
+    });
+
+    it('shares the safeSelf snapshot between scripts injected separately', function () {
+      // A uBO-style safeSelf, and a scriptlet that wraps JSON.stringify and calls the
+      // "native" one from its snapshot, as trusted-edit-inbound-object does.
+      const stacked = new Resources({
+        scriptlets: [
+          {
+            name: 'safe-self.fn',
+            aliases: [],
+            body: 'function safeSelf() { if (safeSelf.safe) { return safeSelf.safe; } const safe = { JSON_stringify: JSON.stringify }; safeSelf.safe = safe; return safe; }',
+            dependencies: [],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+          {
+            name: 'wrap-stringify.js',
+            aliases: [],
+            body: 'function wrapStringify() { const safe = safeSelf(); const wrapped = JSON.stringify; JSON.stringify = function (...args) { safe.JSON_stringify(args[0]); return wrapped.apply(this, args); }; }',
+            dependencies: ['safe-self.fn'],
+            executionWorld: 'MAIN',
+            requiresTrust: false,
+          },
+        ],
+      });
+      const context = vm.createContext({ calls: 0 });
+      vm.runInContext(
+        'const nativeStringify = JSON.stringify; JSON.stringify = function (...args) { calls += 1; return nativeStringify.apply(this, args); };',
+        context,
+      );
+      // Six times, as YouTube gets six of them, each as its own script in the global scope.
+      for (let i = 0; i < 6; i += 1) {
+        vm.runInContext(stacked.getScriptlet('wrap-stringify')!, context);
+      }
+      vm.runInContext('JSON.stringify({})', context);
+      // One call per wrapper plus the page's own; without sharing it would be 2^6.
+      expect(context.calls).to.equal(7);
     });
 
     it('allows resources surrogate', function () {
