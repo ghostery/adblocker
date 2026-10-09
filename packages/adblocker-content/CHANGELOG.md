@@ -1,3 +1,15 @@
+# v2.19.0 (Fri Oct 09 2026)
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5818](https://github.com/ghostery/adblocker/pull/5818) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 1
+
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.2 (Wed Aug 05 2026)
 
 #### :bug: Bug Fix

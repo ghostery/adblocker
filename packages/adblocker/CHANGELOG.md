@@ -1,3 +1,29 @@
+# v2.19.0 (Fri Oct 09 2026)
+
+#### :running_woman: Performance
+
+- fix: share uBO's safeSelf snapshot between separately injected scriptlets [#5855](https://github.com/ghostery/adblocker/pull/5855) ([@tomasrivero](https://github.com/tomasrivero))
+
+#### :house: Internal
+
+- Update local assets [#5817](https://github.com/ghostery/adblocker/pull/5817) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5812](https://github.com/ghostery/adblocker/pull/5812) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5811](https://github.com/ghostery/adblocker/pull/5811) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+- Update local assets [#5808](https://github.com/ghostery/adblocker/pull/5808) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Update dependencies [#5818](https://github.com/ghostery/adblocker/pull/5818) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 4
+
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Tomás Rivero ([@tomasrivero](https://github.com/tomasrivero))
+
+---
+
 # v2.18.2 (Wed Aug 05 2026)
 
 #### :bug: Bug Fix

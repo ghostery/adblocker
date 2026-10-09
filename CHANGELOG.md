@@ -1,3 +1,54 @@
+# v2.19.0 (Fri Oct 09 2026)
+
+#### :running_woman: Performance
+
+- `@ghostery/adblocker`
+  - fix: share uBO's safeSelf snapshot between separately injected scriptlets [#5855](https://github.com/ghostery/adblocker/pull/5855) ([@tomasrivero](https://github.com/tomasrivero))
+
+#### :house: Internal
+
+- `@ghostery/adblocker`
+  - Update local assets [#5817](https://github.com/ghostery/adblocker/pull/5817) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5812](https://github.com/ghostery/adblocker/pull/5812) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5811](https://github.com/ghostery/adblocker/pull/5811) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+  - Update local assets [#5808](https://github.com/ghostery/adblocker/pull/5808) (ghostery-adblocker-bot@users.noreply.github.com [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot]))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump ip-address from 10.4.0 to 10.7.2 [#5844](https://github.com/ghostery/adblocker/pull/5844) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump postcss-selector-parser from 7.1.1 to 7.1.6 [#5853](https://github.com/ghostery/adblocker/pull/5853) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump source-map-js from 1.2.1 to 1.2.2 [#5852](https://github.com/ghostery/adblocker/pull/5852) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump nx from 23.1.1 to 23.2.1 [#5851](https://github.com/ghostery/adblocker/pull/5851) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump undici from 7.29.0 to 7.30.0 [#5843](https://github.com/ghostery/adblocker/pull/5843) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump the webextension group across 1 directory with 2 updates [#5836](https://github.com/ghostery/adblocker/pull/5836) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump browserslist from 4.28.1 to 4.28.9 [#5835](https://github.com/ghostery/adblocker/pull/5835) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @humanfs/node from 0.16.7 to 0.16.8 [#5833](https://github.com/ghostery/adblocker/pull/5833) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump @babel/core from 7.28.6 to 7.29.7 [#5742](https://github.com/ghostery/adblocker/pull/5742) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump esbuild from 0.28.0 to 0.28.1 [#5732](https://github.com/ghostery/adblocker/pull/5732) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump the playwright group with 2 updates [#5838](https://github.com/ghostery/adblocker/pull/5838) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 7.4.10 to 7.4.11 in the tldts group [#5828](https://github.com/ghostery/adblocker/pull/5828) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps-dev): Bump axios from 1.19.0 to 1.20.0 [#5848](https://github.com/ghostery/adblocker/pull/5848) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump undici from 7.28.0 to 7.29.0 [#5803](https://github.com/ghostery/adblocker/pull/5803) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump nx from 22.3.3 to 22.7.8 [#5806](https://github.com/ghostery/adblocker/pull/5806) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 7.4.9 to 7.4.10 in the tldts group across 1 directory [#5798](https://github.com/ghostery/adblocker/pull/5798) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump the playwright group across 1 directory with 2 updates [#5799](https://github.com/ghostery/adblocker/pull/5799) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`
+  - Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5825](https://github.com/ghostery/adblocker/pull/5825) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`
+  - Build(deps): Bump electron from 43.4.0 to 43.5.0 [#5846](https://github.com/ghostery/adblocker/pull/5846) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- `@ghostery/adblocker-content`, `@ghostery/adblocker-electron-example`, `@ghostery/adblocker-electron-preload`, `@ghostery/adblocker-electron`, `@ghostery/adblocker-extended-selectors`, `@ghostery/adblocker-playwright-example`, `@ghostery/adblocker-playwright`, `@ghostery/adblocker-puppeteer-example`, `@ghostery/adblocker-puppeteer`, `@ghostery/adblocker-webextension-cosmetics`, `@ghostery/adblocker-webextension-example`, `@ghostery/adblocker-webextension`, `@ghostery/adblocker`
+  - Update dependencies [#5818](https://github.com/ghostery/adblocker/pull/5818) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 5
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- [@ghostery-adblocker-bot[bot]](https://github.com/ghostery-adblocker-bot[bot])
+- Ghostery Adblocker Bot (ghostery-adblocker-bot@users.noreply.github.com)
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+- Tomás Rivero ([@tomasrivero](https://github.com/tomasrivero))
+
+---
+
 # v2.18.2 (Wed Aug 05 2026)
 
 #### :bug: Bug Fix

@@ -1,3 +1,18 @@
+# v2.19.0 (Fri Oct 09 2026)
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump the production-dependencies group across 1 directory with 2 updates [#5825](https://github.com/ghostery/adblocker/pull/5825) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump electron from 43.4.0 to 43.5.0 [#5846](https://github.com/ghostery/adblocker/pull/5846) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Update dependencies [#5818](https://github.com/ghostery/adblocker/pull/5818) ([@seia-soto](https://github.com/seia-soto))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- HoJeong Go ([@seia-soto](https://github.com/seia-soto))
+
+---
+
 # v2.18.2 (Wed Aug 05 2026)
 
 #### :bug: Bug Fix
