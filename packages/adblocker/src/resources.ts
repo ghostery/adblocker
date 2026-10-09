@@ -115,10 +115,13 @@ function isScriptletValid(scriptlet: any): scriptlet is Scriptlet {
 
 // TODO - support empty resource body
 
+const SHARE_SAFE_SELF = `if (typeof safeSelf === 'function') { if (scriptletGlobals.safeSelf) { safeSelf.safe = scriptletGlobals.safeSelf; } else { scriptletGlobals.safeSelf = safeSelf(); } }`;
+
 const assembleScript = (script: string, dependencies: string[] = []): string =>
   [
     `if (typeof scriptletGlobals === 'undefined') { var scriptletGlobals = {}; }`,
     ...dependencies,
+    SHARE_SAFE_SELF,
     `(${script})(...[\`{{1}}\`,\`{{2}}\`,\`{{3}}\`,\`{{4}}\`,\`{{5}}\`,\`{{6}}\`,\`{{7}}\`,\`{{8}}\`,\`{{9}}\`,\`{{10}}\`].filter((a,i) => a !== '{{'+(i+1)+'}}').map((a) => decodeURIComponent(a)))`,
   ].join(';');
 
