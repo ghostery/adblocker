@@ -666,31 +666,32 @@ export default class CosmeticFilter implements IFilter {
       return false;
     }
 
+    // Not final: a negated entry (e.g. `~foo.com` or `~foo.com>>`) can still exclude the frame.
+    let includesFrame = false;
+
     // Negated parent hostnames (e.g. `~foo.com>>`) exclude all frames below
     // them. Parent hostnames (e.g. `foo.com>>`) include all frames below them.
-    let matchParentDomains = false;
     if (ancestors !== undefined && this.parentDomains !== undefined) {
       for (const { hostname, domain } of ancestors) {
         if (hostname.length === 0) {
           continue;
         }
 
-        const parentHostnameHashes = getHostnameHashesFromLabelsBackward(hostname, domain);
-        const parentEntityHashes = getEntityHashesFromLabelsBackward(hostname, domain);
+        const hostnameHashes = getHostnameHashesFromLabelsBackward(hostname, domain);
+        const entityHashes = getEntityHashesFromLabelsBackward(hostname, domain);
 
-        if (this.parentDomains.matchNegated(parentHostnameHashes, parentEntityHashes)) {
+        if (this.parentDomains.matchNegated(hostnameHashes, entityHashes)) {
           return false;
         }
 
-        if (this.parentDomains.matchPositive(parentHostnameHashes, parentEntityHashes)) {
-          matchParentDomains = true;
+        if (this.parentDomains.matchPositive(hostnameHashes, entityHashes)) {
+          includesFrame = true;
         }
       }
     }
 
     // Negated hostnames (e.g. `~foo.com`) exclude the frame itself. Hostnames
     // (e.g. `foo.com`) include it.
-    let matchDomains = false;
     if (this.domains !== undefined) {
       // TODO - this hashing could be re-used between cosmetics by using an
       // abstraction like `Request` (similar to network filters matching).
@@ -702,10 +703,12 @@ export default class CosmeticFilter implements IFilter {
         return false;
       }
 
-      matchDomains = this.domains.matchPositive(hostnameHashes, entityHashes);
+      if (this.domains.matchPositive(hostnameHashes, entityHashes)) {
+        includesFrame = true;
+      }
     }
 
-    if (matchParentDomains === true || matchDomains === true) {
+    if (includesFrame === true) {
       return true;
     }
 
