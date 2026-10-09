@@ -345,10 +345,8 @@ export default class CosmeticFilter implements IFilter {
     ) {
       // Generic scriptlets are invalid, unless they are un-hide
       if (
-        (domains === undefined ||
-          (domains.hostnames === undefined && domains.entities === undefined)) &&
-        (parentDomains === undefined ||
-          (parentDomains.hostnames === undefined && parentDomains.entities === undefined)) &&
+        domains?.isSpecific() !== true &&
+        parentDomains?.isSpecific() !== true &&
         getBit(mask, COSMETICS_MASK.unhide) === false
       ) {
         return null;
@@ -668,37 +666,55 @@ export default class CosmeticFilter implements IFilter {
       return false;
     }
 
-    if (
-      this.domains !== undefined &&
-      // TODO - this hashing could be re-used between cosmetics by using an
-      // abstraction like `Request` (similar to network filters matching).
-      // Maybe could we reuse `Request` directly without any change?
-      this.domains.match(
-        getHostnameHashesFromLabelsBackward(hostname, domain),
-        getEntityHashesFromLabelsBackward(hostname, domain),
-      )
-    ) {
-      return true;
-    }
+    // Not final: a negated entry (e.g. `~foo.com` or `~foo.com>>`) can still exclude the frame.
+    let includesFrame = false;
 
+    // Negated parent hostnames (e.g. `~foo.com>>`) exclude all frames below
+    // them. Parent hostnames (e.g. `foo.com>>`) include all frames below them.
     if (ancestors !== undefined && this.parentDomains !== undefined) {
       for (const { hostname, domain } of ancestors) {
-        if (
-          this.parentDomains.match(
-            hostname.length === 0
-              ? EMPTY_UINT32_ARRAY
-              : getHostnameHashesFromLabelsBackward(hostname, domain),
-            hostname.length === 0
-              ? EMPTY_UINT32_ARRAY
-              : getEntityHashesFromLabelsBackward(hostname, domain),
-          )
-        ) {
-          return true;
+        if (hostname.length === 0) {
+          continue;
+        }
+
+        const hostnameHashes = getHostnameHashesFromLabelsBackward(hostname, domain);
+        const entityHashes = getEntityHashesFromLabelsBackward(hostname, domain);
+
+        if (this.parentDomains.matchNegated(hostnameHashes, entityHashes)) {
+          return false;
+        }
+
+        if (this.parentDomains.matchPositive(hostnameHashes, entityHashes)) {
+          includesFrame = true;
         }
       }
     }
 
-    return false;
+    // Negated hostnames (e.g. `~foo.com`) exclude the frame itself. Hostnames
+    // (e.g. `foo.com`) include it.
+    if (this.domains !== undefined) {
+      // TODO - this hashing could be re-used between cosmetics by using an
+      // abstraction like `Request` (similar to network filters matching).
+      // Maybe could we reuse `Request` directly without any change?
+      const hostnameHashes = getHostnameHashesFromLabelsBackward(hostname, domain);
+      const entityHashes = getEntityHashesFromLabelsBackward(hostname, domain);
+
+      if (this.domains.matchNegated(hostnameHashes, entityHashes)) {
+        return false;
+      }
+
+      if (this.domains.matchPositive(hostnameHashes, entityHashes)) {
+        includesFrame = true;
+      }
+    }
+
+    if (includesFrame === true) {
+      return true;
+    }
+
+    // Only negated entries (e.g. `~foo.com##.selector`): a generic filter matches
+    // everywhere else. A filter with `>>` entries needs a matching ancestor.
+    return this.isGenericHide() && this.parentDomains === undefined;
   }
 
   /**
@@ -1100,11 +1116,6 @@ export default class CosmeticFilter implements IFilter {
   //
   // For example: ~example.com##.ad  is a generic filter as well!
   public isGenericHide(): boolean {
-    return (
-      this?.domains?.hostnames === undefined &&
-      this?.domains?.entities === undefined &&
-      this?.parentDomains?.hostnames === undefined &&
-      this?.parentDomains?.entities === undefined
-    );
+    return this.domains?.isSpecific() !== true && this.parentDomains?.isSpecific() !== true;
   }
 }
