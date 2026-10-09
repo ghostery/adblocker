@@ -1,3 +1,21 @@
+# v2.20.1 (Fri Oct 09 2026)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - fix: subframe scriptlet filters ignore negated hostnames [#5850](https://github.com/ghostery/adblocker/pull/5850) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump tldts-experimental from 7.4.11 to 7.4.16 in the tldts group [#5856](https://github.com/ghostery/adblocker/pull/5856) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.19.0 (Fri Oct 09 2026)
 
 #### :running_woman: Performance

@@ -1,3 +1,15 @@
+# v2.20.1 (Fri Oct 09 2026)
+
+#### :bug: Bug Fix
+
+- fix: subframe scriptlet filters ignore negated hostnames [#5850](https://github.com/ghostery/adblocker/pull/5850) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### Authors: 1
+
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.19.0 (Fri Oct 09 2026)
 
 #### :running_woman: Performance
