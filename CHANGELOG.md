@@ -1,3 +1,22 @@
+# v2.20.2 (Wed Oct 28 2026)
+
+#### :bug: Bug Fix
+
+- `@ghostery/adblocker`
+  - Optimize regexp matching with leading or trailing ".*" [#5863](https://github.com/ghostery/adblocker/pull/5863) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### :nut_and_bolt: Dependencies
+
+- Build(deps): Bump undici from 7.30.0 to 7.30.1 [#5866](https://github.com/ghostery/adblocker/pull/5866) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+- Build(deps): Bump tldts-experimental from 7.4.16 to 7.4.18 in the tldts group [#5858](https://github.com/ghostery/adblocker/pull/5858) ([@dependabot[bot]](https://github.com/dependabot[bot]))
+
+#### Authors: 2
+
+- [@dependabot[bot]](https://github.com/dependabot[bot])
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.20.1 (Fri Oct 09 2026)
 
 #### :bug: Bug Fix

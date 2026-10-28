@@ -1,3 +1,15 @@
+# v2.20.2 (Wed Oct 28 2026)
+
+#### :bug: Bug Fix
+
+- Optimize regexp matching with leading or trailing ".*" [#5863](https://github.com/ghostery/adblocker/pull/5863) ([@philipp-classen](https://github.com/philipp-classen))
+
+#### Authors: 1
+
+- Philipp Claßen ([@philipp-classen](https://github.com/philipp-classen))
+
+---
+
 # v2.20.1 (Fri Oct 09 2026)
 
 #### :bug: Bug Fix
