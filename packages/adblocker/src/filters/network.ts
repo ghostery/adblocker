@@ -409,6 +409,19 @@ function compileRegex(
   // * can match anything
   filter = filter.replace(/\*/g, '.*');
 
+  // Remove ".*" at start and end if not anchored (same RegExp.test() result).
+  // A ".*" at the start makes the match time quadratic in the URL length.
+  if (!isLeftAnchor) {
+    while (filter.startsWith('.*')) {
+      filter = filter.slice(2);
+    }
+  }
+  if (!isRightAnchor) {
+    while (filter.endsWith('.*')) {
+      filter = filter.slice(0, -2);
+    }
+  }
+
   // ^ can match any separator or the end of the pattern
   filter = filter.replace(/\^/g, '(?:[^\\w\\d_.%-]|$)');
 
